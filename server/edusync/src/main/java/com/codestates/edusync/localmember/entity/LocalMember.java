@@ -1,6 +1,6 @@
 package com.codestates.edusync.localmember.entity;
 
-import com.codestates.edusync.member.entity.Member;
+import com.codestates.edusync.audit.Auditable;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -11,7 +11,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class LocalMember {
+public class LocalMember extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
