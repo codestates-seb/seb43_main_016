@@ -30,4 +30,11 @@ public class LocalMemberDto {
             this.memberId = memberId;
         }
     }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class ProfileImage {
+        private String profileImage;
+    }
 }
