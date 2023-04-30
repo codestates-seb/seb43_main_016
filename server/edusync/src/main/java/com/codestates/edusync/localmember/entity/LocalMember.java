@@ -18,7 +18,7 @@ public class LocalMember extends Auditable {
 
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
-    @Column(nullable = false, updatable = true, unique = true)
+    @Column(nullable = false, updatable = true, unique = false)
     private String password;
     @Column(nullable = false, updatable = true, unique = true)
     private String nickName;
