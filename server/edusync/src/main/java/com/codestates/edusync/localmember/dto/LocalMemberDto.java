@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 public class LocalMemberDto {
     @Getter
     @AllArgsConstructor
-    public static class PostMember{
+    public static class Post{
         @Email(message = "올바른 이메일 형태가 아닙니다.")
         private String email;
         @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
