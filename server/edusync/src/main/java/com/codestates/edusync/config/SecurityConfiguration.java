@@ -2,6 +2,10 @@ package com.codestates.edusync.config;
 
 import com.codestates.edusync.auth.filter.JwtAuthenticationFilter;
 import com.codestates.edusync.auth.filter.JwtVerificationFilter;
+import com.codestates.edusync.auth.handler.MemberAccessDeniedHandler;
+import com.codestates.edusync.auth.handler.MemberAuthenticationEntryPoint;
+import com.codestates.edusync.auth.handler.MemberAuthenticationFailureHandler;
+import com.codestates.edusync.auth.handler.MemberAuthenticationSuccessHandler;
 import com.codestates.edusync.auth.jwt.JwtTokenizer;
 import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.member.repository.MemberRepository;
@@ -48,6 +52,8 @@ public class SecurityConfiguration {
                 .formLogin().disable()   // 폼 로그인 방식을 비활성화
                 .httpBasic().disable()   // HTTP Basic 인증 방식을 비활성화
                 .exceptionHandling()
+                .authenticationEntryPoint(new MemberAuthenticationEntryPoint())  // 인증오류가 발생할 때 처리해주는 핸들러 호출
+                .accessDeniedHandler(new MemberAccessDeniedHandler())  // 인증에는 성공했지만 해당 리소스에 대한 권한이 없을 때 처리해주는 핸들러 호출
                 .and()
                 .apply(new CustomFilterConfigurer())   // Custom Configurer 적용
                 .and()
@@ -87,6 +93,8 @@ public class SecurityConfiguration {
 
             JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);  // JwtAuthenticationFilter를 생성하면서 JwtAuthenticationFilter에서 사용되는 AuthenticationManager와 JwtTokenizer를 DI
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login"); // setFilterProcessesUrl() 메서드를 통해 디폴트 request URL인 “/login”을 “/members/login”으로 변경
+            jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  // 인증 성공시 사용할 객체 등록
+            jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());  // 인증 실패시 사용할 객체 등록
 
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);  // JwtVerificationFilter의 인스턴스를 생성하면서 JwtVerificationFilter에서 사용되는 객체들을 생성자로 DI
 
