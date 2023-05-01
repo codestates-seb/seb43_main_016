@@ -15,19 +15,19 @@ public class MemberDto {
         private String email;
         @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
         private String password;
-        private String memberNickName;
+        private String nickName;
     }
 
     @Getter
     @AllArgsConstructor
     public static class Patch {
-        private long memberId;
+        private long id;
         private String memberNickName;
         @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
         private String password; // 비번 변경 요청시 비밀번호 입력하도록 나중에 기능 추가
 
-        public void setMemberId(long memberId) {
-            this.memberId = memberId;
+        public void setId(long id) {
+            this.id = id;
         }
     }
 

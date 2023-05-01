@@ -36,7 +36,7 @@ public class MemberController {
         Member createMember = memberService.createMember(member);
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(createMember);
 
-        URI location = UriCreator.createUri("/members", createMember.getMemberId());
+        URI location = UriCreator.createUri("/members", createMember.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
 
@@ -47,7 +47,7 @@ public class MemberController {
     public ResponseEntity patchMember(
             @PathVariable("member-id") @Positive long memberId,
             @Valid @RequestBody MemberDto.Patch requestBody) {
-        requestBody.setMemberId(memberId);
+        requestBody.setId(memberId);
         Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody));
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updateMember);
 
@@ -90,10 +90,5 @@ public class MemberController {
         Member updatedMember = memberService.updateMember(member);
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
-    }
-
-    @RequestMapping(value = "/**", method = RequestMethod.OPTIONS)
-    public ResponseEntity<Void> handleOptionsRequest() {
-        return ResponseEntity.ok().build();
     }
 }
