@@ -32,7 +32,7 @@ public class MemberController {
     private final MemberMapper memberMapper;
 
     @PostMapping
-    public ResponseEntity postMember(@Valid @RequestBody MemberDto.PostMember requestBody) {
+    public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
         Member member = memberMapper.memberPostToMember(requestBody);
         Member createMember = memberService.createMember(member);
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(createMember);

@@ -9,7 +9,7 @@ import java.util.List;
 
 @Mapper(componentModel = "spring") // unmappedTargetPolicy = ReportingPolicy.IGNORE // Todo 테스트 끝나면 추가
 public interface MemberMapper {
-    Member memberPostToMember(MemberDto.PostMember requestBody);
+    Member memberPostToMember(MemberDto.Post requestBody);
     Member memberPatchToMember(MemberDto.Patch requestBody);
     MemberJoinResponseDto memberToMemberResponse(Member member);
     List<MemberJoinResponseDto> membersToMemberResponses(List<Member> members);
