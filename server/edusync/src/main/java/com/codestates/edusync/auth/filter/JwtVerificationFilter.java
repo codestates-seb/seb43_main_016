@@ -35,9 +35,18 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerReq
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        Map<String, Object> claims = verifyJws(request); // JWT 검증
-        setAuthenticationToContext(claims);      // SecurityContext에 검증된 정보 저장
-        filterChain.doFilter(request, response); // 인증 끝났으니 다음 작업하도록 다음 필터 호출
+        try {
+            Map<String, Object> claims = verifyJws(request); // JWT 검증
+            setAuthenticationToContext(claims);              // SecurityContext에 검증된 정보 저장
+            filterChain.doFilter(request, response);         // 인증이 성공한 경우 다음 필터 호출
+        } catch (SignatureException se) {
+            sendErrorResponse(response, HttpStatus.valueOf(401)); // 토큰 정보가 잘못되었을 경우 401 응답 반환
+        } catch (ExpiredJwtException ee) {
+            sendErrorResponse(response, HttpStatus.valueOf(401)); // JWT가 만료된 경우 401 응답 반환
+        } catch (Exception e) {
+            request.setAttribute("exception", e);
+            filterChain.doFilter(request, response);
+        }
     }
 
     // 특정 조건에 부합하면(true이면) 해당 Filter의 동작을 수행하지 않고 다음 Filter로 건너뛰도록 해주는 메서드인 OncePerRequestFilter의 shouldNotFilter()를 오버라이드
