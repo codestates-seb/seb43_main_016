@@ -6,6 +6,8 @@ import com.codestates.edusync.localmember.dto.LocalMemberResponseDto;
 import com.codestates.edusync.localmember.entity.LocalMember;
 import com.codestates.edusync.localmember.mapper.LocalMemberMapper;
 import com.codestates.edusync.localmember.service.LocalMemberService;
+import com.codestates.edusync.member.entity.Member;
+import com.codestates.edusync.member.service.MemberService;
 import com.codestates.edusync.util.UriCreator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,14 +31,17 @@ import java.util.List;
 public class LocalMemberController {
     private final LocalMemberService localMemberService;
     private final LocalMemberMapper mapper;
+    private final MemberService memberService;
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody LocalMemberDto.Post requestBody) {
-        LocalMember member = mapper.localMemberPostToLocalMember(requestBody);
-        LocalMember createMember = localMemberService.createLocalMember(member);
-        LocalMemberResponseDto responseDto = mapper.localMemberToLocalMemberResponse(createMember);
+        LocalMember lm = mapper.localMemberPostToLocalMember(requestBody);
+        LocalMember createlm = localMemberService.createLocalMember(lm);
+        LocalMemberResponseDto responseDto = mapper.localMemberToLocalMemberResponse(createlm);
 
-        URI location = UriCreator.createUri("/members/local", createMember.getId());
+        memberService.createMember(createlm); // Todo 현재는 response에 담아주지 않음. 프론트 요청시 추가
+
+        URI location = UriCreator.createUri("/members/local", createlm.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
 
