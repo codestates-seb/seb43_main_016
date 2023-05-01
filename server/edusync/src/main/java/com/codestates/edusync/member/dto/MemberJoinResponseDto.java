@@ -6,8 +6,8 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class MemberJoinResponseDto {
-    private long memberId;
+    private long id;
     private String email;
     private String profileImage;
-    private String memberNickName;
+    private String nickName;
 }

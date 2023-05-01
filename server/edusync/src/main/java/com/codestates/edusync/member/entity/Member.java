@@ -16,16 +16,16 @@ import java.util.List;
 public class Member extends Auditable {
     @Id // 식별자 등록
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별자를 자동으로 생성
-    private Long memberId;
-    private String memberNickName;
+    private Long id;
+    private String nickName;
     private String email;
     @Column(length = 2147483647)
     private String profileImage;
     private String password;
 
-    public Member(Long memberId, String memberNickName, String email, String profileImage) { // 테스트코드 작성용 생성자
-        this.memberId = memberId;
-        this.memberNickName = memberNickName;
+    public Member(Long id, String nickName, String email, String profileImage) { // 테스트코드 작성용 생성자
+        this.id = id;
+        this.nickName = nickName;
         this.email = email;
         this.profileImage = profileImage;
     }
