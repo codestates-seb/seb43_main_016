@@ -1,23 +1,42 @@
 package com.codestates.edusync.member.entity;
 
-import com.codestates.edusync.localmember.entity.LocalMember;
+import com.codestates.edusync.audit.Auditable;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
-@RequiredArgsConstructor
+@NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 기본키 생성을 데이터베이스에 위임 (기본키 자동 생성)
-    private Long id;
+public class Member extends Auditable {
+    @Id // 식별자 등록
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별자를 자동으로 생성
+    private Long memberId;
+    private String memberNickName;
+    private String email;
+    @Column(length = 2147483647)
+    private String profileImage;
+    private String password;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn
-    private LocalMember localMember;
+    public Member(Long memberId, String memberNickName, String email, String profileImage) { // 테스트코드 작성용 생성자
+        this.memberId = memberId;
+        this.memberNickName = memberNickName;
+        this.email = email;
+        this.profileImage = profileImage;
+    }
+
+    @ElementCollection(fetch = FetchType.EAGER) // 별도의 테이블로 생성해서 저장 // 권한 여러개 설정할거면 나중에 바꾸기 (String roles 지우고 관련 메서드 체크!)
+    private List<String> roles = new ArrayList<>(); // 권한 테이블
+
+    private String location;
+
+    private String title;
+
+    private String aboutMe;
 
 }

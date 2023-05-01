@@ -6,10 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByLocalMember_Email(String email); // Member의 필드값 중 localMember의 email을 기준으로 찾기 (JPA가 쿼리문 자동 구현)
-//    SELECT m.*
-//    FROM member m
-//    JOIN local_member lm ON m.local_member_id = lm.id
-//    WHERE lm.email = ?1;
+    Optional<Member> findByEmail(String email); // 예시로 일단 만들었음 뭘 기준으로 member를 찾을지 의논
 }
 

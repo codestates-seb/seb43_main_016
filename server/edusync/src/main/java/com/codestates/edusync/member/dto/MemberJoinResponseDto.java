@@ -1,13 +1,13 @@
-package com.codestates.edusync.localmember.dto;
+package com.codestates.edusync.member.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class LocalMemberResponseDto {
-    private long id;
+public class MemberJoinResponseDto {
+    private long memberId;
     private String email;
     private String profileImage;
-    private String nickName;
+    private String memberNickName;
 }
