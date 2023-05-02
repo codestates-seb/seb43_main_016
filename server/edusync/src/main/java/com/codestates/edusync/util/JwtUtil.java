@@ -30,6 +30,6 @@ public class JwtUtil {
                 .parseClaimsJws(token);
 
         // 이메일 값 반환
-        return claimsJws.getBody().get("memberEmail", String.class);
+        return claimsJws.getBody().get("email", String.class);
     }
 }

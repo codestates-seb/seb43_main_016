@@ -3,13 +3,14 @@ package com.codestates.edusync.member.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
 public class MemberDto {
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Post{
         @Email(message = "올바른 이메일 형태가 아닙니다.")
         private String email;
@@ -19,7 +20,7 @@ public class MemberDto {
     }
 
     @Getter
-    @AllArgsConstructor
+    @NoArgsConstructor
     public static class Patch {
         private long id;
         private String nickName;
