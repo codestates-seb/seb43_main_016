@@ -47,7 +47,9 @@ public class MemberService {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Member updateMember(Member member) {
+    public Member updateMember(Member member, Long memberId, String token) {
+        sameMemberTest(memberId, token); // 변경하려는 회원이 맞는지 확인
+
         Member findMember = findVerifiedMember(member.getId());
 
         Optional.ofNullable(member.getNickName())
@@ -66,7 +68,7 @@ public class MemberService {
     }
 
     @Transactional(readOnly = true)
-    public Member findMember(long memberId) {
+    public Member findMember(Long memberId) {
         return findVerifiedMember(memberId);
     }
 
@@ -75,14 +77,15 @@ public class MemberService {
                 Sort.by("id").descending()));
     }
 
-    public void deleteMember(long memberId) {
+    public void deleteMember(Long memberId, String email) {
+        sameMemberTest2(memberId, email); // authentication.getName()이 이메일 가져오는거다.
         Member findMember = findVerifiedMember(memberId);
 
         memberRepository.delete(findMember);
     }
 
     @Transactional(readOnly = true)
-    public Member findVerifiedMember(long memberId) {
+    public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember =
                 memberRepository.findById(memberId);
 
@@ -98,7 +101,7 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s는 이미 가입한 이메일입니다.", email));
     }
 
-    public void sameMemberTest(long memberId, String token){
+    public void sameMemberTest(Long memberId, String token){
         String email = jwtUtil.extractEmailFromToken(token);
         Member findMember = findVerifiedMember(memberId);
 
@@ -107,7 +110,7 @@ public class MemberService {
         }
     }
 
-    public void sameMemberTest2(long memberId, String email){
+    public void sameMemberTest2(Long memberId, String email){
         Member findMember = memberRepository.findByEmail(email).orElseThrow(() ->
                 new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("이메일(%s)에 해당하는 회원을 찾을 수 없습니다.", email))); // 어차피 인증객체 가져오는거라 불가능한 경우의 수다. 하지만 더블 체크용으로 작성
 

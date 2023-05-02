@@ -49,10 +49,8 @@ public class MemberController {
             @PathVariable("member-id") @Positive Long memberId,
             @Valid @RequestBody MemberDto.Patch requestBody,
             @RequestHeader("Authorization") String token) { // 토큰검증하는 첫번째 방법 -> 서버 내부긴 하지만 토큰이 돌아다니는게 썩 좋아보이지는 않는다.
-        memberService.sameMemberTest(memberId, token); // 변경하려는 회원이 맞는지 확인
-
         requestBody.setId(memberId);
-        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody));
+        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody), memberId, token);
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updateMember);
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
@@ -81,9 +79,7 @@ public class MemberController {
     public ResponseEntity deleteMember(
             @PathVariable("member-id") @Positive Long memberId,
             Authentication authentication) { // 토큰검증하는 두번째 방법 -> context holder에서 바로 인증정보 가져오기
-        memberService.sameMemberTest2(memberId, authentication.getName()); // authentication.getName()이 이메일 가져오는거다.
-
-        memberService.deleteMember(memberId);
+        memberService.deleteMember(memberId, authentication.getName());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -93,11 +89,9 @@ public class MemberController {
             @PathVariable("member-id") @Positive Long memberId,
             @RequestBody MemberDto.ProfileImage requestBody,
             @RequestHeader("Authorization") String token) {
-        memberService.sameMemberTest(memberId, token); // 변경하려는 회원이 맞는지 확인
-
         Member member = memberService.findMember(memberId);
         member.setProfileImage(requestBody.getProfileImage());
-        Member updatedMember = memberService.updateMember(member);
+        Member updatedMember = memberService.updateMember(member, memberId, token);
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
