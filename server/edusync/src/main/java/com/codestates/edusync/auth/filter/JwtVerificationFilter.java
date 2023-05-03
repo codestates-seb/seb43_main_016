@@ -54,12 +54,12 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerReq
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
 
-        return authorization == null || !authorization.startsWith("WishJWT");  //  header의 값이 null이거나 WishJWT로 시작하지 않는다면 해당 Filter의 동작을 수행하지 않도록 정의
+        return authorization == null || !authorization.startsWith("c");  //  header의 값이 null이거나 Bearer로 시작하지 않는다면 해당 Filter의 동작을 수행하지 않도록 정의
         // JWT가 Authorization header에 포함되지 않았다면 JWT 자격증명이 필요하지 않은 리소스에 대한 요청이라고 판단하고 다음(Next) Filter로 처리를 넘기는 것
     }
 
     private Map<String, Object> verifyJws(HttpServletRequest request) { // JWT를 검증하는데 사용되는 메서드
-        String jws = request.getHeader("Authorization").replace("WishJWT ", ""); // "WishJWT" 부분을 제거해서 JWT(accessToken) 얻기
+        String jws = request.getHeader("Authorization").replace("Bearer ", ""); // "Bearer" 부분을 제거해서 JWT(accessToken) 얻기
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); // JWT 서명(Signature)을 검증하기 위한 Secret Key 얻기
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // Claims를 파싱
 

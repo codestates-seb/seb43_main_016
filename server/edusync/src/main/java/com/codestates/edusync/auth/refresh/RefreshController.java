@@ -28,8 +28,8 @@ public class RefreshController {
     @PostMapping
     public ResponseEntity<String> refreshAccessToken(HttpServletRequest request) { // 리프레쉬 토큰 받으면 엑세스 토큰 재발급
         String refreshTokenHeader = request.getHeader("Refresh");
-        if (refreshTokenHeader != null && refreshTokenHeader.startsWith("WishJWT ")) {
-            String refreshToken = refreshTokenHeader.substring(8);
+        if (refreshTokenHeader != null && refreshTokenHeader.startsWith("Bearer ")) {
+            String refreshToken = refreshTokenHeader.substring(7);
             try {
                 Jws<Claims> claims = jwtTokenizer.getClaims(refreshToken, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
 
@@ -40,7 +40,7 @@ public class RefreshController {
                     Member member = optionalMember.get();
                     String accessToken = delegateAccessToken(member);
 
-                    return ResponseEntity.ok().header("Authorization", "WishJWT " + accessToken).body("Access token refreshed");
+                    return ResponseEntity.ok().header("Authorization", "Bearer " + accessToken).body("Access token refreshed");
                 } else {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid member email");
                 }

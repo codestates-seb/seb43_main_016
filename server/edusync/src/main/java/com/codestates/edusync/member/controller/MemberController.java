@@ -95,4 +95,13 @@ public class MemberController {
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
+
+    @PatchMapping("/{member-id}/detail")
+    public ResponseEntity updateDetail(@PathVariable("member-id") @Positive Long memberId,
+                                       @RequestBody MemberDto.PostDetail requestBody,
+                                       @RequestHeader("Authorization") String token){
+        Member updatedMember = memberService.updateDetail(memberId, requestBody, token);
+        MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
+        return new ResponseEntity(responseDto, HttpStatus.OK);
+    }
 }

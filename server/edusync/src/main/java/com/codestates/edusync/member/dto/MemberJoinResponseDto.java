@@ -14,4 +14,6 @@ public class MemberJoinResponseDto {
     private String email;
     private String profileImage;
     private String nickName;
+    private String aboutMe;
+    private String withMe;
 }

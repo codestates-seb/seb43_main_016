@@ -3,6 +3,7 @@ package com.codestates.edusync.member.service;
 import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
+import com.codestates.edusync.member.dto.MemberDto;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.repository.MemberRepository;
 import com.codestates.edusync.util.JwtUtil;
@@ -60,8 +61,8 @@ public class MemberService {
                 .ifPresent(image -> findMember.setProfileImage(image));
         Optional.ofNullable(member.getLocation())
                 .ifPresent(location -> findMember.setLocation(location));
-        Optional.ofNullable(member.getTitle())
-                .ifPresent(title -> findMember.setTitle(title));
+        Optional.ofNullable(member.getWithMe())
+                .ifPresent(withMe -> findMember.setWithMe(withMe));
         Optional.ofNullable(member.getAboutMe())
                 .ifPresent(aboutMe -> findMember.setAboutMe(aboutMe));
         return memberRepository.save(findMember);
@@ -82,6 +83,14 @@ public class MemberService {
         Member findMember = findVerifiedMember(memberId);
 
         memberRepository.delete(findMember);
+    }
+
+    public Member updateDetail(Long memberId, MemberDto.PostDetail requestBody, String token){
+        Member member = findVerifiedMember(memberId);
+        member.setWithMe(requestBody.getWithMe());
+        member.setAboutMe(requestBody.getAboutMe());
+
+        return updateMember(member, memberId, token);
     }
 
     @Transactional(readOnly = true)
@@ -105,7 +114,9 @@ public class MemberService {
         String email = jwtUtil.extractEmailFromToken(token);
         Member findMember = findVerifiedMember(memberId);
 
-        if(!email.equals(findMember.getEmail())){
+        if(email == null || email == ""){
+            throw new BusinessLogicException(ExceptionCode.DUPLICATED_EMAIL, String.format("이메일을 찾을 수 없습니다. 올바른 토큰이 아닐 확률이 높습니다."));
+        }else if(!email.equals(findMember.getEmail())){
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION, String.format("유저(%s)가 권한을 가지고 있지 않습니다. 사용자(%s) 정보를 수정할 수 없습니다.", email, findMember.getEmail()));
         }
     }
