@@ -54,7 +54,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerReq
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
 
-        return authorization == null || !authorization.startsWith("c");  //  header의 값이 null이거나 Bearer로 시작하지 않는다면 해당 Filter의 동작을 수행하지 않도록 정의
+        return authorization == null || !authorization.startsWith("Bearer");  //  header의 값이 null이거나 Bearer로 시작하지 않는다면 해당 Filter의 동작을 수행하지 않도록 정의
         // JWT가 Authorization header에 포함되지 않았다면 JWT 자격증명이 필요하지 않은 리소스에 대한 요청이라고 판단하고 다음(Next) Filter로 처리를 넘기는 것
     }
 
