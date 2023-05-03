@@ -48,7 +48,7 @@ public class MemberController {
     public ResponseEntity patchMember(
             @PathVariable("member-id") @Positive Long memberId,
             @Valid @RequestBody MemberDto.Patch requestBody,
-            @RequestHeader("Authorization") String token) { // 토큰검증하는 첫번째 방법 -> 서버 내부긴 하지만 토큰이 돌아다니는게 썩 좋아보이지는 않는다.
+            @RequestHeader("Authorization") String token) { // 토큰검증하는 첫번째 방법
         requestBody.setId(memberId);
         Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody), memberId, token);
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updateMember);
