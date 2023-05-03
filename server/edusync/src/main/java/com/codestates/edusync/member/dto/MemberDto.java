@@ -38,4 +38,11 @@ public class MemberDto {
     public static class ProfileImage {
         private String profileImage;
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class PostDetail{
+        private String withMe;
+        private String aboutMe;
+    }
 }

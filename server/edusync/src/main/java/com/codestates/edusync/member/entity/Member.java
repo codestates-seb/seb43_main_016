@@ -37,7 +37,7 @@ public class Member extends Auditable {
 
     private String location;
 
-    private String title;
+    private String withMe;
 
     private String aboutMe;
 
