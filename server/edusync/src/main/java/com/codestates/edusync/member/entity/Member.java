@@ -17,7 +17,9 @@ public class Member extends Auditable {
     @Id // 식별자 등록
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별자를 자동으로 생성
     private Long id;
+    @Column(nullable = false, updatable = true, unique = true)
     private String nickName;
+    @Column(nullable = false, updatable = false, unique = true)
     private String email;
     @Column(length = 2147483647)
     private String profileImage;
