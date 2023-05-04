@@ -1,7 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
 import axios from "axios";
-console.log(process.env.REACT_APP_API_URL);
 const Signup = () => {
   const [nickName, setNickName] = useState("");
   const [email, setEmail] = useState("");
@@ -21,7 +20,7 @@ const Signup = () => {
       alert("닉네임과 이메일, 패스워드를 모두 입력해주세요!");
     else {
       axios
-        .post(`${process.env.REACT_APP_API_URL}/members`, {
+        .post(`${import.meta.env.VITE_APP_API_URL}/members`, {
           nickName,
           email,
           password,
