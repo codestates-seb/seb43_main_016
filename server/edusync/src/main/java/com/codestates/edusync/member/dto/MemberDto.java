@@ -3,7 +3,6 @@ package com.codestates.edusync.member.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
@@ -37,5 +36,12 @@ public class MemberDto {
     @AllArgsConstructor
     public static class ProfileImage {
         private String profileImage;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class PostDetail{
+        private String withMe;
+        private String aboutMe;
     }
 }

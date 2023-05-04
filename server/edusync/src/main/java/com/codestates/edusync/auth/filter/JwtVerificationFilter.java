@@ -40,12 +40,13 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerReq
             setAuthenticationToContext(claims);              // SecurityContext에 검증된 정보 저장
             filterChain.doFilter(request, response);         // 인증이 성공한 경우 다음 필터 호출
         } catch (SignatureException se) {
-            sendErrorResponse(response, HttpStatus.valueOf(401)); // 토큰 정보가 잘못되었을 경우 401 응답 반환
+            sendErrorResponse(response, HttpStatus.valueOf(401), "The token information is incorrect."); // 토큰 정보가 잘못되었을 경우 401 응답 반환 // Todo 왜 토큰 정보가 잘못되어도 안걸리는 경우가 생길까?
         } catch (ExpiredJwtException ee) {
-            sendErrorResponse(response, HttpStatus.valueOf(401)); // JWT가 만료된 경우 401 응답 반환
+            sendErrorResponse(response, HttpStatus.valueOf(401), "The token has expired."); // JWT가 만료된 경우 401 응답 반환
         } catch (Exception e) {
-            request.setAttribute("exception", e);
-            filterChain.doFilter(request, response);
+            sendErrorResponse(response, HttpStatus.valueOf(401), "The token information is incorrect.");
+//            request.setAttribute("exception", e); // 토큰의 길이가 짧으면 다른 오류를 발생시켜서 주석처리 함
+//            filterChain.doFilter(request, response);
         }
     }
 
@@ -54,14 +55,14 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerReq
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
 
-        return authorization == null || !authorization.startsWith("WishJWT");  //  header의 값이 null이거나 WishJWT로 시작하지 않는다면 해당 Filter의 동작을 수행하지 않도록 정의
+        return authorization == null || !authorization.startsWith("Bearer");  //  header의 값이 null이거나 Bearer로 시작하지 않는다면 해당 Filter의 동작을 수행하지 않도록 정의
         // JWT가 Authorization header에 포함되지 않았다면 JWT 자격증명이 필요하지 않은 리소스에 대한 요청이라고 판단하고 다음(Next) Filter로 처리를 넘기는 것
     }
 
     private Map<String, Object> verifyJws(HttpServletRequest request) { // JWT를 검증하는데 사용되는 메서드
-        String jws = request.getHeader("Authorization").replace("WishJWT ", ""); // "WishJWT" 부분을 제거해서 JWT(accessToken) 얻기
+        String jws = request.getHeader("Authorization").replace("Bearer ", ""); // "Bearer" 부분을 제거해서 JWT(accessToken) 얻기
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); // JWT 서명(Signature)을 검증하기 위한 Secret Key 얻기
-        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // Claims를 파싱
+        Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // Claims를 파싱 // 여기서 오류가 발생하면 SignatureException 발생
 
         return claims; // Claims가 정상적으로 파싱이 되면 서명 검증에 성공한거다.
     }
