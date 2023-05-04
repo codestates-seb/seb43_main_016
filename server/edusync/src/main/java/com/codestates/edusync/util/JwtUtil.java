@@ -16,9 +16,9 @@ public class JwtUtil {
     private String secretKey;
 
     public String extractEmailFromToken(String token) {
-        // "WishJWT " 부분 제거 (토큰만 남김)
-        if (token.startsWith("WishJWT ")) {
-            token = token.substring(8);
+        // "Bearer " 부분 제거 (토큰만 남김)
+        if (token.startsWith("Bearer ")) {
+            token = token.substring(7);
         }
 
         // secretKey를 Base64로 인코딩

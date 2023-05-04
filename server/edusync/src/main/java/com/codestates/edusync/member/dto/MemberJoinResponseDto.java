@@ -1,5 +1,6 @@
 package com.codestates.edusync.member.dto;
 
+import com.codestates.edusync.member.entity.Member;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,7 @@ public class MemberJoinResponseDto {
     private String email;
     private String profileImage;
     private String nickName;
+    private String aboutMe;
+    private String withMe;
+    private Member.MemberStatus memberStatus;
 }
