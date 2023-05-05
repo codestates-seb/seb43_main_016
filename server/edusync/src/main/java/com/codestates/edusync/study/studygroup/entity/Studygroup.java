@@ -38,7 +38,7 @@ public class Studygroup extends Auditable {
     private CalendarInfo calendar;
 
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    private List<TimeSchedule> timeSchedules;
+    private List<TimeSchedule> timeSchedules = new ArrayList<>();
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String introduction;
