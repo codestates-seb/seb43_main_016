@@ -34,6 +34,9 @@ public class Studygroup extends Auditable {
     @Column(nullable = false, columnDefinition = "TEXT")
     private String introduction;
 
+    @Column
+    private Integer maxClassmateCount;
+
     @Column(length = 50, nullable = false)
     private String platform;
 

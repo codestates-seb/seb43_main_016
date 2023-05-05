@@ -12,6 +12,7 @@ public class StudygroupResponseDto {
     private Long id;
     private String studyName;
     private String introduction;
+    private Integer maxClassmateCount;
     private String platform;
     private String address;
 
