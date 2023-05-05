@@ -19,6 +19,6 @@ public class CalendarInfo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private Timestamp startTime;
-    private Timestamp endTime;
+    private Timestamp startCalendar;
+    private Timestamp endCalendar;
 }
