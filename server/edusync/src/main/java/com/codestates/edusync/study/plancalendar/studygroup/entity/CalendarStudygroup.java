@@ -30,8 +30,7 @@ public class CalendarStudygroup {
     private Studygroup studygroup;
 
     // Studygroup 의 캘린더를 변경하거나 추가, 삭제할 경우, Classmate 의 캘린더에도 함께 적용한다
-    @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    @JoinColumn(name = "fk_calendar_classmate_id")
+    @OneToMany(mappedBy = "calendarStudygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<CalendarClassmate> calendarClassmates;
 
     @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)

@@ -17,8 +17,10 @@ public class StudygroupClassmateRef {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "fk_classmate_id")
     private Classmate classmate;
 
     @ManyToOne
+    @JoinColumn(name = "fk_studygroup_id")
     private Studygroup studygroup;
 }

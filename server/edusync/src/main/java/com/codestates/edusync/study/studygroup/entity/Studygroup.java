@@ -39,19 +39,15 @@ public class Studygroup extends Auditable {
     private Classmate studygroupLeader;
 
     @OneToMany(mappedBy = "studygroup", fetch = LAZY)
-    @JoinColumn(name = "fk_studygroup_classmate_refs")
     private List<StudygroupClassmateRef> studygroupClassmateRefs = new ArrayList<>();
 
     // 댓글은 항상 필요한 것이니 바로 불러올 수 있도록 한다
-    @OneToMany(cascade = {REMOVE}, fetch = EAGER)
-    @JoinColumn(name = "fk_study_post_comments_id")
+    @OneToMany(mappedBy = "studygroup", cascade = {REMOVE}, fetch = EAGER)
     private List<StudyPostComment> studyPostComments = new ArrayList<>();
 
-    @OneToOne(cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)
-    @JoinColumn(name = "fk_calendar_studygroup_id")
+    @OneToOne(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)
     private CalendarStudygroup calendarStudygroup;
 
-    @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    @JoinColumn(name = "fk_search_tags_id")
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<SearchTag> searchTags = new ArrayList<>();
 }
