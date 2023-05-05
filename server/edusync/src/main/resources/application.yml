@@ -24,6 +24,16 @@ spring:
     properties:
       hibernate.format_sql: true
       hibernate.default_batch_fetch_size: 100
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 90423476142-0p4j9mmj540elt7qgg5udb7hsiog7hi2.apps.googleusercontent.com
+            clientSecret: ${GoogleClientSecret}
+            scope:
+              - email
+              - profile
 mail:
   address:
     admin: admin@gmail.com
