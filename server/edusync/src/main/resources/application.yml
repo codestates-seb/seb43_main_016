@@ -18,7 +18,7 @@ spring:
     log-request-details: true
   jpa:
     defer-datasource-initialization: true
-    hibernate.ddl-auto: update  # create, create-drop 시 FK drop 오류 발생하기에 update 로 변경
+    hibernate.ddl-auto: create-drop
     open-in-view: false
     show-sql: true
     properties:
@@ -30,7 +30,16 @@ spring:
         type:
           descriptor:
             sql: trace
-
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 90423476142-0p4j9mmj540elt7qgg5udb7hsiog7hi2.apps.googleusercontent.com
+            clientSecret: ${GoogleClientSecret}
+            scope:
+              - email
+              - profile
 mail:
   address:
     admin: admin@gmail.com
