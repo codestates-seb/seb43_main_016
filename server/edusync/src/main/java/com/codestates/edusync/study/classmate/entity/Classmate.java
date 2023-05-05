@@ -1,7 +1,7 @@
 package com.codestates.edusync.study.classmate.entity;
 
 import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.study.locationInfo.entity.LocationInfo;
+import com.codestates.edusync.study.locationinfo.entity.LocationInfo;
 import com.codestates.edusync.study.plancalendar.classmate.entity.CalendarClassmate;
 import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
