@@ -39,7 +39,7 @@ public class Classmate {
     private List<StudygroupClassmateRef> studygroupClassmateRef;
 
     @OneToOne(cascade = {MERGE}, fetch = EAGER)
-    @JoinColumn(name = "fk_member_id")
+    @JoinColumn(name = "fk_classmate_id")
     private Member member;
 
     @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)

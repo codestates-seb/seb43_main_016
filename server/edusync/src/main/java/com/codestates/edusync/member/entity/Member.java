@@ -57,7 +57,6 @@ public class Member extends Auditable {
         }
     }
 
-    @OneToOne(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    @JoinColumn(name = "fk_classmate_id")
+    @OneToOne(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private Classmate classmate;
 }
