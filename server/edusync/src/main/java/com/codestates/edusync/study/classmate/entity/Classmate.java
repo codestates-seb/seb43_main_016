@@ -35,7 +35,7 @@ public class Classmate {
     private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
     @OneToMany(mappedBy = "studygroupLeader", fetch = LAZY)
-    private List<Studygroup> studygroupAsLeader;
+    private List<Studygroup> studygroupAsLeader = new ArrayList<>();
 
     @OneToMany(mappedBy = "classmate", fetch = LAZY)
     private List<StudygroupClassmateRef> studygroupClassmateRef = new ArrayList<>();
