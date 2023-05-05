@@ -34,7 +34,6 @@ public class Member extends Auditable {
 
     @ElementCollection(fetch = FetchType.EAGER) // 별도의 테이블로 생성해서 저장 // 권한 여러개 설정할거면 나중에 바꾸기 (String roles 지우고 관련 메서드 체크!)
     private List<String> roles = new ArrayList<>(); // 권한 테이블
-    private String location;
     private String withMe;
     private String aboutMe;
     @Enumerated(value = EnumType.STRING)

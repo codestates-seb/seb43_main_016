@@ -62,8 +62,6 @@ public class MemberService {
                 .ifPresent(password -> findMember.setPassword(password));
         Optional.ofNullable(member.getProfileImage())
                 .ifPresent(image -> findMember.setProfileImage(image));
-        Optional.ofNullable(member.getLocation())
-                .ifPresent(location -> findMember.setLocation(location));
         Optional.ofNullable(member.getWithMe())
                 .ifPresent(withMe -> findMember.setWithMe(withMe));
         Optional.ofNullable(member.getAboutMe())

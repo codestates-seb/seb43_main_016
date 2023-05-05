@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Setter
@@ -18,4 +20,5 @@ public class MemberJoinResponseDto {
     private String aboutMe;
     private String withMe;
     private Member.MemberStatus memberStatus;
+    private List<String> roles;
 }
