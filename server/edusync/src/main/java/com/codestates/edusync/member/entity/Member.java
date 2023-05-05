@@ -10,6 +10,9 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
+
 @NoArgsConstructor
 @Getter
 @Setter
@@ -54,7 +57,7 @@ public class Member extends Auditable {
         }
     }
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "classmate_id")
+    @OneToOne(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    @JoinColumn(name = "fk_classmate_id")
     private Classmate classmate;
 }
