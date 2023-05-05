@@ -8,7 +8,7 @@ import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudy
 import com.codestates.edusync.study.plancalendar.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
 import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
-import com.codestates.edusync.tags.entity.SearchTag;
+import com.codestates.edusync.searchtag.entity.SearchTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
