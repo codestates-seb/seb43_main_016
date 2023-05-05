@@ -1,6 +1,5 @@
 package com.codestates.edusync.study.plancalendar.studygroup.entity;
 
-import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.study.plancalendar.classmate.entity.CalendarClassmate;
 import com.codestates.edusync.study.plancalendar.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;

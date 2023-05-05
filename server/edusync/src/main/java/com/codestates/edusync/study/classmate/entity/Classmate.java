@@ -35,7 +35,7 @@ public class Classmate {
     private Studygroup studygroup;
 
     @OneToMany(mappedBy = "classmate", fetch = LAZY)
-    private List<StudygroupClassmateRef> studygroupClassmateRef;
+    private List<StudygroupClassmateRef> studygroupClassmateRef = new ArrayList<>();
 
     @OneToOne(cascade = {MERGE}, fetch = EAGER)
     @JoinColumn(name = "fk_classmate_id")

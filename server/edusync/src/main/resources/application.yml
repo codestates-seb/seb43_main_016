@@ -18,12 +18,19 @@ spring:
     log-request-details: true
   jpa:
     defer-datasource-initialization: true
-    hibernate.ddl-auto: create-drop
+    hibernate.ddl-auto: update  # create, create-drop 시 FK drop 오류 발생하기에 update 로 변경
     open-in-view: false
     show-sql: true
     properties:
-      hibernate.format_sql: true
-      hibernate.default_batch_fetch_size: 100
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        highlight_sql: true
+        color-codes: true
+        type:
+          descriptor:
+            sql: trace
+
 mail:
   address:
     admin: admin@gmail.com
