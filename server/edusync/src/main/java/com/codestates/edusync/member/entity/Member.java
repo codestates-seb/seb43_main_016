@@ -1,6 +1,7 @@
 package com.codestates.edusync.member.entity;
 
 import com.codestates.edusync.audit.Auditable;
+import com.codestates.edusync.study.classmate.entity.Classmate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -8,6 +9,9 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+
+import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.*;
 
 @NoArgsConstructor
 @Getter
@@ -21,7 +25,7 @@ public class Member extends Auditable {
     private String nickName;
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
-    @Column(length = 2147483647)
+    @Column(length = 2147483647)    // fixme : 길이 제한 걸릴 경우 length = -1 이나 columnDefinition = "TEXT" 타입 고려
     private String profileImage;
     private String password;
 
@@ -52,4 +56,7 @@ public class Member extends Auditable {
             this.status = status;
         }
     }
+
+    @OneToOne(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    private Classmate classmate;
 }
