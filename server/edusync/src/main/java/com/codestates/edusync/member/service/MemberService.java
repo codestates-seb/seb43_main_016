@@ -6,7 +6,6 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.member.dto.MemberDto;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.repository.MemberRepository;
-import com.codestates.edusync.util.JwtUtil;
 import com.codestates.edusync.util.VerifyMember;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -28,7 +27,6 @@ public class MemberService implements VerifyMember {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-    private final JwtUtil jwtUtil;
 
     public Member createMember(Member member) {
         verifyExistsEmail(member.getEmail());
@@ -51,9 +49,9 @@ public class MemberService implements VerifyMember {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Member updateMember(Member member, Long memberId, String token) {
+    public Member updateMember(Member member, Long memberId, String email) {
         verifyMemberIsActive(member);
-        sameMemberTest(memberId, token);
+        sameMemberTest(memberId, email);
 
         Member findMember = findVerifiedMember(member.getId());
 
@@ -81,7 +79,7 @@ public class MemberService implements VerifyMember {
     }
 
     public void deleteMember(Long memberId, String email) {
-        sameMemberTest2(memberId, email);
+        sameMemberTest(memberId, email);
         Member findMember = findVerifiedMember(memberId);
         verifyMemberIsActive(findMember);
         String newEmail = "del_" + memberId + "_" + findMember.getEmail();
@@ -120,22 +118,12 @@ public class MemberService implements VerifyMember {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s는 이미 가입한 이메일입니다.", email));
     }
 
-    public void sameMemberTest(Long memberId, String token){
-        String email = jwtUtil.extractEmailFromToken(token);
+    public void sameMemberTest(Long memberId, String email){
         Member findMember = findVerifiedMember(memberId);
 
         if(email == null || email == ""){
             throw new BusinessLogicException(ExceptionCode.DUPLICATED_EMAIL, String.format("이메일을 찾을 수 없습니다. 올바른 토큰이 아닐 확률이 높습니다."));
         }else if(!email.equals(findMember.getEmail())){
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION, String.format("유저(%s)가 권한을 가지고 있지 않습니다. 사용자(%s) 정보를 수정할 수 없습니다.", email, findMember.getEmail()));
-        }
-    }
-
-    public void sameMemberTest2(Long memberId, String email){
-        Member findMember = memberRepository.findByEmail(email).orElseThrow(() ->
-                new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("이메일(%s)에 해당하는 회원을 찾을 수 없습니다.", email))); // 어차피 인증객체 가져오는거라 불가능한 경우의 수다. 하지만 더블 체크용으로 작성
-
-        if(!email.equals(findMember.getEmail())){
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION, String.format("유저(%s)가 권한을 가지고 있지 않습니다. 사용자(%s) 정보를 수정할 수 없습니다.", email, findMember.getEmail()));
         }
     }
