@@ -1,9 +1,11 @@
 package com.codestates.edusync.study.studygroup.entity;
 
 import com.codestates.edusync.audit.Auditable;
+import com.codestates.edusync.study.calendarinfo.entity.CalendarInfo;
 import com.codestates.edusync.study.classmate.entity.Classmate;
-import com.codestates.edusync.study.locationInfo.entity.LocationInfo;
+import com.codestates.edusync.study.locationinfo.entity.LocationInfo;
 import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
+import com.codestates.edusync.study.plancalendar.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
 import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
 import com.codestates.edusync.tags.entity.SearchTag;
@@ -30,6 +32,14 @@ public class Studygroup extends Auditable {
 
     @Column(length = 50, nullable = false)
     private String studyName;
+
+    @OneToOne(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    @JoinColumn(name = "fk_calendar_info_id")
+    private CalendarInfo calendar;
+
+    @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    @JoinColumn(name = "fk_time_schedule_id")
+    private List<TimeSchedule> timeSchedule;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String introduction;

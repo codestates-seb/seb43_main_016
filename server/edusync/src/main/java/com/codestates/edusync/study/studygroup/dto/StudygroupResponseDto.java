@@ -11,6 +11,8 @@ import lombok.Setter;
 public class StudygroupResponseDto {
     private Long id;
     private String studyName;
+    private String calendar;
+    private String timeSchedule;
     private String introduction;
     private Integer maxClassmateCount;
     private String platform;
