@@ -28,8 +28,14 @@ public class Studygroup extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 50, nullable = false)
+    private String studyName;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String introduction;
+
+    @Column(length = 50, nullable = false)
+    private String platform;
 
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, REMOVE}, fetch = LAZY)
     private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
