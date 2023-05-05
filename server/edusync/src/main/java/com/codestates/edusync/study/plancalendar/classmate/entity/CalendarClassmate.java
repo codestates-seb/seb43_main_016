@@ -28,7 +28,7 @@ public class CalendarClassmate {
     @JoinColumn(name = "fk_classmate_id")
     private Classmate classmate;
 
-    @ManyToOne(cascade = {PERSIST, REMOVE}, fetch = EAGER)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "fk_calendar_studygroup_id")
     private CalendarStudygroup calendarStudygroup;
 
