@@ -1,12 +1,14 @@
 package com.codestates.edusync.study.studygroup.entity;
 
 import com.codestates.edusync.audit.Auditable;
+import com.codestates.edusync.study.calendarinfo.entity.CalendarInfo;
 import com.codestates.edusync.study.classmate.entity.Classmate;
-import com.codestates.edusync.study.locationInfo.entity.LocationInfo;
+import com.codestates.edusync.study.locationinfo.entity.LocationInfo;
 import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
+import com.codestates.edusync.study.plancalendar.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
 import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
-import com.codestates.edusync.tags.entity.SearchTag;
+import com.codestates.edusync.searchtag.entity.SearchTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -28,8 +30,24 @@ public class Studygroup extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(length = 50, nullable = false)
+    private String studyName;
+
+    @OneToOne(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    @JoinColumn(name = "fk_calendar_info_id")
+    private CalendarInfo calendar;
+
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    private List<TimeSchedule> timeSchedules;
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String introduction;
+
+    @Column
+    private Integer maxClassmateCount;
+
+    @Column(length = 50, nullable = false)
+    private String platform;
 
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, REMOVE}, fetch = LAZY)
     private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
