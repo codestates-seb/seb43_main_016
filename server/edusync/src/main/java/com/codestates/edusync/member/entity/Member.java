@@ -1,6 +1,7 @@
 package com.codestates.edusync.member.entity;
 
 import com.codestates.edusync.audit.Auditable;
+import com.codestates.edusync.study.classmate.entity.Classmate;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -52,4 +53,8 @@ public class Member extends Auditable {
             this.status = status;
         }
     }
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "classmate_id")
+    private Classmate classmate;
 }
