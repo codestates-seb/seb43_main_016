@@ -5,6 +5,7 @@ import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.study.locationInfo.entity.LocationInfo;
 import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
 import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
+import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
 import com.codestates.edusync.tags.entity.SearchTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,6 +30,9 @@ public class Studygroup extends Auditable {
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String introduction;
+
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, REMOVE}, fetch = LAZY)
+    private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
     @OneToOne(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     @JoinColumn(name = "fk_location_info_id")

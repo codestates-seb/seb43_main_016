@@ -6,6 +6,7 @@ import com.codestates.edusync.study.plancalendar.classmate.entity.CalendarClassm
 import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.entity.StudygroupClassmateRef;
+import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +30,9 @@ public class Classmate {
     @OneToOne(cascade = {PERSIST, MERGE, CascadeType.REMOVE}, fetch = LAZY)
     @JoinColumn(name = "fk_location_info_id")
     private LocationInfo locationInfo;
+
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, REMOVE}, fetch = LAZY)
+    private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "fk_study_group_id")
