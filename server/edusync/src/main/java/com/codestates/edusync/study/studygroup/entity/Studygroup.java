@@ -37,9 +37,8 @@ public class Studygroup extends Auditable {
     @JoinColumn(name = "fk_calendar_info_id")
     private CalendarInfo calendar;
 
-    @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    @JoinColumn(name = "fk_time_schedule_id")
-    private List<TimeSchedule> timeSchedule;
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    private List<TimeSchedule> timeSchedules;
 
     @Column(nullable = false, columnDefinition = "TEXT")
     private String introduction;

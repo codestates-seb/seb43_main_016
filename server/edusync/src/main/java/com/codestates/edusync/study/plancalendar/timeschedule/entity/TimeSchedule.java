@@ -1,6 +1,7 @@
 package com.codestates.edusync.study.plancalendar.timeschedule.entity;
 
 import com.codestates.edusync.audit.Auditable;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,12 +18,13 @@ public class TimeSchedule extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100, nullable = false)
-    private String content;
-
     @Column
     private Timestamp startTime;
 
     @Column
     private Timestamp endTime;
+
+    @ManyToOne
+    @JoinColumn(name = "fk_studygroup_id")
+    private Studygroup studygroup;
 }
