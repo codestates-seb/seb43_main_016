@@ -21,7 +21,7 @@ public class Member extends Auditable {
     private String nickName;
     @Column(nullable = false, updatable = false, unique = true)
     private String email;
-    @Column(length = 2147483647)
+    @Column(length = 2147483647)    // fixme : 길이 제한 걸릴 경우 length = -1 이나 columnDefinition = "TEXT" 타입 고려
     private String profileImage;
     private String password;
 
