@@ -7,6 +7,7 @@ import com.codestates.edusync.member.dto.MemberDto;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.repository.MemberRepository;
 import com.codestates.edusync.util.JwtUtil;
+import com.codestates.edusync.util.VerifyMember;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -23,7 +24,7 @@ import java.util.Optional;
 @AllArgsConstructor
 @Transactional
 @Service
-public class MemberService {
+public class MemberService implements VerifyMember {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
@@ -139,7 +140,7 @@ public class MemberService {
         }
     }
 
-    private void verifyMemberIsActive(Member member) {
+    public void verifyMemberIsActive(Member member) {
         if (member.getMemberStatus() != Member.MemberStatus.MEMBER_ACTIVE) {
             throw new BusinessLogicException(ExceptionCode.INACTIVE_MEMBER,
                     String.format("멤버(%s)는 활성화되지 않았습니다. 해당 요청을 처리할 수 없습니다.", member.getEmail()));
