@@ -34,9 +34,8 @@ public class Classmate {
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, REMOVE}, fetch = LAZY)
     private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "fk_study_group_id")
-    private Studygroup studygroup;
+    @OneToMany(mappedBy = "studygroupLeader", fetch = LAZY)
+    private List<Studygroup> studygroupAsLeader;
 
     @OneToMany(mappedBy = "classmate", fetch = LAZY)
     private List<StudygroupClassmateRef> studygroupClassmateRef = new ArrayList<>();
