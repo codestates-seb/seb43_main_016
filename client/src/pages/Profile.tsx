@@ -29,12 +29,23 @@ const Profile = () => {
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
   // Edit 버튼 클릭 시, isEdit 상태를 업데이트하는 코드
-  const handleEditBtn = (e: FormEvent<HTMLButtonElement>) => {
+  const handleEditBtn = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    const enterPassword = prompt("수정할 비밀번호를 입력해주세요");
-    const userPassword = "" // ? JWT 토큰으로 어떻게 유저정보를 가져올 수 있을까?
-    if (enterPassword === userPassword) {
-      setIsEdit(!isEdit);
+
+    const token = localStorage.getItem("accessToken");
+
+    const res = await axios.get("http://localhost:3001/member/1", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    const data = res.data;
+    const enterPassword = prompt(
+      "개인정보를 수정하려면 비밀번호를 재확인해주세요."
+    );
+    if (enterPassword === data.password) {
+      setIsEdit(true);
     }
   };
 
