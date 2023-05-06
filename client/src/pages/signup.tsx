@@ -2,6 +2,8 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
+import logo from "../assets/edusync-logo.png";
+import googleLogo from "../assets/google-icon.png";
 import { validateEmptyInput } from "./utils/loginUtils";
 const SignUp = () => {
   const [nickName, setNickName] = useState("");
@@ -24,7 +26,7 @@ const SignUp = () => {
     );
   };
 
-  const handleSignupButton = () => {
+  const handleSignUpButton = () => {
     if (
       validateEmptyInput(nickName) ||
       validateEmptyInput(email) ||
@@ -55,6 +57,9 @@ const SignUp = () => {
   return (
     <Container>
       <SignUpDiv>
+        <LogoDiv>
+          <img src={logo} />
+        </LogoDiv>
         <SignUpForm>
           <input
             onChange={handleNickName}
@@ -80,8 +85,10 @@ const SignUp = () => {
           />
         </SignUpForm>
         <ButtonDiv>
-          <button onClick={handleSignupButton}>Sign up</button>
-          <div>구글</div>
+          <button onClick={handleSignUpButton}>Sign up</button>
+          <div onClick={handleSignUpButton}>
+            <img src={googleLogo} alt="goole-login" />
+          </div>
         </ButtonDiv>
       </SignUpDiv>
       <LoginLink to="/login">로그인하러 가기</LoginLink>
@@ -97,6 +104,13 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 `;
+const LogoDiv = styled.div`
+  margin-bottom: 1rem;
+  img {
+    width: 10rem;
+  }
+`;
+
 const SignUpDiv = styled.div`
   background-color: #ffffff;
   border-radius: 10px;
@@ -127,10 +141,25 @@ const SignUpForm = styled.form`
     padding: 10px;
   }
 `;
-const ButtonDiv = styled.div``;
+const ButtonDiv = styled.div`
+  margin-top: 1rem;
+  width: 75%;
+  display: flex;
+  justify-content: space-between;
+  button {
+    width: 71%;
+    height: 45px;
+  }
+  img {
+    width: 45px;
+    border: 2px solid #e9e9e9;
+    border-radius: 50%;
+  }
+`;
 const LoginLink = styled(Link)`
   text-decoration-line: none;
   color: #ffffff;
+  font-size: 11px;
 `;
 
 export default SignUp;
