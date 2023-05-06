@@ -27,6 +27,22 @@ type UserInfo = Omit<UserInfoResponseDto, "memberStatus">;
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // 최초 페이지 렌더링 시 유저 정보를 가져오는 코드
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      try {
+        const res = await axios.get("http://localhost:3001/member/1");
+        const data = res.data;
+        setUserInfo(data);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserInfo();
+  }, []);
 
   // Edit 버튼 클릭 시, isEdit 상태를 업데이트하는 코드
   const handleEditBtn = async (e: FormEvent<HTMLButtonElement>) => {
@@ -46,22 +62,10 @@ const Profile = () => {
     );
     if (enterPassword === data.password) {
       setIsEdit(true);
+    } else {
+      alert("비밀번호를 다시 확인하세요");
     }
   };
-
-  useEffect(() => {
-    const fetchUserInfo = async () => {
-      try {
-        const res = await axios.get("http://localhost:3001/member/1");
-        const data = res.data;
-        setUserInfo(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
-    fetchUserInfo();
-  }, []);
 
   // input 태그의 값이 변경될 때, userInfo 상태를 업데이트하는 코드
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -71,6 +75,31 @@ const Profile = () => {
       ...prevUserInfo,
       [name]: value,
     }));
+  };
+
+  // save 버튼 클릭 시 유저 정보를 수정하는 코드
+  const handleSaveBtn = async (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const token = localStorage.getItem("accessToken");
+
+    setIsLoading(true);
+
+    try {
+      const res = await axios.put("http://localhost:3001/member/1", userInfo, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      const updatedUserInfo = res.data;
+      setUserInfo(updatedUserInfo);
+      setIsEdit(false);
+    } catch (error) {
+      console.error(error);
+      alert("개인정보 수정에 실패했습니다.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   // 회원탈퇴 버튼 클릭 시, 회원정보 삭제를 요청하는 코드
@@ -159,7 +188,7 @@ const Profile = () => {
         {!isEdit ? (
           <button onClick={handleEditBtn}>Edit</button>
         ) : (
-          <button onClick={handleEditBtn}>Sumbit</button>
+          <button onClick={handleSaveBtn}>Save</button>
         )}
         <button onClick={handleDeleteBtn}>회원탈퇴</button>
       </form>

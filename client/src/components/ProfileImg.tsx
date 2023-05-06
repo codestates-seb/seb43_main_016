@@ -8,7 +8,10 @@ const ProfileImgSection = styled.div``;
 const ProfileImg = () => {
   const [imageUrl, setImageUrl] = useState<string>("");
 
-  // TODO 업로드 된 이미지를 S3에 저장하는 함수
+  // TODO 업로드 된 이미지를 S3에 저장할 것을 요청하는 함수
+  const uploadImg = () => {
+
+  };
 
 
   // TODO 이미지가 잘 업로드 되는지 확인하는 함수
