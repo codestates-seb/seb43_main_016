@@ -4,12 +4,23 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-@NoArgsConstructor
-@Getter
-@Setter
+import javax.validation.constraints.NotNull;
+
 public class StudyPostCommentDto {
 
+    @NoArgsConstructor
+    @Getter
     public static class Post {
+        @NotNull
+        private String content;
+    }
 
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Patch {
+        private Long id;
+
+        private String content;
     }
 }
