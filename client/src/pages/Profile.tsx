@@ -27,9 +27,8 @@ type UserInfo = Omit<UserInfoResponseDto, "memberStatus">;
 const Profile = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const [isLoading, setIsLoading] = useState<boolean>(false);
 
-  // 최초 페이지 렌더링 시 유저 정보를 가져오는 코드
+  // TODO 최초 페이지 렌더링 시 유저 정보를 가져오는 코드
   useEffect(() => {
     const fetchUserInfo = async () => {
       try {
@@ -44,30 +43,35 @@ const Profile = () => {
     fetchUserInfo();
   }, []);
 
-  // Edit 버튼 클릭 시, isEdit 상태를 업데이트하는 코드
+  // TODO Edit 버튼 클릭 시, 유저 비밀번호를 검증하고 isEdit 상태를 업데이트하는 코드
   const handleEditBtn = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const token = localStorage.getItem("accessToken");
+    const enterPassword = prompt("개인정보를 수정하려면 비밀번호를 확인이 필요합니다");
 
-    const res = await axios.get("http://localhost:3001/member/1", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    const data = res.data;
-    const enterPassword = prompt(
-      "개인정보를 수정하려면 비밀번호를 재확인해주세요."
-    );
-    if (enterPassword === data.password) {
-      setIsEdit(true);
-    } else {
-      alert("비밀번호를 다시 확인하세요");
+    try {
+      //
+      const res = await axios.post(
+        "http://localhost:3001/verify-password", // ? 유저의 비밀번호 검증을 수행하는 별도의 api 엔드포인트를 요청한다.
+        {
+          password: enterPassword,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      if (res.status < 299) {
+        setIsEdit(true);
+      }
+    } catch (error) {
+      alert("비밀번호를 확인하세요");
     }
   };
 
-  // input 태그의 값이 변경될 때, userInfo 상태를 업데이트하는 코드
+  // TODO input 태그의 값이 변경될 때, userInfo 상태를 업데이트하는 코드
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setUserInfo((prevUserInfo: any) => ({
@@ -77,13 +81,11 @@ const Profile = () => {
     }));
   };
 
-  // save 버튼 클릭 시 유저 정보를 수정하는 코드
+  // TODO save 버튼 클릭 시 유저 정보를 수정하는 코드
   const handleSaveBtn = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
 
     const token = localStorage.getItem("accessToken");
-
-    setIsLoading(true);
 
     try {
       const res = await axios.put("http://localhost:3001/member/1", userInfo, {
@@ -95,14 +97,11 @@ const Profile = () => {
       setUserInfo(updatedUserInfo);
       setIsEdit(false);
     } catch (error) {
-      console.error(error);
       alert("개인정보 수정에 실패했습니다.");
-    } finally {
-      setIsLoading(false);
     }
   };
 
-  // 회원탈퇴 버튼 클릭 시, 회원정보 삭제를 요청하는 코드
+  // TODO 회원탈퇴 버튼 클릭 시, 회원정보 삭제를 요청하는 코드
   const handleDeleteBtn = () => {
     const deleteUserInfo = async () => {
       try {
