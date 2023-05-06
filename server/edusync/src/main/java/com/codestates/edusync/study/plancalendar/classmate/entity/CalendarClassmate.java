@@ -2,7 +2,7 @@ package com.codestates.edusync.study.plancalendar.classmate.entity;
 
 import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
-import com.codestates.edusync.study.plancalendar.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

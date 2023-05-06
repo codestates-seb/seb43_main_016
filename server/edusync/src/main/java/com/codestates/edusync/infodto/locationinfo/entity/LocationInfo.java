@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.locationinfo.entity;
+package com.codestates.edusync.infodto.locationinfo.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

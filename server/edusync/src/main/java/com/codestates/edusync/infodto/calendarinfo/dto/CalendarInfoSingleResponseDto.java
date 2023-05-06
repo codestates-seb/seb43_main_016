@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.calendarinfo.dto;
+package com.codestates.edusync.infodto.calendarinfo.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
