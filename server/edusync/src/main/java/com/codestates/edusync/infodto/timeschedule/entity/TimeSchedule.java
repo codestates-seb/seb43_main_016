@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.plancalendar.timeschedule.entity;
+package com.codestates.edusync.infodto.timeschedule.entity;
 
 import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;

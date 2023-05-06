@@ -1,11 +1,9 @@
-package com.codestates.edusync.study.plancalendar.timeschedule.dto;
+package com.codestates.edusync.infodto.timeschedule.dto;
 
-import com.codestates.edusync.study.calendarinfo.dto.CalendarInfoSingleResponseDto;
+import com.codestates.edusync.infodto.calendarinfo.dto.CalendarInfoSingleResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.sql.Timestamp;
 
 @NoArgsConstructor
 @Getter

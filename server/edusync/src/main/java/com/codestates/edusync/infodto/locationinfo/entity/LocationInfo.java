@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.locationinfo.entity;
+package com.codestates.edusync.infodto.locationinfo.entity;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,8 +19,8 @@ public class LocationInfo {
     private String address;
 
     @Column(nullable = true)
-    private float latitude;
+    private Float latitude;
 
     @Column(nullable = true)
-    private float longitude;
+    private Float longitude;
 }
