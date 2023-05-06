@@ -71,5 +71,5 @@ public class Studygroup extends Auditable {
     private CalendarStudygroup calendarStudygroup;
 
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    private List<SearchTag> searchTags = new ArrayList<>();
+    private List<SearchTag> tags = new ArrayList<>();
 }
