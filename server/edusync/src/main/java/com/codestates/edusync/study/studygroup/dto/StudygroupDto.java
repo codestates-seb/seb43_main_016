@@ -15,7 +15,6 @@ public class StudygroupDto {
 
     @NoArgsConstructor
     @Getter
-    @Setter
     public static class Post {
         @NotNull
         private String studyName;
@@ -39,6 +38,7 @@ public class StudygroupDto {
     @Getter
     @Setter
     public static class Patch {
+        private Long id;
         private String studyName;
 
         private CalendarInfoDto calendar;
