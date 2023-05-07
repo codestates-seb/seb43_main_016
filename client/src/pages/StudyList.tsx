@@ -8,28 +8,32 @@ import StudyListBox from "../components/StudyListBox";
 const StudyList = () => {
   return (
     <StudyListContainer>
-      <StudyListMain>
+      <StudyListBody>
         <StudyListTop>
           <h2>여러분의 스터디를 만들어보세요!</h2>
           <Link to="/">
             <StudyPostButton>스터디 모집!</StudyPostButton>
           </Link>
         </StudyListTop>
-        <StudyListWrapper>
+        <StudyListMain>
           <StudyListBox />
           <StudyListBox />
           <StudyListBox />
           <StudyListBox />
           <StudyListBox />
           <StudyListBox />
-        </StudyListWrapper>
-      </StudyListMain>
+          <StudyListBox />
+          <StudyListBox />
+          <StudyListBox />
+        </StudyListMain>
+      </StudyListBody>
     </StudyListContainer>
   );
 };
 
 const StudyListContainer = styled.div`
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   background-color: #e0e0e0;
   display: flex;
   flex-direction: column;
@@ -37,10 +41,10 @@ const StudyListContainer = styled.div`
   align-items: center;
 `;
 
-const StudyListMain = styled.div`
+const StudyListBody = styled.div`
   width: 960px;
-  height: 100vh;
-  padding-top: 80px;
+  height: 100%;
+  padding-top: 120px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -58,6 +62,7 @@ const StudyListTop = styled.div`
   h2 {
     text-align: left;
     font-size: 2rem;
+    color: #1f1f1f;
     font-weight: 700;
     margin-left: 20px;
   }
@@ -79,7 +84,7 @@ const StudyPostButton = styled.button`
   }
 `;
 
-const StudyListWrapper = styled.div`
+const StudyListMain = styled.div`
   width: 960px;
   display: flex;
   flex-flow: row wrap;

@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 const StudyListBox = () => {
   return (
     <StudyListBoxContainer>
-      <Link to="/">
+      <Link to="/studycontent">
         <StudyListImage></StudyListImage>
         <StudyListTitle>
           <h3>TypeScript 스터디 모집</h3>
@@ -43,6 +43,7 @@ const StudyListImage = styled.div`
 const StudyListTitle = styled.div`
   width: 260px;
   padding: 15px 0;
+  color: #1f1f1f;
   display: flex;
   justify-content: flex-start;
   align-items: center;
