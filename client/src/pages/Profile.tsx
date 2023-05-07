@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from "react";
-import ProfileNav from "../components/ProfileNav";
-import ProfileImg from "../components/ProfileImg";
+import ProfileNav from "../components/profileNav";
+import ProfileImg from "../components/profileImg";
 import styled from "styled-components";
 import axios from "axios";
 
@@ -48,7 +48,9 @@ const Profile = () => {
     e.preventDefault();
 
     const token = localStorage.getItem("accessToken");
-    const enterPassword = prompt("개인정보를 수정하려면 비밀번호를 확인이 필요합니다");
+    const enterPassword = prompt(
+      "개인정보를 수정하려면 비밀번호를 확인이 필요합니다"
+    );
 
     try {
       //
