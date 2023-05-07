@@ -1,7 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./GlobalStyle";
-import Login from "./pages/Login";
-import SignUp from "./pages/SignUp";
+import Login from "./pages/login";
+import SignUp from "./pages/signup";
+import Profile from "./pages/Profile";
+import Calender from "./pages/calender";
 import "./App.css";
 
 function App() {
@@ -10,9 +12,10 @@ function App() {
       <BrowserRouter>
         <GlobalStyle />
         <Routes>
-          <Route path="/" element={<>home</>} />
+          <Route path="/profile" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
+          <Route path="/calender" element={<Calender />} />
           <Route />
         </Routes>
       </BrowserRouter>
