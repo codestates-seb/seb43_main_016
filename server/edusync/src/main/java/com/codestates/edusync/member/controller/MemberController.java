@@ -104,4 +104,17 @@ public class MemberController {
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
+
+    @GetMapping("/{member-id}/password")
+    public ResponseEntity checkPassword(
+            @PathVariable("member-id") @Positive Long memberId,
+            @RequestBody MemberDto.CheckPassword requestBody,
+            Authentication authentication) {
+        boolean isPasswordCorrect = memberService.checkPassword(memberId, requestBody.getPassword(), authentication.getName());
+        if (isPasswordCorrect) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
+    }
 }
