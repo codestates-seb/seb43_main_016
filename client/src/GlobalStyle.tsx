@@ -35,7 +35,8 @@ const GlobalStyle = createGlobalStyle`
     background-color: #e9e9e9;
   }
   a{
-    text-decoration:none;
+    text-decoration: none;
+    color: #1F1F1F;
   }
 `;
 

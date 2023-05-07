@@ -3,32 +3,22 @@ import styled from "styled-components";
 import { Link } from "react-router-dom";
 // import axios from "axios";
 
-import StudyListBox from "../components/StudyListBox";
-
-const StudyList = () => {
+const StudyContent = () => {
   return (
-    <StudyListContainer>
-      <StudyListMain>
-        <StudyListTop>
+    <StudyContentContainer>
+      <StudyContentMain>
+        <StudyContentTop>
           <h2>여러분의 스터디를 만들어보세요!</h2>
           <Link to="/">
             <StudyPostButton>스터디 모집!</StudyPostButton>
           </Link>
-        </StudyListTop>
-        <StudyListWrapper>
-          <StudyListBox />
-          <StudyListBox />
-          <StudyListBox />
-          <StudyListBox />
-          <StudyListBox />
-          <StudyListBox />
-        </StudyListWrapper>
-      </StudyListMain>
-    </StudyListContainer>
+        </StudyContentTop>
+      </StudyContentMain>
+    </StudyContentContainer>
   );
 };
 
-const StudyListContainer = styled.div`
+const StudyContentContainer = styled.div`
   height: 100vh;
   background-color: #e0e0e0;
   display: flex;
@@ -37,7 +27,7 @@ const StudyListContainer = styled.div`
   align-items: center;
 `;
 
-const StudyListMain = styled.div`
+const StudyContentMain = styled.div`
   width: 960px;
   height: 100vh;
   padding-top: 80px;
@@ -48,7 +38,7 @@ const StudyListMain = styled.div`
   align-items: center;
 `;
 
-const StudyListTop = styled.div`
+const StudyContentTop = styled.div`
   width: 960px;
   display: flex;
   margin-bottom: 30px;
@@ -79,12 +69,4 @@ const StudyPostButton = styled.button`
   }
 `;
 
-const StudyListWrapper = styled.div`
-  width: 960px;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
-export default StudyList;
+export default StudyContent;
