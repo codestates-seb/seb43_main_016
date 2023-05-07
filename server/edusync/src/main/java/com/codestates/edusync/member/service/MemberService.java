@@ -103,7 +103,7 @@ public class MemberService implements VerifyMember {
         sameMemberTest(memberId, email);
 
         Member member = memberRepository.findByEmail(email).get();
-        return member.getPassword().equals(password);
+        return passwordEncoder.matches(password, member.getPassword());
     }
 
     @Transactional(readOnly = true)
