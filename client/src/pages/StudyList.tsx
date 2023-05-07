@@ -1,6 +1,6 @@
 import styled from "styled-components";
 // import { useState } from "react";
-// import { Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 // import axios from "axios";
 
 import StudyListBox from "../components/StudyListBox";
@@ -11,9 +11,16 @@ const StudyList = () => {
       <StudyListMain>
         <StudyListTitle>
           <h2>여러분의 스터디를 만들어보세요!</h2>
-          <StudyPostButton>스터디 모집!</StudyPostButton>
+          <Link to="/">
+            <StudyPostButton>스터디 모집!</StudyPostButton>
+          </Link>
         </StudyListTitle>
         <StudyListWrapper>
+          <StudyListBox />
+          <StudyListBox />
+          <StudyListBox />
+          <StudyListBox />
+          <StudyListBox />
           <StudyListBox />
         </StudyListWrapper>
       </StudyListMain>
@@ -33,6 +40,7 @@ const StudyListContainer = styled.div`
 const StudyListMain = styled.div`
   width: 960px;
   height: 100vh;
+  padding-top: 80px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
