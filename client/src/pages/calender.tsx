@@ -1,7 +1,9 @@
+import FullCalender from "../components/calender/fullcalender";
+
 const Calender = () => {
   return (
     <div>
-      <h1>Calender</h1>
+      <FullCalender />
     </div>
   );
 };

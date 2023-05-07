@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./GlobalStyle";
 import Login from "./pages/login";
 import SignUp from "./pages/signup";
-import Profile from "./pages/profile";
+import Profile from "./pages/Profile";
 import Calender from "./pages/calender";
 import "./App.css";
 
