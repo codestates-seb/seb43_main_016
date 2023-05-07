@@ -7,7 +7,11 @@ const FullCalender = () => {
       <FullCalendar
         plugins={[timeGridPlugin]}
         initialView="timeGridWeek"
+        allDaySlot={true}
         weekends={true}
+        events={[
+
+        ]}
       />
     </>
   );
