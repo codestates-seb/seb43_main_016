@@ -44,4 +44,10 @@ public class MemberDto {
         private String withMe;
         private String aboutMe;
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class CheckPassword{
+        private String password;
+    }
 }

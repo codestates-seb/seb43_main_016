@@ -99,6 +99,13 @@ public class MemberService implements VerifyMember {
         return updateMember(member, memberId, token);
     }
 
+    public boolean checkPassword(Long memberId, String password, String email){
+        sameMemberTest(memberId, email);
+
+        Member member = memberRepository.findByEmail(email).get();
+        return member.getPassword().equals(password);
+    }
+
     @Transactional(readOnly = true)
     public Member findVerifiedMember(Long memberId) {
         Optional<Member> optionalMember =
@@ -121,7 +128,7 @@ public class MemberService implements VerifyMember {
     public void sameMemberTest(Long memberId, String email){
         Member findMember = findVerifiedMember(memberId);
 
-        if(email == null || email == ""){
+        if(email == null || email.isEmpty()){
             throw new BusinessLogicException(ExceptionCode.DUPLICATED_EMAIL, String.format("이메일을 찾을 수 없습니다. 올바른 토큰이 아닐 확률이 높습니다."));
         }else if(!email.equals(findMember.getEmail())){
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION, String.format("유저(%s)가 권한을 가지고 있지 않습니다. 사용자(%s) 정보를 수정할 수 없습니다.", email, findMember.getEmail()));
