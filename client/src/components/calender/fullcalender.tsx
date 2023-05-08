@@ -27,8 +27,9 @@ const Calendar = () => {
       .catch((error) => console.error(error));
   }, []);
 
-  const handleEventClick = () => {
+  const handleEventClick = (info: any) => {
     alert("clicked");
+    console.log(info.event);
   };
 
   return (
