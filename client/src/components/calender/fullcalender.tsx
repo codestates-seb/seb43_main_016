@@ -3,67 +3,34 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-
-interface Event {
-  id: string;
-  title: string;
-  allDay: boolean;
-  start: string;
-  end: string;
-  description: string;
-  overlap: boolean;
-  extendedProps: {
-    department: string;
-  };
-  color?: string;
-}
-
-interface ServerEvent {
-  title: string;
-  allDay: boolean;
-  schedule: {
-    start: string;
-    end: string;
-  }[];
-  hour: {
-    start: string;
-    end: string;
-  }[];
-  description: string;
-  overlap: string;
-  extendedProps: {
-    department: string;
-  };
-  color?: string;
-}
-
-function transformData(serverData: ServerEvent): Event {
-  const { title, allDay, schedule, hour, description, overlap, extendedProps, color } = serverData;
-
-  const start = new Date(`${schedule[0].start}T${hour[0].start.replace("24:00:00", "00:00:00")}`).toISOString();
-  const end = new Date(`${schedule[0].end}T${hour[0].end.replace("24:00:00", "00:00:00")}`).toISOString();
-
-  return {
-    id: uuidv4(),
-    title,
-    allDay,
-    start,
-    end,
-    description,
-    overlap: overlap === "true",
-    extendedProps,
-    color,
-  };
-}
+import { Event, ServerEvent } from "./FullcalenderType";
 
 const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
 
+  const transformData = (serverEvent: ServerEvent): Event[] => {
+    const transformedEvents = serverEvent.schedule.map((schedule, index) => {
+      return {
+        id: uuidv4(),
+        title: serverEvent.title,
+        allDay: serverEvent.allDay,
+        start: `${schedule.start.replaceAll(".","-")}T${serverEvent.hour[index].start}`,
+        end: `${schedule.end.replaceAll(".","-")}T${serverEvent.hour[index].end}`,
+        description: serverEvent.description,
+        overlap: serverEvent.overlap === "true",
+        extendedProps: serverEvent.extendedProps,
+        color: serverEvent.color,
+      };
+    });
+    // console.log(transformedEvents); // ! Debug
+    return transformedEvents;
+  };
+
   useEffect(() => {
     axios
       .get<ServerEvent[]>("http://localhost:3001/event")
-      .then((response) => {
-        const transformedData = response.data.map(transformData);
+      .then((res) => {
+        const transformedData = res.data.flatMap(transformData);
         setEvents(transformedData);
       })
       .catch((error) => console.error(error));
