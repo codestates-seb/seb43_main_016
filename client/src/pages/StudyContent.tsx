@@ -2,6 +2,7 @@ import styled from "styled-components";
 // import { useState } from "react";
 import { Link } from "react-router-dom";
 // import axios from "axios";
+import StudyComment from "../components/StudyComment";
 
 const StudyContent = () => {
   return (
@@ -85,6 +86,7 @@ const StudyContent = () => {
             <StudyJoinButton>스터디 신청!</StudyJoinButton>
           </StudyJoinButtonWrapper>
         </StudyContentMain>
+        <StudyComment />
       </StudyContentBody>
     </StudyContentContainer>
   );
@@ -175,14 +177,14 @@ const StudyContentInfo = styled.div`
   div {
     width: 100px;
     text-align: left;
-    font-size: 1.25rem;
+    font-size: 1.125rem;
     font-weight: 700;
     color: #2759a2;
     margin-right: 20px;
   }
   span {
     text-align: left;
-    font-size: 1.125rem;
+    font-size: 1rem;
     font-weight: 300;
     color: #666;
   }
