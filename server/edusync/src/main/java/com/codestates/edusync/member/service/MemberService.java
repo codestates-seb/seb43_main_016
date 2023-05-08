@@ -50,15 +50,19 @@ public class MemberService implements VerifyMember {
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Member updateMember(Member member, Long memberId, String email) {
-        verifyMemberIsActive(member);
         sameMemberTest(memberId, email);
 
         Member findMember = findVerifiedMember(member.getId());
+        verifyMemberIsActive(findMember);
 
         Optional.ofNullable(member.getNickName())
                 .ifPresent(name -> findMember.setNickName(name));
         Optional.ofNullable(member.getPassword())
-                .ifPresent(password -> findMember.setPassword(password));
+                .ifPresent(password -> {
+                    if (!password.isEmpty()) {
+                        findMember.setPassword(password);
+                    }
+                });
         Optional.ofNullable(member.getProfileImage())
                 .ifPresent(image -> findMember.setProfileImage(image));
         Optional.ofNullable(member.getWithMe())
@@ -90,11 +94,16 @@ public class MemberService implements VerifyMember {
         memberRepository.save(findMember);
     }
 
-    public Member updateDetail(Long memberId, MemberDto.PostDetail requestBody, String token){
+    public Member updateDetail(Long memberId, MemberDto.Detail requestBody, String token){
         Member member = findVerifiedMember(memberId);
         verifyMemberIsActive(member);
-        member.setWithMe(requestBody.getWithMe());
-        member.setAboutMe(requestBody.getAboutMe());
+
+        if (requestBody.getWithMe() != null) {
+            member.setWithMe(requestBody.getWithMe());
+        }
+        if (requestBody.getAboutMe() != null) {
+            member.setAboutMe(requestBody.getAboutMe());
+        }
 
         return updateMember(member, memberId, token);
     }

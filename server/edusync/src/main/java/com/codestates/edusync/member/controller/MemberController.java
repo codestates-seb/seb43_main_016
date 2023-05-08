@@ -98,7 +98,7 @@ public class MemberController {
 
     @PatchMapping("/{member-id}/detail")
     public ResponseEntity updateDetail(@PathVariable("member-id") @Positive Long memberId,
-                                       @RequestBody MemberDto.PostDetail requestBody,
+                                       @RequestBody MemberDto.Detail requestBody,
                                        Authentication authentication){
         Member updatedMember = memberService.updateDetail(memberId, requestBody, authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
