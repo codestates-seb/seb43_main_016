@@ -20,7 +20,8 @@ interface Event {
 const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
 
-  useEffect(() => {
+
+  useEffect(() => { // 서버통신을 위한 useEffect
     axios
       .get("http://localhost:3001/event")
       .then((response) => setEvents(response.data))
@@ -31,6 +32,8 @@ const Calendar = () => {
     alert("clicked");
     console.log(info.event);
   };
+
+
 
   return (
     <>
