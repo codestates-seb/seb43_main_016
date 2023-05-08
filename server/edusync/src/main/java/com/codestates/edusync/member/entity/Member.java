@@ -2,7 +2,7 @@ package com.codestates.edusync.member.entity;
 
 import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.study.classmate.entity.Classmate;
-import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
+import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -64,5 +64,5 @@ public class Member extends Auditable {
     private List<Classmate> classmates = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    private List<StudyPostComment> studyPostComments = new ArrayList<>();
+    private List<StudygroupPostComment> studygroupPostComments = new ArrayList<>();
 }

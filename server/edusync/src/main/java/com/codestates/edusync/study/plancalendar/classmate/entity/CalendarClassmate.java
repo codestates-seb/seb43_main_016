@@ -1,8 +1,8 @@
 package com.codestates.edusync.study.plancalendar.classmate.entity;
 
-import com.codestates.edusync.study.classmate.entity.Classmate;
-import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.classmate.entity.Classmate;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,13 +24,8 @@ public class CalendarClassmate {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "fk_classmate_id")
+    @OneToOne(cascade = {PERSIST, MERGE}, fetch = LAZY)
     private Classmate classmate;
-
-    @ManyToOne(fetch = EAGER)
-    @JoinColumn(name = "fk_calendar_studygroup_id")
-    private CalendarStudygroup calendarStudygroup;
 
     @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)
     @JoinColumn(name = "fk_time_schedules_id")
