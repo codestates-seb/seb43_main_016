@@ -14,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.security.Principal;
@@ -27,7 +28,7 @@ public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
 
     @PostMapping(STUDYGROUP_DEFAULT_URI)
-    public ResponseEntity postStudygroup(@RequestBody StudygroupDto.Post postDto) {
+    public ResponseEntity postStudygroup(@Valid @RequestBody StudygroupDto.Post postDto) {
 
         long studygroupId = 1L;     // fixme: 임시로 만들어둠
 
@@ -38,7 +39,7 @@ public class StudygroupController {
 
     @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity patchStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                          @RequestBody StudygroupDto.Patch patchDto) {
+                                          @Valid @RequestBody StudygroupDto.Patch patchDto) {
 
         // TODO: 2023-05-08 작업 해야함 
         

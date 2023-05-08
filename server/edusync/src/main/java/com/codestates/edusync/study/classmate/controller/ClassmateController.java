@@ -30,8 +30,9 @@ public class ClassmateController {
     public ResponseEntity postClassmateOnCandidated(@PathVariable("studygroup-id") @Positive Long studygroupId) {
         long candidatedId = 1L;     // fixme: 임시로 만들어둠
 
-        URI firstLocation = UriCreator.createUri(DEFAULT_STUDYGROUP_URL, studygroupId);
-        URI location = UriCreator.createUri(firstLocation + DEFAULT_CANDIDATE_URL, candidatedId);  // FIXME: 2023-05-08 테스트 해봐야함 !!!
+        URI location = UriCreator.createUri(
+                UriCreator.createUri(DEFAULT_STUDYGROUP_URL, studygroupId) +
+                        DEFAULT_CANDIDATE_URL, candidatedId);  // FIXME: 2023-05-08 테스트 해봐야함 !!!
 
         return new ResponseEntity<>(location, HttpStatus.CREATED);
     }
