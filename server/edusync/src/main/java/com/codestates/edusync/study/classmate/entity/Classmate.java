@@ -44,9 +44,6 @@ public class Classmate {
     @JoinColumn(name = "fk_classmates_id")
     private Member member;
 
-    @OneToMany(mappedBy = "classmate", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    private List<StudyPostComment> studyPostComments = new ArrayList<>();
-
     @OneToOne(mappedBy = "classmate", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private CalendarClassmate calendarClassmate;
 }

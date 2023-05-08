@@ -1,7 +1,7 @@
 package com.codestates.edusync.study.postcomment.entity;
 
 import com.codestates.edusync.audit.Auditable;
-import com.codestates.edusync.study.classmate.entity.Classmate;
+import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,6 +28,6 @@ public class StudyPostComment extends Auditable {
     private Studygroup studygroup;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "fk_classmate_id")
-    private Classmate classmate;
+    @JoinColumn(name = "fk_member_id")
+    private Member member;
 }
