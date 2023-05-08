@@ -22,14 +22,14 @@ public class CalendarClassmateController {
 
     private static final String DEFAULT_CALENDAR_URL = "/calendar";
 
-    @PatchMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}")
+    @PatchMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}/classmate")
     public ResponseEntity patchCalendarClassmate(@PathVariable("calendar-id") @Positive Long calendarId,
                                                  @Valid @RequestBody CalendarDto.Patch patchDto) {
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}")
+    @DeleteMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}/classmate")
     public ResponseEntity deleteCalendarClassmate(@PathVariable("calendar-id") @Positive Long calendarId) {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
