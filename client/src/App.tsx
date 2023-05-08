@@ -1,9 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./GlobalStyle";
-import Login from "./pages/login";
+import Login from "./pages/Login";
 import SignUp from "./pages/signup";
 import Profile from "./pages/Profile";
-import Calender from "./pages/calender";
+import Calender from "./pages/Calender";
 import "./App.css";
 
 function App() {
