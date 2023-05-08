@@ -61,9 +61,8 @@ public class Studygroup extends Auditable {
     private Classmate studygroupLeader;
 
     @OneToMany(mappedBy = "studygroup", fetch = LAZY)
-    private List<StudygroupClassmateRef> studygroupClassmateRefs = new ArrayList<>();
+    private List<Classmate> classmates = new ArrayList<>();
 
-    // 댓글은 항상 필요한 것이니 바로 불러올 수 있도록 한다
     @OneToMany(mappedBy = "studygroup", cascade = {REMOVE}, fetch = LAZY)
     private List<StudyPostComment> studyPostComments = new ArrayList<>();
 
