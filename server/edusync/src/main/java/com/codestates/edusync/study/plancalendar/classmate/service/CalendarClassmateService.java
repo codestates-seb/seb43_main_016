@@ -1,6 +1,6 @@
-package com.codestates.edusync.study.plancalendar.studygroup.service;
+package com.codestates.edusync.study.plancalendar.classmate.service;
 
-import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarClassmateRepository;
+import com.codestates.edusync.study.plancalendar.classmate.repository.CalendarClassmateRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -17,7 +17,7 @@ import java.net.URI;
 @RequiredArgsConstructor
 @Validated
 @RestController
-public class StudygroupPostComment {
+public class StudygroupPostCommentController {
     private final StudygroupService studygroupService;
     private final StudygroupMapper mapper;
 

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class StudygroupPostComment {
+public class StudygroupPostCommentService {
     private final StudygroupRepository studygroupRepository;
 
 

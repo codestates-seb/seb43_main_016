@@ -1,6 +1,7 @@
 package com.codestates.edusync.study.plancalendar.studygroup.entity;
 
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,13 +18,13 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
-public class Calendar<T> {
+public class CalendarStudygroup {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @OneToOne(cascade = {PERSIST, MERGE}, fetch = LAZY)
-    private T referenceObject;
+    private Studygroup studygroup;
 
     @OneToMany(cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)
     @JoinColumn(name = "fk_time_schedules_id")

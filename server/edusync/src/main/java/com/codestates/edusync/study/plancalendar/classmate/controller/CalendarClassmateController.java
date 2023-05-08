@@ -1,9 +1,8 @@
-package com.codestates.edusync.study.plancalendar.studygroup.controller;
+package com.codestates.edusync.study.plancalendar.classmate.controller;
 
 import com.codestates.edusync.study.plancalendar.studygroup.dto.CalendarDto;
-import com.codestates.edusync.study.plancalendar.studygroup.mapper.CalendarMapper;
-import com.codestates.edusync.study.plancalendar.studygroup.service.CalendarClassmateService;
-import com.codestates.edusync.study.classmate.entity.Classmate;
+import com.codestates.edusync.study.plancalendar.classmate.mapper.CalendarClassmateMapper;
+import com.codestates.edusync.study.plancalendar.classmate.service.CalendarClassmateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,7 @@ import javax.validation.constraints.Positive;
 @RestController
 public class CalendarClassmateController {
     private final CalendarClassmateService calendarClassmateService;
-    private final CalendarMapper<Classmate> mapper;
+    private final CalendarClassmateMapper mapper;
 
     private static final String DEFAULT_CALENDAR_URL = "/calendar";
 

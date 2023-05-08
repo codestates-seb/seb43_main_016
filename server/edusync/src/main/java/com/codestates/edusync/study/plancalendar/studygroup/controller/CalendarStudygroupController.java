@@ -1,7 +1,7 @@
 package com.codestates.edusync.study.plancalendar.studygroup.controller;
 
 import com.codestates.edusync.study.plancalendar.studygroup.dto.CalendarDto;
-import com.codestates.edusync.study.plancalendar.studygroup.mapper.CalendarMapper;
+import com.codestates.edusync.study.plancalendar.studygroup.mapper.CalendarStudygroupMapper;
 import com.codestates.edusync.study.plancalendar.studygroup.service.CalendarStudygroupService;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.RequiredArgsConstructor;
@@ -18,13 +18,14 @@ import javax.validation.constraints.Positive;
 @RestController
 public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
-    private final CalendarMapper<Studygroup> mapper;
+    private final CalendarStudygroupMapper mapper;
 
     private static final String DEFAULT_CALENDAR_URL = "/calendar";
 
     @PatchMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}/studygroup")
     public ResponseEntity patchCalendarStudygroup(@PathVariable("calendar-id") @Positive Long calendarId,
                                                   @Valid @RequestBody CalendarDto.Patch patchDto) {
+        Studygroup patchStudygroup = mapper.studygroupPatchDtoToStudygroup(patchDto);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }

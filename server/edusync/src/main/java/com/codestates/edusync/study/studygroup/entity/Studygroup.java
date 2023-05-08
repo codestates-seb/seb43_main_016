@@ -4,9 +4,9 @@ import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.infodto.calendarinfo.entity.CalendarInfo;
 import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.infodto.locationinfo.entity.LocationInfo;
-import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
-import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
+import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
+import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
 import com.codestates.edusync.searchtag.entity.SearchTag;
 import lombok.Getter;
@@ -64,7 +64,7 @@ public class Studygroup extends Auditable {
     private List<Classmate> classmates = new ArrayList<>();
 
     @OneToMany(mappedBy = "studygroup", cascade = {REMOVE}, fetch = LAZY)
-    private List<StudyPostComment> studyPostComments = new ArrayList<>();
+    private List<StudygroupPostComment> studygroupPostComments = new ArrayList<>();
 
     @OneToOne(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)
     private CalendarStudygroup calendarStudygroup;
