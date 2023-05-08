@@ -3,9 +3,7 @@ package com.codestates.edusync.study.classmate.entity;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.infodto.locationinfo.entity.LocationInfo;
 import com.codestates.edusync.study.plancalendar.classmate.entity.CalendarClassmate;
-import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
-import com.codestates.edusync.study.studygroup.entity.StudygroupClassmateRef;
 import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,8 +35,9 @@ public class Classmate {
     @OneToMany(mappedBy = "studygroupLeader", fetch = LAZY)
     private List<Studygroup> studygroupAsLeader = new ArrayList<>();
 
-    @OneToMany(mappedBy = "classmate", fetch = LAZY)
-    private List<StudygroupClassmateRef> studygroupClassmateRef = new ArrayList<>();
+    @ManyToOne(fetch = LAZY)
+    @JoinColumn(name = "fk_classmates_id")
+    private Studygroup studygroup;
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "fk_classmates_id")
