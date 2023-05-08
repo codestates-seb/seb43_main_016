@@ -8,7 +8,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import java.util.List;
 
-public class CalendarStudygroupDto {
+public class CalendarDto {
 
     @NoArgsConstructor
     @Getter

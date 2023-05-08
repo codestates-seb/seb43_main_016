@@ -12,7 +12,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CalendarStudygroupResponseDto {
+public class CalendarResponseDto {
     private Long id;
     private Long groupId;
 
