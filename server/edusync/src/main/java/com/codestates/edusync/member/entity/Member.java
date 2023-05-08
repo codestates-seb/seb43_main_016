@@ -59,6 +59,6 @@ public class Member extends Auditable {
         }
     }
 
-    @OneToOne(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    private Classmate classmate;
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    private List<Classmate> classmates = new ArrayList<>();
 }
