@@ -1,6 +1,6 @@
 import { useState, useEffect, FormEvent } from "react";
-import ProfileNav from "../components/profileNav";
-import ProfileImg from "../components/profileImg";
+import ProfileNav from "../components/ProfileNav";
+import ProfileImg from "../components/ProfileImg";
 import styled from "styled-components";
 import axios from "axios";
 
