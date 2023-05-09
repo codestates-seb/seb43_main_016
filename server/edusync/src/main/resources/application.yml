@@ -18,7 +18,7 @@ spring:
     log-request-details: true
   jpa:
     defer-datasource-initialization: true
-    hibernate.ddl-auto: update
+#    hibernate.ddl-auto: update
     open-in-view: false
     show-sql: true
     properties:
