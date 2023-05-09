@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.classmate.dto;
+package com.codestates.edusync.study.studygroupjoin.dto;
 
 import com.codestates.edusync.member.dto.MemberResponseDto;
 import lombok.Getter;

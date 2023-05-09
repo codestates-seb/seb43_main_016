@@ -2,12 +2,11 @@ package com.codestates.edusync.study.studygroup.entity;
 
 import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.infodto.calendarinfo.entity.CalendarInfo;
-import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.infodto.locationinfo.entity.LocationInfo;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
-import com.codestates.edusync.study.studyjoin.entity.StudygroupJoin;
+import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.searchtag.entity.SearchTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

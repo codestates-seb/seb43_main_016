@@ -2,7 +2,6 @@ package com.codestates.edusync.member.entity;
 
 import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
-import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

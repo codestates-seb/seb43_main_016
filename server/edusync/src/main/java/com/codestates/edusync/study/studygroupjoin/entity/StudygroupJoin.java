@@ -1,6 +1,6 @@
-package com.codestates.edusync.study.studyjoin.entity;
+package com.codestates.edusync.study.studygroupjoin.entity;
 
-import com.codestates.edusync.study.classmate.entity.Classmate;
+import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,11 +17,14 @@ public class StudygroupJoin {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "fk_classmate_id")
-    private Classmate classmate;
+    @Column(name = "is_approved")
+    private Boolean isApproved = false;
 
     @ManyToOne
-    @JoinColumn(name = "fk_studygroup_id")
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 }

@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.classmate.mapper;
+package com.codestates.edusync.study.studygroupjoin.mapper;
 
 import org.mapstruct.Mapper;
 

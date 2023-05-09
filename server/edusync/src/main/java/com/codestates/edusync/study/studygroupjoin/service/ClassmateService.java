@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.classmate.service;
+package com.codestates.edusync.study.studygroupjoin.service;
 
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.codestates.edusync.study.classmate.utils;
+package com.codestates.edusync.study.studygroupjoin.utils;
 
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 

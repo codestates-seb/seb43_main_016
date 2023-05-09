@@ -1,6 +1,6 @@
-package com.codestates.edusync.study.classmate.controller;
+package com.codestates.edusync.study.studygroupjoin.controller;
 
-import com.codestates.edusync.study.classmate.service.ClassmateService;
+import com.codestates.edusync.study.studygroupjoin.service.ClassmateService;
 import com.codestates.edusync.util.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

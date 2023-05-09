@@ -1,6 +1,6 @@
 package com.codestates.edusync.study.studygroup.dto;
 
-import com.codestates.edusync.study.classmate.dto.ClassmateResponseDto;
+import com.codestates.edusync.study.studygroupjoin.dto.ClassmateResponseDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
