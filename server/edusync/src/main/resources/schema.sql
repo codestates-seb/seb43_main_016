@@ -51,7 +51,6 @@ create table if not exists studygroup
     created_at             timestamp,
 
     leader_member_id       bigint,
-    calendar_studygroup_id bigint,
 
     constraint pk_studygroup_id primary key (id)
 );

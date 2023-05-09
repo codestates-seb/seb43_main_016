@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
+
+import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
 @Getter
@@ -20,11 +24,9 @@ public class StudygroupJoin {
     @Column(name = "is_approved")
     private Boolean isApproved = false;
 
-    @ManyToOne
-    @JoinColumn(name = "member_id")
-    private Member member;
+    @OneToMany(mappedBy = "member_id", fetch = LAZY)
+    private List<Member> members = new ArrayList<>();
 
-    @ManyToOne
-    @JoinColumn(name = "studygroup_id")
-    private Studygroup studygroup;
+    @OneToMany(mappedBy = "studygroup_id", fetch = LAZY)
+    private List<Studygroup> studygroups = new ArrayList<>();
 }

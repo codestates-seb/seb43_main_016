@@ -3,6 +3,8 @@ package com.codestates.edusync.member.entity;
 import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
+import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -61,6 +63,13 @@ public class Member extends Auditable {
             this.status = status;
         }
     }
+
+    @OneToMany(mappedBy = "leaderMember", cascade = {PERSIST, MERGE}, fetch = LAZY)
+    private List<Studygroup> studygroupsAsLeader = new ArrayList<>();
+
+    @ManyToOne(cascade = {PERSIST, MERGE}, fetch = EAGER)
+    @JoinColumn(name = "studygroup_join_id")
+    private StudygroupJoin studygroupJoin;
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<TimeSchedule> timeSchedules = new ArrayList<>();
