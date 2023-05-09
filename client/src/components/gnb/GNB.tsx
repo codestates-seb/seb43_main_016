@@ -1,13 +1,10 @@
 import { Link } from "react-router-dom";
-import { useState } from "react";
+
 import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
+
 const GNB = () => {
-  const [isLogin, setIsLogin] = useState(false);
-  const handleLogout = (): void => {
-    setIsLogin(!isLogin);
-  };
   return (
     <>
       <GNBDiv>
@@ -17,7 +14,7 @@ const GNB = () => {
           </HomeLink>
         </GNBBlock>
 
-        <User isLogin={isLogin} handleLogout={handleLogout} />
+        <User />
       </GNBDiv>
     </>
   );

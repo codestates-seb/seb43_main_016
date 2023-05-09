@@ -1,14 +1,33 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { useEffect } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { getAccessToken, getRefreshToken } from "../../pages/utils/Auth";
+import { removeTokens } from "../../pages/utils/Auth";
+import { useRecoilState } from "recoil";
+import { myIdState } from "../../recoil/atoms/myIdState";
 
-interface UserProps {
-  isLogin: boolean;
-  handleLogout: () => void;
-}
-const User = ({ isLogin, handleLogout }: UserProps) => {
+const accessToken = getAccessToken();
+const refreshToken = getRefreshToken();
+
+const User = () => {
+  const navigate = useNavigate();
+  const [myId, setMyId] = useRecoilState(myIdState);
+
+  const handleLogout = (): void => {
+    removeTokens();
+    setMyId(1);
+    navigate("/");
+  };
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/members/${myId}`)
+      .then((res) => console.log(res.data));
+  }, [setMyId]);
   return (
     <>
-      {isLogin ? (
+      {accessToken && refreshToken ? (
         <UserDiv>
           <ProfileLink to="/profile">
             <div>
