@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken, getRefreshToken } from "../../pages/utils/Auth";
@@ -14,17 +14,20 @@ const refreshToken = getRefreshToken();
 const User = () => {
   const navigate = useNavigate();
   const [myId, setMyId] = useRecoilState(myIdState);
+  const [profileImage, setProfileImage] = useState("");
 
   const handleLogout = (): void => {
     removeTokens();
-    setMyId(1);
+    setMyId(0);
     navigate("/");
   };
   useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/members/${myId}`)
-      .then((res) => console.log(res.data));
-  }, [setMyId]);
+    if (myId > 0) {
+      axios
+        .get(`${import.meta.env.VITE_APP_API_URL}/members/${myId}`)
+        .then((res) => console.log(res.data.profileImage));
+    }
+  }, [myIdState]);
   return (
     <>
       {accessToken && refreshToken ? (

@@ -17,6 +17,11 @@ interface User {
   nickName: string;
   email: string;
   password: string;
+  aboutMe: string;
+  memberStatus: string;
+  profileImage: string;
+  roles: [];
+  withMe: string;
 }
 
 const Login = () => {
@@ -49,11 +54,10 @@ const Login = () => {
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
         const decodedToken = jwtDecode<any>(accessToken);
-        const foundMember = members.find(
-          (member) => member.email === decodedToken.email
-        );
-        setMyId(foundMember ? foundMember.id : 0);
-
+        const foundMember = members.filter((member) => {
+          return member.email === email;
+        });
+        setMyId(foundMember ? foundMember[0].id : 0);
         navigate("/");
       },
       onError: (error) => {
@@ -85,22 +89,18 @@ const Login = () => {
     setIsLoading(true);
 
     axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/members?page=1&size=10`)
+      .get(`${import.meta.env.VITE_APP_API_URL}/members?page=1&size=1`)
       .then((res) => {
-        // pageInfo 객체에서 totalElements 값을 size 변수에 할당한다.
         const {
           pageInfo: { totalElements: size },
         } = res.data;
-        // 이후 size 값을 사용하여 처리를 수행한다.
 
         axios
           .get<User[]>(
             `${import.meta.env.VITE_APP_API_URL}/members?page=1&size=${size}`
           )
           .then((res) => {
-            setMembers(Object.values(res.data));
-            console.log(members);
-
+            setMembers(Object(res.data).data);
             setIsLoading(false);
           });
       });
@@ -109,7 +109,9 @@ const Login = () => {
   return (
     <Container>
       {isLoading ? (
-        <></>
+        <>
+          <span>gg</span>
+        </>
       ) : (
         <LoginDiv>
           <LogoDiv>
