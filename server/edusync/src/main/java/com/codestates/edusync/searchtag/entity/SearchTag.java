@@ -7,6 +7,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 @NoArgsConstructor
@@ -24,7 +25,7 @@ public class SearchTag {
     @Column(length = 100)
     private String tagValue;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "fk_studygroup_id")
+    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
+    @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 }
