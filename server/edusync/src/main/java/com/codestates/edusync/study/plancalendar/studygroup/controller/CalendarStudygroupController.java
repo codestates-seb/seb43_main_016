@@ -25,7 +25,6 @@ public class CalendarStudygroupController {
     @PatchMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}/studygroup")
     public ResponseEntity patchCalendarStudygroup(@PathVariable("calendar-id") @Positive Long calendarId,
                                                   @Valid @RequestBody CalendarDto.Patch patchDto) {
-        Studygroup patchStudygroup = mapper.studygroupPatchDtoToStudygroup(patchDto);
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
