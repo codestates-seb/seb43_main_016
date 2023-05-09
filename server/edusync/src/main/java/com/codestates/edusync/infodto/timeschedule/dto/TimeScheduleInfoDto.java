@@ -11,9 +11,9 @@ import java.sql.Timestamp;
 @Getter
 @Setter
 public class TimeScheduleInfoDto {
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private Timestamp start;
 
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private Timestamp end;
 }
