@@ -24,9 +24,9 @@ public class StudygroupJoin {
     @Column(name = "is_approved")
     private Boolean isApproved = false;
 
-    @OneToMany(mappedBy = "member_id", fetch = LAZY)
+    @OneToMany(mappedBy = "studygroupJoin", fetch = LAZY)
     private List<Member> members = new ArrayList<>();
 
-    @OneToMany(mappedBy = "studygroup_id", fetch = LAZY)
+    @OneToMany(mappedBy = "studygroupJoin", fetch = LAZY)
     private List<Studygroup> studygroups = new ArrayList<>();
 }
