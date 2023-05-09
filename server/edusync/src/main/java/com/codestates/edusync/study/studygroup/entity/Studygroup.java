@@ -1,11 +1,8 @@
 package com.codestates.edusync.study.studygroup.entity;
 
 import com.codestates.edusync.audit.Auditable;
-import com.codestates.edusync.infodto.calendarinfo.entity.CalendarInfo;
-import com.codestates.edusync.infodto.locationinfo.entity.LocationInfo;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.study.plancalendar.studygroup.entity.CalendarStudygroup;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.searchtag.entity.SearchTag;
@@ -70,9 +67,6 @@ public class Studygroup extends Auditable {
 
     @OneToMany(mappedBy = "studygroup", cascade = {REMOVE}, fetch = LAZY)
     private List<StudygroupPostComment> studygroupPostComments = new ArrayList<>();
-
-    @OneToOne(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)
-    private CalendarStudygroup calendarStudygroup;
 
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<SearchTag> tags = new ArrayList<>();
