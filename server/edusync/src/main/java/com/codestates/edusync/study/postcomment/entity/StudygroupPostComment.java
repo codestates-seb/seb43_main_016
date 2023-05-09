@@ -24,10 +24,10 @@ public class StudygroupPostComment extends Auditable {
     private String content;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "fk_studygroup_id")
+    @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "fk_member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 }
