@@ -1,11 +1,12 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./GlobalStyle";
-import Login from "./pages/login";
-import SignUp from "./pages/signup";
+import Login from "./pages/Login";
+import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import Calender from "./pages/calender";
 import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
+import StudyPost from "./pages/StudyPost";
 
 import "./App.css";
 
@@ -21,6 +22,7 @@ function App() {
           <Route path="/calender" element={<Calender />} />
           <Route path="/studylist" element={<StudyList />} />
           <Route path="/studycontent" element={<StudyContent />} />
+          <Route path="/studypost" element={<StudyPost />} />
           <Route />
         </Routes>
       </BrowserRouter>
