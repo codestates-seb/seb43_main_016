@@ -25,6 +25,5 @@ public class TimeSchedule extends Auditable {
     private Timestamp endTime;
 
     @ManyToOne
-    @JoinColumn(name = "fk_studygroup_id")
     private Studygroup studygroup;
 }
