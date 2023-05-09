@@ -2,7 +2,7 @@ package com.codestates.edusync.study.studygroupjoin.utils;
 
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 
-public interface ClassmateManager {
+public interface StudygroupJoinManager {
     /**
      * <h2>스터디에 가입 신청을 한다</h2>
      * <font color="white"><b> 403 forbidden </b></font> 로그인을 하지 않은 경우, 권한이 없음<br>
