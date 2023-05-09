@@ -8,14 +8,15 @@ import { Event, ServerEvent } from "./FullcalenderType";
 const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
 
+  // TODO 서버 측 데이터 형식을 클라이언트 측 데이터 형식으로 변환하는 함수
   const transformData = (serverEvent: ServerEvent): Event[] => {
-    const transformedEvents = serverEvent.schedule.map((schedule, index) => {
+    const transformedEvents = serverEvent.schedules.map((schedules, index) => {
       return {
         id: uuidv4(),
         title: serverEvent.title,
         allDay: serverEvent.allDay,
-        start: `${schedule.start.replaceAll(".","-")}T${serverEvent.hour[index].start}`,
-        end: `${schedule.end.replaceAll(".","-")}T${serverEvent.hour[index].end}`,
+        start: `${schedules.start.replaceAll(".","-")}T${serverEvent.hours[index].start}`,
+        end: `${schedules.end.replaceAll(".","-")}T${serverEvent.hours[index].end}`,
         description: serverEvent.description,
         overlap: serverEvent.overlap === "true",
         extendedProps: serverEvent.extendedProps,
@@ -26,6 +27,7 @@ const Calendar = () => {
     return transformedEvents;
   };
 
+  // TODO 서버에서 데이터를 받아오는 함수
   useEffect(() => {
     axios
       .get<ServerEvent[]>("http://localhost:3001/event")
@@ -36,6 +38,7 @@ const Calendar = () => {
       .catch((error) => console.error(error));
   }, []);
 
+  // TODO 이벤트를 클릭했을 때 발생하는 함수 ===> // TODO 추후 이벤트의 상세 내용을 표현할 예정
   const handleEventClick = (info: any) => {
     alert("clicked");
     console.log(info.event);

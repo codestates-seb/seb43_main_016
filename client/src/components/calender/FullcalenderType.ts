@@ -15,11 +15,11 @@ export interface Event {
 export interface ServerEvent {
   title: string;
   allDay: boolean;
-  schedule: {
+  schedules: {
     start: string;
     end: string;
   }[];
-  hour: {
+  hours: {
     start: string;
     end: string;
   }[];
