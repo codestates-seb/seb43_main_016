@@ -13,8 +13,8 @@ import GNB from "./components/gnb/GNB";
 import "./App.css";
 import ProfileDetail from "./pages/ProfileDetail";
 import ProfileStudyList from "./pages/ProfileStudyList";
+import StudyPost from "./pages/StudyPost";
 const queryClient = new QueryClient();
-// ? "/"는 루트라는 뜻 , "*"는 모든 경로를 의미
 
 function App() {
   const myId = useRecoilValue(myIdState);
@@ -36,6 +36,7 @@ function App() {
             <Route path="/studylist" element={<StudyList />} />
             <Route path="/studycontent" element={<StudyContent />} />
             <Route path="manage-group" element={<ProfileStudyList />} />
+            <Route path="/studypost" element={<StudyPost />} />
             <Route />
           </Routes>
         </BrowserRouter>
