@@ -67,9 +67,8 @@ public class Member extends Auditable {
     @OneToMany(mappedBy = "leaderMember", cascade = {PERSIST, MERGE}, fetch = LAZY)
     private List<Studygroup> studygroupsAsLeader = new ArrayList<>();
 
-    @ManyToOne(cascade = {PERSIST, MERGE}, fetch = EAGER)
-    @JoinColumn(name = "studygroup_join_id")
-    private StudygroupJoin studygroupJoin;
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<TimeSchedule> timeSchedules = new ArrayList<>();

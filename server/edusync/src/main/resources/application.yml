@@ -16,11 +16,10 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
     log-request-details: true
-  sql:
-    init:
-      mode: always
+#  sql:
+#    init:
+#      mode: always
   jpa:
-#    hibernate.ddl-auto: create
     defer-datasource-initialization: true
     open-in-view: false
     show-sql: true

@@ -10,6 +10,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
@@ -24,9 +25,11 @@ public class StudygroupJoin {
     @Column(name = "is_approved")
     private Boolean isApproved = false;
 
-    @OneToMany(mappedBy = "studygroupJoin", fetch = LAZY)
-    private List<Member> members = new ArrayList<>();
+    @ManyToOne(fetch = EAGER)
+    @JoinColumn(name = "studygroup_join_member_id")
+    private Member member;
 
-    @OneToMany(mappedBy = "studygroupJoin", fetch = LAZY)
-    private List<Studygroup> studygroups = new ArrayList<>();
+    @ManyToOne(fetch = EAGER)
+    @JoinColumn(name = "studygroup_join_studygroup_id")
+    private Studygroup studygroup;
 }

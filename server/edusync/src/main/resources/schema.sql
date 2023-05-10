@@ -37,18 +37,22 @@ create table if not exists studygroup_join
 
 create table if not exists studygroup
 (
-    id                     bigint auto_increment,
-    study_name             varchar(50),
-    studygroup_image       blob,
-    address                varchar(200),
-    study_period           varchar(100),
-    study_time             varchar(100),
-    introduction           TEXT,
-    member_count_min       int,
-    member_count_max       int,
-    platform               varchar(50),
-    modified_at            timestamp,
-    created_at             timestamp,
+    id                 bigint auto_increment,
+    study_name         varchar(50),
+    studygroup_image   blob,
+    address            varchar(200),
+    days_of_week       varchar(50),
+    study_period_start varchar(100),
+    study_period_end   varchar(100),
+    study_time_start   varchar(100),
+    study_time_end     varchar(100),
+    introduction       TEXT,
+    member_count_min   int,
+    member_count_max   int,
+    platform           varchar(50),
+    is_requited        boolean,
+    modified_at        timestamp,
+    created_at         timestamp,
 
     leader_member_id       bigint,
 
@@ -82,6 +86,8 @@ create table if not exists study_post_comment
 create table if not exists time_schedule
 (
     id            bigint auto_increment,
+    title         varchar(100),
+    content       varchar(200),
     start_time    timestamp,
     end_time      timestamp,
 
