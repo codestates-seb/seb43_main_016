@@ -20,7 +20,6 @@ spring:
 #    init:
 #      mode: always
   jpa:
-#    hibernate.ddl-auto: create
     defer-datasource-initialization: true
     open-in-view: false
     show-sql: true
