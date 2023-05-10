@@ -1,6 +1,6 @@
-package com.codestates.edusync.study.classmate.controller;
+package com.codestates.edusync.study.studygroupjoin.controller;
 
-import com.codestates.edusync.study.classmate.service.ClassmateService;
+import com.codestates.edusync.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.util.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,8 +14,8 @@ import java.net.URI;
 @RequiredArgsConstructor
 @Validated
 @RestController
-public class ClassmateController {
-    private final ClassmateService classmateService;
+public class StudygroupJoinController {
+    private final StudygroupJoinService studygroupJoinService;
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_CLASSMATE_URL = "/classmate";
     private static final String DEFAULT_CANDIDATE_URL = "/candidate";

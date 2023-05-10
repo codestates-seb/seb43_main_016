@@ -1,8 +1,10 @@
 package com.codestates.edusync.member.entity;
 
 import com.codestates.edusync.audit.Auditable;
-import com.codestates.edusync.study.classmate.entity.Classmate;
+import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
+import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -29,6 +31,8 @@ public class Member extends Auditable {
     @Column(length = 2147483647)    // fixme : 길이 제한 걸릴 경우 length = -1 이나 columnDefinition = "TEXT" 타입 고려
     private String profileImage;
     private String password;
+    @Column(length = 200)
+    private String address;
     @Column(length = 50)
     private String grade;
 
@@ -60,8 +64,14 @@ public class Member extends Auditable {
         }
     }
 
+    @OneToMany(mappedBy = "leaderMember", cascade = {PERSIST, MERGE}, fetch = LAZY)
+    private List<Studygroup> studygroupsAsLeader = new ArrayList<>();
+
     @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    private List<Classmate> classmates = new ArrayList<>();
+    private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
+
+    @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    private List<TimeSchedule> timeSchedules = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<StudygroupPostComment> studygroupPostComments = new ArrayList<>();

@@ -1,7 +1,5 @@
 package com.codestates.edusync.study.studygroup.dto;
 
-import com.codestates.edusync.infodto.calendarinfo.dto.CalendarInfoDto;
-import com.codestates.edusync.infodto.timeschedule.dto.TimeScheduleInfoDto;
 import com.codestates.edusync.searchtag.entity.SearchTag;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,12 +16,13 @@ public class StudygroupDto {
     public static class Post {
         @NotNull
         private String studyName;
-
-        private CalendarInfoDto calendar;
-        private List<TimeScheduleInfoDto> timeSchedules;
+        private String studyPeriod;
+        private String studyTime;
 
         @Positive
-        private Integer maxClassmateCount;
+        private Integer memberCountMin;
+        @Positive
+        private Integer memberCountMax;
 
         @NotNull
         private String platform;
@@ -40,12 +39,13 @@ public class StudygroupDto {
     public static class Patch {
         private Long id;
         private String studyName;
-
-        private CalendarInfoDto calendar;
-        private List<TimeScheduleInfoDto> timeSchedules;
+        private String studyPeriod;
+        private String studyTime;
 
         @Positive
-        private Integer maxClassmateCount;
+        private Integer memberCountMin;
+        @Positive
+        private Integer memberCountMax;
 
         private String platform;
         private String introduction;

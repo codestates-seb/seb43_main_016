@@ -13,9 +13,9 @@ import java.sql.Timestamp;
 public class TimeScheduleSingleResponseDto {
     private Long id;
 
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private Timestamp startTime;
 
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+    @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
     private Timestamp endTime;
 }

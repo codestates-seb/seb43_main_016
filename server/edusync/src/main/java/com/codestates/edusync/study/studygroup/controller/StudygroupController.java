@@ -1,23 +1,17 @@
 package com.codestates.edusync.study.studygroup.controller;
 
-import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
-import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import com.codestates.edusync.util.UriCreator;
-import com.nimbusds.jose.crypto.RSAEncrypter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
-import java.security.Principal;
 
 @RequiredArgsConstructor
 @Validated
