@@ -1,12 +1,37 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { Link } from "react-router-dom";
-// import axios from "axios";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
 
 const StudyPost = () => {
-  const [post, setPost] = useState("");
+  const [postText, setPostText] = useState<string>("");
+  const [maxPeople, setMaxPeople] = useState<number>(0);
+  const [platform, setPlatform] = useState<string>("");
+
+  const navigate = useNavigate();
+
+  const handleMaxPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMaxPeople(+e.target.value);
+  };
+  const handlePlatform = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setPlatform(e.target.value);
+  };
+
+  const handlePostButton = async () => {
+    await axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/members`, {
+        maxClassmateCount: maxPeople,
+        platform: `${platform}`,
+        introduction: `${postText}`,
+      })
+      .then(() => navigate("/studylist"))
+      .catch((error) => {
+        console.error("Error during POST request:", error);
+      })
+      .finally(() => {});
+  };
 
   return (
     <StudyPostContainer>
@@ -22,19 +47,29 @@ const StudyPost = () => {
             <input type="text"></input>
           </StudyPostInfo>
           <StudyPostInfo>
+            <span>요일</span>
+            <input type="text"></input>
+          </StudyPostInfo>
+          <StudyPostInfo>
             <span>시각</span>
             <input type="text"></input>
           </StudyPostInfo>
           <StudyPostInfo>
-            <span>인원</span>
-            <input type="text"></input>
+            <span>최대 인원</span>
+            <input
+              type="number"
+              min="1"
+              value={maxPeople}
+              onChange={handleMaxPeople}
+              required
+            />
           </StudyPostInfo>
           <StudyPostInfo>
             <span>플랫폼</span>
-            <input type="text"></input>
+            <input type="url" value={platform} onChange={handlePlatform} />
           </StudyPostInfo>
           <StudyPostInput>
-            <TextEditor handleContentChange={setPost} />
+            <TextEditor handleContentChange={setPostText} />
           </StudyPostInput>
           <StudyPostButtonWrapper>
             <StudyPostButton>스터디 등록</StudyPostButton>
@@ -125,7 +160,9 @@ const StudyPostInfo = styled.div`
   }
 `;
 
-const StudyPostInput = styled.div``;
+const StudyPostInput = styled.div`
+  margin: 16px 0;
+`;
 
 const StudyPostButtonWrapper = styled.div`
   width: 800px;

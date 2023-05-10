@@ -35,6 +35,7 @@ function TextEditor({ onFocus, onBlur, handleContentChange }) {
 export default TextEditor;
 
 const EditorContainer = styled.div`
+  width: 720px;
   display: flex;
   justify-content: center;
   align-items: center;
