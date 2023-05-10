@@ -41,12 +41,13 @@ public class TimeSchedule extends Auditable {
     @JoinColumn(name = "member_id")
     private Member member;
 
+
     /**
      * <h2>양방향 매핑을 위한 메서드</h2>
      * 기존 연결을 끊고, 새로 관계를 연결한다.<br>
      * <font color="white"><b>양방향 매핑 시 순환참조 가능성이 있으므로, 반대쪽에서 사용하면 절대 안됨</b></color="white"><br>
      * 참고: {@link TimeSchedule#setStudygroupOneWay(Studygroup)}
-     * @param studygroup
+     * @param studygroup 양방향 매핑을 위한 객체
      */
     public void setStudygroup(Studygroup studygroup) {
         if (studygroup == null) {
@@ -74,7 +75,7 @@ public class TimeSchedule extends Auditable {
      * 기존 연결을 끊고, 새로 관계를 연결한다.<br>
      * <font color="white"><b>양방향 매핑 시 순환참조 가능성이 있으므로, 반대쪽에서 사용하면 절대 안됨</b></color="white"><br>
      * 참고: {@link TimeSchedule#setMemberOneWay(Member)}
-     * @param member
+     * @param member 양방향 매핑을 위한 객체
      */
     public void setMember(Member member) {
         if (member == null) {
