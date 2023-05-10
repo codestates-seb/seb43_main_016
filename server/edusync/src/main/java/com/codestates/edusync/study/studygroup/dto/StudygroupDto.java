@@ -11,6 +11,9 @@ import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 import java.util.List;
 
+@NoArgsConstructor
+@Getter
+@Setter
 public class StudygroupDto {
 
     @NoArgsConstructor
@@ -57,17 +60,33 @@ public class StudygroupDto {
     @Getter
     @Setter
     public static class Patch {
+        @NotNull
         private Long id;
+
         private String studyName;
-        private String studyPeriod;
-        private String studyTime;
+
+        @JsonFormat(pattern = "yyyy.MM.dd")
+        private Timestamp studyPeriodStart;
+
+        @JsonFormat(pattern = "yyyy.MM.dd")
+        private Timestamp studyPeriodEnd;
+
+        private List<Integer> daysOfWeek;
+
+        @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+        private Timestamp studyTimeStart;
+
+        @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
+        private Timestamp studyTimeEnd;
 
         @Positive
         private Integer memberCountMin;
+
         @Positive
         private Integer memberCountMax;
 
         private String platform;
+
         private String introduction;
 
         private List<SearchTag> tags;

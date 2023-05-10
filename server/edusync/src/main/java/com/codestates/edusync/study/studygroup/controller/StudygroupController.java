@@ -100,9 +100,9 @@ public class StudygroupController {
      * @return
      */
     @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        
-        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) throws Exception{
+        service.deleteStudygroup(studygroupId);
+        return ResponseEntity.noContent().build();
     }
 
     // FIXME: 2023-05-10 끝나고 생각

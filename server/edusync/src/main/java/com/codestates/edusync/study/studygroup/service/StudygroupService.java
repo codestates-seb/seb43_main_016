@@ -1,12 +1,17 @@
 package com.codestates.edusync.study.studygroup.service;
 
+import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.service.MemberService;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.repository.StudygroupRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Transactional
@@ -23,7 +28,7 @@ public class StudygroupService {
      */
     public Studygroup createStudygruop(Studygroup studygroup) {
 
-        // FIXME: 2023-05-11 멤버 불러오기 실패, 추후 확인 필요
+        // FIXME: 2023-05-11 스터디 리더를 등록하기 위한 멤버 불러오기 실패, 추후 확인 필요
 //        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        member = memberService.findVerifiedMember(member.getId());
 //        studygroup.setLeaderMember(member);
@@ -50,9 +55,19 @@ public class StudygroupService {
 
     }
 
-    public void deleteStudygroup() {
+    public void deleteStudygroup(Long studygroupId) throws Exception{
 
+        Studygroup findStudygroup = repository.findById(studygroupId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
+
+        // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
+//        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+//        member = memberService.findVerifiedMember(member.getId());
+//
+//        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
+//            repository.deleteById(studygroupId);
+//        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+
+        repository.deleteById(studygroupId);
     }
-
-    //public void deleteStudygroup() {}
 }

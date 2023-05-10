@@ -10,7 +10,8 @@ public enum ExceptionCode {
     INTERNAL_SERVER_ERROR(500, "내부 서버 오류"),
     INVALID_PERMISSION(403, "권한이 유효하지 않습니다."),
     INACTIVE_MEMBER(403, "탈퇴한 회원입니다."),
-    INVALID_TOKEN(401, "유효하지 않은 토큰입니다.");
+    INVALID_TOKEN(401, "유효하지 않은 토큰입니다."),
+    STUDYGROUP_NOT_FOUND(404, "스터디를 찾을 수 없습니다.");
 
     @Getter
     private int status;
