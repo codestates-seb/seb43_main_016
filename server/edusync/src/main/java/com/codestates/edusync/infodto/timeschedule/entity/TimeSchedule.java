@@ -22,11 +22,16 @@ public class TimeSchedule extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column
-    private Timestamp startTime;
+    @Column(length = 100)
+    private String title;
+
+    @Column(length = 200)
+    private String content;
 
     @Column
-    private Timestamp endTime;
+    private Timestamp start;
+    @Column
+    private Timestamp end;
 
     @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
     @JoinColumn(name = "studygroup_id")
