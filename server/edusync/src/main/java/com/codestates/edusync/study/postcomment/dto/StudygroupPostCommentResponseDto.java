@@ -7,7 +7,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class StudyPostCommentResponseDto {
+public class StudygroupPostCommentResponseDto {
     private Long id;
     private String content;
 }

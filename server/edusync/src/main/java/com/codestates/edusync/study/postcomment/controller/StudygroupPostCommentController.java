@@ -1,6 +1,6 @@
 package com.codestates.edusync.study.postcomment.controller;
 
-import com.codestates.edusync.study.postcomment.dto.StudyPostCommentDto;
+import com.codestates.edusync.study.postcomment.dto.StudygroupPostCommentDto;
 import com.codestates.edusync.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import com.codestates.edusync.util.UriCreator;
@@ -32,7 +32,7 @@ public class StudygroupPostCommentController {
      */
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL)
     public ResponseEntity postStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                    @Valid @RequestBody StudyPostCommentDto.Post postDto) {
+                                                    @Valid @RequestBody StudygroupPostCommentDto.Post postDto) {
         long commentId = 1L;     // fixme: 임시로 만들어둠
 
         URI location = UriCreator.createUri(
@@ -52,7 +52,7 @@ public class StudygroupPostCommentController {
     @PatchMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL + "/{comment-id}")
     public ResponseEntity postStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                     @PathVariable("comment-id") @Positive Long commentId,
-                                                    @Valid @RequestBody StudyPostCommentDto.Patch patchDto) {
+                                                    @Valid @RequestBody StudygroupPostCommentDto.Patch patchDto) {
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -77,6 +77,17 @@ public class StudygroupPostCommentController {
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL + "/{comment-id}")
     public ResponseEntity deleteStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                       @PathVariable("comment-id") @Positive Long commentId) {
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    /**
+     * 스터디 모집글에 있는 댓글들을 전부 삭제한다
+     * @param studygroupId
+     * @return
+     */
+    @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/all")
+    public ResponseEntity deleteAllStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId) {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

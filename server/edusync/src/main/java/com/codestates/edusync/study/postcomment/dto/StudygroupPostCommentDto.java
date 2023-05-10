@@ -6,7 +6,7 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 
-public class StudyPostCommentDto {
+public class StudygroupPostCommentDto {
 
     @NoArgsConstructor
     @Getter
