@@ -1,4 +1,4 @@
-package com.codestates.edusync.infodto.timeschedule.entity;
+package com.codestates.edusync.study.postcomment.entity;
 
 import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.member.entity.Member;
@@ -8,36 +8,26 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.LAZY;
+import static javax.persistence.FetchType.*;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class TimeSchedule extends Auditable {
+public class StudygroupPostComment extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 100)
-    private String title;
-
     @Column(length = 200)
     private String content;
 
-    @Column
-    private Timestamp start;
-    @Column
-    private Timestamp end;
-
-    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 
-    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
+    @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id")
     private Member member;
 
@@ -46,8 +36,8 @@ public class TimeSchedule extends Auditable {
      * <h2>양방향 매핑을 위한 메서드</h2>
      * 기존 연결을 끊고, 새로 관계를 연결한다.<br>
      * <font color="white"><b>양방향 매핑 시 순환참조 가능성이 있으므로, 반대쪽에서 사용하면 절대 안됨</b></color="white"><br>
-     * 참고: {@link TimeSchedule#setStudygroupOneWay(Studygroup)}
-     * @param studygroup 양방향 매핑을 위한 객체
+     * 참고: {@link StudygroupPostComment#setStudygroupOneWay(Studygroup)}
+     * @param studygroup    양방향 매핑을 위한 객체
      */
     public void setStudygroup(Studygroup studygroup) {
         if (studygroup == null) {
@@ -55,10 +45,10 @@ public class TimeSchedule extends Auditable {
         }
 
         if(this.studygroup != null) {
-            this.studygroup.getTimeSchedules().remove(this);
+            this.studygroup.getStudygroupPostComments().remove(this);
         }
         this.studygroup = studygroup;
-        this.studygroup.getTimeSchedules().add(this);
+        this.studygroup.getStudygroupPostComments().add(this);
     }
 
     /**
@@ -74,8 +64,8 @@ public class TimeSchedule extends Auditable {
      * <h2>양방향 매핑을 위한 메서드</h2>
      * 기존 연결을 끊고, 새로 관계를 연결한다.<br>
      * <font color="white"><b>양방향 매핑 시 순환참조 가능성이 있으므로, 반대쪽에서 사용하면 절대 안됨</b></color="white"><br>
-     * 참고: {@link TimeSchedule#setMemberOneWay(Member)}
-     * @param member 양방향 매핑을 위한 객체
+     * 참고: {@link StudygroupPostComment#setMemberOneWay(Member)}
+     * @param member    양방향 매핑을 위한 객체
      */
     public void setMember(Member member) {
         if (member == null) {
@@ -83,10 +73,10 @@ public class TimeSchedule extends Auditable {
         }
 
         if(this.member != null) {
-            this.member.getTimeSchedules().remove(this);
+            this.member.getStudygroupPostComments().remove(this);
         }
         this.member = member;
-        this.member.getTimeSchedules().add(this);
+        this.member.getStudygroupPostComments().add(this);
     }
 
     /**
@@ -96,5 +86,4 @@ public class TimeSchedule extends Auditable {
     public void setMemberOneWay(Member member) {
         this.member = member;
     }
-
 }
