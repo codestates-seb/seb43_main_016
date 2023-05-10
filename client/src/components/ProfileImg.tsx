@@ -21,7 +21,7 @@ const ProfileImg = () => {
         alert("프로필 이미지는 png, jpeg, jpg 파일만 업로드 가능합니다.");
         return;
       }
-      const maxSize: number = 3 * 1024 * 1024; // 파일의 사이즈는 3MB를 넘을 수 없음
+      const maxSize = 3 * 1024 * 1024; // 파일의 사이즈는 3MB를 넘을 수 없음
       if (selectedFile.size > maxSize) {
         alert("프로필 이미지는 3MB를 넘을 수 없습니다.");
         return;

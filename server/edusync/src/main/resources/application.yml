@@ -1,0 +1,36 @@
+logging:
+  level:
+    org:
+      springframework:
+        web: debug
+    org.springframework.web.servlet: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/edusync?serverTimezone=Asia/Seoul
+    username: root
+    password: ${localDBPassword}
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    log-request-details: true
+  jpa:
+    defer-datasource-initialization: true
+    hibernate.ddl-auto: create-drop
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate.format_sql: true
+      hibernate.default_batch_fetch_size: 100
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 30
+  refresh-token-expiration-minutes: 420
+
+server:
+  port: 8080
