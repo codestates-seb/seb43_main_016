@@ -1,4 +1,4 @@
-const MyStudyManage = () => {
+const ProfileStudyManage = () => {
     return (
         <div>
             <h1>StudyManage</h1>
@@ -6,4 +6,4 @@ const MyStudyManage = () => {
     );
 }
 
-export default MyStudyManage;
+export default ProfileStudyManage;

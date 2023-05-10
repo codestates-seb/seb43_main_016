@@ -1,4 +1,4 @@
 const GNB = () => {
-return()
-
-} export default GNB; 
+  return <></>;
+};
+export default GNB;

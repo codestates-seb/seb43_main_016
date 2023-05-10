@@ -3,8 +3,39 @@ import timeGridPlugin from "@fullcalendar/timegrid";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { v4 as uuidv4 } from "uuid";
-import { Event, ServerEvent } from "./FullcalenderType";
 
+export interface Event {
+  id: string;
+  title: string;
+  allDay: boolean;
+  start: string;
+  end: string;
+  description: string;
+  overlap: boolean;
+  extendedProps: {
+    department: string;
+  };
+  color?: string;
+}
+
+export interface ServerEvent {
+  title: string;
+  allDay: boolean;
+  schedules: {
+    start: string;
+    end: string;
+  }[];
+  hours: {
+    start: string;
+    end: string;
+  }[];
+  description: string;
+  overlap: string;
+  extendedProps: {
+    department: string;
+  };
+  color?: string;
+}
 const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
 
@@ -15,8 +46,12 @@ const Calendar = () => {
         id: uuidv4(),
         title: serverEvent.title,
         allDay: serverEvent.allDay,
-        start: `${schedules.start.replaceAll(".","-")}T${serverEvent.hours[index].start}`,
-        end: `${schedules.end.replaceAll(".","-")}T${serverEvent.hours[index].end}`,
+        start: `${schedules.start.replaceAll(".", "-")}T${
+          serverEvent.hours[index].start
+        }`,
+        end: `${schedules.end.replaceAll(".", "-")}T${
+          serverEvent.hours[index].end
+        }`,
         description: serverEvent.description,
         overlap: serverEvent.overlap === "true",
         extendedProps: serverEvent.extendedProps,

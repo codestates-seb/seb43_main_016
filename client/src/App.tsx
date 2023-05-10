@@ -6,7 +6,7 @@ import Profile from "./pages/Profile";
 import Calender from "./pages/Calender";
 import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
-import MyStudyManage from "./pages/MyStudyManage";
+import MyStudyManage from "./pages/ProfileStudyManage";
 
 import "./App.css";
 
@@ -16,7 +16,7 @@ function App() {
       <BrowserRouter>
         <GlobalStyle />
         <Routes>
-          <Route path="/profile" element={<Profile />} />
+          <Route path="/profile/*" element={<Profile />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/calendar" element={<Calender />} />
