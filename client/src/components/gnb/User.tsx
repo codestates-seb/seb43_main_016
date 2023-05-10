@@ -1,12 +1,12 @@
 import { Link } from "react-router-dom";
-import styled from "styled-components";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { getAccessToken, getRefreshToken } from "../../pages/utils/Auth";
 import { removeTokens } from "../../pages/utils/Auth";
 import { useRecoilState } from "recoil";
 import { myIdState } from "../../recoil/atoms/myIdState";
+import styled from "styled-components";
+import axios from "axios";
 
 const accessToken = getAccessToken();
 const refreshToken = getRefreshToken();
