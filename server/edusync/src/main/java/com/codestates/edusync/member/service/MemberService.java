@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -151,4 +153,34 @@ public class MemberService implements VerifyMember {
         }
     }
 
+    /**
+     * <h2>현재 로그인 된 사용자의 정보를 리턴해주는 메서드</h2>
+     * @return 접속 중인 Member 의 정보
+     */
+    public Member findVerifyMemberWhoLoggedIn() {
+        var authentication = SecurityContextHolder.getContext().getAuthentication();
+        var oAuth2User = (OAuth2User) authentication.getPrincipal();
+        String email = oAuth2User.getAttribute("email");
+
+        return findVerifiedMember(email);
+    }
+
+    /**
+     * <h2>email 을 이용해서 회원을 검색하는 메서드</h2>
+     * email 로 회원 검색 후 검증하여 리턴해준다.
+     * @param email
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public Member findVerifiedMember(String email) {
+        Optional<Member> optionalMember =
+                memberRepository.findByEmail(email);
+
+        Member findMember =
+                optionalMember.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%s번 회원을 찾을 수 없습니다.", email)));
+        verifyMemberIsActive(findMember);
+
+        return findMember;
+    }
 }
