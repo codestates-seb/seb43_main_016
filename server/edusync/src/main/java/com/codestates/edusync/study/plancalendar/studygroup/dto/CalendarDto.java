@@ -22,7 +22,7 @@ public class CalendarDto {
     @Setter
     public static class Patch {
         @NotNull
-        private List<TimeScheduleDto.Patch> timeSchedules;
+        private TimeScheduleDto.Patch timeSchedule;
     }
 
     public static class TimeScheduleDto {
