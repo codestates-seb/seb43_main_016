@@ -3,7 +3,13 @@ import { CKEditor } from "@ckeditor/ckeditor5-react";
 import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useState } from "react";
 
-function TextEditor({ onFocus, onBlur, handleContentChange }) {
+type Props = {
+  onFocus: () => void;
+  onBlur: () => void;
+  handleContentChange: () => void;
+};
+
+function TextEditor({ onFocus, onBlur, handleContentChange }: Props) {
   const [text, setText] = useState("");
 
   const handleOnChange = (event: any, editor: ClassicEditor) => {
@@ -20,9 +26,9 @@ function TextEditor({ onFocus, onBlur, handleContentChange }) {
         <CKEditor
           editor={ClassicEditor}
           data={text}
-          config={{
-            contentCss: "/path/to/custom.css",
-          }}
+          // config={{
+          //   contentCss: "/path/to/custom.css",
+          // }}
           onChange={handleOnChange}
           onFocus={onFocus}
           onBlur={onBlur}

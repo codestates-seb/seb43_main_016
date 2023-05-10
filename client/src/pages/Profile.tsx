@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import ProfileDetail from "./ProfileDetail";
 import ProfileStudyList from "./ProfileStudyList";
-import Calender from "./Calender";
+import Calender from "./Calendar";
 import { Link, Route, Routes } from "react-router-dom";
 
 const NavWrapper = styled.div``;
