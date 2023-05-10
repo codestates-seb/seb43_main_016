@@ -21,24 +21,24 @@ const StudyPost = () => {
     setPlatform(e.target.value);
   };
 
-  const handlePostButton = () => {
+  const handlePostButton = async () => {
     // console.log("Submitting form with values:", {
     //   maxClassmateCount: maxPeople,
     //   platform: `${platform}`,
     //   introduction: `${postText}`,
     // });
-
-    axios
-      .post(`${API_URL}/studygroup/1`, {
+    try {
+      const response = await axios.post(`${API_URL}/studygroup/1`, {
         maxClassmateCount: maxPeople,
         platform: `${platform}`,
         introduction: `${postText}`,
-      })
-      .then(() => alert("스터디 등록이 완료되었습니다!"))
-      .then(() => navigate("/studylist"))
-      .catch((error) => {
-        console.error("Error during POST request:", error);
       });
+      console.log("POST request successful:", response.data);
+      alert("스터디 등록이 완료되었습니다!");
+      navigate("/studylist");
+    } catch (error) {
+      console.error("Error during POST request:", error);
+    }
   };
 
   return (
