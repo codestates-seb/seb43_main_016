@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +37,20 @@ public class Studygroup extends Auditable {
     @Column(length = 200)
     private String address;
 
-    @Column(length = 100, name = "study_period")
-    private String studyPeriod;
+    @Column(length = 50, name = "days_of_week")
+    private String daysOfWeek;
 
-    @Column(length = 100, name = "study_time")
-    private String studyTime;
+    @Column(name = "study_period_start")
+    private Timestamp studyPeriodStart;
+
+    @Column(name = "study_period_end")
+    private Timestamp studyPeriodEnd;
+
+    @Column(name = "study_time_start")
+    private Timestamp studyTimeStart;
+
+    @Column(name = "study_time_end")
+    private Timestamp studyTimeEnd;
 
     @OneToMany(mappedBy = "studygroup", fetch = LAZY)
     private List<TimeSchedule> timeSchedules = new ArrayList<>();
@@ -68,5 +78,123 @@ public class Studygroup extends Auditable {
     private List<StudygroupPostComment> studygroupPostComments = new ArrayList<>();
 
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
-    private List<SearchTag> tags = new ArrayList<>();
+    private List<SearchTag> searchTags = new ArrayList<>();
+
+
+    /**
+     * <h2>양방향 매핑을 위한 One To Many 쪽의 Setter 설정</h2>
+     * 기존에 연결되어있던 관계를 끊고, 양쪽 객체를 새로 연결해준다.
+     * @param timeSchedules  새로 매핑할 객체의 리스트( 시간표 )
+     */
+    public void setTimeSchedules(List<TimeSchedule> timeSchedules) {
+        if (timeSchedules == null) {
+            throw new IllegalArgumentException("TimeSchedule List cannot be null");
+        }
+
+        if (this.timeSchedules != null) {
+            for (TimeSchedule timeSchedule : this.timeSchedules) {
+                timeSchedule.setStudygroupOneWay(null);
+            }
+        }
+
+        this.timeSchedules = timeSchedules;
+        for (TimeSchedule timeSchedule : this.timeSchedules) {
+            timeSchedule.setStudygroupOneWay(this);
+        }
+    }
+
+
+    /**
+     * <h2>양방향 매핑을 위한 메서드</h2>
+     * 기존 연결을 끊고, 새로 관계를 연결한다.<br>
+     * <font color="white"><b>양방향 매핑 시 순환참조 가능성이 있으므로, 반대쪽에서 사용하면 절대 안됨</b></color="white"><br>
+     * 참고: {@link Studygroup#setLeaderMemberOneWay(Member)}
+     * @param leaderMember  양방향 매핑을 위한 객체
+     */
+    public void setLeaderMember(Member leaderMember) {
+        if (leaderMember == null) {
+            throw new IllegalArgumentException("Leader Member cannot be null");
+        }
+
+        if(this.leaderMember != null) {
+            this.leaderMember.getStudygroupsAsLeader().remove(this);
+        }
+        this.leaderMember = leaderMember;
+        this.leaderMember.getStudygroupsAsLeader().add(this);
+    }
+
+    /**
+     * <h2>양방향 매핑 중 순환 방지용으로 단방향으로만 추가하는 메서드</h2>
+     * @param leaderMember 관계를 끊는 경우 null 가능
+     */
+    public void setLeaderMemberOneWay(Member leaderMember) {
+        this.leaderMember = leaderMember;
+    }
+
+    /**
+     * <h2>양방향 매핑을 위한 One To Many 쪽의 Setter 설정</h2>
+     * 기존에 연결되어있던 관계를 끊고, 양쪽 객체를 새로 연결해준다.
+     * @param studygroupJoins  새로 매핑할 객체의 리스트( 시간표 )
+     */
+    public void setStudygroupJoins(List<StudygroupJoin> studygroupJoins) {
+        if (studygroupJoins == null) {
+            throw new IllegalArgumentException("StudygroupJoin List cannot be null");
+        }
+
+        if (this.studygroupJoins != null) {
+            for (StudygroupJoin studygroupJoin : this.studygroupJoins) {
+                studygroupJoin.setStudygroupOneWay(null);
+            }
+        }
+
+        this.studygroupJoins = studygroupJoins;
+        for (StudygroupJoin studygroupJoin : this.studygroupJoins) {
+            studygroupJoin.setStudygroupOneWay(this);
+        }
+    }
+
+    /**
+     * <h2>양방향 매핑을 위한 One To Many 쪽의 Setter 설정</h2>
+     * 기존에 연결되어있던 관계를 끊고, 양쪽 객체를 새로 연결해준다.
+     * @param studygroupPostComments  새로 매핑할 객체의 리스트( 시간표 )
+     */
+    public void setStudygroupPostComments(List<StudygroupPostComment> studygroupPostComments) {
+        if (studygroupPostComments == null) {
+            throw new IllegalArgumentException("StudygroupPostComment List cannot be null");
+        }
+
+        if (this.studygroupPostComments != null) {
+            for (StudygroupPostComment studygroupPostComment : this.studygroupPostComments) {
+                studygroupPostComment.setStudygroupOneWay(null);
+            }
+        }
+
+        this.studygroupPostComments = studygroupPostComments;
+        for (StudygroupPostComment studygroupPostComment : this.studygroupPostComments) {
+            studygroupPostComment.setStudygroupOneWay(this);
+        }
+    }
+
+
+    /**
+     * <h2>양방향 매핑을 위한 One To Many 쪽의 Setter 설정</h2>
+     * 기존에 연결되어있던 관계를 끊고, 양쪽 객체를 새로 연결해준다.
+     * @param searchTags  새로 매핑할 객체의 리스트( 시간표 )
+     */
+    public void setSearchTags(List<SearchTag> searchTags) {
+        if (searchTags == null) {
+            throw new IllegalArgumentException("Search Tag List cannot be null");
+        }
+
+        if (this.searchTags != null) {
+            for (SearchTag searchTag : this.searchTags) {
+                searchTag.setStudygroupOneWay(null);
+            }
+        }
+
+        this.searchTags = searchTags;
+        for (SearchTag searchTag : this.searchTags) {
+            searchTag.setStudygroupOneWay(this);
+        }
+    }
 }
