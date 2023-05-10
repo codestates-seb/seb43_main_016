@@ -15,6 +15,7 @@ public enum ExceptionCode {
     STUDYGROUP_POST_COMMENT_NOT_ALLOWED(403, "댓글은 본인과 스터디장만 삭제할 수 있습니다."),
     STUDYGROUP_POST_COMMENT_ALLOWED_ONLY_FOR_LEADER(403, "스터디장에게만 있는 권한입니다."),
     STUDYGROUP_POST_COMMENT_NOT_MATCHED(400, "해당 댓글은 해당 스터디 모집글에 존재하지 않습니다. 댓글의 식별자와 스터디 모집글의 식별자를 확인해주세요!"),
+    TIME_SCHEDULE_NOT_FOUND(404, "일정이 존재하지 않습니다."),
     ;
 
     @Getter
