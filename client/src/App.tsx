@@ -12,32 +12,30 @@ import MyStudyManage from "./pages/MyStudyManage";
 
 import "./App.css";
 import { useRecoilValue } from "recoil";
-import { myIdState } from "./recoil/atoms/myIdState";
+import { myIdState } from "./recoil/atoms/MyIdState";
 
 const queryClient = new QueryClient();
 
 function App() {
   const myId = useRecoilValue(myIdState);
   return (
-    <>
-      <QueryClientProvider client={queryClient}>
-        <BrowserRouter>
-          <GNB />
-          <GlobalStyle />
-          <Routes>
-            <Route path="/" element={<>{myId}</>} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/signup" element={<SignUp />} />
-            <Route path="/calendar" element={<Calender />} />
-            <Route path="/studylist" element={<StudyList />} />
-            <Route path="/studycontent" element={<StudyContent />} />
-            <Route path="/studymanage" element={<MyStudyManage />} />
-            <Route />
-          </Routes>
-        </BrowserRouter>
-      </QueryClientProvider>
-    </>
+    <QueryClientProvider client={queryClient}>
+      <BrowserRouter>
+        <GNB />
+        <GlobalStyle />
+        <Routes>
+          <Route path="/" element={<>{myId}</>} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/calendar" element={<Calender />} />
+          <Route path="/studylist" element={<StudyList />} />
+          <Route path="/studycontent" element={<StudyContent />} />
+          <Route path="/studymanage" element={<MyStudyManage />} />
+          <Route />
+        </Routes>
+      </BrowserRouter>
+    </QueryClientProvider>
   );
 }
 
