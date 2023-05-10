@@ -80,4 +80,15 @@ public class StudygroupPostCommentController {
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    /**
+     * 스터디 모집글에 있는 댓글들을 전부 삭제한다
+     * @param studygroupId
+     * @return
+     */
+    @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/all")
+    public ResponseEntity deleteAllStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }
