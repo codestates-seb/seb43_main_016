@@ -42,6 +42,15 @@ public class StudygroupResponseDto {
         private Long id;
         private String nickName;
     }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class DtoList {
+        private Long id;
+        private String title;
+        private List<SearchTag> tags;
+    }
 //    private Count count;
 //
 //    @NoArgsConstructor

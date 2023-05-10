@@ -7,10 +7,14 @@ import com.codestates.edusync.member.service.MemberService;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.repository.StudygroupRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -46,8 +50,7 @@ public class StudygroupService {
      */
     public Studygroup updateStudygroup(Studygroup studygroup) {
 
-        Studygroup findStudygroup = repository.findById(studygroup.getId())
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
+        Studygroup findStudygroup = findStudygroup(studygroup.getId());
 
         // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
 //        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -75,8 +78,7 @@ public class StudygroupService {
      * @param studygroupId
      */
     public void updateStatusStudygroup(Long studygroupId) {
-        Studygroup findStudygroup = repository.findById(studygroupId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
+        Studygroup findStudygroup = findStudygroup(studygroupId);
 
         // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
 //        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
@@ -90,12 +92,21 @@ public class StudygroupService {
         repository.save(findStudygroup);
     }
 
-    public void findStudygroup() {
+    /**
+     * 스터디 조회
+     * @param studygroupId
+     * @return
+     */
+    public Studygroup findStudygroup(Long studygroupId) {
 
+        Studygroup findStudygroup = repository.findById(studygroupId)
+                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
+
+        return findStudygroup;
     }
 
-    public void findStudygroups() {
-
+    public Page<Studygroup> findStudygroups(int page, int size) {
+        return repository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
     /**
@@ -105,8 +116,7 @@ public class StudygroupService {
      */
     public void deleteStudygroup(Long studygroupId) throws Exception{
 
-        Studygroup findStudygroup = repository.findById(studygroupId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
+        Studygroup findStudygroup = findStudygroup(studygroupId);
 
         // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
 //        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();

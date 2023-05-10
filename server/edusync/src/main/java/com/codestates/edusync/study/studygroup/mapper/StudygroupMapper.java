@@ -2,11 +2,16 @@ package com.codestates.edusync.study.studygroup.mapper;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
+import com.codestates.edusync.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import org.mapstruct.Mapper;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface StudygroupMapper {
@@ -93,5 +98,36 @@ public interface StudygroupMapper {
         studygroup.setPlatform(studygroupDto.getPlatform());
         studygroup.setSearchTags(studygroupDto.getTags());
         return studygroup;
+    }
+
+    /**
+     * 스터디 리스트 조회
+     * @param studygroups
+     * @return
+     */
+    default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups) {
+        List<StudygroupResponseDto.DtoList> respnseDtoList = new ArrayList<>(studygroups.size());
+        Iterator studygroupIterator = studygroups.iterator();
+
+        while(studygroupIterator.hasNext()) {
+            StudygroupResponseDto.DtoList responseDto =
+                    StudygroupsToStudygroupResponseDtoList((Studygroup) studygroupIterator.next());
+            respnseDtoList.add(responseDto);
+        }
+
+        return respnseDtoList;
+    }
+
+    /**
+     * 스터디 리스트 조회 시, 각 스터디를 ResponseDto 로 매핑
+     * @param studygroup
+     * @return
+     */
+    default StudygroupResponseDto.DtoList StudygroupsToStudygroupResponseDtoList(Studygroup studygroup) {
+        StudygroupResponseDto.DtoList dtoList = new StudygroupResponseDto.DtoList();
+        dtoList.setId(studygroup.getId());
+        dtoList.setTitle(studygroup.getStudyName());
+        dtoList.setTags(studygroup.getSearchTags());
+        return dtoList;
     }
 }

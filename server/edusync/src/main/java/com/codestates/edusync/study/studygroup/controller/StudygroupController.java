@@ -1,6 +1,8 @@
 package com.codestates.edusync.study.studygroup.controller;
 
+import com.codestates.edusync.dto.MultiResponseDto;
 import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
@@ -8,6 +10,7 @@ import com.codestates.edusync.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import com.codestates.edusync.util.UriCreator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
@@ -75,7 +79,7 @@ public class StudygroupController {
      * @return
      */
     @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity patchStudygroupStatus(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+    public ResponseEntity patchStudygroupStatus(@PathVariable("studygroup-id") @Positive Long studygroupId) throws Exception{
 
         service.updateStatusStudygroup(studygroupId);
 
@@ -93,9 +97,12 @@ public class StudygroupController {
      * @return
      */
     @GetMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity getStudygroupDetail(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        
-        return new ResponseEntity<>(HttpStatus.OK);
+    public ResponseEntity getStudygroupDetail(@PathVariable("studygroup-id") @Positive Long studygroupId) throws Exception {
+
+        Studygroup studygroup = service.findStudygroup(studygroupId);
+        StudygroupResponseDto responseDto = mapper.StudygroupToStudygroupResponseDto(studygroup);
+
+        return ResponseEntity.ok(responseDto);
     }
 
     /**
@@ -104,11 +111,16 @@ public class StudygroupController {
      * @param size
      * @return
      */
-    @GetMapping(STUDYGROUP_DEFAULT_URI + "s")   // 복수형으로 만들어주기 위해서 ( 오타 아님 )
+    @GetMapping(STUDYGROUP_DEFAULT_URI + "s")
     public ResponseEntity getStudygroupPage(@RequestParam("page") @Positive Integer page,
                                             @RequestParam("size") @Positive Integer size) {
-        
-        return new ResponseEntity<>(HttpStatus.OK);
+
+        Page<Studygroup> studygroupPage = service.findStudygroups(page-1, size);
+        List<Studygroup> studygroupList = studygroupPage.getContent();
+        List<StudygroupResponseDto.DtoList> responseDtoList =
+                mapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
+
+        return ResponseEntity.ok(new MultiResponseDto<>(responseDtoList,studygroupPage));
     }
 
     /**
