@@ -2,6 +2,7 @@ import React, { useState } from "react";
 
 interface EventInfo {
   title: string;
+  daysOfWeek: number[];
   startDate: string;
   endDate: string;
   startTime: string;
@@ -17,6 +18,7 @@ interface EventInfo {
 const AddEvent = () => {
   const [eventInfo, setEventInfo] = useState<EventInfo>({
     title: "",
+    daysOfWeek: [],
     startDate: "",
     endDate: "",
     startTime: "",
@@ -25,19 +27,24 @@ const AddEvent = () => {
     maxPerson: 0,
     platform: "",
     tag: "",
-    description: "",
     color: "#ffffff",
+    description: "",
   });
+  // TODO: 요일을 선택하면, 해당 요일을 0,1,2 ... 6의 데이터로 변환하는 코드
 
+  // TODO: input 값이 바뀔 때마다 eventInfo를 업데이트하는 코드
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setEventInfo((prevState) => ({
+      // 아래의 경우 외에는 이전 상태를 그대로 유지한다.
       ...prevState,
       [name]:
+        // minPerson, maxPerson을 정하는 코드
         name === "minPerson" || name === "maxPerson" ? Number(value) : value,
     }));
   };
 
+  // TODO: 이벤트 등록 버튼 클릭 시, 이벤트를 서버 형식에 맞춰 재처리하는 코드
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
