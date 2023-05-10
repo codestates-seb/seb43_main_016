@@ -34,6 +34,9 @@ const GlobalStyle = createGlobalStyle`
     line-height: 1.5;
     background-color: #e9e9e9;
   }
+  a{
+    text-decoration: none;
+  }
 `;
 
 export default GlobalStyle;
