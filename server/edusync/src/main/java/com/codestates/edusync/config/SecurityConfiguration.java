@@ -4,11 +4,8 @@ import com.codestates.edusync.auth.filter.JwtAuthenticationFilter;
 import com.codestates.edusync.auth.filter.JwtVerificationFilter;
 import com.codestates.edusync.auth.handler.*;
 import com.codestates.edusync.auth.jwt.JwtTokenizer;
-import com.codestates.edusync.auth.oauth2.Oauth2Service;
 import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
-import com.codestates.edusync.http.CustomResponseLoggingFilter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +18,6 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.servletapi.SecurityContextHolderAwareRequestFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
@@ -38,14 +34,10 @@ public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final OAuth2MemberSuccessHandler oAuth2MemberSuccessHandler;
-    private final Oauth2Service oauth2Service;
-    @Autowired
-    private CustomResponseLoggingFilter responseLoggingFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .addFilterAfter(responseLoggingFilter, SecurityContextHolderAwareRequestFilter.class)
                 .csrf().disable()        // CSRF공격에 대한 Spring Security에 대한 설정을 비활성화
                 .cors(withDefaults())    // CORS 설정 추가 (corsConfigurationSource라는 이름으로 등록된 Bean을 이용)
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)  // 세션을 생성하지 않도록 설정
@@ -62,10 +54,9 @@ public class SecurityConfiguration {
                                 .anyRequest().permitAll()                // 모든 HTTP request 요청에 대해서 접근 허용
                 )
                 .oauth2Login()
-//                .defaultSuccessUrl("/oauth2-login-success")
-                .successHandler(oAuth2MemberSuccessHandler)  // OAuth 2 인증이 성공한 뒤 실행되는 핸들러를 추가
-                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정을 저장
-                .userService(oauth2Service); // OAuth2 로그인 성공 시, 후작업을 진행할 UserService 인터페이스 구현체 등록
+                .successHandler(oAuth2MemberSuccessHandler);  // OAuth 2 인증이 성공한 뒤 실행되는 핸들러를 추가
+//                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정을 저장
+//                .userService(oauth2Service); // OAuth2 로그인 성공 시, 후작업을 진행할 UserService 인터페이스 구현체 등록
         return http.build();
     }
 
