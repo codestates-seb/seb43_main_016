@@ -1,4 +1,4 @@
-import FullCalender from "../components/calender/Fullcalender";
+import FullCalender from "../components/FullCalender";
 
 const Calender = () => {
   return (

@@ -10,15 +10,18 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@tanstack/react-query": "^4.29.5",
     "@fullcalendar/core": "^6.1.6",
     "@fullcalendar/daygrid": "^6.1.6",
     "@fullcalendar/react": "^6.1.6",
     "@fullcalendar/timegrid": "^6.1.6",
     "axios": "^1.4.0",
     "dotenv": "^16.0.3",
+    "jwt-decode": "^3.1.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
     "react-router-dom": "^6.11.0",
+    "recoil": "^0.7.7",
     "styled-components": "^5.3.10",
     "uuid": "^9.0.0"
   },

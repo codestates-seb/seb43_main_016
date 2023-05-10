@@ -1,3 +1,4 @@
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import GlobalStyle from "./GlobalStyle";
 import Login from "./pages/Login";
@@ -7,25 +8,33 @@ import Calender from "./pages/Calender";
 import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
 import MyStudyManage from "./pages/ProfileStudyManage";
-
 import "./App.css";
+import { useRecoilValue } from "recoil";
+import { myIdState } from "./recoil/atoms/myIdState";
+
+const queryClient = new QueryClient();
 
 function App() {
+  const myId = useRecoilValue(myIdState);
   return (
     <>
-      <BrowserRouter>
-        <GlobalStyle />
-        <Routes>
-          <Route path="/profile/*" element={<Profile />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/calendar" element={<Calender />} />
-          <Route path="/studylist" element={<StudyList />} />
-          <Route path="/studycontent" element={<StudyContent />} />
-          <Route path="/studymanage" element={<MyStudyManage />} />
-          <Route />
-        </Routes>
-      </BrowserRouter>
+      <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+          <GNB />
+          <GlobalStyle />
+          <Routes>
+            <Route path="/" element={<>{myId}</>} />
+            <Route path="/profile" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/calendar" element={<Calender />} />
+            <Route path="/studylist" element={<StudyList />} />
+            <Route path="/studycontent" element={<StudyContent />} />
+            <Route path="/studymanage" element={<MyStudyManage />} />
+            <Route />
+          </Routes>
+        </BrowserRouter>
+      </QueryClientProvider>
     </>
   );
 }

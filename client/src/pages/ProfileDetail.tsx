@@ -62,11 +62,15 @@ const Profile = () => {
     try {
       const {
         data: { password },
-      } = await axios.get( `${import.meta.env.VITE_APP_API_URL}/members/${userInfo?.id}/password`, { // ? id가 추가되는 부분이 이해되지 않아 문의드림
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      } = await axios.get(
+        `${import.meta.env.VITE_APP_API_URL}/members/${userInfo?.id}/password`,
+        {
+          // ? id가 추가되는 부분이 이해되지 않아 문의드림
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       if (enterPassword === password) {
         setIsEdit(true);
@@ -95,11 +99,15 @@ const Profile = () => {
     const token = localStorage.getItem("accessToken");
 
     try {
-      const res = await axios.put(`${import.meta.env.VITE_APP_API_URL}/members/${userInfo?.id}`, userInfo, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const res = await axios.put(
+        `${import.meta.env.VITE_APP_API_URL}/members/${userInfo?.id}`,
+        userInfo,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const updatedUserInfo = res.data;
       setUserInfo(updatedUserInfo);
       setIsEdit(false);
@@ -130,7 +138,7 @@ const Profile = () => {
   return (
     <ProfileWrapper>
       <form>
-        <ProfileImg />
+        <ProfileImg profileImage={userInfo?.profileImage || ""} />
         <ProfileContentsWrapper>
           <ProfileContents>
             <ProfileContentsInput

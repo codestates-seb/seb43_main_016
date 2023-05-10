@@ -17,7 +17,6 @@ export interface Event {
   };
   color?: string;
 }
-
 export interface ServerEvent {
   title: string;
   allDay: boolean;
