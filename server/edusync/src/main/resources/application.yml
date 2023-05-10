@@ -3,6 +3,7 @@ logging:
     org:
       springframework:
         web: debug
+        security: debug
     org.springframework.web.servlet: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
@@ -18,7 +19,7 @@ spring:
     log-request-details: true
   jpa:
     defer-datasource-initialization: true
-    hibernate.ddl-auto: update
+    hibernate.ddl-auto: create-drop
     open-in-view: false
     show-sql: true
     properties:
@@ -40,6 +41,25 @@ spring:
             scope:
               - email
               - profile
+          kakao:
+            client-id: ${KakaoClientId}
+            client-secret: ${KakaoClientSecret}
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            client-name: Kakao
+            provider: kakao
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+#            jwkSetUri: https://kauth.kakao.com/oauth/authorize
 mail:
   address:
     admin: admin@gmail.com
@@ -50,3 +70,6 @@ jwt:
 
 server:
   port: 8080
+
+KakaoClientId: ${KakaoClientId}
+

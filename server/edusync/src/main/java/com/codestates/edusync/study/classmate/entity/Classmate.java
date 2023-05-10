@@ -36,11 +36,11 @@ public class Classmate {
     private List<Studygroup> studygroupAsLeader = new ArrayList<>();
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "fk_classmates_id")
+    @JoinColumn(name = "fk_classmate_id")
     private Studygroup studygroup;
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "fk_classmates_id")
+    @JoinColumn(name = "fk_member_id")
     private Member member;
 
     @OneToOne(mappedBy = "classmate", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)

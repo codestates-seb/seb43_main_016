@@ -3,9 +3,7 @@ package com.codestates.edusync.member.entity;
 import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.study.classmate.entity.Classmate;
 import com.codestates.edusync.study.postcomment.entity.StudyPostComment;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -15,9 +13,11 @@ import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
 @NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
+@Builder
 public class Member extends Auditable {
     @Id // 식별자 등록
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별자를 자동으로 생성
@@ -57,6 +57,22 @@ public class Member extends Auditable {
 
         MemberStatus(String status) {
             this.status = status;
+        }
+    }
+
+    private Provider provider = Provider.LOCAL;
+
+    public enum Provider {
+        LOCAL("기본 회원"),
+        GOOGLE("구글 연동 회원"),
+        KAKAO("카카오 연동 회원"),
+        NAVER("네이버 연동 회원");
+
+        @Getter
+        private String provider;
+
+        Provider(String provider) {
+            this.provider = provider;
         }
     }
 
