@@ -15,7 +15,7 @@ interface UserInfoResponseDto {
 
 type UserInfo = Omit<UserInfoResponseDto, "memberStatus">;
 
-const Profile = () => {
+const ProfileInfo = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
 
@@ -130,7 +130,9 @@ const Profile = () => {
   return (
     <ProfileWrapper>
       <form>
+        {/* // TODO ProfileImag 코드 구현 부분 */}
         <ProfileImg profileImage={userInfo?.profileImage || ""} />
+        {/* // TODO ProfileContents 코드 구현 부분 */}
         <ProfileContentsWrapper>
           <ProfileContents>
             <ProfileContentsInput
@@ -170,6 +172,7 @@ const Profile = () => {
             <ProfileContentsInput type="text" placeholder="등급" disabled />
           </ProfileContents>
         </ProfileContentsWrapper>
+        {/* // TODO ProfileDetail 코드 구현 부분 */}
         <ProfileDetailWrapper>
           <ProfileDetail>
             <ProfileDetailInput
@@ -201,7 +204,7 @@ const Profile = () => {
   );
 };
 
-export default Profile;
+export default ProfileInfo;
 
 const ProfileWrapper = styled.div``;
 const ProfileContentsWrapper = styled.div``;

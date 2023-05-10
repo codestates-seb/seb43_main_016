@@ -1,31 +1,52 @@
+import ProfileInfo from "./ProfileInfo";
 import styled from "styled-components";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate, Link } from "react-router-dom";
+import ProfileStudyList from "./ProfileStudyList";
+import ProfileCalendar from "./ProfileCalendar";
 
-const Wrapper = styled.div``;
-const Title = styled.div``;
-const LNB = styled.button``;
-
-const ProfileNav = () => {
+const Profile = () => {
   const navigate = useNavigate();
   return (
     <Wrapper>
-      <Title>MyInfo</Title>
-      <nav>
+      <LnbWrapper>
+        <Title>My Info</Title>
         <ul>
           <li>
-            <LNB onClick={() => navigate("/profile")}>Profile</LNB>
+            <Lnb to="./">Profile</Lnb>
           </li>
           <li>
-            <LNB onClick={() => navigate("/manage-group")}>Manage Group</LNB>
+            <Lnb to="./manage-group">Manage Group</Lnb>
           </li>
           <li>
-            <LNB onClick={() => navigate("/calendar")}>Schedule</LNB>
+            <div onClick={() => navigate("/calendar")}>Schedule</div>
           </li>
         </ul>
-      </nav>
-      <Outlet />
+      </LnbWrapper>
+      <Routes>
+        <Route path="/" element={<ProfileInfo />} />
+        <Route path="/manage-group" element={<ProfileStudyList />} />
+        <Route path="/calendar" element={<ProfileCalendar />} />
+      </Routes>
     </Wrapper>
   );
 };
 
-export default ProfileNav;
+export default Profile;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+`;
+
+const LnbWrapper = styled.div`
+  background-color: white;
+  margin-right: 20px;
+`;
+const Title = styled.div``;
+const Lnb = styled(Link)`
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
