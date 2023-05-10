@@ -1,6 +1,8 @@
 package com.codestates.edusync.study.postcomment.controller;
 
 import com.codestates.edusync.study.postcomment.dto.StudygroupPostCommentDto;
+import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
+import com.codestates.edusync.study.postcomment.service.StudygroupPostCommentService;
 import com.codestates.edusync.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import com.codestates.edusync.util.UriCreator;
@@ -13,12 +15,13 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
 @RestController
 public class StudygroupPostCommentController {
-    private final StudygroupService studygroupService;
+    private final StudygroupPostCommentService studygroupPostCommentService;
     private final StudygroupMapper mapper;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
@@ -33,11 +36,15 @@ public class StudygroupPostCommentController {
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL)
     public ResponseEntity postStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                     @Valid @RequestBody StudygroupPostCommentDto.Post postDto) {
-        long commentId = 1L;     // fixme: 임시로 만들어둠
+        StudygroupPostComment createdStudygroupPostComment =
+                studygroupPostCommentService.createStudygroupPostComment(
+                        studygroupId,
+                        mapper.studygroupPostCommentPostDtoToStudygroupPostComment(postDto)
+                );
 
         URI location = UriCreator.createUri(
                 UriCreator.createUri(DEFAULT_STUDYGROUP_URL, studygroupId) +
-                        DEFAULT_STUDYGROUP_POST_COMMENT_URL, commentId);  // FIXME: 2023-05-08 테스트 해봐야함 !!!
+                        DEFAULT_STUDYGROUP_POST_COMMENT_URL, createdStudygroupPostComment.getId());
 
         return new ResponseEntity<>(location, HttpStatus.CREATED);
     }
@@ -50,9 +57,14 @@ public class StudygroupPostCommentController {
      * @return
      */
     @PatchMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL + "/{comment-id}")
-    public ResponseEntity postStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                    @PathVariable("comment-id") @Positive Long commentId,
-                                                    @Valid @RequestBody StudygroupPostCommentDto.Patch patchDto) {
+    public ResponseEntity patchStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                     @PathVariable("comment-id") @Positive Long commentId,
+                                                     @Valid @RequestBody StudygroupPostCommentDto.Patch patchDto) {
+        StudygroupPostComment updatedStudygroupPostComment =
+                studygroupPostCommentService.updateStudygroupPostComment(
+                        studygroupId, commentId,
+                        mapper.studygroupPostCommentPatchDtoToStudygroupPostComment(patchDto)
+                );
 
         return new ResponseEntity<>(HttpStatus.OK);
     }
@@ -64,8 +76,12 @@ public class StudygroupPostCommentController {
      */
     @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL + "s")
     public ResponseEntity getStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+        List<StudygroupPostComment> findComments = studygroupPostCommentService.getAllStudygroupPostComments(studygroupId);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(
+                mapper.studygroupPostCommentToStudygroupPostCommentResponseDtos(findComments),
+                HttpStatus.OK
+        );
     }
 
     /**
@@ -78,6 +94,8 @@ public class StudygroupPostCommentController {
     public ResponseEntity deleteStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                       @PathVariable("comment-id") @Positive Long commentId) {
 
+        studygroupPostCommentService.deleteStudygroupPostComment(studygroupId, commentId);
+
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -88,6 +106,8 @@ public class StudygroupPostCommentController {
      */
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/all")
     public ResponseEntity deleteAllStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+
+        studygroupPostCommentService.deleteAllStudygroupPostCommentByStudygroupId(studygroupId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
