@@ -61,9 +61,8 @@ public class Studygroup extends Auditable {
     @JoinColumn(name = "leader_member_id")
     private Member leaderMember;
 
-    @ManyToOne(cascade = {PERSIST, MERGE, REMOVE}, fetch = EAGER)
-    @JoinColumn(name = "studygroup_join_id")
-    private StudygroupJoin studygroupJoin;
+    @OneToMany(mappedBy = "studygroup", fetch = LAZY)
+    private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
     @OneToMany(mappedBy = "studygroup", cascade = {REMOVE}, fetch = LAZY)
     private List<StudygroupPostComment> studygroupPostComments = new ArrayList<>();
