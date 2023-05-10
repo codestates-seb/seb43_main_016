@@ -85,8 +85,6 @@ const Login = () => {
   // Google 로그인 처리
   // };
   useEffect(() => {
-    setIsLoading(true);
-
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/members?page=1&size=1`)
       .then((res) => {
@@ -100,7 +98,6 @@ const Login = () => {
           )
           .then((res) => {
             setMembers(Object(res.data).data);
-            setIsLoading(false);
           });
       });
   }, []);

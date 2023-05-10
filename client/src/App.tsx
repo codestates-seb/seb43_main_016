@@ -6,14 +6,15 @@ import GlobalStyle from "./GlobalStyle";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
-import Calender from "./pages/Calender";
+import ProfileCalendar from "./pages/ProfileCalendar";
 import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
 import GNB from "./components/gnb/GNB";
 import "./App.css";
-
-
+import ProfileDetail from "./pages/ProfileDetail";
+import ProfileStudyList from "./pages/ProfileStudyList";
 const queryClient = new QueryClient();
+// ? "/"는 루트라는 뜻 , "*"는 모든 경로를 의미
 
 function App() {
   const myId = useRecoilValue(myIdState);
@@ -25,12 +26,16 @@ function App() {
           <GlobalStyle />
           <Routes>
             <Route path="/" element={<>{myId}</>} />
-            <Route path="/profile" element={<Profile />} />
-            <Route path="/calendar" element={<Calender />} />
+            <Route path="/profile/*" element={<Profile />}>
+              <Route path="*" element={<ProfileDetail />} />
+              <Route path="/calendar" element={<ProfileCalendar />} />
+              <Route path="/manage-group" element={<ProfileStudyList />} />
+            </Route>
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
             <Route path="/studylist" element={<StudyList />} />
             <Route path="/studycontent" element={<StudyContent />} />
+            <Route path="manage-group" element={<ProfileStudyList />} />
             <Route />
           </Routes>
         </BrowserRouter>

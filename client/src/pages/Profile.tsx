@@ -1,36 +1,30 @@
 import styled from "styled-components";
-import ProfileDetail from "./ProfileDetail";
-import ProfileStudyList from "./ProfileStudyList";
-import Calender from "./Calender";
-import { Link, Route, Routes } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 
-const NavWrapper = styled.div``;
+const Wrapper = styled.div``;
 const Title = styled.div``;
-const NavContents = styled(Link)``;
+const LNB = styled.button``;
 
 const ProfileNav = () => {
+  const navigate = useNavigate();
   return (
-    <NavWrapper>
+    <Wrapper>
       <Title>MyInfo</Title>
       <nav>
         <ul>
           <li>
-            <NavContents to="profile">Profile</NavContents>
+            <LNB onClick={() => navigate("/profile")}>Profile</LNB>
           </li>
           <li>
-            <NavContents to="manage-group">Manage Group</NavContents>
+            <LNB onClick={() => navigate("/manage-group")}>Manage Group</LNB>
           </li>
           <li>
-            <NavContents to="calendar">Schedule</NavContents>
+            <LNB onClick={() => navigate("/calendar")}>Schedule</LNB>
           </li>
         </ul>
       </nav>
-      <Routes>
-        <Route path="profile" element={<ProfileDetail />} />
-        <Route path="manage-group" element={<ProfileStudyList />} />
-        <Route path="calendar" element={<Calender />} />
-      </Routes>
-    </NavWrapper>
+      <Outlet />
+    </Wrapper>
   );
 };
 

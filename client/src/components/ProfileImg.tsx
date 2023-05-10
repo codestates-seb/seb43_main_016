@@ -8,7 +8,7 @@ interface Props {
 const ProfileImg = ({ profileImage }: Props) => {
   const [imageUrl, setImageUrl] = useState<string>(profileImage || "");
 
-  // TODO 이미지가 잘 업로드 되는지 확인하는 코드
+  // TODO 프로필 이미지를 업로드하여 상태에 담아놓는 코드
   const checkImg = (e: React.ChangeEvent<HTMLInputElement>): any => {
     const selectedFile: File | undefined = e.target.files?.[0];
 
