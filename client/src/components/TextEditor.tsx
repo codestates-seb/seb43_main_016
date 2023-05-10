@@ -6,7 +6,7 @@ import { useState } from "react";
 function TextEditor({ onFocus, onBlur, handleContentChange }) {
   const [text, setText] = useState("");
 
-  const handleOnChange = (event, editor) => {
+  const handleOnChange = (event: any, editor: ClassicEditor) => {
     const data = editor.getData();
     const plainText = data.replace(/(<([^>]+)>)/gi, "");
     setText(data);

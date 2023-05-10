@@ -19,18 +19,24 @@ const StudyPost = () => {
     setPlatform(e.target.value);
   };
 
-  const handlePostButton = async () => {
-    await axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/members`, {
+  const handlePostButton = () => {
+    // console.log("Submitting form with values:", {
+    //   maxClassmateCount: maxPeople,
+    //   platform: `${platform}`,
+    //   introduction: `${postText}`,
+    // });
+
+    axios
+      .post(`${import.meta.env.VITE_APP_API_URL}/studygroup/1`, {
         maxClassmateCount: maxPeople,
         platform: `${platform}`,
         introduction: `${postText}`,
       })
+      .then(() => alert("스터디 등록이 완료되었습니다!"))
       .then(() => navigate("/studylist"))
       .catch((error) => {
         console.error("Error during POST request:", error);
-      })
-      .finally(() => {});
+      });
   };
 
   return (
@@ -72,7 +78,9 @@ const StudyPost = () => {
             <TextEditor handleContentChange={setPostText} />
           </StudyPostInput>
           <StudyPostButtonWrapper>
-            <StudyPostButton>스터디 등록</StudyPostButton>
+            <StudyPostButton onClick={handlePostButton}>
+              스터디 등록
+            </StudyPostButton>
           </StudyPostButtonWrapper>
         </StudyPostMain>
       </StudyPostBody>
