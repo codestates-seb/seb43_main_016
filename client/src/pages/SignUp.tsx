@@ -1,5 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { KeyboardEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/edusync-logo.png";
@@ -53,6 +54,12 @@ const SignUp = () => {
         .finally(() => {});
     }
   };
+  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSignUpButton();
+    }
+  };
 
   return (
     <Container>
@@ -85,7 +92,13 @@ const SignUp = () => {
           />
         </SignUpForm>
         <ButtonDiv>
-          <button onClick={handleSignUpButton}>Sign up</button>
+          <button
+            type="button"
+            onClick={handleSignUpButton}
+            onKeyDown={handleKeyDown}
+          >
+            Sign up
+          </button>
           <div onClick={handleSignUpButton}>
             <img src={googleLogo} alt="goole-login" />
           </div>

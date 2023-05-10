@@ -1,68 +1,149 @@
 import styled from "styled-components";
 import { useState } from "react";
+import { useEffect } from "react";
+import { useMutation } from "@tanstack/react-query";
+import jwtDecode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/edusync-logo.png";
 import googleLogo from "../assets/google-icon.png";
 import { validateEmptyInput } from "./utils/loginUtils";
+import { setAccessToken, setRefreshToken } from "./utils/Auth";
+import { useSetRecoilState } from "recoil";
+import { myIdState } from "../recoil/atoms/myIdState";
+
+interface User {
+  id: number;
+  nickName: string;
+  email: string;
+  password: string;
+  aboutMe: string;
+  memberStatus: string;
+  profileImage: string;
+  roles: [];
+  withMe: string;
+}
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [members, setMembers] = useState<User[]>([]);
+  const setMyId = useSetRecoilState(myIdState);
   const navigate = useNavigate();
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
+
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
   };
+
+  const loginMutation = useMutation(
+    () =>
+      axios.post(`${import.meta.env.VITE_APP_API_URL}/members/login`, {
+        email,
+        password,
+      }),
+    {
+      onSuccess: (data) => {
+        const accessToken = data.headers.authorization;
+        const refreshToken = data.headers.refresh;
+        setAccessToken(accessToken);
+        setRefreshToken(refreshToken);
+        const decodedToken = jwtDecode<any>(accessToken);
+        const foundMember = members.filter((member) => {
+          return member.email === email;
+        });
+        setMyId(foundMember ? foundMember[0].id : 0);
+        navigate("/");
+      },
+      onError: (error) => {
+        console.error(error);
+        alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!!");
+      },
+    }
+  );
 
   const handleLoginButton = () => {
     if (validateEmptyInput(email) || validateEmptyInput(password)) {
       alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!");
     } else {
-      axios
-        .post(`${import.meta.env.VITE_APP_API_URL}/members/login`, {
-          email,
-          password,
-        })
-        .then(() => navigate("/"))
-        .catch((error) => {
-          console.log(error);
-          alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!");
-        });
+      loginMutation.mutate();
     }
   };
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleLoginButton();
+    }
+  };
+
+  //  const handleGoogleLogin = () => {
+  // Google 로그인 처리
+  // };
+  useEffect(() => {
+    setIsLoading(true);
+
+    axios
+      .get(`${import.meta.env.VITE_APP_API_URL}/members?page=1&size=1`)
+      .then((res) => {
+        const {
+          pageInfo: { totalElements: size },
+        } = res.data;
+
+        axios
+          .get<User[]>(
+            `${import.meta.env.VITE_APP_API_URL}/members?page=1&size=${size}`
+          )
+          .then((res) => {
+            setMembers(Object(res.data).data);
+            setIsLoading(false);
+          });
+      });
+  }, []);
+
   return (
     <Container>
-      <LoginDiv>
-        <LogoDiv>
-          <img src={logo} />
-        </LogoDiv>
-        <LoginForm>
-          <input
-            onChange={handleEmail}
-            type="email"
-            placeholder="Email"
-            required
-          />
-        </LoginForm>
-        <LoginForm>
-          <input
-            onChange={handlePassword}
-            type="password"
-            placeholder="Password"
-            required
-          />
-        </LoginForm>
-        <ButtonDiv>
-          <button onClick={handleLoginButton}>Log In</button>
-          <div onClick={handleLoginButton}>
-            <img src={googleLogo} alt="goole-login" />
-          </div>
-        </ButtonDiv>
-      </LoginDiv>
+      {isLoading ? (
+        <>
+          <span>gg</span>
+        </>
+      ) : (
+        <LoginDiv>
+          <LogoDiv>
+            <img src={logo} />
+          </LogoDiv>
+          <LoginForm>
+            <input
+              onChange={handleEmail}
+              type="email"
+              placeholder="Email"
+              required
+            />
+          </LoginForm>
+          <LoginForm>
+            <input
+              onChange={handlePassword}
+              type="password"
+              placeholder="Password"
+              required
+            />
+          </LoginForm>
+          <ButtonDiv>
+            <button onClick={handleLoginButton} onKeyDown={handleKeyDown}>
+              Log In
+            </button>
+            <div onClick={handleLoginButton}>
+              <img src={googleLogo} alt="goole-login" />
+            </div>
+          </ButtonDiv>
+        </LoginDiv>
+      )}
+
       <SignUpLink to="/signup">회원가입하러 가기</SignUpLink>
     </Container>
   );
