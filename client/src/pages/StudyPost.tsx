@@ -5,6 +5,8 @@ import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
 
+const API_URL = "http://localhost:8080";
+
 const StudyPost = () => {
   const [postText, setPostText] = useState<string>("");
   const [maxPeople, setMaxPeople] = useState<number>(0);
@@ -27,7 +29,7 @@ const StudyPost = () => {
     // });
 
     axios
-      .post(`${import.meta.env.VITE_APP_API_URL}/studygroup/1`, {
+      .post(`${API_URL}/studygroup/1`, {
         maxClassmateCount: maxPeople,
         platform: `${platform}`,
         introduction: `${postText}`,
