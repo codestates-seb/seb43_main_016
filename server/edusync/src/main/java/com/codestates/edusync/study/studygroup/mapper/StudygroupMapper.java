@@ -71,4 +71,27 @@ public interface StudygroupMapper {
         leader.setNickName(member.getNickName());
         return leader;
     }
+
+    /**
+     * 스터디 수정 시, 스터디 객체로 매핑
+     * @param studygroupDto
+     * @return
+     * @throws Exception
+     */
+    default Studygroup StudygroupDtoPatchToStudygroup(StudygroupDto.Patch studygroupDto) throws Exception{
+        Studygroup studygroup = new Studygroup();
+        studygroup.setId(studygroupDto.getId());
+        studygroup.setStudyName(studygroupDto.getStudyName());
+        studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
+        studygroup.setStudyPeriodStart(studygroupDto.getStudyPeriodStart());
+        studygroup.setStudyPeriodEnd(studygroupDto.getStudyPeriodEnd());
+        studygroup.setStudyTimeStart(studygroupDto.getStudyTimeStart());
+        studygroup.setStudyTimeEnd(studygroupDto.getStudyTimeEnd());
+        studygroup.setIntroduction(studygroupDto.getIntroduction());
+        studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
+        studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
+        studygroup.setPlatform(studygroupDto.getPlatform());
+        studygroup.setSearchTags(studygroupDto.getTags());
+        return studygroup;
+    }
 }

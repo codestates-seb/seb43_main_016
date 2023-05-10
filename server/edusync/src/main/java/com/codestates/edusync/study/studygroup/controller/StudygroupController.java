@@ -1,11 +1,14 @@
 package com.codestates.edusync.study.studygroup.controller;
 
+import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
+import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import com.codestates.edusync.util.UriCreator;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -46,17 +49,24 @@ public class StudygroupController {
 
     /**
      * 스터디 모집 & 수정
-     * @param studygroupId
      * @param patchDto
      * @return
+     * @throws Exception
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity patchStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                          @Valid @RequestBody StudygroupDto.Patch patchDto) {
+    @PatchMapping(STUDYGROUP_DEFAULT_URI)
+    public ResponseEntity patchStudygroup(@Valid @RequestBody StudygroupDto.Patch patchDto) throws Exception{
 
-        // TODO: 2023-05-08 작업 해야함 
-        
-        return new ResponseEntity<>(HttpStatus.OK);
+        Studygroup studygroup = mapper.StudygroupDtoPatchToStudygroup(patchDto);
+        studygroup = service.updateStudygroup(studygroup);
+        // FIXME: 2023-05-11 수정된 데이터를 전달할 지, 확인 필요
+        //StudygroupResponseDto responseDto = mapper.StudygroupToStudygroupResponseDto(studygroup);
+
+        URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(location);
+
+        return new ResponseEntity<>(headers, HttpStatus.OK);
+        //return new ResponseEntity<>(responseDto, location, HttpStatus.OK);
     }
 
     /**
@@ -64,10 +74,17 @@ public class StudygroupController {
      * @param studygroupId
      * @return
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/status")
+    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity patchStudygroupStatus(@PathVariable("studygroup-id") @Positive Long studygroupId) {
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        service.updateStatusStudygroup(studygroupId);
+
+        URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroupId);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setLocation(location);
+
+        return new ResponseEntity<>(headers, HttpStatus.OK);
+        //return new ResponseEntity<>(responseDto, location, HttpStatus.OK);
     }
 
     /**
