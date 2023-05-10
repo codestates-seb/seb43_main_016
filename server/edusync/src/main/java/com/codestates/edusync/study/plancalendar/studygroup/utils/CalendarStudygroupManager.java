@@ -14,7 +14,7 @@ public interface CalendarStudygroupManager {
      * @param studyGroupId  스터디 그룹의 식별자
      * @param timeSchedules 일정 리스트
      */
-    void createTimeSchedulesForStudygroup(Long studyGroupId, List<TimeSchedule> timeSchedules);
+    void createTimeSchedulesForStudygroup(Long studygroupId, List<TimeSchedule> timeSchedules);
 
     /**
      * <h2>스터디 맴버의 캘린더에 일정 리스트를 생성한다</h2>
@@ -24,15 +24,17 @@ public interface CalendarStudygroupManager {
      * @param studyGroupId  스터디 그룹의 식별자
      * @param timeSchedules 일정 리스트
      */
-    void createTimeSchedulesOfAllMember(Long studyGroupId, List<TimeSchedule> timeSchedules);
+    void createTimeSchedulesOfAllMember(Long studygroupId, List<TimeSchedule> timeSchedules);
 
     /**
      * <h2>하나의 일정을 수정한다.</h2>
-     * Time Schedule Id 에 해당하는 일정의 내용을 수정한다
+     * Time Schedule Id 에 해당하는 일정의 내용을 수정한다<br>
+     * studygroup Id 는 유효성 검증용<br>
+     * @param studygroupId   스터디 그룹의 식별자
      * @param timeScheduleId 일정의 식별자
      * @param timeSchedule   변경할 일정 내용
      */
-    void updateStudygroupTimeSchedule(Long timeScheduleId, TimeSchedule timeSchedule);
+    void updateStudygroupTimeSchedule(Long studygroupId, Long timeScheduleId, TimeSchedule timeSchedule);
 
     /**
      * <h2>스터디 그룹에 해당하는 일정 리스트를 조회한다</h2>
@@ -41,6 +43,16 @@ public interface CalendarStudygroupManager {
      * @return
      */
     List<TimeSchedule> getTimeSchedulesByStudygroupId(Long studygroupId);
+
+
+    /**
+     * <h2>하나의 일정을 조회한다</h2>
+     * 스터디 그룹에 속하는 일정 하나를 조회한다.
+     * @param studygroupId   스터디 그룹의 식별자
+     * @param timeScheduleId 일정의 식별자
+     * @return
+     */
+    TimeSchedule getSingleTimeScheduleById(Long studygroupId, Long timeScheduleId);
 
     /**
      * <h2>모든 스터디 맴버와 스터디 그룹의 일정을 삭제한다</h2>
