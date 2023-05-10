@@ -3,14 +3,6 @@ import ProfileImg from "../components/ProfileImg";
 import styled from "styled-components";
 import axios from "axios";
 
-const ProfileWrapper = styled.div``;
-const ProfileContentsWrapper = styled.div``;
-const ProfileContents = styled.div``;
-const ProfileContentsInput = styled.input``;
-const ProfileDetailWrapper = styled.div``;
-const ProfileDetail = styled.div``;
-const ProfileDetailInput = styled.input``;
-
 interface UserInfoResponseDto {
   id: number;
   email: string;
@@ -210,3 +202,11 @@ const Profile = () => {
 };
 
 export default Profile;
+
+const ProfileWrapper = styled.div``;
+const ProfileContentsWrapper = styled.div``;
+const ProfileContents = styled.div``;
+const ProfileContentsInput = styled.input``;
+const ProfileDetailWrapper = styled.div``;
+const ProfileDetail = styled.div``;
+const ProfileDetailInput = styled.input``;

@@ -1,11 +1,11 @@
-import FullCalender from "../components/FullCalender";
+import Calendar from "../components/calender/fullcalender";
 
-const Calender = () => {
+const FullCalendar = () => {
   return (
     <div>
-      <FullCalender />
+      <Calendar />
     </div>
   );
 };
 
-export default Calender;
+export default FullCalendar;
