@@ -41,6 +41,13 @@ public class TimeSchedule extends Auditable {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    /**
+     * <h2>양방향 매핑을 위한 메서드</h2>
+     * 기존 연결을 끊고, 새로 관계를 연결한다.<br>
+     * <font color="white"><b>양방향 매핑 시 순환참조 가능성이 있으므로, 반대쪽에서 사용하면 절대 안됨</b></color="white"><br>
+     * 참고: {@link TimeSchedule#setStudygroupOneWay(Studygroup)}
+     * @param studygroup
+     */
     public void setStudygroup(Studygroup studygroup) {
         if (studygroup == null) {
             throw new IllegalArgumentException("Studygroup cannot be null");
@@ -53,6 +60,22 @@ public class TimeSchedule extends Auditable {
         this.studygroup.getTimeSchedules().add(this);
     }
 
+    /**
+     * <h2>양방향 매핑 중 순환 방지용으로 단방향으로만 추가하는 메서드</h2>
+     * @param studygroup 관계를 끊는 경우 null 가능
+     */
+    public void setStudygroupOneWay(Studygroup studygroup) {
+        this.studygroup = studygroup;
+    }
+
+
+    /**
+     * <h2>양방향 매핑을 위한 메서드</h2>
+     * 기존 연결을 끊고, 새로 관계를 연결한다.<br>
+     * <font color="white"><b>양방향 매핑 시 순환참조 가능성이 있으므로, 반대쪽에서 사용하면 절대 안됨</b></color="white"><br>
+     * 참고: {@link TimeSchedule#setMemberOneWay(Member)}
+     * @param member
+     */
     public void setMember(Member member) {
         if (member == null) {
             throw new IllegalArgumentException("Member cannot be null");
@@ -63,6 +86,14 @@ public class TimeSchedule extends Auditable {
         }
         this.member = member;
         this.member.getTimeSchedules().add(this);
+    }
+
+    /**
+     * <h2>양방향 매핑 중 순환 방지용으로 단방향으로만 추가하는 메서드</h2>
+     * @param member 관계를 끊는 경우 null 가능
+     */
+    public void setMemberOneWay(Member member) {
+        this.member = member;
     }
 
 }
