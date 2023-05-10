@@ -1,11 +1,11 @@
 package com.codestates.edusync.study.plancalendar.studygroup.dto;
 
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.sql.Timestamp;
 import java.util.List;
 
 public class CalendarDto {
@@ -14,7 +14,7 @@ public class CalendarDto {
     @Getter
     public static class Post {
         @NotNull
-        private List<TimeSchedule> timeSchedules;
+        private List<TimeScheduleDto.Post> timeSchedules;
     }
 
     @NoArgsConstructor
@@ -22,6 +22,38 @@ public class CalendarDto {
     @Setter
     public static class Patch {
         @NotNull
-        private List<TimeSchedule> timeSchedules;
+        private List<TimeScheduleDto.Patch> timeSchedules;
+    }
+
+    public static class TimeScheduleDto {
+
+        @NoArgsConstructor
+        @Getter
+        @Setter
+        public static class Post {
+            @NotNull
+            private String title;
+
+            @NotNull
+            private String content;
+
+            @NotNull
+            private Timestamp start;
+
+            @NotNull
+            private Timestamp end;
+        }
+
+        @NoArgsConstructor
+        @Getter
+        @Setter
+        public static class Patch {
+            private Long id;
+            private String title;
+            private String content;
+            private Timestamp start;
+            private Timestamp end;
+        }
+
     }
 }
