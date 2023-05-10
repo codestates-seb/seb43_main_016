@@ -12,6 +12,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,11 +37,20 @@ public class Studygroup extends Auditable {
     @Column(length = 200)
     private String address;
 
-    @Column(length = 100, name = "study_period")
-    private String studyPeriod;
+    @Column(length = 50, name = "days_of_week")
+    private String daysOfWeek;
 
-    @Column(length = 100, name = "study_time")
-    private String studyTime;
+    @Column(name = "study_period_start")
+    private Timestamp studyPeriodStart;
+
+    @Column(name = "study_period_end")
+    private Timestamp studyPeriodEnd;
+
+    @Column(name = "study_time_start")
+    private Timestamp studyTimeStart;
+
+    @Column(name = "study_time_end")
+    private Timestamp studyTimeEnd;
 
     @OneToMany(mappedBy = "studygroup", fetch = LAZY)
     private List<TimeSchedule> timeSchedules = new ArrayList<>();
