@@ -35,4 +35,29 @@ public class TimeSchedule extends Auditable {
     @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
     @JoinColumn(name = "member_id")
     private Member member;
+
+    public void setStudygroup(Studygroup studygroup) {
+        if (studygroup == null) {
+            throw new IllegalArgumentException("Studygroup cannot be null");
+        }
+
+        if(this.studygroup != null) {
+            this.studygroup.getTimeSchedules().remove(this);
+        }
+        this.studygroup = studygroup;
+        this.studygroup.getTimeSchedules().add(this);
+    }
+
+    public void setMember(Member member) {
+        if (member == null) {
+            throw new IllegalArgumentException("Member cannot be null");
+        }
+
+        if(this.member != null) {
+            this.member.getTimeSchedules().remove(this);
+        }
+        this.member = member;
+        this.member.getTimeSchedules().add(this);
+    }
+
 }
