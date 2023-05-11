@@ -10,6 +10,7 @@ import org.apache.tomcat.jni.Time;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 
 @NoArgsConstructor
@@ -32,7 +33,7 @@ public class StudygroupResponseDto {
     private String platform;
     private String introduction;
     private Boolean requited;
-    private List<TagDto> tags;
+    private HashMap<String, String> tags;
     private StudyLeader leader;
 
     @NoArgsConstructor
@@ -54,27 +55,4 @@ public class StudygroupResponseDto {
         private String title;
         //private
     }
-
-    /**
-     * 스터디 조회 시, 태그
-     */
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class TagDto {
-        private String key;
-        private String value;
-    }
-
-//    private Count count;
-//
-//    @NoArgsConstructor
-//    @Getter
-//    @Setter
-//    public static class Count {
-//        private Integer waiter;
-//        private Integer classmate;
-//        private Integer comment;
-//        private Integer tag;
-//    }
 }
