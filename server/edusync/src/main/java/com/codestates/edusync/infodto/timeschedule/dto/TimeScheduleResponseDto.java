@@ -22,9 +22,7 @@ public class TimeScheduleResponseDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public class CalendarInfoDto {
-        private Long id;
-
+    public static class CalendarInfoDto {
         @JsonFormat(pattern = "MM-dd", timezone = "Asia/Seoul")
         private Timestamp start;
 
@@ -35,9 +33,7 @@ public class TimeScheduleResponseDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public class TimeScheduleDto {
-        private Long id;
-
+    public static class TimeScheduleDto {
         @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
         private Timestamp start;
 

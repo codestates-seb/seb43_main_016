@@ -71,7 +71,7 @@ create table if not exists search_tag
     constraint pk_search_tag_id primary key (id)
 );
 
-create table if not exists study_post_comment
+create table if not exists studygroup_post_comment
 (
     id            bigint auto_increment,
     content       varchar(200),
@@ -81,7 +81,7 @@ create table if not exists study_post_comment
     studygroup_id bigint,
     member_id     bigint,
 
-    constraint pk_study_post_comment_id primary key (id)
+    constraint pk_studygroup_post_comment_id primary key (id)
 );
 
 create table if not exists time_schedule
@@ -102,11 +102,11 @@ alter table member_roles
     add constraint fk_member_roles_member_id
         foreign key (member_id) references member (id);
 
-alter table study_post_comment
-    add constraint fk_study_post_comment_member_id
+alter table studygroup_post_comment
+    add constraint fk_studygroup_post_comment_member_id
         foreign key (member_id) references member (id);
-alter table study_post_comment
-    add constraint fk_study_post_comment_studygroup_id
+alter table studygroup_post_comment
+    add constraint fk_studygroup_post_comment_studygroup_id
         foreign key (studygroup_id) references studygroup (id);
 
 alter table studygroup_join

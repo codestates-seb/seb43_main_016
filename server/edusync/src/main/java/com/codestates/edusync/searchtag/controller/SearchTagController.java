@@ -1,5 +1,7 @@
 package com.codestates.edusync.searchtag.controller;
 
+import com.codestates.edusync.searchtag.dto.SearchTagResponseDto;
+import com.codestates.edusync.searchtag.entity.SearchTag;
 import com.codestates.edusync.searchtag.mapper.SearchTagMapper;
 import com.codestates.edusync.searchtag.service.SearchTagService;
 import lombok.RequiredArgsConstructor;
@@ -9,6 +11,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
@@ -25,8 +29,12 @@ public class SearchTagController {
      */
     @GetMapping(DEFAULT_SEARCH_TAG_URL + "/all")
     public ResponseEntity getSearchTags() {
+        List<SearchTag> tags = searchTagService.getAllSearchTagList();
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(
+                mapper.searchTagsToSearchTagResponseDto(tags),
+                HttpStatus.OK
+        );
     }
 
     /**
@@ -36,7 +44,11 @@ public class SearchTagController {
      */
     @GetMapping(DEFAULT_SEARCH_TAG_URL)
     public ResponseEntity getSearchTags(@RequestParam("key") String key) {
+        List<SearchTag> tags = searchTagService.getSearchTagList(key);
 
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(
+                mapper.searchTagsToSearchTagResponseDto(tags),
+                HttpStatus.OK
+        );
     }
 }

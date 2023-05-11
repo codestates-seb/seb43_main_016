@@ -10,17 +10,18 @@ public interface StudygroupPostCommentManager {
      * <h2>댓글을 생성한다</h2>
      * 해당 스터디 그룹에 댓글을 생성한다.<br>
      * @param studygroupId 스터디 그룹 식별자
-     * @param comment      댓글 엔티티
+     * @param comment      댓글
      */
-    void createStudygroupPostComment(Long studygroupId, StudygroupPostComment comment);
+    StudygroupPostComment createStudygroupPostComment(Long studygroupId, StudygroupPostComment comment);
 
     /**
      * <h2>댓글을 수정한다</h2>
      * 해당 스터디 그룹의 댓글을 수정한다.<br>
      * @param studygroupId 스터디 그룹 식별자
-     * @param comment      댓글 엔티티
+     * @param commentId    댓글 식별자
+     * @param comment      댓글
      */
-    void patchStudygroupPostComment(Long studygroupId, StudygroupPostComment comment);
+    StudygroupPostComment updateStudygroupPostComment(Long studygroupId, Long commentId, StudygroupPostComment comment);
 
     /**
      * <h2>댓글들을 전부 조회한다</h2>

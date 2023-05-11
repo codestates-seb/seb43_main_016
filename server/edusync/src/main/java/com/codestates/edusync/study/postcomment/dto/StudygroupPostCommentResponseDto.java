@@ -8,6 +8,8 @@ import lombok.Setter;
 @Getter
 @Setter
 public class StudygroupPostCommentResponseDto {
-    private Long id;
+    private Long commentId;
+    private Long studygroupId;
+    private Long memberId;
     private String content;
 }
