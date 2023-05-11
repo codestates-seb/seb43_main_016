@@ -1,11 +1,13 @@
 package com.codestates.edusync.study.plancalendar.studygroup.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -30,7 +32,6 @@ public class CalendarDto {
 
         @NoArgsConstructor
         @Getter
-        @Setter
         public static class Post {
             @NotNull
             private String title;
@@ -39,21 +40,26 @@ public class CalendarDto {
             private String content;
 
             @NotNull
-            private Timestamp start;
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+            private Timestamp startTime;
 
             @NotNull
-            private Timestamp end;
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+            private Timestamp endTime;
         }
 
         @NoArgsConstructor
         @Getter
-        @Setter
         public static class Patch {
             private Long id;
             private String title;
             private String content;
-            private Timestamp start;
-            private Timestamp end;
+
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+            private Timestamp startTime;
+
+            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+            private Timestamp endTime;
         }
 
     }

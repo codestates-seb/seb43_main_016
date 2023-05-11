@@ -17,12 +17,13 @@ public class CalendarResponseDto {
     private Long groupId;
 
     private String title;
+    private String content;
     private Boolean allDay;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    private Timestamp start;
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss", timezone = "Asia/Seoul")
-    private Timestamp end;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private Timestamp startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+    private Timestamp endTime;
 
     private String description;
     private Boolean overlap;
