@@ -11,9 +11,6 @@ import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
 import java.util.List;
 
-@NoArgsConstructor
-@Getter
-@Setter
 public class StudygroupDto {
 
     @NoArgsConstructor
