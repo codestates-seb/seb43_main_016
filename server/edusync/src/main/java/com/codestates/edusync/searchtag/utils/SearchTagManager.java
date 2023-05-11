@@ -27,7 +27,7 @@ public interface SearchTagManager {
      * <h2>searchTag 의 목록을 입력받아, DB 에 생성한다</h2>
      * @param tags  key(카테고리), value(태그) 의 목록
      */
-    void createSearchTags(List<SearchTag> tags);
+    List<SearchTag> createSearchTags(List<SearchTag> tags);
 
     /**
      * <h2>searchTag 의 목록을 입력받아, DB 에서 삭제한다</h2>

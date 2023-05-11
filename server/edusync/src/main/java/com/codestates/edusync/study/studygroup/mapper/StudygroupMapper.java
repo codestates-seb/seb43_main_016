@@ -2,15 +2,13 @@ package com.codestates.edusync.study.studygroup.mapper;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.member.entity.Member;
+import com.codestates.edusync.searchtag.dto.SearchTagResponseDto;
+import com.codestates.edusync.searchtag.entity.SearchTag;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-
-import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -24,7 +22,7 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto) throws Exception{
+    default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto){
         Studygroup studygroup = new Studygroup();
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
@@ -47,7 +45,14 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default StudygroupResponseDto StudygroupToStudygroupResponseDto(Studygroup studygroup) throws Exception{
+    default StudygroupResponseDto StudygroupToStudygroupResponseDto(Studygroup studygroup){
+        List<StudygroupResponseDto.tagDto> tags = new ArrayList<>();
+        for (SearchTag st : studygroup.getSearchTags()) {
+            StudygroupResponseDto.tagDto tag = new StudygroupResponseDto.tagDto();
+            tag.setKey(st.getTagKey());
+            tag.setValue(st.getTagValue());
+            tags.add(tag);
+        }
         StudygroupResponseDto responseDto = new StudygroupResponseDto();
         responseDto.setId(studygroup.getId());
         responseDto.setStudyName(studygroup.getStudyName());
@@ -61,7 +66,7 @@ public interface StudygroupMapper {
         responseDto.setPlatform(studygroup.getPlatform());
         responseDto.setIntroduction(studygroup.getIntroduction());
         responseDto.setRequited(studygroup.getIs_requited());
-        responseDto.setTags(studygroup.getSearchTags());
+        responseDto.setTags(tags);
         responseDto.setLeader(memberToStudyLeader(studygroup.getLeaderMember()));
         return responseDto;
     }
@@ -72,7 +77,7 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default StudygroupResponseDto.StudyLeader memberToStudyLeader(Member member) throws Exception{
+    default StudygroupResponseDto.StudyLeader memberToStudyLeader(Member member){
         if (member == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         StudygroupResponseDto.StudyLeader leader = new StudygroupResponseDto.StudyLeader();
         leader.setId(member.getId());
@@ -86,7 +91,7 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default Studygroup StudygroupDtoPatchToStudygroup(StudygroupDto.Patch studygroupDto) throws Exception{
+    default Studygroup StudygroupDtoPatchToStudygroup(StudygroupDto.Patch studygroupDto){
         Studygroup studygroup = new Studygroup();
         studygroup.setId(studygroupDto.getId());
         studygroup.setStudyName(studygroupDto.getStudyName());
@@ -108,7 +113,7 @@ public interface StudygroupMapper {
      * @param studygroups
      * @return
      */
-    default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups) throws Exception {
+    default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups){
         List<StudygroupResponseDto.DtoList> respnseDtoList = new ArrayList<>(studygroups.size());
         Iterator studygroupIterator = studygroups.iterator();
 
@@ -126,11 +131,10 @@ public interface StudygroupMapper {
      * @param studygroup
      * @return
      */
-    default StudygroupResponseDto.DtoList StudygroupsToStudygroupResponseDtoList(Studygroup studygroup) throws Exception{
+    default StudygroupResponseDto.DtoList StudygroupsToStudygroupResponseDtoList(Studygroup studygroup){
         StudygroupResponseDto.DtoList dtoList = new StudygroupResponseDto.DtoList();
         dtoList.setId(studygroup.getId());
         dtoList.setTitle(studygroup.getStudyName());
-        dtoList.setTags(studygroup.getSearchTags());
         return dtoList;
     }
 }

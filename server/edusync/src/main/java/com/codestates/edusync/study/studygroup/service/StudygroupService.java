@@ -4,6 +4,7 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.service.MemberService;
+import com.codestates.edusync.searchtag.service.SearchTagService;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.repository.StudygroupRepository;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +24,7 @@ import java.util.Optional;
 public class StudygroupService {
     private final StudygroupRepository repository;
     private final MemberService memberService;
+    private final SearchTagService searchTagService;
 
     /**
      * 스터디 등록
@@ -31,15 +33,9 @@ public class StudygroupService {
      * @return
      */
     public Studygroup createStudygruop(Studygroup studygroup) {
-
-        // FIXME: 2023-05-11 스터디 리더를 등록하기 위한 멤버 불러오기 실패, 추후 확인 필요
-        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        member = memberService.findVerifiedMember(member.getId());
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
         studygroup.setLeaderMember(member);
-
-//        Member member = memberService.findVerifiedMember(1L);
-//        studygroup.setLeaderMember(member);
-
+        studygroup.setSearchTags(searchTagService.createSearchTags(studygroup.getSearchTags()));
         return repository.save(studygroup);
     }
 
@@ -49,14 +45,10 @@ public class StudygroupService {
      * @return
      */
     public Studygroup updateStudygroup(Studygroup studygroup) {
-
         Studygroup findStudygroup = findStudygroup(studygroup.getId());
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
 
-        // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
-//        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        member = memberService.findVerifiedMember(member.getId());
-//
-//        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
+        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
             Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
             Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
             Optional.ofNullable(studygroup.getStudyPeriodStart()).ifPresent(findStudygroup::setStudyPeriodStart);
@@ -68,7 +60,7 @@ public class StudygroupService {
             Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
             Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
             Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
-//        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
 
         return repository.save(findStudygroup);
     }
@@ -79,17 +71,14 @@ public class StudygroupService {
      */
     public void updateStatusStudygroup(Long studygroupId) {
         Studygroup findStudygroup = findStudygroup(studygroupId);
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
 
-        // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
-//        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        member = memberService.findVerifiedMember(member.getId());
-//
-//        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
+        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
             boolean requited = findStudygroup.getIs_requited();
             if (requited) requited = false;
             else requited = true;
             findStudygroup.setIs_requited(requited);
-//        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
 
         repository.save(findStudygroup);
     }
@@ -100,14 +89,18 @@ public class StudygroupService {
      * @return
      */
     public Studygroup findStudygroup(Long studygroupId) {
-
         Studygroup findStudygroup = repository.findById(studygroupId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
-
         return findStudygroup;
     }
 
-    public Page<Studygroup> findStudygroups(int page, int size) {
+    /**
+     * 스터디 리스트 조회
+     * @param page
+     * @param size
+     * @return
+     */
+    public Page<Studygroup> findStudygroups(Integer page, Integer size) {
         return repository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
@@ -116,18 +109,12 @@ public class StudygroupService {
      * @param studygroupId
      * @throws Exception
      */
-    public void deleteStudygroup(Long studygroupId) throws Exception{
-
+    public void deleteStudygroup(Long studygroupId){
         Studygroup findStudygroup = findStudygroup(studygroupId);
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
 
-        // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
-//        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        member = memberService.findVerifiedMember(member.getId());
-//
-//        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
-//            repository.deleteById(studygroupId);
-//        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-
-        repository.deleteById(studygroupId);
+        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
+            repository.deleteById(studygroupId);
+        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }
 }
