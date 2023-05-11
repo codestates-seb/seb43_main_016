@@ -3,7 +3,9 @@ package com.codestates.edusync.auth.filter;
 import com.codestates.edusync.auth.jwt.JwtTokenizer;
 import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
 import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.security.SignatureException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,15 +25,10 @@ import static com.codestates.edusync.audit.utils.ErrorResponder.sendErrorRespons
 
 // JWT 검증 필터 구현 클래스
 // 클라이언트 측에서 전송된 request header에 포함된 JWT에 대해 검증 작업을 수행하는 코드
+@RequiredArgsConstructor
 public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerRequestFilter 상속받아서 request 당 단 한 번만 수행
     private final JwtTokenizer jwtTokenizer; // JWT를 검증하고 Claims(토큰에 포함된 정보)를 얻는 데 사용
     private final CustomAuthorityUtils authorityUtils; // JWT 검증에 성공하면 Authentication 객체에 채울 사용자의 권한을 생성하는 데 사용
-
-    public JwtVerificationFilter(JwtTokenizer jwtTokenizer,
-                                 CustomAuthorityUtils authorityUtils) {
-        this.jwtTokenizer = jwtTokenizer;
-        this.authorityUtils = authorityUtils;
-    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -40,13 +37,15 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerReq
             setAuthenticationToContext(claims);              // SecurityContext에 검증된 정보 저장
             filterChain.doFilter(request, response);         // 인증이 성공한 경우 다음 필터 호출
         } catch (SignatureException se) {
-            sendErrorResponse(response, HttpStatus.valueOf(401), "The token information is incorrect."); // 토큰 정보가 잘못되었을 경우 401 응답 반환 // Todo 왜 토큰 정보가 잘못되어도 안걸리는 경우가 생길까?
+            sendErrorResponse(response, HttpStatus.valueOf(401), "The token information is incorrect."); // 토큰 정보가 잘못되었을 경우 401 응답 반환
+        } catch (MalformedJwtException me){
+            sendErrorResponse(response, HttpStatus.valueOf(401), "JWT strings must contain exactly 2 period characters"); // 토큰 정보가 잘못되었을 경우 401 응답 반환
         } catch (ExpiredJwtException ee) {
             sendErrorResponse(response, HttpStatus.valueOf(401), "The token has expired."); // JWT가 만료된 경우 401 응답 반환
         } catch (Exception e) {
-            sendErrorResponse(response, HttpStatus.valueOf(401), "The token information is incorrect.");
-//            request.setAttribute("exception", e); // 토큰의 길이가 짧으면 다른 오류를 발생시켜서 주석처리 함
-//            filterChain.doFilter(request, response);
+//            sendErrorResponse(response, HttpStatus.valueOf(401), "The token information is incorrect.");
+            request.setAttribute("exception", e); // 토큰의 길이가 짧으면 다른 오류를 발생시켜서 주석처리 함
+            filterChain.doFilter(request, response);
         }
     }
 
@@ -55,11 +54,14 @@ public class JwtVerificationFilter extends OncePerRequestFilter {  // OncePerReq
     protected boolean shouldNotFilter(HttpServletRequest request) throws ServletException {
         String authorization = request.getHeader("Authorization");
 
-        return authorization == null || !authorization.startsWith("Bearer");  //  header의 값이 null이거나 Bearer로 시작하지 않는다면 해당 Filter의 동작을 수행하지 않도록 정의
+        return authorization == null;  //  header의 값이 null이면 해당 Filter(토큰 검증)의 동작을 수행하지 않도록 정의
         // JWT가 Authorization header에 포함되지 않았다면 JWT 자격증명이 필요하지 않은 리소스에 대한 요청이라고 판단하고 다음(Next) Filter로 처리를 넘기는 것
     }
 
     private Map<String, Object> verifyJws(HttpServletRequest request) { // JWT를 검증하는데 사용되는 메서드
+        if(!request.getHeader("Authorization").startsWith("Bearer ")) {
+            throw new SignatureException("");
+        }
         String jws = request.getHeader("Authorization").replace("Bearer ", ""); // "Bearer" 부분을 제거해서 JWT(accessToken) 얻기
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()); // JWT 서명(Signature)을 검증하기 위한 Secret Key 얻기
         Map<String, Object> claims = jwtTokenizer.getClaims(jws, base64EncodedSecretKey).getBody();   // Claims를 파싱 // 여기서 오류가 발생하면 SignatureException 발생

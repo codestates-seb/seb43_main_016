@@ -48,9 +48,9 @@ public class MemberController {
     public ResponseEntity patchMember(
             @PathVariable("member-id") @Positive Long memberId,
             @Valid @RequestBody MemberDto.Patch requestBody,
-            @RequestHeader("Authorization") String token) { // 토큰검증하는 첫번째 방법
+            Authentication authentication) {
         requestBody.setId(memberId);
-        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody), memberId, token);
+        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody), memberId, authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updateMember);
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
@@ -78,7 +78,7 @@ public class MemberController {
     @DeleteMapping("/{member-id}")
     public ResponseEntity deleteMember(
             @PathVariable("member-id") @Positive Long memberId,
-            Authentication authentication) { // 토큰검증하는 두번째 방법 -> context holder에서 바로 인증정보 가져오기
+            Authentication authentication) {
         memberService.deleteMember(memberId, authentication.getName());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -88,20 +88,33 @@ public class MemberController {
     public ResponseEntity updateProfileImage(
             @PathVariable("member-id") @Positive Long memberId,
             @RequestBody MemberDto.ProfileImage requestBody,
-            @RequestHeader("Authorization") String token) {
+            Authentication authentication) {
         Member member = memberService.findMember(memberId);
         member.setProfileImage(requestBody.getProfileImage());
-        Member updatedMember = memberService.updateMember(member, memberId, token);
+        Member updatedMember = memberService.updateMember(member, memberId, authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     @PatchMapping("/{member-id}/detail")
     public ResponseEntity updateDetail(@PathVariable("member-id") @Positive Long memberId,
-                                       @RequestBody MemberDto.PostDetail requestBody,
-                                       @RequestHeader("Authorization") String token){
-        Member updatedMember = memberService.updateDetail(memberId, requestBody, token);
+                                       @RequestBody MemberDto.Detail requestBody,
+                                       Authentication authentication){
+        Member updatedMember = memberService.updateDetail(memberId, requestBody, authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
+    }
+
+    @GetMapping("/{member-id}/password")
+    public ResponseEntity checkPassword(
+            @PathVariable("member-id") @Positive Long memberId,
+            @RequestBody MemberDto.CheckPassword requestBody,
+            Authentication authentication) {
+        boolean isPasswordCorrect = memberService.checkPassword(memberId, requestBody.getPassword(), authentication.getName());
+        if (isPasswordCorrect) {
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+        }
     }
 }
