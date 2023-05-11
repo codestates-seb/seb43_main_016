@@ -4,8 +4,6 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
 import com.codestates.edusync.study.plancalendar.studygroup.utils.CalendarStudygroupManager;
-import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
-import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -89,13 +87,9 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
      * @return
      */
     private TimeSchedule findVerifyTimeSchedule(Long timeScheduleId) {
-        Optional<TimeSchedule> optionalTimeSchedule = calendarStudygroupRepository.findById(timeScheduleId);
-
-        TimeSchedule findTimeSchedule =
-                optionalTimeSchedule.orElseThrow( () ->
+        return calendarStudygroupRepository.findById(timeScheduleId)
+                .orElseThrow( () ->
                         new BusinessLogicException(TIME_SCHEDULE_NOT_FOUND)
                 );
-
-        return findTimeSchedule;
     }
 }
