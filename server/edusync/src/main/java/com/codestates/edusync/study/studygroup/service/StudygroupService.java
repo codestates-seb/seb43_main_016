@@ -35,7 +35,6 @@ public class StudygroupService {
     public Studygroup createStudygruop(Studygroup studygroup) {
         Member member = memberService.findVerifyMemberWhoLoggedIn();
         studygroup.setLeaderMember(member);
-        studygroup.setSearchTags(searchTagService.createSearchTags(studygroup.getSearchTags()));
         return repository.save(studygroup);
     }
 
@@ -91,6 +90,7 @@ public class StudygroupService {
     public Studygroup findStudygroup(Long studygroupId) {
         Studygroup findStudygroup = repository.findById(studygroupId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
+        findStudygroup.setSearchTags(searchTagService.getSearchTagList(studygroupId));
         return findStudygroup;
     }
 
