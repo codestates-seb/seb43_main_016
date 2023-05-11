@@ -2,8 +2,8 @@ package com.codestates.edusync.study.postcomment.controller;
 
 import com.codestates.edusync.study.postcomment.dto.StudygroupPostCommentDto;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
+import com.codestates.edusync.study.postcomment.mapper.StudygroupPostCommentMapper;
 import com.codestates.edusync.study.postcomment.service.StudygroupPostCommentService;
-import com.codestates.edusync.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.util.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -21,7 +21,7 @@ import java.util.List;
 @RestController
 public class StudygroupPostCommentController {
     private final StudygroupPostCommentService studygroupPostCommentService;
-    private final StudygroupMapper mapper;
+    private final StudygroupPostCommentMapper mapper;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_STUDYGROUP_POST_COMMENT_URL = "/comment";
