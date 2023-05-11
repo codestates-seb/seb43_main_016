@@ -12,6 +12,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
@@ -24,6 +25,7 @@ public class Member extends Auditable {
     @Id // 식별자 등록
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별자를 자동으로 생성
     private Long id;
+    private String uuid = UUID.randomUUID().toString();
     @Column(nullable = false, updatable = true, unique = true)
     private String nickName;
     @Column(nullable = false, updatable = false, unique = true)
