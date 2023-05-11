@@ -9,6 +9,7 @@ import lombok.Setter;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import java.sql.Timestamp;
+import java.util.HashMap;
 import java.util.List;
 
 public class StudygroupDto {
@@ -50,7 +51,7 @@ public class StudygroupDto {
         @NotNull
         private String introduction;
 
-        private List<SearchTag> tags;
+        private HashMap<String, String> tags;
     }
 
     @NoArgsConstructor
@@ -86,6 +87,6 @@ public class StudygroupDto {
 
         private String introduction;
 
-        private List<SearchTag> tags;
+        private HashMap<String, String> tags;
     }
 }
