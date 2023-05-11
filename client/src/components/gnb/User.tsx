@@ -1,24 +1,25 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { getAccessToken, getRefreshToken } from "../../pages/utils/Auth";
+import { useRecoilValue } from "recoil";
+import { isLoggedInSelector } from "../../recoil/selectors/IsLoggedInSelector";
+import { googleLogout } from "@react-oauth/google";
 import { removeTokens } from "../../pages/utils/Auth";
 
-const accessToken = getAccessToken();
-const refreshToken = getRefreshToken();
-
-const User = ({ myId, setMyId, profileImage }: any) => {
+const User = ({ setMyId, profileImage }: any) => {
   const navigate = useNavigate();
+  const isLoggedIn = useRecoilValue(isLoggedInSelector);
 
   const handleLogout = (): void => {
     removeTokens();
     setMyId(0);
+    googleLogout();
     navigate("/");
   };
 
   return (
     <>
-      {accessToken && refreshToken && myId > 0 ? (
+      {isLoggedIn ? (
         <UserDiv>
           <ProfileLink to="/profile">
             <div>

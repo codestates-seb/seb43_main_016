@@ -28,7 +28,7 @@ const GNB = () => {
           </HomeLink>
         </GNBBlock>
 
-        <User myId={myId} setMyId={setMyId} profileImage={profileImage} />
+        <User setMyId={setMyId} profileImage={profileImage} />
       </GNBDiv>
     </>
   );
