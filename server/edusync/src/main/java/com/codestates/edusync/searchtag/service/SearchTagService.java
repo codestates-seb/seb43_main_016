@@ -3,6 +3,8 @@ package com.codestates.edusync.searchtag.service;
 import com.codestates.edusync.searchtag.entity.SearchTag;
 import com.codestates.edusync.searchtag.repository.SearchTagRepository;
 import com.codestates.edusync.searchtag.utils.SearchTagManager;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
+import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,6 +31,7 @@ public class SearchTagService implements SearchTagManager {
 
     @Override
     public List<SearchTag> createSearchTags(List<SearchTag> tags) {
+
         return searchTagRepository.saveAll(tags);
     }
 
