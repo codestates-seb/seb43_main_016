@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 
 public class MemberDto {
     @Getter
@@ -45,4 +46,12 @@ public class MemberDto {
     public static class CheckPassword{
         private String password;
     }
+
+    @Getter
+    @NoArgsConstructor
+    public static class UuidListRequest {
+        private List<String> data;
+
+    }
+
 }

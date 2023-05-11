@@ -1,6 +1,7 @@
 create table if not exists member
 (
     id            bigint auto_increment,
+    uuid          varchar(50),
     email         varchar(100),
     nick_name     varchar(100),
     profile_image blob,
