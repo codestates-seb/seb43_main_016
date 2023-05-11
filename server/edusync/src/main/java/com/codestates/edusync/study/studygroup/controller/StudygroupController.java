@@ -1,8 +1,6 @@
 package com.codestates.edusync.study.studygroup.controller;
 
 import com.codestates.edusync.dto.MultiResponseDto;
-import com.codestates.edusync.exception.BusinessLogicException;
-import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
@@ -36,17 +34,13 @@ public class StudygroupController {
      * @return
      */
     @PostMapping(STUDYGROUP_DEFAULT_URI)
-    public ResponseEntity postStudygroup(@Valid @RequestBody StudygroupDto.Post postDto) throws Exception{
+    public ResponseEntity postStudygroup(@Valid @RequestBody StudygroupDto.Post postDto) {
 
         Studygroup studygroup = mapper.StudygroupDtoPostToStudygroup(postDto);
         studygroup = service.createStudygruop(studygroup);
-        // FIXME: 2023-05-11 생성된 데이터를 전달할 지, 확인 필요
-        //StudygroupResponseDto responseDto = mapper.StudygroupToStudygroupResponseDto(studygroup);
-        //URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, responseDto.getId());
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
 
         return ResponseEntity.created(location).build();
-        //return ResponseEntity.created(location).body(responseDto);
     }
 
     /**
@@ -56,19 +50,16 @@ public class StudygroupController {
      * @throws Exception
      */
     @PatchMapping(STUDYGROUP_DEFAULT_URI)
-    public ResponseEntity patchStudygroup(@Valid @RequestBody StudygroupDto.Patch patchDto) throws Exception{
+    public ResponseEntity patchStudygroup(@Valid @RequestBody StudygroupDto.Patch patchDto) {
 
         Studygroup studygroup = mapper.StudygroupDtoPatchToStudygroup(patchDto);
         studygroup = service.updateStudygroup(studygroup);
-        // FIXME: 2023-05-11 수정된 데이터를 전달할 지, 확인 필요
-        //StudygroupResponseDto responseDto = mapper.StudygroupToStudygroupResponseDto(studygroup);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
 
         return new ResponseEntity<>(headers, HttpStatus.OK);
-        //return new ResponseEntity<>(responseDto, location, HttpStatus.OK);
     }
 
     /**
@@ -77,7 +68,7 @@ public class StudygroupController {
      * @return
      */
     @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity patchStudygroupStatus(@PathVariable("studygroup-id") @Positive Long studygroupId) throws Exception{
+    public ResponseEntity patchStudygroupStatus(@PathVariable("studygroup-id") @Positive Long studygroupId) {
 
         service.updateStatusStudygroup(studygroupId);
 
@@ -94,7 +85,7 @@ public class StudygroupController {
      * @return
      */
     @GetMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity getStudygroupDetail(@PathVariable("studygroup-id") @Positive Long studygroupId) throws Exception {
+    public ResponseEntity getStudygroupDetail(@PathVariable("studygroup-id") @Positive Long studygroupId) {
 
         Studygroup studygroup = service.findStudygroup(studygroupId);
         StudygroupResponseDto responseDto = mapper.StudygroupToStudygroupResponseDto(studygroup);
@@ -110,7 +101,7 @@ public class StudygroupController {
      */
     @GetMapping(STUDYGROUP_DEFAULT_URI + "s")
     public ResponseEntity getStudygroupPage(@RequestParam("page") @Positive Integer page,
-                                            @RequestParam("size") @Positive Integer size) throws Exception{
+                                            @RequestParam("size") @Positive Integer size){
 
         Page<Studygroup> studygroupPage = service.findStudygroups(page-1, size);
         List<Studygroup> studygroupList = studygroupPage.getContent();
@@ -126,7 +117,7 @@ public class StudygroupController {
      * @return
      */
     @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) throws Exception{
+    public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) {
         service.deleteStudygroup(studygroupId);
         return ResponseEntity.noContent().build();
     }

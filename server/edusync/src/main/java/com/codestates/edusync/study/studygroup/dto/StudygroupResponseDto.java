@@ -32,7 +32,7 @@ public class StudygroupResponseDto {
     private String platform;
     private String introduction;
     private Boolean requited;
-    private List<SearchTag> tags;
+    private List<tagDto> tags;
     private StudyLeader leader;
 
     @NoArgsConstructor
@@ -43,14 +43,29 @@ public class StudygroupResponseDto {
         private String nickName;
     }
 
+    /**
+     * 스터디 조회
+     */
     @NoArgsConstructor
     @Getter
     @Setter
     public static class DtoList {
         private Long id;
         private String title;
-        private List<SearchTag> tags;
+        //private
     }
+
+    /**
+     * 스터디 조회 시, 태그
+     */
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class TagDto {
+        private String key;
+        private String value;
+    }
+
 //    private Count count;
 //
 //    @NoArgsConstructor

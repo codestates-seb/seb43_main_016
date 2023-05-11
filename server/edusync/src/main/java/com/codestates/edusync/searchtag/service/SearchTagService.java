@@ -24,8 +24,8 @@ public class SearchTagService implements SearchTagManager {
     }
 
     @Override
-    public void createSearchTags(List<SearchTag> tags) {
-        searchTagRepository.saveAll(tags);
+    public List<SearchTag> createSearchTags(List<SearchTag> tags) {
+        return searchTagRepository.saveAll(tags);
     }
 
     @Override
