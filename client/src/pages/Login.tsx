@@ -2,15 +2,16 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
-import jwtDecode from "jwt-decode";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/edusync-logo.png";
-import googleLogo from "../assets/google-icon.png";
 import { validateEmptyInput } from "./utils/loginUtils";
 import { setAccessToken, setRefreshToken } from "./utils/Auth";
 import { useSetRecoilState } from "recoil";
-import { myIdState } from "../recoil/atoms/myIdState";
+import { myIdState } from "../recoil/atoms/MyIdState";
+import Google from "../components/GoogleLogin";
+
+type Role = "USER";
 
 interface User {
   id: number;
@@ -20,12 +21,11 @@ interface User {
   aboutMe: string;
   memberStatus: string;
   profileImage: string;
-  roles: [];
+  roles: Role[];
   withMe: string;
 }
 
 const Login = () => {
-  const [isLoading, setIsLoading] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [members, setMembers] = useState<User[]>([]);
@@ -52,7 +52,6 @@ const Login = () => {
         const refreshToken = data.headers.refresh;
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        const decodedToken = jwtDecode<any>(accessToken);
         const foundMember = members.filter((member) => {
           return member.email === email;
         });
@@ -85,8 +84,6 @@ const Login = () => {
   // Google 로그인 처리
   // };
   useEffect(() => {
-    setIsLoading(true);
-
     axios
       .get(`${import.meta.env.VITE_APP_API_URL}/members?page=1&size=1`)
       .then((res) => {
@@ -100,49 +97,41 @@ const Login = () => {
           )
           .then((res) => {
             setMembers(Object(res.data).data);
-            setIsLoading(false);
           });
       });
   }, []);
 
   return (
     <Container>
-      {isLoading ? (
-        <>
-          <span>gg</span>
-        </>
-      ) : (
-        <LoginDiv>
-          <LogoDiv>
-            <img src={logo} />
-          </LogoDiv>
-          <LoginForm>
-            <input
-              onChange={handleEmail}
-              type="email"
-              placeholder="Email"
-              required
-            />
-          </LoginForm>
-          <LoginForm>
-            <input
-              onChange={handlePassword}
-              type="password"
-              placeholder="Password"
-              required
-            />
-          </LoginForm>
-          <ButtonDiv>
-            <button onClick={handleLoginButton} onKeyDown={handleKeyDown}>
-              Log In
-            </button>
-            <div onClick={handleLoginButton}>
-              <img src={googleLogo} alt="goole-login" />
-            </div>
-          </ButtonDiv>
-        </LoginDiv>
-      )}
-
+      <LoginDiv>
+        <LogoDiv>
+          <img src={logo} />
+        </LogoDiv>
+        <LoginForm>
+          <input
+            onChange={handleEmail}
+            type="email"
+            placeholder="Email"
+            required
+          />
+        </LoginForm>
+        <LoginForm>
+          <input
+            onChange={handlePassword}
+            type="password"
+            placeholder="Password"
+            required
+          />
+        </LoginForm>
+        <ButtonDiv>
+          <button onClick={handleLoginButton} onKeyDown={handleKeyDown}>
+            Log In
+          </button>
+          <div>
+            <Google />
+          </div>
+        </ButtonDiv>
+      </LoginDiv>
       <SignUpLink to="/signup">회원가입하러 가기</SignUpLink>
     </Container>
   );
@@ -201,9 +190,6 @@ const ButtonDiv = styled.div`
     height: 45px;
   }
   img {
-    width: 45px;
-    border: 2px solid #e9e9e9;
-    border-radius: 50%;
   }
 `;
 const SignUpLink = styled(Link)`

@@ -36,6 +36,7 @@ const WaitingList = () => {
     <WaitingListWrapper>
       <WaitingListTitle>신청중인 스터디</WaitingListTitle>
       {/* <WaitingListContents waitingList={waitingList} /> */}
+      {/* // TODO 원래는 서버에서 보내준 데이터 or 개인 데이터에서 맵핑한 데이터를 동적으로 렌더링 할 예정이지만, 현재 API 명세서에 데이터가 명확하지 않아, 임시로 유사한 동작을 구현 */}
       <ul>
         <li>스터디 이름</li>
         <li>스터디 이름</li>

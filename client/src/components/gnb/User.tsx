@@ -1,40 +1,29 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { getAccessToken, getRefreshToken } from "../../pages/utils/Auth";
-import { removeTokens } from "../../pages/utils/Auth";
-import { useRecoilState } from "recoil";
-import { myIdState } from "../../recoil/atoms/myIdState";
 import styled from "styled-components";
-import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { isLoggedInSelector } from "../../recoil/selectors/IsLoggedInSelector";
+import { googleLogout } from "@react-oauth/google";
+import { removeTokens } from "../../pages/utils/Auth";
 
-const accessToken = getAccessToken();
-const refreshToken = getRefreshToken();
-
-const User = () => {
+const User = ({ setMyId, profileImage }: any) => {
   const navigate = useNavigate();
-  const [myId, setMyId] = useRecoilState(myIdState);
-  const [profileImage, setProfileImage] = useState("");
+  const isLoggedIn = useRecoilValue(isLoggedInSelector);
 
   const handleLogout = (): void => {
     removeTokens();
     setMyId(0);
+    googleLogout();
     navigate("/");
   };
-  useEffect(() => {
-    if (myId > 0) {
-      axios
-        .get(`${import.meta.env.VITE_APP_API_URL}/members/${myId}`)
-        .then((res) => console.log(res.data.profileImage));
-    }
-  }, [myIdState]);
+
   return (
     <>
-      {accessToken && refreshToken ? (
+      {isLoggedIn ? (
         <UserDiv>
           <ProfileLink to="/profile">
             <div>
-              <img src="https://www.kocca.kr/cmm/fnw/getImage.do?atchFileId=FILE_000000001097008&fileSn=1" />
+              <img src={profileImage} />
             </div>
           </ProfileLink>
           <button onClick={handleLogout}>로그아웃</button>
