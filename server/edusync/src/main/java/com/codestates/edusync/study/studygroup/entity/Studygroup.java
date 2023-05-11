@@ -57,7 +57,7 @@ public class Studygroup extends Auditable {
     @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
     private Timestamp studyTimeEnd;
 
-    @OneToMany(mappedBy = "studygroup", fetch = LAZY)
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<TimeSchedule> timeSchedules = new ArrayList<>();
 
     @Column(nullable = false, columnDefinition = "TEXT")
