@@ -11,7 +11,7 @@ const StudyList = () => {
       <StudyListBody>
         <StudyListTop>
           <h2>여러분의 스터디를 만들어보세요!</h2>
-          <Link to="/">
+          <Link to="/studypost">
             <StudyPostButton>스터디 모집!</StudyPostButton>
           </Link>
         </StudyListTop>
@@ -44,7 +44,7 @@ const StudyListContainer = styled.div`
 const StudyListBody = styled.div`
   width: 960px;
   height: 100%;
-  padding-top: 120px;
+  padding-top: 90px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
