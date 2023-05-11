@@ -11,6 +11,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -158,9 +159,8 @@ public class MemberService implements VerifyMember {
      * @return 접속 중인 Member 의 정보
      */
     public Member findVerifyMemberWhoLoggedIn() {
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        var oAuth2User = (OAuth2User) authentication.getPrincipal();
-        String email = oAuth2User.getAttribute("email");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getPrincipal().toString();
 
         return findVerifiedMember(email);
     }
@@ -178,7 +178,7 @@ public class MemberService implements VerifyMember {
 
         Member findMember =
                 optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%d번 회원을 찾을 수 없습니다.", email)));
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%s 회원을 찾을 수 없습니다.", email)));
         verifyMemberIsActive(findMember);
 
         return findMember;

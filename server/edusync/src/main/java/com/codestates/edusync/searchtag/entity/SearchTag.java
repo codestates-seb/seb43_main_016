@@ -25,7 +25,7 @@ public class SearchTag {
     @Column(length = 100)
     private String tagValue;
 
-    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
+    @ManyToOne
     @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 

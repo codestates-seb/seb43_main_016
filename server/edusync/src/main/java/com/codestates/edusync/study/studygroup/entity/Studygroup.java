@@ -6,6 +6,7 @@ import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.searchtag.entity.SearchTag;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -41,15 +42,19 @@ public class Studygroup extends Auditable {
     private String daysOfWeek;
 
     @Column(name = "study_period_start")
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private Timestamp studyPeriodStart;
 
     @Column(name = "study_period_end")
+    @JsonFormat(pattern = "yyyy.MM.dd")
     private Timestamp studyPeriodEnd;
 
     @Column(name = "study_time_start")
+    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
     private Timestamp studyTimeStart;
 
     @Column(name = "study_time_end")
+    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
     private Timestamp studyTimeEnd;
 
     @OneToMany(mappedBy = "studygroup", fetch = LAZY)
@@ -66,6 +71,9 @@ public class Studygroup extends Auditable {
 
     @Column(length = 50, nullable = false)
     private String platform;
+
+    @Column
+    private Boolean is_requited;
 
     @ManyToOne(cascade = {PERSIST, MERGE}, fetch = EAGER)
     @JoinColumn(name = "leader_member_id")
