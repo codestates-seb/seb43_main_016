@@ -11,4 +11,6 @@ public interface SearchTagRepository extends JpaRepository<SearchTag, Long> {
     List<SearchTag> findAllByStudygroupId(Long studygroupId);
 
     void deleteAllByStudygroupId(Long studygroupId);
+
+    void deleteByTagKeyAndTagValue(String tagKey, String tagValue);
 }

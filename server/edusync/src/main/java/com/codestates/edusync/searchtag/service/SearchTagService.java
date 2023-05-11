@@ -37,7 +37,7 @@ public class SearchTagService implements SearchTagManager {
 
     @Override
     public void deleteSearchTags(List<SearchTag> tags) {
-        searchTagRepository.deleteAll(tags);
+        tags.forEach(tag -> searchTagRepository.deleteByTagKeyAndTagValue(tag.getTagKey(), tag.getTagValue()));
     }
 
     @Override
