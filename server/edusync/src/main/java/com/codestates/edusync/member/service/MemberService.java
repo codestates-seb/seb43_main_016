@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @AllArgsConstructor
 @Transactional
@@ -89,6 +90,11 @@ public class MemberService implements VerifyMember {
     public boolean checkPassword(String password, String email){
         Member member = findVerifiedMember(email);
         return passwordEncoder.matches(password, member.getPassword());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Member> findMembersByUUID(List<String> uuids) {
+        return memberRepository.findByUuidIn(uuids);
     }
 
     /**

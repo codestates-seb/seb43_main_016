@@ -21,6 +21,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
 
 @AllArgsConstructor
 @RestController
@@ -60,6 +62,16 @@ public class MemberController {
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(member);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
+
+    @PostMapping("/list")
+    public ResponseEntity getMembersByUUID(@RequestBody MemberDto.UuidListRequest uuidListRequestDto) {
+        List<Member> members = memberService.findMembersByUUID(uuidListRequestDto.getData());
+        List<MemberJoinResponseDto> responseDtos = members.stream()
+                .map(memberMapper::memberToMemberResponse)
+                .collect(Collectors.toList());
+        return new ResponseEntity(responseDtos, HttpStatus.OK);
+    }
+
 
     @GetMapping("/all") // Todo 개발용으로 만들어 뒀다. 후에 삭제!!
     public ResponseEntity getMembers(@Positive @RequestParam int page,
