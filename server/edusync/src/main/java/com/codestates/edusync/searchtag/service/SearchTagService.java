@@ -41,4 +41,11 @@ public class SearchTagService implements SearchTagManager {
     public void deleteSearchTags(Long studygroupId) {
         searchTagRepository.deleteAllByStudygroupId(studygroupId);
     }
+
+    @Override
+    public void updateSearchTags(Long studygroupId, List<SearchTag> searchTags) {
+        searchTagRepository.deleteAllByStudygroupId(studygroupId);
+
+        createSearchTags(searchTags);
+    }
 }
