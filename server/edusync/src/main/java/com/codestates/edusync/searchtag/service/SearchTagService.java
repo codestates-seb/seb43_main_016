@@ -6,8 +6,10 @@ import com.codestates.edusync.searchtag.utils.SearchTagManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class SearchTagService implements SearchTagManager {
@@ -15,7 +17,7 @@ public class SearchTagService implements SearchTagManager {
 
     @Override
     public List<SearchTag> getSearchTagList(String key) {
-        return searchTagRepository.findByTagKey(key);
+        return searchTagRepository.findAllByTagKey(key);
     }
 
     @Override
@@ -32,4 +34,6 @@ public class SearchTagService implements SearchTagManager {
     public void deleteSearchTags(List<SearchTag> tags) {
         searchTagRepository.deleteAll(tags);
     }
+
+    public List<SearchTag> getSearchTagList(Long studygroupId) { return searchTagRepository.findAllByStudygroupId(studygroupId); }
 }

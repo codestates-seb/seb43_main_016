@@ -11,13 +11,14 @@ import javax.persistence.*;
 import java.sql.Timestamp;
 
 import static javax.persistence.CascadeType.*;
+import static javax.persistence.FetchType.EAGER;
 import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @Entity
-public class TimeSchedule extends Auditable {
+public class TimeSchedule {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -29,15 +30,15 @@ public class TimeSchedule extends Auditable {
     private String content;
 
     @Column
-    private Timestamp start;
+    private Timestamp startTime;
     @Column
-    private Timestamp end;
+    private Timestamp endTime;
 
-    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 
-    @ManyToOne(fetch = LAZY, cascade = {PERSIST, MERGE, REMOVE})
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 

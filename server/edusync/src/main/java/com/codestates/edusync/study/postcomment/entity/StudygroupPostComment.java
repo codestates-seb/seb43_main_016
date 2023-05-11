@@ -24,11 +24,11 @@ public class StudygroupPostComment extends Auditable {
     @Column(length = 200)
     private String content;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 
-    @ManyToOne(fetch = LAZY)
+    @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "member_id")
     private Member member;
 

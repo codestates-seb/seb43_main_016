@@ -6,15 +6,18 @@ import com.codestates.edusync.member.service.MemberService;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.postcomment.repository.StudygroupPostCommentRepository;
 import com.codestates.edusync.study.postcomment.utils.StudygroupPostCommentManager;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
 
 import static com.codestates.edusync.exception.ExceptionCode.*;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class StudygroupPostCommentService implements StudygroupPostCommentManager {
@@ -28,11 +31,9 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
         Member findMember = memberService.findVerifyMemberWhoLoggedIn();
         comment.setMember(findMember);
 
-        // FIXME: 2023-05-11: 스터디 그룹 머지하면 적용. 지금은 동작 하지 않는다!
-//        Studygroup findStudygroup = studygroupService.findVerifyStudygroup(studygroupId);
-//        comment.setStudygroup(findStudygroup);
+        Studygroup findStudygroup = studygroupService.findStudygroup(studygroupId);
+        comment.setStudygroup(findStudygroup);
 
-        // 이것도 동작하지않음. 엔티티에 빈값이 있어서 !
         return studygroupPostCommentRepository.save(comment);
     }
 
@@ -85,8 +86,8 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
     }
     
     private void verifyStudygroupMemberLeader(Long memberId,
-                                              StudygroupPostComment comment) {
-        if( comment.getStudygroup().getLeaderMember().getId() != memberId ) {
+                                              Studygroup studygroup) {
+        if( studygroup.getLeaderMember().getId() != memberId ) {
             throw new BusinessLogicException(STUDYGROUP_POST_COMMENT_ALLOWED_ONLY_FOR_LEADER);
         }
     }
@@ -109,10 +110,9 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
     @Override
     public void deleteAllStudygroupPostCommentByStudygroupId(Long studygroupId) {
         Member findMember = memberService.findVerifyMemberWhoLoggedIn();
-        // FIXME: 2023-05-11 : 머지 후 작업 필요
-//        Studygroup findStudygroup = studygroupService.findVerifyStudygroup(studygroupId);
-//        
-//        verifyStudygroupMemberLeader(findMember.getId(), findStudygroup);
+        Studygroup findStudygroup = studygroupService.findStudygroup(studygroupId);
+
+        verifyStudygroupMemberLeader(findMember.getId(), findStudygroup);
         
         studygroupPostCommentRepository.deleteAllByStudygroupId(studygroupId);
     }

@@ -26,7 +26,7 @@ public class CalendarStudygroupController {
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_TIME_SCHEDULE_URL = "/timeSchedule";
 
-    @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
+    @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL)
     public ResponseEntity postCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                  @Valid @RequestBody CalendarDto.Post postDto) {
         calendarStudygroupService.createTimeSchedulesForStudygroup(

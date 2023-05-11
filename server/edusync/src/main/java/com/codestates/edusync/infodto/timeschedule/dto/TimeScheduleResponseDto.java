@@ -13,7 +13,7 @@ import java.sql.Timestamp;
 public class TimeScheduleResponseDto {
     private Long id;
 
-    private String studygroupName;
+    private String studyName;
     private String platform;
 
     private TimeScheduleDto timeScheduleInfo;
@@ -24,20 +24,20 @@ public class TimeScheduleResponseDto {
     @Setter
     public static class CalendarInfoDto {
         @JsonFormat(pattern = "MM-dd", timezone = "Asia/Seoul")
-        private Timestamp start;
+        private Timestamp startDate;
 
         @JsonFormat(pattern = "MM-dd", timezone = "Asia/Seoul")
-        private Timestamp end;
+        private Timestamp endDate;
     }
 
     @NoArgsConstructor
     @Getter
     @Setter
     public static class TimeScheduleDto {
-        @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp start;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        private Timestamp startTime;
 
-        @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp end;
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        private Timestamp endTime;
     }
 }
