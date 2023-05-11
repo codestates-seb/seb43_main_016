@@ -44,27 +44,24 @@ public class MemberController {
         return new ResponseEntity(responseDto, headers, HttpStatus.CREATED);
     }
 
-    @PatchMapping("/{member-id}") // 케법 케이스 (url 경로에서 주로 사용하는 방식 => 필드값은 카멜케이스로 작성하니까 구분을 위해 사용)
+    @PatchMapping
     public ResponseEntity patchMember(
-            @PathVariable("member-id") @Positive Long memberId,
             @Valid @RequestBody MemberDto.Patch requestBody,
             Authentication authentication) {
-        requestBody.setId(memberId);
-        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody), memberId, authentication.getName());
+        Member updateMember = memberService.updateMember(memberMapper.memberPatchToMember(requestBody), authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updateMember);
 
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{member-id}")
-    public ResponseEntity getMember(
-            @PathVariable("member-id") @Positive Long memberId) {
-        Member member = memberService.findMember(memberId);
+    @GetMapping
+    public ResponseEntity getMember(Authentication authentication) {
+        Member member = memberService.findVerifiedMember(authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(member);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping
+    @GetMapping("/all") // Todo 개발용으로 만들어 뒀다. 후에 삭제!!
     public ResponseEntity getMembers(@Positive @RequestParam int page,
                                      @Positive @RequestParam int size) {
         Page<Member> pageMembers = memberService.findMembers(page - 1, size);
@@ -75,42 +72,34 @@ public class MemberController {
                 HttpStatus.OK);
     }
 
-    @DeleteMapping("/{member-id}")
-    public ResponseEntity deleteMember(
-            @PathVariable("member-id") @Positive Long memberId,
-            Authentication authentication) {
-        memberService.deleteMember(memberId, authentication.getName());
+    @DeleteMapping
+    public ResponseEntity deleteMember(Authentication authentication) {
+        memberService.deleteMember(authentication.getName());
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PatchMapping("/{member-id}/profile-image")
+    @PatchMapping("/profile-image")
     public ResponseEntity updateProfileImage(
-            @PathVariable("member-id") @Positive Long memberId,
             @RequestBody MemberDto.ProfileImage requestBody,
             Authentication authentication) {
-        Member member = memberService.findMember(memberId);
-        member.setProfileImage(requestBody.getProfileImage());
-        Member updatedMember = memberService.updateMember(member, memberId, authentication.getName());
+        Member updatedMember = memberService.updateMember(memberMapper.memberProfileImageToMember(requestBody), authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    @PatchMapping("/{member-id}/detail")
-    public ResponseEntity updateDetail(@PathVariable("member-id") @Positive Long memberId,
-                                       @RequestBody MemberDto.Detail requestBody,
+    @PatchMapping("/detail")
+    public ResponseEntity updateDetail(@RequestBody MemberDto.Detail requestBody,
                                        Authentication authentication){
-        Member updatedMember = memberService.updateDetail(memberId, requestBody, authentication.getName());
+        Member updatedMember = memberService.updateMember(memberMapper.memberDetailToMember(requestBody), authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
-    @GetMapping("/{member-id}/password")
-    public ResponseEntity checkPassword(
-            @PathVariable("member-id") @Positive Long memberId,
-            @RequestBody MemberDto.CheckPassword requestBody,
-            Authentication authentication) {
-        boolean isPasswordCorrect = memberService.checkPassword(memberId, requestBody.getPassword(), authentication.getName());
+    @PostMapping("/password")
+    public ResponseEntity checkPassword(@RequestBody MemberDto.CheckPassword requestBody,
+                                        Authentication authentication) {
+        boolean isPasswordCorrect = memberService.checkPassword(requestBody.getPassword(), authentication.getName());
         if (isPasswordCorrect) {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
