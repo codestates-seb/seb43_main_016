@@ -3,7 +3,6 @@ package com.codestates.edusync.member.service;
 import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.member.dto.MemberDto;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.repository.MemberRepository;
 import com.codestates.edusync.util.VerifyMember;
@@ -14,7 +13,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
@@ -52,18 +50,16 @@ public class MemberService implements VerifyMember {
     }
 
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
-    public Member updateMember(Member member, Long memberId, String email) {
-        sameMemberTest(memberId, email);
+    public Member updateMember(Member member, String email) {
 
-        Member findMember = findVerifiedMember(member.getId());
-        verifyMemberIsActive(findMember);
+        Member findMember = findVerifiedMember(email);
 
         Optional.ofNullable(member.getNickName())
                 .ifPresent(name -> findMember.setNickName(name));
         Optional.ofNullable(member.getPassword())
                 .ifPresent(password -> {
                     if (!password.isEmpty()) {
-                        findMember.setPassword(password);
+                        findMember.setPassword(passwordEncoder.encode(password));
                     }
                 });
         Optional.ofNullable(member.getProfileImage())
@@ -75,21 +71,14 @@ public class MemberService implements VerifyMember {
         return memberRepository.save(findMember);
     }
 
-    @Transactional(readOnly = true)
-    public Member findMember(Long memberId) {
-        return findVerifiedMember(memberId);
-    }
-
     public Page<Member> findMembers(int page, int size) {
         return memberRepository.findAll(PageRequest.of(page, size,
                 Sort.by("id").descending()));
     }
 
-    public void deleteMember(Long memberId, String email) {
-        sameMemberTest(memberId, email);
-        Member findMember = findVerifiedMember(memberId);
-        verifyMemberIsActive(findMember);
-        String newEmail = "del_" + memberId + "_" + findMember.getEmail();
+    public void deleteMember(String email) {
+        Member findMember = findVerifiedMember(email);
+        String newEmail = "del_" + findMember.getId() + "_" + findMember.getEmail();
 
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
         findMember.setEmail(newEmail);
@@ -97,72 +86,9 @@ public class MemberService implements VerifyMember {
         memberRepository.save(findMember);
     }
 
-    public Member updateDetail(Long memberId, MemberDto.Detail requestBody, String token){
-        Member member = findVerifiedMember(memberId);
-        verifyMemberIsActive(member);
-
-        if (requestBody.getWithMe() != null) {
-            member.setWithMe(requestBody.getWithMe());
-        }
-        if (requestBody.getAboutMe() != null) {
-            member.setAboutMe(requestBody.getAboutMe());
-        }
-
-        return updateMember(member, memberId, token);
-    }
-
-    public boolean checkPassword(Long memberId, String password, String email){
-        sameMemberTest(memberId, email);
-
-        Member member = memberRepository.findByEmail(email).get();
+    public boolean checkPassword(String password, String email){
+        Member member = findVerifiedMember(email);
         return passwordEncoder.matches(password, member.getPassword());
-    }
-
-    @Transactional(readOnly = true)
-    public Member findVerifiedMember(Long memberId) {
-        Optional<Member> optionalMember =
-                memberRepository.findById(memberId);
-
-        Member findMember =
-                optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%d번 회원을 찾을 수 없습니다.", memberId)));
-        verifyMemberIsActive(findMember);
-
-        return findMember;
-    }
-
-    private void verifyExistsEmail(String email) {
-        Optional<Member> member = memberRepository.findByEmail(email);
-        if (member.isPresent())
-            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s는 이미 가입한 이메일입니다.", email));
-    }
-
-    public void sameMemberTest(Long memberId, String email){
-        Member findMember = findVerifiedMember(memberId);
-
-        if(email == null || email.isEmpty()){
-            throw new BusinessLogicException(ExceptionCode.DUPLICATED_EMAIL, String.format("이메일을 찾을 수 없습니다. 올바른 토큰이 아닐 확률이 높습니다."));
-        }else if(!email.equals(findMember.getEmail())){
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION, String.format("유저(%s)가 권한을 가지고 있지 않습니다. 사용자(%s) 정보를 수정할 수 없습니다.", email, findMember.getEmail()));
-        }
-    }
-
-    public void verifyMemberIsActive(Member member) {
-        if (member.getMemberStatus() != Member.MemberStatus.MEMBER_ACTIVE) {
-            throw new BusinessLogicException(ExceptionCode.INACTIVE_MEMBER,
-                    String.format("멤버(%s)는 활성화되지 않았습니다. 해당 요청을 처리할 수 없습니다.", member.getEmail()));
-        }
-    }
-
-    /**
-     * <h2>현재 로그인 된 사용자의 정보를 리턴해주는 메서드</h2>
-     * @return 접속 중인 Member 의 정보
-     */
-    public Member findVerifyMemberWhoLoggedIn() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String email = authentication.getPrincipal().toString();
-
-        return findVerifiedMember(email);
     }
 
     /**
@@ -182,5 +108,30 @@ public class MemberService implements VerifyMember {
         verifyMemberIsActive(findMember);
 
         return findMember;
+    }
+
+    private void verifyExistsEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent())
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s는 이미 가입한 이메일입니다.", email));
+    }
+
+
+    public void verifyMemberIsActive(Member member) {
+        if (member.getMemberStatus() != Member.MemberStatus.MEMBER_ACTIVE) {
+            throw new BusinessLogicException(ExceptionCode.INACTIVE_MEMBER,
+                    String.format("멤버(%s)는 활성화되지 않았습니다. 해당 요청을 처리할 수 없습니다.", member.getEmail()));
+        }
+    }
+
+    /**
+     * <h2>현재 로그인 된 사용자의 정보를 리턴해주는 메서드</h2>
+     * @return 접속 중인 Member 의 정보
+     */
+    public Member findVerifyMemberWhoLoggedIn() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String email = authentication.getPrincipal().toString();
+
+        return findVerifiedMember(email);
     }
 }

@@ -13,7 +13,6 @@ import java.util.List;
 @Setter
 @Getter
 public class MemberJoinResponseDto {
-    private long id;
     private String email;
     private String profileImage;
     private String nickName;
