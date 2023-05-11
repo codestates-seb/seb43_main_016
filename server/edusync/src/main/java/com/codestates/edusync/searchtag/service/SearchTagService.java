@@ -34,4 +34,6 @@ public class SearchTagService implements SearchTagManager {
     public void deleteSearchTags(List<SearchTag> tags) {
         searchTagRepository.deleteAll(tags);
     }
+
+    public List<SearchTag> getSearchTagList(Long studygroupId) { return searchTagRepository.findByStudygroupId(studygroupId); }
 }
