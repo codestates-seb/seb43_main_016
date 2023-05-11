@@ -21,13 +21,9 @@ public class MemberDto {
     @Getter
     @NoArgsConstructor
     public static class Patch {
-        private long id;
         private String nickName;
-        private String password; // 비번 변경 요청시 비밀번호 입력하도록 나중에 기능 추가
+        private String password;
 
-        public void setId(long id) {
-            this.id = id;
-        }
     }
 
     @Getter
