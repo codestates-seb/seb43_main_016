@@ -32,7 +32,7 @@ public class StudygroupResponseDto {
     private String platform;
     private String introduction;
     private Boolean requited;
-    private List<tagDto> tags;
+    private List<TagDto> tags;
     private StudyLeader leader;
 
     @NoArgsConstructor

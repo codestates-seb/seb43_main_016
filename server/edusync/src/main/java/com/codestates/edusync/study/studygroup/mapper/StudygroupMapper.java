@@ -46,9 +46,9 @@ public interface StudygroupMapper {
      * @throws Exception
      */
     default StudygroupResponseDto StudygroupToStudygroupResponseDto(Studygroup studygroup){
-        List<StudygroupResponseDto.tagDto> tags = new ArrayList<>();
+        List<StudygroupResponseDto.TagDto> tags = new ArrayList<>();
         for (SearchTag st : studygroup.getSearchTags()) {
-            StudygroupResponseDto.tagDto tag = new StudygroupResponseDto.tagDto();
+            StudygroupResponseDto.TagDto tag = new StudygroupResponseDto.TagDto();
             tag.setKey(st.getTagKey());
             tag.setValue(st.getTagValue());
             tags.add(tag);
