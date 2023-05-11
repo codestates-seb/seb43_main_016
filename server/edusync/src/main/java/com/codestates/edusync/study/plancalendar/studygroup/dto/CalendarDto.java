@@ -3,6 +3,7 @@ package com.codestates.edusync.study.plancalendar.studygroup.dto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
@@ -34,7 +35,7 @@ public class CalendarDto {
             @NotNull
             private String title;
 
-            @NotNull
+            @Nullable
             private String content;
 
             @NotNull
