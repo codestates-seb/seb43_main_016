@@ -5,7 +5,7 @@ import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
 import { useRecoilState } from "recoil";
-import { myIdState } from "../../recoil/atoms/MyIdState";
+import { myIdState } from "../../recoil/atoms/myIdState";
 
 const GNB = () => {
   const [myId, setMyId] = useRecoilState(myIdState);

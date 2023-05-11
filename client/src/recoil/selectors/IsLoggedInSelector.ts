@@ -1,5 +1,5 @@
 import { selector } from "recoil";
-import { myIdState } from "../atoms/MyIdState";
+import { myIdState } from "../atoms/myIdState";
 import { getAccessToken, getRefreshToken } from "../../pages/utils/Auth";
 
 export const isLoggedInSelector = selector({

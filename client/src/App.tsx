@@ -11,7 +11,7 @@ import GNB from "./components/gnb/GNB";
 import ProfileCalendar from "./pages/ProfileCalendar";
 import "./App.css";
 import { useRecoilValue } from "recoil";
-import { myIdState } from "./recoil/atoms/MyIdState";
+import { myIdState } from "./recoil/atoms/myIdState";
 
 const queryClient = new QueryClient();
 

@@ -6,13 +6,13 @@ import { useState } from "react";
 type Props = {
   onFocus: () => void;
   onBlur: () => void;
-  handleContentChange: () => void;
+  handleContentChange: (content: string) => void;
 };
 
 function TextEditor({ onFocus, onBlur, handleContentChange }: Props) {
   const [text, setText] = useState("");
 
-  const handleOnChange = (event: any, editor: ClassicEditor) => {
+  const handleOnChange = (_event: any, editor: ClassicEditor) => {
     const data = editor.getData();
     const plainText = data.replace(/(<([^>]+)>)/gi, "");
     setText(data);

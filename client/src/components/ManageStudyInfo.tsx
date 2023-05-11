@@ -1,9 +1,18 @@
+import styled from "styled-components";
+
 const ManageStudyInfo = () => {
   return (
-    <div>
-      <h1>Manage Study Info</h1>
-    </div>
+    <Wrapper>
+      <Title></Title>
+      <PersonCount></PersonCount>
+      <Platform></Platform>
+    </Wrapper>
   );
 };
 
 export default ManageStudyInfo;
+
+const Wrapper = styled.div``;
+const Title = styled.div``;
+const PersonCount = styled.div``;
+const Platform = styled.div``;

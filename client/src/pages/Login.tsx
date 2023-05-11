@@ -8,7 +8,7 @@ import logo from "../assets/edusync-logo.png";
 import { validateEmptyInput } from "./utils/loginUtils";
 import { setAccessToken, setRefreshToken } from "./utils/Auth";
 import { useSetRecoilState } from "recoil";
-import { myIdState } from "../recoil/atoms/MyIdState";
+import { myIdState } from "../recoil/atoms/myIdState";
 import Google from "../components/GoogleLogin";
 
 type Role = "USER";
