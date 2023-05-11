@@ -15,6 +15,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "studygroup_post_comment")
 public class StudygroupPostComment extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
