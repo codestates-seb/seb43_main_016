@@ -33,12 +33,12 @@ public class StudygroupService {
     public Studygroup createStudygruop(Studygroup studygroup) {
 
         // FIXME: 2023-05-11 스터디 리더를 등록하기 위한 멤버 불러오기 실패, 추후 확인 필요
-//        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//        member = memberService.findVerifiedMember(member.getId());
-//        studygroup.setLeaderMember(member);
-
-        Member member = memberService.findVerifiedMember(1L);
+        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        member = memberService.findVerifiedMember(member.getId());
         studygroup.setLeaderMember(member);
+
+//        Member member = memberService.findVerifiedMember(1L);
+//        studygroup.setLeaderMember(member);
 
         return repository.save(studygroup);
     }
@@ -83,10 +83,12 @@ public class StudygroupService {
         // FIXME: 2023-05-11 스터디 리더인지 확인하기 위한 멤버 불러오기 실패, 추후 확인 필요
 //        Member member = (Member) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 //        member = memberService.findVerifiedMember(member.getId());
-
+//
 //        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
-            if (findStudygroup.getIs_requited()) findStudygroup.setIs_requited(false);
-            else findStudygroup.setIs_requited(true);
+            boolean requited = findStudygroup.getIs_requited();
+            if (requited) requited = false;
+            else requited = true;
+            findStudygroup.setIs_requited(requited);
 //        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
 
         repository.save(findStudygroup);

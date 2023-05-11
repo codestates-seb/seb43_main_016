@@ -27,9 +27,7 @@ import java.util.List;
 @RestController
 public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
-
     private final StudygroupMapper mapper;
-
     private final StudygroupService service;
 
     /**
@@ -88,7 +86,6 @@ public class StudygroupController {
         headers.setLocation(location);
 
         return new ResponseEntity<>(headers, HttpStatus.OK);
-        //return new ResponseEntity<>(responseDto, location, HttpStatus.OK);
     }
 
     /**
@@ -113,7 +110,7 @@ public class StudygroupController {
      */
     @GetMapping(STUDYGROUP_DEFAULT_URI + "s")
     public ResponseEntity getStudygroupPage(@RequestParam("page") @Positive Integer page,
-                                            @RequestParam("size") @Positive Integer size) {
+                                            @RequestParam("size") @Positive Integer size) throws Exception{
 
         Page<Studygroup> studygroupPage = service.findStudygroups(page-1, size);
         List<Studygroup> studygroupList = studygroupPage.getContent();

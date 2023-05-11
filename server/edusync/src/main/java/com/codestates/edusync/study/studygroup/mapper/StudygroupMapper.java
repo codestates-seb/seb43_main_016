@@ -105,7 +105,7 @@ public interface StudygroupMapper {
      * @param studygroups
      * @return
      */
-    default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups) {
+    default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups) throws Exception {
         List<StudygroupResponseDto.DtoList> respnseDtoList = new ArrayList<>(studygroups.size());
         Iterator studygroupIterator = studygroups.iterator();
 
@@ -123,7 +123,7 @@ public interface StudygroupMapper {
      * @param studygroup
      * @return
      */
-    default StudygroupResponseDto.DtoList StudygroupsToStudygroupResponseDtoList(Studygroup studygroup) {
+    default StudygroupResponseDto.DtoList StudygroupsToStudygroupResponseDtoList(Studygroup studygroup) throws Exception{
         StudygroupResponseDto.DtoList dtoList = new StudygroupResponseDto.DtoList();
         dtoList.setId(studygroup.getId());
         dtoList.setTitle(studygroup.getStudyName());
