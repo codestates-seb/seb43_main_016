@@ -8,5 +8,5 @@ import java.util.List;
 public interface SearchTagRepository extends JpaRepository<SearchTag, Long> {
 
     List<SearchTag> findAllByTagKey(String key);
-    List<SearchTag> findByStudygroupId(Long studygroupId);
+    List<SearchTag> findAllByStudygroupId(Long studygroupId);
 }
