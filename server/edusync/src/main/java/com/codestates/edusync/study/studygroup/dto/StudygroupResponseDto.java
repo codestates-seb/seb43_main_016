@@ -61,7 +61,7 @@ public class StudygroupResponseDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class tagDto {
+    public static class TagDto {
         private String key;
         private String value;
     }
