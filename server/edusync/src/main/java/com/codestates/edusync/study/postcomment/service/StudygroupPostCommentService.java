@@ -6,10 +6,8 @@ import com.codestates.edusync.member.service.MemberService;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.postcomment.repository.StudygroupPostCommentRepository;
 import com.codestates.edusync.study.postcomment.utils.StudygroupPostCommentManager;
-import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -60,14 +58,10 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
      * @return
      */
     private StudygroupPostComment findVerifyStudygroupPostComment(Long commentId) {
-        Optional<StudygroupPostComment> optionalComment = studygroupPostCommentRepository.findById(commentId);
-
-        StudygroupPostComment findComment =
-                optionalComment.orElseThrow( () ->
+        return studygroupPostCommentRepository.findById(commentId)
+                .orElseThrow( () ->
                         new BusinessLogicException(STUDYGROUP_POST_COMMENT_NOT_FOUND)
-        );
-
-        return findComment;
+                );
     }
 
     /**
