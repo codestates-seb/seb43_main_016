@@ -8,12 +8,16 @@ import TextEditor from "../components/TextEditor";
 const API_URL = "http://localhost:8080";
 
 const StudyPost = () => {
-  const [postText, setPostText] = useState<string>("");
+  const [title, setTitle] = useState<string>("");
   const [maxPeople, setMaxPeople] = useState<number>(0);
   const [platform, setPlatform] = useState<string>("");
+  const [postText, setPostText] = useState<string>("");
 
   const navigate = useNavigate();
 
+  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
   const handleMaxPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxPeople(+e.target.value);
   };
@@ -22,18 +26,31 @@ const StudyPost = () => {
   };
 
   const handlePostButton = async () => {
-    // console.log("Submitting form with values:", {
-    //   maxClassmateCount: maxPeople,
-    //   platform: `${platform}`,
-    //   introduction: `${postText}`,
-    // });
+    console.log("Submitting form with values:", {
+      studyName: `${title}`,
+      studyPeriodStart: "2023.05.01",
+      studyPeriodEnd: "2023.06.10",
+      daysOfWeek: "2023.06.10",
+      studyTimeStart: "18:00",
+      studyTimeEnd: "20:00",
+      minClassmateCount: 1,
+      maxClassmateCount: maxPeople,
+      platform: `${platform}`,
+      tags: [
+        {
+          taKey: "프론트엔드",
+          tagValue: "javascript",
+        },
+      ],
+    });
     try {
-      const response = await axios.post(`${API_URL}/studygroup/1`, {
+      const res = await axios.post(`${API_URL}/studygroup/1`, {
+        studyName: `${title}`,
         maxClassmateCount: maxPeople,
         platform: `${platform}`,
         introduction: `${postText}`,
       });
-      console.log("POST request successful:", response.data);
+      console.log("POST request successful:", res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
@@ -46,13 +63,21 @@ const StudyPost = () => {
       <StudyPostBody>
         <StudyPostTop>
           <span>스터디 등록</span>
-          <input type="text" placeholder="제목을 입력하세요"></input>
+          <input
+            type="text"
+            placeholder="제목을 입력하세요"
+            value={title}
+            onChange={handleTitle}
+            required
+          />
         </StudyPostTop>
 
         <StudyPostMain>
           <StudyPostInfo>
             <span>일정</span>
-            <input type="text"></input>
+            <input type="date"></input>
+            <p>~</p>
+            <input type="date"></input>
           </StudyPostInfo>
           <StudyPostInfo>
             <span>요일</span>
@@ -167,6 +192,9 @@ const StudyPostInfo = styled.div`
     height: 40px;
     border: 1px solid #ccc;
     border-radius: 0;
+  }
+  p {
+    padding: 0 10px;
   }
 `;
 
