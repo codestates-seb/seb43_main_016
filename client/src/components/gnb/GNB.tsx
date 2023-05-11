@@ -1,10 +1,24 @@
 import { Link } from "react-router-dom";
-
+import { useEffect, useState } from "react";
+import axios from "axios";
 import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
+import { useRecoilState } from "recoil";
+import { myIdState } from "../../recoil/atoms/MyIdState";
 
 const GNB = () => {
+  const [myId, setMyId] = useRecoilState(myIdState);
+  const [profileImage, setProfileImage] = useState("");
+
+  useEffect(() => {
+    if (myId > 0) {
+      axios
+        .get(`${import.meta.env.VITE_APP_API_URL}/members/${myId}`)
+        .then((res) => setProfileImage(res.data.profileImage));
+    }
+  }, [myId]);
+
   return (
     <>
       <GNBDiv>
@@ -14,7 +28,7 @@ const GNB = () => {
           </HomeLink>
         </GNBBlock>
 
-        <User />
+        <User setMyId={setMyId} profileImage={profileImage} />
       </GNBDiv>
     </>
   );
