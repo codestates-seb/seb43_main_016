@@ -1,37 +1,54 @@
+import ProfileInfo from "./ProfileInfo";
 import styled from "styled-components";
-import ProfileDetail from "./ProfileDetail";
+import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import ProfileStudyList from "./ProfileStudyList";
-import Calender from "./Calendar";
-import { Link, Route, Routes } from "react-router-dom";
+import ProfileCalendar from "./ProfileCalendar";
+import ProfileStudyManage from "./ProfileStudyManage";
 
-const NavWrapper = styled.div``;
-const Title = styled.div``;
-const NavContents = styled(Link)``;
-
-const ProfileNav = () => {
+const Profile = () => {
+  const navigate = useNavigate();
   return (
-    <NavWrapper>
-      <Title>MyInfo</Title>
-      <nav>
+    <Wrapper>
+      <LnbWrapper>
+        <Title>My Info</Title>
         <ul>
           <li>
-            <NavContents to="profile">Profile</NavContents>
+            <Lnb to="./">Profile</Lnb>
           </li>
           <li>
-            <NavContents to="manage-group">Manage Group</NavContents>
+            <Lnb to="./manage-group">Manage Group</Lnb>
           </li>
           <li>
-            <NavContents to="calendar">Schedule</NavContents>
+            <div onClick={() => navigate("/calendar")}>Schedule</div>
           </li>
         </ul>
-      </nav>
+      </LnbWrapper>
       <Routes>
-        <Route path="profile" element={<ProfileDetail />} />
-        <Route path="manage-group" element={<ProfileStudyList />} />
-        <Route path="calendar" element={<Calender />} />
+        <Route path="/" element={<ProfileInfo />} />
+        <Route path="/manage-group" element={<ProfileStudyList />} />
+        <Route path="/:studyId" element={<ProfileStudyManage />} />
+        <Route path="/calendar" element={<ProfileCalendar />} />
       </Routes>
-    </NavWrapper>
+    </Wrapper>
   );
 };
 
-export default ProfileNav;
+export default Profile;
+
+const Wrapper = styled.div`
+  display: flex;
+  justify-content: center;
+  margin-top: 50px;
+`;
+
+const LnbWrapper = styled.div`
+  background-color: white;
+  margin-right: 20px;
+`;
+const Title = styled.div``;
+const Lnb = styled(Link)`
+  &:hover {
+    cursor: pointer;
+    text-decoration: underline;
+  }
+`;
