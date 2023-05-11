@@ -4,13 +4,20 @@ import com.codestates.edusync.infodto.timeschedule.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.dto.CalendarDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
+import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Named;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Mapper(componentModel = "spring")
 public interface CalendarStudygroupMapper {
 
+    @Named("PostDtoToEntity")
+    TimeSchedule timeSchedulePostDtoToTimeSchedule(CalendarDto.TimeScheduleDto.Post timeSchedule);
+
+    @IterableMapping(qualifiedByName = "PostDtoToEntity")
     List<TimeSchedule> timeSchedulePostDtoListToTimeScheduleList(List<CalendarDto.TimeScheduleDto.Post> timeSchedules);
     TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarDto.Patch patchDto);
 
@@ -19,17 +26,17 @@ public interface CalendarStudygroupMapper {
     default TimeScheduleResponseDto timeScheduleToTimeScheduleResponseDto(TimeSchedule ts) {
         TimeScheduleResponseDto result = new TimeScheduleResponseDto();
         result.setId(ts.getId());
-        result.setStudygroupName(ts.getStudygroup().getStudyName());
+        result.setStudyName(ts.getStudygroup().getStudyName());
         result.setPlatform(ts.getStudygroup().getPlatform());
 
         TimeScheduleResponseDto.TimeScheduleDto resultTimeScheduleInfo = new TimeScheduleResponseDto.TimeScheduleDto();
-        resultTimeScheduleInfo.setStart(ts.getStart());
-        resultTimeScheduleInfo.setEnd(ts.getEnd());
+        resultTimeScheduleInfo.setStartTime(ts.getStartTime());
+        resultTimeScheduleInfo.setEndTime(ts.getEndTime());
         result.setTimeScheduleInfo(resultTimeScheduleInfo);
 
         TimeScheduleResponseDto.CalendarInfoDto resultCalendarInfo = new TimeScheduleResponseDto.CalendarInfoDto();
-        resultCalendarInfo.setStart(ts.getStudygroup().getStudyPeriodStart());
-        resultCalendarInfo.setEnd(ts.getStudygroup().getStudyPeriodEnd());
+        resultCalendarInfo.setStartDate(ts.getStudygroup().getStudyPeriodStart());
+        resultCalendarInfo.setEndDate(ts.getStudygroup().getStudyPeriodEnd());
         result.setCalendarInfo(resultCalendarInfo);
 
         return result;

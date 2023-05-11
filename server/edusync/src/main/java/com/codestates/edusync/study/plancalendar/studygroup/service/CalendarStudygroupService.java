@@ -4,8 +4,11 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
 import com.codestates.edusync.study.plancalendar.studygroup.utils.CalendarStudygroupManager;
+import com.codestates.edusync.study.studygroup.entity.Studygroup;
+import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,21 +16,23 @@ import java.util.Optional;
 import static com.codestates.edusync.exception.ExceptionCode.STUDYGROUP_POST_COMMENT_NOT_FOUND;
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_FOUND;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final CalendarStudygroupRepository calendarStudygroupRepository;
+    private final StudygroupService studygroupService;
+
     @Override
-    public void createTimeSchedulesForStudygroup(Long studyGroupId,
+    public void createTimeSchedulesForStudygroup(Long studygroupId,
                                                  List<TimeSchedule> timeSchedules) {
-        // FIXME: 2023-05-11: 스터디 그룹 머지하면 적용. 지금은 동작 하지 않는다!
-//        Studygroup findStudygroup = studygroupService.findVerifyStudygroup(studygroupId);
-//
-//        timeSchedules.forEach(ts -> {
-//            ts.setStudygroup(findStudygroup);
-//            ts.setTitle(findStudygroup.getStudyName());
-//            ts.setContent((findStudygroup.getPlatform()));
-//        } );
+        Studygroup findStudygroup = studygroupService.findStudygroup(studygroupId);
+
+        timeSchedules.forEach(ts -> {
+            ts.setStudygroup(findStudygroup);
+            ts.setTitle(findStudygroup.getStudyName());
+            ts.setContent((findStudygroup.getPlatform()));
+        } );
         calendarStudygroupRepository.saveAll(timeSchedules);
     }
 
@@ -44,8 +49,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getContent()).ifPresent(findTimeSchedule::setContent);
-        Optional.ofNullable(timeSchedule.getStart()).ifPresent(findTimeSchedule::setStart);
-        Optional.ofNullable(timeSchedule.getEnd()).ifPresent(findTimeSchedule::setEnd);
+        Optional.ofNullable(timeSchedule.getStartTime()).ifPresent(findTimeSchedule::setStartTime);
+        Optional.ofNullable(timeSchedule.getEndTime()).ifPresent(findTimeSchedule::setEndTime);
         
         calendarStudygroupRepository.save(findTimeSchedule);
     }
@@ -57,6 +62,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     @Override
     public TimeSchedule getSingleTimeScheduleById(Long studygroupId, Long timeScheduleId) {
+
         return findVerifyTimeSchedule(timeScheduleId);
     }
 
