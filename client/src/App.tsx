@@ -10,7 +10,6 @@ import StudyPost from "./pages/StudyPost";
 import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
 import GNB from "./components/gnb/GNB";
-// import ProfileStudyList from "./pages/ProfileStudyList";
 import ProfileCalendar from "./pages/ProfileCalendar";
 import "./App.css";
 const queryClient = new QueryClient();
@@ -30,7 +29,6 @@ function App() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/studylist" element={<StudyList />} />
             <Route path="/studycontent" element={<StudyContent />} />
-            {/* <Route path="/manage-group" element={<ProfileStudyList />} /> */}
             <Route path="/studypost" element={<StudyPost />} />
             <Route path="/calendar" element={<ProfileCalendar />} />
             <Route />

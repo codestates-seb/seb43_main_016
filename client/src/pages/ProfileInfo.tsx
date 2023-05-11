@@ -42,29 +42,46 @@ const ProfileInfo = () => {
     fetchUserInfo();
   }, []);
 
-  // TODO Edit 버튼 클릭 시, 유저 비밀번호를 검증하고 isEdit 상태를 업데이트하는 코드
-  const handleEditBtn = async (e: FormEvent<HTMLButtonElement>) => {
-    e.preventDefault();
-
+  // TODO 중복이 잦은 비밀번호 검증 부분을 따로 정의한 코드
+  const validatePassword = async (
+    userId: number,
+    enteredPassword: string
+  ): Promise<boolean> => {
     const token = localStorage.getItem("accessToken");
-    const enterPassword = prompt(
-      "개인정보를 수정하려면 비밀번호를 확인이 필요합니다"
-    );
 
     try {
       const {
         data: { password },
       } = await axios.get(
-        `${import.meta.env.VITE_APP_API_URL}/members/${userInfo?.id}/password`,
+        `${import.meta.env.VITE_APP_API_URL}/members/${userId}/password`,
         {
-          // ? id가 추가되는 부분이 이해되지 않아 문의드림
           headers: {
             Authorization: `Bearer ${token}`,
           },
         }
       );
 
-      if (enterPassword === password) {
+      return enteredPassword === password;
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+  };
+
+  // TODO Edit 버튼 클릭 시, 유저 비밀번호를 검증하고 isEdit 상태를 업데이트하는 코드
+  const handleEditBtn = async (e: FormEvent<HTMLButtonElement>) => {
+    e.preventDefault();
+
+    const enterPassword = prompt(
+      "개인정보를 수정하려면 비밀번호를 확인이 필요합니다"
+    );
+
+    try {
+      const isValidPassword = await validatePassword(
+        userInfo?.id || 0,
+        enterPassword || ""
+      );
+      if (isValidPassword) {
         setIsEdit(true);
       } else {
         alert("비밀번호를 확인하세요");
@@ -109,17 +126,35 @@ const ProfileInfo = () => {
   };
 
   // TODO 회원탈퇴 버튼 클릭 시, 회원정보 삭제를 요청하는 코드
-  const handleDeleteBtn = () => {
-    const deleteUserInfo = async () => {
+  const handleDeleteBtn = async () => {
+    const enterPassword = prompt(
+      "회원탈퇴를 진행하시려면 비밀번호를 입력해주세요."
+    );
+    const isValidPassword = await validatePassword(
+      userInfo?.id || 0,
+      enterPassword || ""
+    );
+
+    if (isValidPassword) {
       try {
-        const res = await axios.delete("http://localhost:3001/member/1");
+        const token = localStorage.getItem("accessToken");
+        const res = await axios.delete(
+          `${import.meta.env.VITE_APP_API_URL}/members/${userInfo?.id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const data = res.data;
         console.log(data);
+        alert("회원탈퇴가 완료되었습니다.");
       } catch (error) {
         console.error(error);
       }
-    };
-    deleteUserInfo();
+    } else {
+      alert("비밀번호를 확인하세요.");
+    }
   };
 
   // ! userInfo 상태가 변경될 때, 콘솔에 userInfo를 출력하는 코드 => 구현 후에는 반드시 삭제.

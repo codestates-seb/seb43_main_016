@@ -3,6 +3,7 @@ import styled from "styled-components";
 import { Routes, Route, useNavigate, Link } from "react-router-dom";
 import ProfileStudyList from "./ProfileStudyList";
 import ProfileCalendar from "./ProfileCalendar";
+import ProfileStudyManage from "./ProfileStudyManage";
 
 const Profile = () => {
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Profile = () => {
       <Routes>
         <Route path="/" element={<ProfileInfo />} />
         <Route path="/manage-group" element={<ProfileStudyList />} />
+        <Route path="/:studyId" element={<ProfileStudyManage />} />
         <Route path="/calendar" element={<ProfileCalendar />} />
       </Routes>
     </Wrapper>
