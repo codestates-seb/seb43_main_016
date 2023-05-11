@@ -4,9 +4,7 @@ import com.codestates.edusync.auth.filter.JwtAuthenticationFilter;
 import com.codestates.edusync.auth.filter.JwtVerificationFilter;
 import com.codestates.edusync.auth.handler.*;
 import com.codestates.edusync.auth.jwt.JwtTokenizer;
-import com.codestates.edusync.auth.userdetails.MemberDetailsService;
 import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
-import com.codestates.edusync.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -58,6 +55,8 @@ public class SecurityConfiguration {
                 )
                 .oauth2Login()
                 .successHandler(oAuth2MemberSuccessHandler);  // OAuth 2 인증이 성공한 뒤 실행되는 핸들러를 추가
+//                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정을 저장
+//                .userService(oauth2Service); // OAuth2 로그인 성공 시, 후작업을 진행할 UserService 인터페이스 구현체 등록
         return http.build();
     }
 

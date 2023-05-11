@@ -8,6 +8,9 @@ import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+
+import java.util.List;
 
 import java.util.ArrayList;
 import java.util.Iterator;

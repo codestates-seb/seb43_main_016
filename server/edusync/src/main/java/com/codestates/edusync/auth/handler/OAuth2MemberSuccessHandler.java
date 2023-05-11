@@ -48,9 +48,37 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
         var oAuth2User = (OAuth2User)authentication.getPrincipal();
-        String email = String.valueOf(oAuth2User.getAttributes().get("email")); // OAuth2User 객체로부터 Resource Owner의 이메일 주소를 얻기
-        String nickName = String.valueOf(oAuth2User.getAttributes().get("name")); // 이름을 얻기
-        String profileImage = String.valueOf(oAuth2User.getAttributes().get("picture")); // 프로필 이미지 URL을 얻기
+//        String email = String.valueOf(oAuth2User.getAttributes().get("email")); // OAuth2User 객체로부터 Resource Owner의 이메일 주소를 얻기
+//        String nickName = String.valueOf(oAuth2User.getAttributes().get("name")); // 이름을 얻기
+//        String profileImage = String.valueOf(oAuth2User.getAttributes().get("picture")); // 프로필 이미지 URL을 얻기
+
+        OAuth2AuthenticationToken authToken = (OAuth2AuthenticationToken) authentication;
+        String providerType = authToken.getAuthorizedClientRegistrationId();
+
+        String email;
+        String nickName;
+        String profileImage;
+
+        if ("google".equals(providerType)) {
+            email = String.valueOf(oAuth2User.getAttributes().get("email"));
+            nickName = String.valueOf(oAuth2User.getAttributes().get("name"));
+            profileImage = String.valueOf(oAuth2User.getAttributes().get("picture"));
+        } else if ("kakao".equals(providerType)) {
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
+            email = (String) kakaoAccount.get("email");
+            Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
+            nickName = (String) profile.get("nickname");
+            profileImage = (String) profile.get("profile_image_url");
+        } else if ("naver".equals(providerType)) {
+            Map<String, Object> attributes = oAuth2User.getAttributes();
+            Map<String, Object> response2 = (Map<String, Object>) attributes.get("response");
+            email = (String) response2.get("email");
+            nickName = (String) response2.get("name");
+            profileImage = (String) response2.get("profile_image");
+        } else {
+            throw new IllegalArgumentException("Unsupported provider: " + providerType);
+        }
 
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
 

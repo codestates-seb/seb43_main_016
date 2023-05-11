@@ -31,8 +31,6 @@ public class Member extends Auditable {
     @Column(length = 2147483647)    // fixme : 길이 제한 걸릴 경우 length = -1 이나 columnDefinition = "TEXT" 타입 고려
     private String profileImage;
     private String password;
-    @Column(length = 200)
-    private String address;
     @Column(length = 50)
     private String grade;
 
@@ -66,6 +64,22 @@ public class Member extends Auditable {
 
     @OneToMany(mappedBy = "leaderMember", cascade = {PERSIST, MERGE}, fetch = LAZY)
     private List<Studygroup> studygroupsAsLeader = new ArrayList<>();
+
+    private Provider provider = Provider.LOCAL;
+
+    public enum Provider {
+        LOCAL("기본 회원"),
+        GOOGLE("구글 연동 회원"),
+        KAKAO("카카오 연동 회원"),
+        NAVER("네이버 연동 회원");
+
+        @Getter
+        private String provider;
+
+        Provider(String provider) {
+            this.provider = provider;
+        }
+    }
 
     @OneToMany(mappedBy = "member", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<StudygroupJoin> studygroupJoins = new ArrayList<>();

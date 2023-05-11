@@ -1,5 +1,7 @@
 package com.codestates.edusync.study.plancalendar.studygroup.controller;
 
+import com.codestates.edusync.infodto.timeschedule.dto.TimeScheduleResponseDto;
+import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.dto.CalendarDto;
 import com.codestates.edusync.study.plancalendar.studygroup.mapper.CalendarStudygroupMapper;
 import com.codestates.edusync.study.plancalendar.studygroup.service.CalendarStudygroupService;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
@@ -20,17 +23,60 @@ public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
     private final CalendarStudygroupMapper mapper;
 
-    private static final String DEFAULT_CALENDAR_URL = "/calendar";
+    private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
+    private static final String DEFAULT_TIME_SCHEDULE_URL = "/timeSchedule";
 
-    @PatchMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}/studygroup")
-    public ResponseEntity patchCalendarStudygroup(@PathVariable("calendar-id") @Positive Long calendarId,
+    @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
+    public ResponseEntity postCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                 @Valid @RequestBody CalendarDto.Post postDto) {
+        calendarStudygroupService.createTimeSchedulesForStudygroup(
+                studygroupId,
+                mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules())
+        );
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @PatchMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
+    public ResponseEntity patchCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                  @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                   @Valid @RequestBody CalendarDto.Patch patchDto) {
+        calendarStudygroupService.updateStudygroupTimeSchedule(
+                studygroupId, timeScheduleId,
+                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto)
+        );
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @DeleteMapping(DEFAULT_CALENDAR_URL + "/{calendar-id}/studygroup")
-    public ResponseEntity deleteCalendarStudygroup(@PathVariable("calendar-id") @Positive Long calendarId) {
+    @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL + "s")
+    public ResponseEntity getAllTimeScheduleOfStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+
+        List<TimeSchedule> findTimeSchedules =
+                calendarStudygroupService.getTimeSchedulesByStudygroupId(studygroupId);
+
+        List<TimeScheduleResponseDto.TimeScheduleDto> responseDtos =
+                mapper.timeScheduleListToTimeScheduleResponseDto(findTimeSchedules);
+
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+    }
+
+    @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
+    public ResponseEntity getTimeScheduleOfStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                      @PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
+        TimeSchedule findTimeSchedule =
+                calendarStudygroupService.getSingleTimeScheduleById(studygroupId, timeScheduleId);
+
+        TimeScheduleResponseDto responseDto =
+                mapper.timeScheduleToTimeScheduleResponseDto(findTimeSchedule);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.OK);
+    }
+
+    @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
+    public ResponseEntity deleteCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
+        calendarStudygroupService.deleteTimeScheduleByTimeScheduleId(studygroupId, timeScheduleId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

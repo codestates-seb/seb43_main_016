@@ -10,6 +10,7 @@ create table if not exists member
     about_me      TEXT,
     with_me       TEXT,
     member_status varchar(50),
+    provider      varchar(50),
     modified_at   timestamp,
     created_at    timestamp,
 

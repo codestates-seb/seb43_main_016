@@ -7,7 +7,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class StudyPostCommentResponseDto {
-    private Long id;
+public class StudygroupPostCommentResponseDto {
+    private Long commentId;
+    private Long studygroupId;
+    private Long memberId;
     private String content;
 }

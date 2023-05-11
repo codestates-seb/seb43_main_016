@@ -2,7 +2,6 @@ package com.codestates.edusync.searchtag.utils;
 
 import com.codestates.edusync.searchtag.entity.SearchTag;
 
-import java.util.HashMap;
 import java.util.List;
 
 public interface SearchTagManager {
@@ -25,17 +24,17 @@ public interface SearchTagManager {
     List<SearchTag> getAllSearchTagList();
 
     /**
-     * <h2>key(카테고리)와 value(태그)의 목록을 입력받아, DB 에 생성한다</h2>
+     * <h2>searchTag 의 목록을 입력받아, DB 에 생성한다</h2>
      * @param tags  key(카테고리), value(태그) 의 목록
      */
-    void createSearchTags(List<HashMap<String, SearchTag>> tags);
+    void createSearchTags(List<SearchTag> tags);
 
     /**
-     * <h2>key(카테고리)와 value(태그)의 목록을 입력받아, DB 에서 삭제한다</h2>
+     * <h2>searchTag 의 목록을 입력받아, DB 에서 삭제한다</h2>
      * <font color="white"><b> 403 forbidden </b></font> 로그인을 하지 않은 경우<br>
      * <font color="white"><b> 403 forbidden </b></font> 해당 스터디의 리더가 아닌 경우<br>
      * <font color="white"><b> 404 not found </b></font> 해당 key 와 value 로 이루어진 목록이 하나도 존재하지 않는 경우<br>
      * @param tags
      */
-    void deleteSearchTags(List<HashMap<String, SearchTag>> tags);
+    void deleteSearchTags(List<SearchTag> tags);
 }
