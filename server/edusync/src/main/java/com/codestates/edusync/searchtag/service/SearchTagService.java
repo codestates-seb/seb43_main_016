@@ -15,6 +15,8 @@ import java.util.List;
 public class SearchTagService implements SearchTagManager {
     private final SearchTagRepository searchTagRepository;
 
+    public List<SearchTag> getSearchTagList(Long studygroupId) { return searchTagRepository.findAllByStudygroupId(studygroupId); }
+
     @Override
     public List<SearchTag> getSearchTagList(String key) {
         return searchTagRepository.findAllByTagKey(key);
@@ -35,5 +37,8 @@ public class SearchTagService implements SearchTagManager {
         searchTagRepository.deleteAll(tags);
     }
 
-    public List<SearchTag> getSearchTagList(Long studygroupId) { return searchTagRepository.findAllByStudygroupId(studygroupId); }
+    @Override
+    public void deleteSearchTags(Long studygroupId) {
+        searchTagRepository.deleteAllByStudygroupId(studygroupId);
+    }
 }
