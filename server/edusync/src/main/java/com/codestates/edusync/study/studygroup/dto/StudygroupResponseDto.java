@@ -19,9 +19,9 @@ import java.util.List;
 public class StudygroupResponseDto {
     private Long id;
     private String studyName;
-    @JsonFormat(pattern = "yyyy.MM.dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Timestamp studyPeriodStart;
-    @JsonFormat(pattern = "yyyy.MM.dd")
+    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
     private Timestamp studyPeriodEnd;
     private String daysOfWeek;
     @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
@@ -30,6 +30,7 @@ public class StudygroupResponseDto {
     private Timestamp studyTimeEnd;
     private Integer memberCountMin;
     private Integer memberCountMax;
+    private Integer memberCountCurrent;
     private String platform;
     private String introduction;
     private Boolean requited;

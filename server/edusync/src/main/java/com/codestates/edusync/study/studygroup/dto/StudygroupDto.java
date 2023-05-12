@@ -1,6 +1,5 @@
 package com.codestates.edusync.study.studygroup.dto;
 
-import com.codestates.edusync.searchtag.entity.SearchTag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,11 +21,11 @@ public class StudygroupDto {
         private String studyName;
 
         @NotNull
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodStart;
 
         @NotNull
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodEnd;
 
         private List<Integer> daysOfWeek;
@@ -44,6 +43,9 @@ public class StudygroupDto {
 
         @Positive
         private Integer memberCountMax;
+
+        @Positive
+        private Integer memberCountCurrent;
 
         @NotNull
         private String platform;
@@ -63,10 +65,10 @@ public class StudygroupDto {
 
         private String studyName;
 
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodStart;
 
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodEnd;
 
         private List<Integer> daysOfWeek;
@@ -82,6 +84,9 @@ public class StudygroupDto {
 
         @Positive
         private Integer memberCountMax;
+
+        @Positive
+        private Integer memberCountCurrent;
 
         private String platform;
 
