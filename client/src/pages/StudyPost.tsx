@@ -5,10 +5,14 @@ import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
 
-const API_URL = "http://localhost:8080";
+const API_URL = "https://wish17.store";
 
 const StudyPost = () => {
   const [title, setTitle] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("");
+  const [endTime, setEndTime] = useState<string>("");
   const [maxPeople, setMaxPeople] = useState<number>(0);
   const [platform, setPlatform] = useState<string>("");
   const [postText, setPostText] = useState<string>("");
@@ -17,6 +21,18 @@ const StudyPost = () => {
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
+  };
+  const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartDate(e.target.value);
+  };
+  const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(e.target.value);
+  };
+  const handleStartTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartTime(e.target.value);
+  };
+  const handleEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndTime(e.target.value);
   };
   const handleMaxPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxPeople(+e.target.value);
@@ -28,11 +44,11 @@ const StudyPost = () => {
   const handlePostButton = async () => {
     console.log("Submitting form with values:", {
       studyName: `${title}`,
-      studyPeriodStart: "2023.05.01",
-      studyPeriodEnd: "2023.06.10",
-      daysOfWeek: "2023.06.10",
-      studyTimeStart: "18:00",
-      studyTimeEnd: "20:00",
+      studyPeriodStart: `${startDate}`,
+      studyPeriodEnd: `${endDate}`,
+      daysOfWeek: [3, 4, 5],
+      studyTimeStart: `${startTime}`,
+      studyTimeEnd: `${endTime}`,
       minClassmateCount: 1,
       maxClassmateCount: maxPeople,
       platform: `${platform}`,
@@ -46,14 +62,26 @@ const StudyPost = () => {
     try {
       const res = await axios.post(`${API_URL}/studygroup/1`, {
         studyName: `${title}`,
+        studyPeriodStart: `${startDate}`,
+        studyPeriodEnd: `${endDate}`,
+        daysOfWeek: [3, 4, 5],
+        studyTimeStart: `${startTime}`,
+        studyTimeEnd: `${endTime}`,
+        minClassmateCount: 1,
         maxClassmateCount: maxPeople,
         platform: `${platform}`,
-        introduction: `${postText}`,
+        tags: [
+          {
+            taKey: "프론트엔드",
+            tagValue: "javascript",
+          },
+        ],
       });
       console.log("POST request successful:", res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
+      alert("스터디 등록이 실패했습니다!");
       console.error("Error during POST request:", error);
     }
   };
@@ -75,9 +103,19 @@ const StudyPost = () => {
         <StudyPostMain>
           <StudyPostInfo>
             <span>일정</span>
-            <input type="date"></input>
+            <input
+              type="date"
+              value={startDate}
+              onChange={handleStartDate}
+              required
+            />
             <p>~</p>
-            <input type="date"></input>
+            <input
+              type="date"
+              value={endDate}
+              onChange={handleEndDate}
+              required
+            />
           </StudyPostInfo>
           <StudyPostInfo>
             <span>요일</span>
@@ -85,7 +123,19 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>시각</span>
-            <input type="text"></input>
+            <input
+              type="time"
+              value={startTime}
+              onChange={handleStartTime}
+              required
+            />
+            <p>~</p>
+            <input
+              type="time"
+              value={endTime}
+              onChange={handleEndTime}
+              required
+            />
           </StudyPostInfo>
           <StudyPostInfo>
             <span>최대 인원</span>
