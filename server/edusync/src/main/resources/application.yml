@@ -39,13 +39,13 @@ spring:
         registration:
           google:
             client-id: 90423476142-0p4j9mmj540elt7qgg5udb7hsiog7hi2.apps.googleusercontent.com
-            clientSecret: ${GoogleClientSecret}
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
             scope:
               - email
               - profile
           kakao:
-            client-id: ${KakaoClientId}
-            client-secret: ${KakaoClientSecret}
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
             client-authentication-method: POST
             authorization-grant-type: authorization_code
             client-name: Kakao
