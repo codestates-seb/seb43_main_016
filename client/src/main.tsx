@@ -5,7 +5,6 @@ import { GoogleOAuthProvider } from "@react-oauth/google";
 import { RecoilRoot } from "recoil";
 
 const GoogleClientID = `${import.meta.env.GOOGLE_CLIENT_ID}`;
-const GoogleClientPW = `${import.meta.env.GOOGLE_CLIENT_PW}`;
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
   <RecoilRoot>
