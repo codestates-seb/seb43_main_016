@@ -13,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codestates.edusync.exception.ExceptionCode.STUDYGROUP_POST_COMMENT_NOT_FOUND;
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_FOUND;
 
 @Transactional
