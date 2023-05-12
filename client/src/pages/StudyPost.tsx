@@ -177,7 +177,7 @@ const StudyPost = () => {
           </StudyPostInput>
           <StudyPostButtonWrapper>
             <StudyPostButton onClick={handlePostButton}>
-              스터디 등록
+              스터디 등록!!
             </StudyPostButton>
           </StudyPostButtonWrapper>
         </StudyPostMain>
