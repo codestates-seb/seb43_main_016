@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
@@ -173,7 +173,15 @@ const StudyPost = () => {
             <input type="text" />
           </StudyPostInfo>
           <StudyPostInput>
-            <TextEditor handleContentChange={setPostText} />
+            <TextEditor
+              handleContentChange={setPostText}
+              onFocus={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+              onBlur={function (): void {
+                throw new Error("Function not implemented.");
+              }}
+            />
           </StudyPostInput>
           <StudyPostButtonWrapper>
             <StudyPostButton onClick={handlePostButton}>
