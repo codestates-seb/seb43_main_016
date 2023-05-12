@@ -121,31 +121,4 @@ public class StudygroupController {
         service.deleteStudygroup(studygroupId);
         return ResponseEntity.noContent().build();
     }
-
-    // FIXME: 2023-05-10 끝나고 생각
-//    /**
-//     * 스터디 멤버 강퇴
-//     * @param studygroupId
-//     * @param classmateId
-//     * @return
-//     */
-//    @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/classmate/{classmate-id}/kickout")
-//    public ResponseEntity deleteStudygroupkick(@PathVariable("studygroup-id") @Positive Long studygroupId,
-//                                           @PathVariable("classmate-id") @Positive Long classmateId) {
-//
-//        return new ResponseEntity(HttpStatus.NO_CONTENT);
-//    }
-//
-//    /**
-//     * 스터디 자진 탈퇴
-//     * @param studygroupId
-//     * @param classmateId
-//     * @return
-//     */
-//    @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/classmate/{classmate-id}")
-//    public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-//                                           @PathVariable("classmate-id") @Positive Long classmateId) {
-//
-//        return new ResponseEntity(HttpStatus.NO_CONTENT);
-//    }
 }

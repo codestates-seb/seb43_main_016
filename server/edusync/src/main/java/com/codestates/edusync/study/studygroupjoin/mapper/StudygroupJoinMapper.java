@@ -4,19 +4,23 @@ import com.codestates.edusync.study.studygroupjoin.dto.StudygroupJoinDto;
 import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
 import org.mapstruct.Mapper;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface StudygroupJoinMapper {
 
-    default StudygroupJoinDto.Response studygroupJoinToStudygroupJoinDto(StudygroupJoin studygroupJoin) {
+    /**
+     * 스터디 멤버 리스트 & 가입 대기 리스트 매퍼
+     * @param studygroupJoinList
+     * @return
+     */
+    default StudygroupJoinDto.Response studygroupJoinToStudygroupJoinDtos(List<StudygroupJoin> studygroupJoinList) {
         StudygroupJoinDto.Response studygroupJoinDto = new StudygroupJoinDto.Response();
-        studygroupJoinDto.setNickName(studygroupJoin.getMember().getNickName());
+        List<String> nickName = new ArrayList<>(studygroupJoinList.size());
+        studygroupJoinList.stream().map(e -> nickName.add(e.getMember().getNickName()));
+        studygroupJoinDto.setNickName(nickName);
         return studygroupJoinDto;
-    }
-
-    default List<StudygroupJoinDto.Response> studygroupJoinToStudygroupJoinDtos(List<StudygroupJoin> studygroupJoinList) {
-        return studygroupJoinList.stream().map(this::studygroupJoinToStudygroupJoinDto).collect(Collectors.toList());
     }
 }

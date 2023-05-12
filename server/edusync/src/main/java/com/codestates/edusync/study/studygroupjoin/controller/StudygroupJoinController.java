@@ -22,24 +22,24 @@ public class StudygroupJoinController {
     private static final String DEFAULT_JOIN_URL = "/join";
     private static final String DEFAULT_CANDIDATE_URL = "/candidate";
     private final StudygroupJoinService studygroupJoinService;
-    private final StudygroupJoinMapper mapper;
+    private final StudygroupJoinMapper studygroupJoinmapper;
 
     /**
-     * 스터디 가입 대기 리스트 및 가입된 멤버 리스트 조회
+     * 스터디 멤버 리스트 및 가입 대기 리스트 조회
      * @param studygroupId
      * @return
      */
-    // FIXME: 2023-05-12 응답줄 때 리스트로 변환 필요
-    @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_CANDIDATE_URL)
+    @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/member")
     public ResponseEntity getStudygroupJoins(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                             @RequestParam("candidate") Boolean candidate) {
+                                             @RequestParam("join") Boolean join) {
 
         List<StudygroupJoin> studygroupJoinList;
 
-        if (candidate) studygroupJoinList = studygroupJoinService.findStudygroupJoinsCandidateList(studygroupId); // 가입 대기
-        else studygroupJoinList = studygroupJoinService.findStudygroupJoinsList(studygroupId); // 가입된 멤버
+        if (join) studygroupJoinList = studygroupJoinService.findStudygroupJoinList(studygroupId); // 멤버 리스트
+        else studygroupJoinList = studygroupJoinService.findStudygroupJoinCandidateList(studygroupId); // 대기 리스트
 
-        List<StudygroupJoinDto.Response> studygroupJoinDtos = mapper.studygroupJoinToStudygroupJoinDtos(studygroupJoinList);
+        StudygroupJoinDto.Response studygroupJoinDtos =
+                studygroupJoinmapper.studygroupJoinToStudygroupJoinDtos(studygroupJoinList);
         return ResponseEntity.ok(studygroupJoinDtos);
     }
 
@@ -49,7 +49,7 @@ public class StudygroupJoinController {
      * @return
      */
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_JOIN_URL)
-    public ResponseEntity postClassmateOnCandidated(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+    public ResponseEntity postStudygroupJoin(@PathVariable("studygroup-id") @Positive Long studygroupId) {
         studygroupJoinService.createStudygroupJoin(studygroupId);
         return new ResponseEntity(HttpStatus.CREATED);
     }
@@ -60,32 +60,31 @@ public class StudygroupJoinController {
      * @return
      */
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_JOIN_URL)
-    public ResponseEntity deleteCandidatedMember(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        studygroupJoinService.deleteSelfStudygroupJoinCandidate(studygroupId);
+    public ResponseEntity deleteStudygroupJoinCandidate(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+        studygroupJoinService.deleteStudygroupJoinCandidate(studygroupId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    //    /**
-//     * 스터디 자진 탈퇴
-//     * @param studygroupId
-//     * @param classmateId
-//     * @return
-//     */
-//    @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/classmate/{classmate-id}")
-//    public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-//                                           @PathVariable("classmate-id") @Positive Long classmateId) {
-//
-//        return new ResponseEntity(HttpStatus.NO_CONTENT);
-//    }
+    /**
+     * 스터디 자진 탈퇴
+     * @param studygroupId
+     * @return
+     */
+    @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/member")
+    public ResponseEntity deleteStudygroupJoin(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+        studygroupJoinService.deleteStudygroupJoin(studygroupId);
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 
     /**
      * 가입 승인한다. (스터디장)
      * @param studygroupId
+     * @param studygroupJoinDto
      * @return
      */
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_CANDIDATE_URL)
-    public ResponseEntity approveCandidatedMember(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                  @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto) {
+    public ResponseEntity postStudygroupJoinApprove(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                    @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto) {
         studygroupJoinService.approveStudygroupJoin(studygroupId, studygroupJoinDto.getNickName());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
@@ -93,26 +92,26 @@ public class StudygroupJoinController {
     /**
      * 가입 거부한다. (스터디장)
      * @param studygroupId
+     * @param studygroupJoinDto
      * @return
      */
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_CANDIDATE_URL)
-    public ResponseEntity rejectCandidatedMember(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                 @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto) {
-        studygroupJoinService.deleteStudygroupJoinCandidate(studygroupId, studygroupJoinDto.getNickName());
+    public ResponseEntity deleteStudygroupJoinReject(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                     @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto) {
+        studygroupJoinService.rejectStudygroupJoinCandidate(studygroupId, studygroupJoinDto.getNickName());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-//    /**
-//     * 스터디 멤버 강퇴
-//     * @param studygroupId
-//     * @param classmateId
-//     * @return
-//     */
-//    @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/classmate/{classmate-id}/kickout")
-//    public ResponseEntity deleteStudygroupkick(@PathVariable("studygroup-id") @Positive Long studygroupId,
-//                                           @PathVariable("classmate-id") @Positive Long classmateId) {
-//
-//        return new ResponseEntity(HttpStatus.NO_CONTENT);
-//    }
-//
+    /**
+     * 스터디 멤버 강퇴
+     * @param studygroupId
+     * @param studygroupJoinDto
+     * @return
+     */
+    @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/kick")
+    public ResponseEntity deleteStudygroupJoinKick(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                   @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto) {
+        studygroupJoinService.deleteStudygroupJoinKick(studygroupId, studygroupJoinDto.getNickName());
+        return new ResponseEntity(HttpStatus.NO_CONTENT);
+    }
 }

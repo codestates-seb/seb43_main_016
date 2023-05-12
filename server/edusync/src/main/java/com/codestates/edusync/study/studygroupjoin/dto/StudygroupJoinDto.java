@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 public class StudygroupJoinDto {
     @NoArgsConstructor
@@ -18,6 +19,6 @@ public class StudygroupJoinDto {
     @Getter
     @Setter
     public static class Response {
-        private String nickName;
+        private List<String> nickName;
     }
 }
