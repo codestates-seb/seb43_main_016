@@ -24,11 +24,13 @@ public class StudygroupJoinController {
     private final StudygroupJoinService studygroupJoinService;
     private final StudygroupJoinMapper mapper;
 
+
     /**
      * 스터디 그룹에 가입 신청한다.
      * @param studygroupId
      * @return
      */
+    // FIXME: 2023-05-12 중복 신청 불가하도록 작업 필요
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_JOIN_URL)
     public ResponseEntity postClassmateOnCandidated(@PathVariable("studygroup-id") @Positive Long studygroupId) {
         studygroupJoinService.createStudygroupJoin(studygroupId);
@@ -52,6 +54,7 @@ public class StudygroupJoinController {
      * @param studygroupId
      * @return
      */
+    // FIXME: 2023-05-12 응답줄 때 리스트로 변환 필요
     @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_CANDIDATE_URL)
     public ResponseEntity getStudygroupJoins(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                              @RequestParam("candidate") Boolean candidate) {

@@ -19,9 +19,8 @@ import java.util.List;
 @Service
 public class StudygroupJoinService {
     private final StudygroupJoinRepository studygroupJoinRepository;
-    private static MemberService memberService;
-    private static StudygroupService studygroupService;
-
+    private final MemberService memberService;
+    private final StudygroupService studygroupService;
 
     /**
      * 스터디 가입 신청
@@ -29,8 +28,11 @@ public class StudygroupJoinService {
      */
     public void createStudygroupJoin(Long studygroupId) {
         StudygroupJoin studygroupJoin = new StudygroupJoin();
-        studygroupJoin.setMember(memberService.findVerifyMemberWhoLoggedIn());
+        Member member = memberService.findVerifyMemberWhoLoggedIn()
+        studygroupJoin.setMember(member);
         studygroupJoin.setStudygroup(studygroupService.findStudygroup(studygroupId));
+
+        findStudygroupJoinCandidate(studygroupId, member.getNickName());
         studygroupJoinRepository.save(studygroupJoin);
     }
 

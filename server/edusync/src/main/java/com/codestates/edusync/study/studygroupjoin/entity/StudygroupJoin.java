@@ -23,11 +23,11 @@ public class StudygroupJoin {
     private Boolean isApproved = false;
 
     @ManyToOne(fetch = EAGER)
-    @JoinColumn(name = "studygroup_join_member_id")
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @ManyToOne(fetch = EAGER)
-    @JoinColumn(name = "studygroup_join_studygroup_id")
+    @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 
 
