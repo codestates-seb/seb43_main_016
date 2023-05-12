@@ -1,17 +1,12 @@
 package com.codestates.edusync.study.studygroup.dto;
 
-import com.codestates.edusync.searchtag.entity.SearchTag;
-import com.codestates.edusync.study.studygroupjoin.dto.ClassmateResponseDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.jni.Time;
 
-import javax.validation.constraints.NotNull;
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.List;
 
 @NoArgsConstructor
 @Getter
