@@ -24,10 +24,7 @@ const ProfileImg = ({ profileImage }: Props) => {
       const maxSize = 3 * 1024 * 1024; // 파일의 사이즈는 3MB를 넘을 수 없음
       if (selectedFile.size > maxSize) {
         alert("프로필 이미지는 3MB를 넘을 수 없습니다.");
-        return;2
-
-
-
+        return;
       }
 
       const reader: FileReader = new FileReader();

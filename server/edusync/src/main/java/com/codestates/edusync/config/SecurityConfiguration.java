@@ -2,14 +2,10 @@ package com.codestates.edusync.config;
 
 import com.codestates.edusync.auth.filter.JwtAuthenticationFilter;
 import com.codestates.edusync.auth.filter.JwtVerificationFilter;
-import com.codestates.edusync.auth.handler.MemberAccessDeniedHandler;
-import com.codestates.edusync.auth.handler.MemberAuthenticationEntryPoint;
-import com.codestates.edusync.auth.handler.MemberAuthenticationFailureHandler;
-import com.codestates.edusync.auth.handler.MemberAuthenticationSuccessHandler;
+import com.codestates.edusync.auth.handler.*;
 import com.codestates.edusync.auth.jwt.JwtTokenizer;
 import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
-import com.codestates.edusync.member.repository.MemberRepository;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +16,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -30,18 +27,14 @@ import java.util.Arrays;
 import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
+@RequiredArgsConstructor
 @EnableWebSecurity // Spring Security를 사용하기 위한 필수 설정들을 자동으로 등록
 @EnableGlobalMethodSecurity(prePostEnabled = true) // 메소드 보안 기능 활성화
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberRepository memberRepository;
+    private final OAuth2MemberSuccessHandler oAuth2MemberSuccessHandler;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberRepository memberRepository) {
-        this.jwtTokenizer = jwtTokenizer;
-        this.authorityUtils = authorityUtils;
-        this.memberRepository = memberRepository;
-    }
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
@@ -59,7 +52,11 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                                 .anyRequest().permitAll()                // 모든 HTTP request 요청에 대해서 접근 허용
-                );
+                )
+                .oauth2Login()
+                .successHandler(oAuth2MemberSuccessHandler);  // OAuth 2 인증이 성공한 뒤 실행되는 핸들러를 추가
+//                .userInfoEndpoint() // OAuth2 로그인 성공 이후 사용자 정보를 가져올 때 설정을 저장
+//                .userService(oauth2Service); // OAuth2 로그인 성공 시, 후작업을 진행할 UserService 인터페이스 구현체 등록
         return http.build();
     }
 
@@ -99,7 +96,8 @@ public class SecurityConfiguration {
             JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);  // JwtVerificationFilter의 인스턴스를 생성하면서 JwtVerificationFilter에서 사용되는 객체들을 생성자로 DI
 
             builder.addFilter(jwtAuthenticationFilter)  // addFilter() 메서드를 통해 JwtAuthenticationFilter를 Spring Security Filter Chain에 추가
-                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class);   // JwtVerificationFilter는 JwtAuthenticationFilter에서 로그인 인증에 성공한 후 발급 받은 JWT가 클라이언트의 request header(Authorization 헤더)에 포함되어 있을 경우에만 동작한다.
+                    .addFilterAfter(jwtVerificationFilter, JwtAuthenticationFilter.class)   // JwtVerificationFilter는 JwtAuthenticationFilter에서 로그인 인증에 성공한 후 발급 받은 JWT가 클라이언트의 request header(Authorization 헤더)에 포함되어 있을 경우에만 동작한다.
+                    .addFilterAfter(jwtVerificationFilter, OAuth2LoginAuthenticationFilter.class);
         }
     }
 }
