@@ -2,6 +2,8 @@ import { useState, useEffect, FormEvent } from "react";
 import ProfileImg from "../components/ProfileImg";
 import styled from "styled-components";
 import axios from "axios";
+import { myIdState } from "../recoil/atoms/MyIdState";
+import { useRecoilValue } from "recoil";
 
 interface UserInfoResponseDto {
   id: number;
@@ -18,6 +20,7 @@ type UserInfo = Omit<UserInfoResponseDto, "memberStatus">;
 const ProfileInfo = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
+  const myId = useRecoilValue(myIdState);
 
   // TODO 최초 페이지 렌더링 시 유저 정보를 가져오는 코드
   useEffect(() => {
@@ -25,7 +28,7 @@ const ProfileInfo = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const res = await axios.get(
-          `${import.meta.env.VITE_APP_API_URL}/members/`,
+          `${import.meta.env.VITE_APP_API_URL}/member/${myId}`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -44,7 +47,6 @@ const ProfileInfo = () => {
 
   // TODO 중복이 잦은 비밀번호 검증 부분을 따로 정의한 코드
   const validatePassword = async (
-    userId: number,
     enteredPassword: string
   ): Promise<boolean> => {
     const token = localStorage.getItem("accessToken");
@@ -53,7 +55,7 @@ const ProfileInfo = () => {
       const {
         data: { password },
       } = await axios.get(
-        `${import.meta.env.VITE_APP_API_URL}/members/${userId}/password`,
+        `${import.meta.env.VITE_APP_API_URL}/members/${myId}/password`,
         {
           headers: {
             Authorization: `Bearer ${token}`,

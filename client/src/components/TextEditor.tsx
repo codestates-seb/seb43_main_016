@@ -26,9 +26,6 @@ function TextEditor({ onFocus, onBlur, handleContentChange }: Props) {
         <CKEditor
           editor={ClassicEditor}
           data={text}
-          // config={{
-          //   contentCss: "/path/to/custom.css",
-          // }}
           onChange={handleOnChange}
           onFocus={onFocus}
           onBlur={onBlur}
