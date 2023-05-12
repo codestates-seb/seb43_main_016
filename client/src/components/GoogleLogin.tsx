@@ -1,4 +1,4 @@
-import { GoogleLogin, useGoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
 import googleLogo from "../assets/google-icon.png";
 
 import styled from "styled-components";
