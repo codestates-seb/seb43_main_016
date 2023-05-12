@@ -13,6 +13,7 @@ const StudyPost = () => {
   const [endDate, setEndDate] = useState<string>("");
   const [startTime, setStartTime] = useState<string>("00:00");
   const [endTime, setEndTime] = useState<string>("00:00");
+  const [minPeople, setMinPeople] = useState<number>(1);
   const [maxPeople, setMaxPeople] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
   const [postText, setPostText] = useState<string>("");
@@ -34,6 +35,9 @@ const StudyPost = () => {
   const handleEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
     setEndTime(e.target.value);
   };
+  const handleMinPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMinPeople(+e.target.value);
+  };
   const handleMaxPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxPeople(+e.target.value);
   };
@@ -49,7 +53,7 @@ const StudyPost = () => {
       daysOfWeek: [3, 4, 5],
       studyTimeStart: `${startTime}`,
       studyTimeEnd: `${endTime}`,
-      minClassmateCount: 1,
+      minClassmateCount: minPeople,
       maxClassmateCount: maxPeople,
       platform: `${platform}`,
       introduction: `${postText}`,
@@ -70,7 +74,7 @@ const StudyPost = () => {
           daysOfWeek: [3, 4, 5],
           studyTimeStart: `${startTime}`,
           studyTimeEnd: `${endTime}`,
-          minClassmateCount: 1,
+          minClassmateCount: minPeople,
           maxClassmateCount: maxPeople,
           platform: `${platform}`,
           introduction: `${postText}`,
@@ -143,10 +147,20 @@ const StudyPost = () => {
             />
           </StudyPostInfo>
           <StudyPostInfo>
-            <span>최대 인원</span>
+            <span>최소 인원</span>
             <input
               type="number"
               min="1"
+              value={minPeople}
+              onChange={handleMinPeople}
+              required
+            />
+          </StudyPostInfo>
+          <StudyPostInfo>
+            <span>최대 인원</span>
+            <input
+              type="number"
+              min={minPeople}
               value={maxPeople}
               onChange={handleMaxPeople}
               required
