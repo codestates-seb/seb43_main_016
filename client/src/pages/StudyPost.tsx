@@ -171,12 +171,8 @@ const StudyPost = () => {
           <StudyPostInput>
             <TextEditor
               handleContentChange={setPostText}
-              onFocus={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-              onBlur={function (): void {
-                throw new Error("Function not implemented.");
-              }}
+              onFocus={function (): void {}}
+              onBlur={function (): void {}}
             />
           </StudyPostInput>
           <StudyPostButtonWrapper>
