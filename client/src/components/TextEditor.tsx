@@ -6,7 +6,7 @@ import { useState } from "react";
 type Props = {
   onFocus: () => void;
   onBlur: () => void;
-  handleContentChange: () => void;
+  handleContentChange: (content: string) => void;
 };
 
 function TextEditor({ onFocus, onBlur, handleContentChange }: Props) {
@@ -26,9 +26,6 @@ function TextEditor({ onFocus, onBlur, handleContentChange }: Props) {
         <CKEditor
           editor={ClassicEditor}
           data={text}
-          // config={{
-          //   contentCss: "/path/to/custom.css",
-          // }}
           onChange={handleOnChange}
           onFocus={onFocus}
           onBlur={onBlur}
