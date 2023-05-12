@@ -159,9 +159,9 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         return UriComponentsBuilder
                 .newInstance()
-                .scheme("http")
-                .host("localhost") // Todo 리액트 서버 도메인 주소 입력
-                .port(8080)
+                .scheme("https")
+                .host("www.edusync.site")
+                .path("/login")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
