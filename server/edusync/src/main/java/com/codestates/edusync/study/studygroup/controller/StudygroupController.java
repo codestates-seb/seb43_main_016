@@ -25,8 +25,8 @@ import java.util.List;
 @RestController
 public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
-    private final StudygroupMapper mapper;
-    private final StudygroupService service;
+    private final StudygroupMapper studygroupMapper;
+    private final StudygroupService studygroupService;
 
     /**
      * 스터디 모집 & 등록
@@ -36,8 +36,8 @@ public class StudygroupController {
     @PostMapping(STUDYGROUP_DEFAULT_URI)
     public ResponseEntity postStudygroup(@Valid @RequestBody StudygroupDto.Post postDto) {
 
-        Studygroup studygroup = mapper.StudygroupDtoPostToStudygroup(postDto);
-        studygroup = service.createStudygruop(studygroup);
+        Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto);
+        studygroup = studygroupService.createStudygruop(studygroup);
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
 
         return ResponseEntity.created(location).build();
@@ -52,8 +52,8 @@ public class StudygroupController {
     @PatchMapping(STUDYGROUP_DEFAULT_URI)
     public ResponseEntity patchStudygroup(@Valid @RequestBody StudygroupDto.Patch patchDto) {
 
-        Studygroup studygroup = mapper.StudygroupDtoPatchToStudygroup(patchDto);
-        studygroup = service.updateStudygroup(studygroup);
+        Studygroup studygroup = studygroupMapper.StudygroupDtoPatchToStudygroup(patchDto);
+        studygroup = studygroupService.updateStudygroup(studygroup);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
         HttpHeaders headers = new HttpHeaders();
@@ -70,7 +70,7 @@ public class StudygroupController {
     @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity patchStudygroupStatus(@PathVariable("studygroup-id") @Positive Long studygroupId) {
 
-        service.updateStatusStudygroup(studygroupId);
+        studygroupService.updateStatusStudygroup(studygroupId);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroupId);
         HttpHeaders headers = new HttpHeaders();
@@ -87,8 +87,8 @@ public class StudygroupController {
     @GetMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity getStudygroupDetail(@PathVariable("studygroup-id") @Positive Long studygroupId) {
 
-        Studygroup studygroup = service.findStudygroup(studygroupId);
-        StudygroupResponseDto responseDto = mapper.StudygroupToStudygroupResponseDto(studygroup);
+        Studygroup studygroup = studygroupService.findStudygroup(studygroupId);
+        StudygroupResponseDto responseDto = studygroupMapper.StudygroupToStudygroupResponseDto(studygroup);
 
         return ResponseEntity.ok(responseDto);
     }
@@ -103,10 +103,10 @@ public class StudygroupController {
     public ResponseEntity getStudygroupPage(@RequestParam("page") @Positive Integer page,
                                             @RequestParam("size") @Positive Integer size){
 
-        Page<Studygroup> studygroupPage = service.findStudygroups(page-1, size);
+        Page<Studygroup> studygroupPage = studygroupService.findStudygroups(page-1, size);
         List<Studygroup> studygroupList = studygroupPage.getContent();
         List<StudygroupResponseDto.DtoList> responseDtoList =
-                mapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
+                studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
 
         return ResponseEntity.ok(new MultiResponseDto<>(responseDtoList,studygroupPage));
     }
@@ -118,7 +118,7 @@ public class StudygroupController {
      */
     @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        service.deleteStudygroup(studygroupId);
+        studygroupService.deleteStudygroup(studygroupId);
         return ResponseEntity.noContent().build();
     }
 }
