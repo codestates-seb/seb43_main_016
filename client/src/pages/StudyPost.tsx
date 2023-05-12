@@ -57,16 +57,14 @@ const StudyPost = () => {
       maxClassmateCount: maxPeople,
       platform: `${platform}`,
       introduction: `${postText}`,
-      tags: [
-        {
-          taKey: "프론트엔드",
-          tagValue: "javascript",
-        },
-      ],
+      tags: {
+        백엔드: "javascript",
+        프론트엔드: "javascript",
+      },
     });
     try {
       const res = await axios.post(
-        `${import.meta.env.VITE_APP_API_URL}/studygroup/1`,
+        `${import.meta.env.VITE_APP_API_URL}/studygroup`,
         {
           studyName: `${title}`,
           studyPeriodStart: `${startDate}`,
@@ -78,12 +76,10 @@ const StudyPost = () => {
           maxClassmateCount: maxPeople,
           platform: `${platform}`,
           introduction: `${postText}`,
-          tags: [
-            {
-              taKey: "프론트엔드",
-              tagValue: "javascript",
-            },
-          ],
+          tags: {
+            백엔드: "javascript",
+            프론트엔드: "javascript",
+          },
         }
       );
       console.log("POST request successful:", res.data);
@@ -175,12 +171,8 @@ const StudyPost = () => {
           <StudyPostInput>
             <TextEditor
               handleContentChange={setPostText}
-              onFocus={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-              onBlur={function (): void {
-                throw new Error("Function not implemented.");
-              }}
+              onFocus={function (): void {}}
+              onBlur={function (): void {}}
             />
           </StudyPostInput>
           <StudyPostButtonWrapper>

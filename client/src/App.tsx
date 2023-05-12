@@ -12,6 +12,7 @@ import ProfileCalendar from "./pages/ProfileCalendar";
 import "./App.css";
 import { useRecoilValue } from "recoil";
 import { myIdState } from "./recoil/atoms/myIdState";
+import TestUtility from "./pages/TestUtility";
 
 const queryClient = new QueryClient();
 
@@ -32,6 +33,7 @@ function App() {
             <Route path="/studycontent" element={<StudyContent />} />
             <Route path="/studypost" element={<StudyPost />} />
             <Route path="/calendar" element={<ProfileCalendar />} />
+            <Route path="/test" element={<TestUtility />} />
             <Route />
           </Routes>
         </BrowserRouter>
