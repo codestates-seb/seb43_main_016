@@ -21,19 +21,41 @@ public class GlobalException {
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMethodArgumentNotValidException(
-            MethodArgumentNotValidException e) {
-        final ErrorResponse response = ErrorResponse.of(e.getBindingResult());
+                               MethodArgumentNotValidException e) {
 
-        return response;
+        return ErrorResponse.of(e.getBindingResult());
     }
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleConstraintViolationException(
-            ConstraintViolationException e) {
-        final ErrorResponse response = ErrorResponse.of(e.getConstraintViolations());
+                               ConstraintViolationException e) {
 
-        return response;
+        return ErrorResponse.of(e.getConstraintViolations());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
+    public ErrorResponse handleHttpRequestMethodNotSupportedException(
+                               HttpRequestMethodNotSupportedException e) {
+
+        return ErrorResponse.of(HttpStatus.METHOD_NOT_ALLOWED, e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleHttpMessageNotReadableException(
+                               HttpMessageNotReadableException e) {
+
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMissingServletRequestParameterException(
+                               MissingServletRequestParameterException e) {
+
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler
@@ -42,29 +64,5 @@ public class GlobalException {
 
         return new ResponseEntity<>(response, HttpStatus.valueOf(e.getExceptionCode()
                 .getStatus()));
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
-    public ErrorResponse handleHttpRequestMethodNotSupportedException(
-            HttpRequestMethodNotSupportedException e) {
-
-        return ErrorResponse.of(HttpStatus.METHOD_NOT_ALLOWED);
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleHttpMessageNotReadableException(
-            HttpMessageNotReadableException e) {
-
-        return ErrorResponse.of(HttpStatus.BAD_REQUEST,"Required request body is missing");
-    }
-
-    @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse handleMissingServletRequestParameterException(
-            MissingServletRequestParameterException e) {
-
-        return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 }
