@@ -3,6 +3,7 @@ logging:
     org:
       springframework:
         web: debug
+#        security: debug
     org.springframework.web.servlet: debug
     org.hibernate.type.descriptor.sql.BasicBinder: trace
 
@@ -16,14 +17,50 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
     log-request-details: true
+#  sql:
+#    init:
+#      mode: always
   jpa:
     defer-datasource-initialization: true
-    hibernate.ddl-auto: create-drop
     open-in-view: false
     show-sql: true
     properties:
-      hibernate.format_sql: true
-      hibernate.default_batch_fetch_size: 100
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        highlight_sql: true
+        color-codes: true
+        type:
+          descriptor:
+            sql: trace
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 90423476142-0p4j9mmj540elt7qgg5udb7hsiog7hi2.apps.googleusercontent.com
+            clientSecret: ${GoogleClientSecret}
+            scope:
+              - email
+              - profile
+          kakao:
+            client-id: ${KakaoClientId}
+            client-secret: ${KakaoClientSecret}
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            client-name: Kakao
+            provider: kakao
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
 mail:
   address:
     admin: admin@gmail.com

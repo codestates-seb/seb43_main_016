@@ -11,6 +11,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+
   const handleNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNickName(e.target.value);
   };
@@ -44,7 +45,7 @@ const SignUp = () => {
         })
         .then(() => navigate("/login"))
         .catch((error) => {
-          if (error.response.status === 500) {
+          if (error?.response?.status === 500) {
             console.log(error.response.data.message);
             alert("이미 가입된 이메일 입니다.");
           } else {
