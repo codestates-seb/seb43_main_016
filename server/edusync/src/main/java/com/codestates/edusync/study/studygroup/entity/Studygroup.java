@@ -69,6 +69,9 @@ public class Studygroup extends Auditable {
     @Column
     private Integer memberCountMax;
 
+    @Column
+    private Integer memberCountCurrent;
+
     @Column(length = 50, nullable = false)
     private String platform;
 
