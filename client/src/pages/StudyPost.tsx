@@ -156,6 +156,10 @@ const StudyPost = () => {
             <span>플랫폼</span>
             <input type="url" value={platform} onChange={handlePlatform} />
           </StudyPostInfo>
+          <StudyPostInfo>
+            <span>태그</span>
+            <input type="text" />
+          </StudyPostInfo>
           <StudyPostInput>
             <TextEditor handleContentChange={setPostText} />
           </StudyPostInput>
