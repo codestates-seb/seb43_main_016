@@ -23,50 +23,6 @@ public class StudygroupJoinService {
     private final StudygroupService studygroupService;
 
     /**
-     * 스터디 가입 신청
-     * @param studygroupId
-     */
-    public void createStudygroupJoin(Long studygroupId) {
-        StudygroupJoin studygroupJoin = new StudygroupJoin();
-        Member member = memberService.findVerifyMemberWhoLoggedIn()
-        studygroupJoin.setMember(member);
-        studygroupJoin.setStudygroup(studygroupService.findStudygroup(studygroupId));
-
-        findStudygroupJoinCandidate(studygroupId, member.getNickName());
-        studygroupJoinRepository.save(studygroupJoin);
-    }
-
-    // 스터디 리더가 가입 승인
-    public void approveStudygroupJoin(Long studygroupId, String nickName) {
-        Member member = memberService.findVerifyMemberWhoLoggedIn();
-        Studygroup studygroup = studygroupService.findStudygroup(studygroupId);
-
-        if (member.getId() != studygroup.getLeaderMember().getId()) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        } else {
-            StudygroupJoin studygroupJoin = findStudygroupJoinCandidate(studygroupId, nickName);
-            studygroupJoin.setIsApproved(true);
-            studygroupJoinRepository.save(studygroupJoin);
-        }
-    }
-
-    /**
-     * 스터디 가입 요청 조회
-     * @return StudygroupJoin
-     */
-    public StudygroupJoin findStudygroupJoinCandidate(Long studygroupId, String nickName) {
-        StudygroupJoin studygroupJoin = new StudygroupJoin();
-        for (StudygroupJoin sj : studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId)) {
-            if (sj.getMember().getNickName().equals(nickName)) {
-                studygroupJoin = sj;
-                break;
-            }
-        }
-        if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        return studygroupJoin;
-    }
-
-    /**
      * 스터디 가입 대기자 리스트 조회
      * @param studygroupId
      * @return
@@ -85,7 +41,63 @@ public class StudygroupJoinService {
     }
 
     /**
-     * 스터디 리더가 가입 거부
+     * 스터디 가입 신청
+     * @param studygroupId
+     */
+    public void createStudygroupJoin(Long studygroupId) {
+        StudygroupJoin studygroupJoin = new StudygroupJoin();
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
+        studygroupJoin.setMember(member);
+        studygroupJoin.setStudygroup(studygroupService.findStudygroup(studygroupId));
+
+        if (findStudygroupJoinCandidate(studygroupId, member.getNickName()) == null) {
+            studygroupJoinRepository.save(studygroupJoin);
+        } else throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
+    }
+
+    /**
+     * 스터디 가입 신청 철회
+     * @param studygroupId
+     */
+    public void deleteSelfStudygroupJoinCandidate(Long studygroupId) {
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
+        StudygroupJoin studygroupJoin = new StudygroupJoin();
+
+        for (StudygroupJoin sj : findStudygroupJoinsCandidateList(studygroupId)) {
+            if (sj.getMember().getEmail().equals(member.getEmail())) {
+                studygroupJoin = sj;
+                studygroupJoinRepository.delete(sj);
+            }
+        }
+        if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND);
+    }
+
+    /**
+     * 스터디 탈퇴
+     */
+
+    /**
+     * 스터디 리더가 가입 승인
+     * @param studygroupId
+     * @param nickName
+     */
+    public void approveStudygroupJoin(Long studygroupId, String nickName) {
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
+        Studygroup studygroup = studygroupService.findStudygroup(studygroupId);
+
+        if (member.getId() != studygroup.getLeaderMember().getId()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        } else {
+            StudygroupJoin studygroupJoin = findStudygroupJoinCandidate(studygroupId, nickName);
+            if (studygroupJoin != null) {
+                studygroupJoin.setIsApproved(true);
+                studygroupJoinRepository.save(studygroupJoin);
+            } else throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_NOT_FOUND);
+        }
+    }
+
+    /**
+     * 스터디 리더가 가입 거절
      * @param studygroupId
      * @param nickName
      */
@@ -96,24 +108,29 @@ public class StudygroupJoinService {
         if (member.getId() != studygroup.getLeaderMember().getId()) {
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
         } else {
-            studygroupJoinRepository.delete(findStudygroupJoinCandidate(studygroupId, nickName));
+            StudygroupJoin studygroupJoin = findStudygroupJoinCandidate(studygroupId, nickName);
+            if (studygroupJoin != null) {
+                studygroupJoinRepository.delete(studygroupJoin);
+            } else throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_NOT_FOUND);
         }
     }
 
     /**
-     * 본인이 스터디 가입 신청 철회
-     * @param studygroupId
+     * 스터디 리더가 멤버 강퇴
      */
-    public void deleteSelfStudygroupJoinCandidate(Long studygroupId) {
-        Member member = memberService.findVerifyMemberWhoLoggedIn();
 
+    /**
+     * 스터디 가입 요청 조회
+     * @return StudygroupJoin
+     */
+    public StudygroupJoin findStudygroupJoinCandidate(Long studygroupId, String nickName) {
         StudygroupJoin studygroupJoin = new StudygroupJoin();
-        for (StudygroupJoin sj : findStudygroupJoinsCandidateList(studygroupId)) {
-            if (sj.getMember().getEmail().equals(member.getEmail())) {
+        for (StudygroupJoin sj : studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId)) {
+            if (sj.getMember().getNickName().equals(nickName)) {
                 studygroupJoin = sj;
-                studygroupJoinRepository.delete(sj);
+                break;
             }
         }
-        if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND);
+        return studygroupJoin;
     }
 }
