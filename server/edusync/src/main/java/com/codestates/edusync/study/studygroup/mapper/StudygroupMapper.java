@@ -3,7 +3,6 @@ package com.codestates.edusync.study.studygroup.mapper;
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.searchtag.dto.SearchTagResponseDto;
 import com.codestates.edusync.searchtag.entity.SearchTag;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
@@ -12,8 +11,8 @@ import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface StudygroupMapper {
@@ -132,24 +131,6 @@ public interface StudygroupMapper {
     }
 
     /**
-     * 스터디 리스트 조회
-     * @param studygroups
-     * @return
-     */
-    default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups){
-        List<StudygroupResponseDto.DtoList> respnseDtoList = new ArrayList<>(studygroups.size());
-        Iterator studygroupIterator = studygroups.iterator();
-
-        while(studygroupIterator.hasNext()) {
-            StudygroupResponseDto.DtoList responseDto =
-                    StudygroupsToStudygroupResponseDtoList((Studygroup) studygroupIterator.next());
-            respnseDtoList.add(responseDto);
-        }
-
-        return respnseDtoList;
-    }
-
-    /**
      * 스터디 리스트 조회 시, 각 스터디를 ResponseDto 로 매핑
      * @param studygroup
      * @return
@@ -159,5 +140,14 @@ public interface StudygroupMapper {
         dtoList.setId(studygroup.getId());
         dtoList.setTitle(studygroup.getStudyName());
         return dtoList;
+    }
+
+    /**
+     * 스터디 리스트 조회
+     * @param studygroups
+     * @return
+     */
+    default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups){
+        return studygroups.stream().map(this::StudygroupsToStudygroupResponseDtoList).collect(Collectors.toList());
     }
 }
