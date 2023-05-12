@@ -22,11 +22,11 @@ public class StudygroupDto {
         private String studyName;
 
         @NotNull
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodStart;
 
         @NotNull
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodEnd;
 
         private List<Integer> daysOfWeek;
@@ -63,10 +63,10 @@ public class StudygroupDto {
 
         private String studyName;
 
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodStart;
 
-        @JsonFormat(pattern = "yyyy.MM.dd")
+        @JsonFormat(pattern = "yyyy-MM-dd")
         private Timestamp studyPeriodEnd;
 
         private List<Integer> daysOfWeek;
