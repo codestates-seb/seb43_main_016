@@ -5,15 +5,15 @@ import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
 
-const API_URL = "https://wish17.store";
+// const API_URL = "https://wish17.store";
 
 const StudyPost = () => {
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
-  const [startTime, setStartTime] = useState<string>("");
-  const [endTime, setEndTime] = useState<string>("");
-  const [maxPeople, setMaxPeople] = useState<number>(0);
+  const [startTime, setStartTime] = useState<string>("00:00");
+  const [endTime, setEndTime] = useState<string>("00:00");
+  const [maxPeople, setMaxPeople] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
   const [postText, setPostText] = useState<string>("");
 
@@ -61,24 +61,27 @@ const StudyPost = () => {
       ],
     });
     try {
-      const res = await axios.post(`${API_URL}/studygroup/1`, {
-        studyName: `${title}`,
-        studyPeriodStart: `${startDate}`,
-        studyPeriodEnd: `${endDate}`,
-        daysOfWeek: [3, 4, 5],
-        studyTimeStart: `${startTime}`,
-        studyTimeEnd: `${endTime}`,
-        minClassmateCount: 1,
-        maxClassmateCount: maxPeople,
-        platform: `${platform}`,
-        introduction: `${postText}`,
-        tags: [
-          {
-            taKey: "프론트엔드",
-            tagValue: "javascript",
-          },
-        ],
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_APP_API_URL}/studygroup/1`,
+        {
+          studyName: `${title}`,
+          studyPeriodStart: `${startDate}`,
+          studyPeriodEnd: `${endDate}`,
+          daysOfWeek: [3, 4, 5],
+          studyTimeStart: `${startTime}`,
+          studyTimeEnd: `${endTime}`,
+          minClassmateCount: 1,
+          maxClassmateCount: maxPeople,
+          platform: `${platform}`,
+          introduction: `${postText}`,
+          tags: [
+            {
+              taKey: "프론트엔드",
+              tagValue: "javascript",
+            },
+          ],
+        }
+      );
       console.log("POST request successful:", res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
