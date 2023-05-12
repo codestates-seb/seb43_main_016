@@ -1,6 +1,5 @@
 package com.codestates.edusync.study.studygroup.dto;
 
-import com.codestates.edusync.searchtag.entity.SearchTag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
