@@ -161,7 +161,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
                 .newInstance()
                 .scheme("https")
                 .host("www.edusync.site")
-                .path("/login")
+                .path("/oauth/redirect")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
