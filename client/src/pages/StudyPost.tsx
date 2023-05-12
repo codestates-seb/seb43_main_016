@@ -52,6 +52,7 @@ const StudyPost = () => {
       minClassmateCount: 1,
       maxClassmateCount: maxPeople,
       platform: `${platform}`,
+      introduction: `${postText}`,
       tags: [
         {
           taKey: "프론트엔드",
@@ -70,6 +71,7 @@ const StudyPost = () => {
         minClassmateCount: 1,
         maxClassmateCount: maxPeople,
         platform: `${platform}`,
+        introduction: `${postText}`,
         tags: [
           {
             taKey: "프론트엔드",
