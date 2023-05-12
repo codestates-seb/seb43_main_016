@@ -61,12 +61,13 @@ public class StudygroupJoinService {
      */
     public void deleteSelfStudygroupJoinCandidate(Long studygroupId) {
         Member member = memberService.findVerifyMemberWhoLoggedIn();
-        StudygroupJoin studygroupJoin = new StudygroupJoin();
+        StudygroupJoin studygroupJoin = null;
 
         for (StudygroupJoin sj : findStudygroupJoinsCandidateList(studygroupId)) {
             if (sj.getMember().getEmail().equals(member.getEmail())) {
                 studygroupJoin = sj;
                 studygroupJoinRepository.delete(sj);
+                break;
             }
         }
         if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND);
@@ -124,13 +125,11 @@ public class StudygroupJoinService {
      * @return StudygroupJoin
      */
     public StudygroupJoin findStudygroupJoinCandidate(Long studygroupId, String nickName) {
-        StudygroupJoin studygroupJoin = new StudygroupJoin();
         for (StudygroupJoin sj : studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId)) {
             if (sj.getMember().getNickName().equals(nickName)) {
-                studygroupJoin = sj;
-                break;
+                return sj;
             }
         }
-        return studygroupJoin;
+        return null;
     }
 }
