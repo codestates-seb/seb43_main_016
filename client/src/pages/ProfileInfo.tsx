@@ -2,7 +2,7 @@ import { useState, useEffect, FormEvent } from "react";
 import ProfileImg from "../components/ProfileImg";
 import styled from "styled-components";
 import axios from "axios";
-import { myIdState } from "../recoil/atoms/MyIdState";
+import { myIdState } from "../recoil/atoms/myIdState";
 import { useRecoilValue } from "recoil";
 
 interface UserInfoResponseDto {
@@ -79,10 +79,7 @@ const ProfileInfo = () => {
     );
 
     try {
-      const isValidPassword = await validatePassword(
-        userInfo?.id || 0,
-        enterPassword || ""
-      );
+      const isValidPassword = await validatePassword(enterPassword || "");
       if (isValidPassword) {
         setIsEdit(true);
       } else {
@@ -132,10 +129,7 @@ const ProfileInfo = () => {
     const enterPassword = prompt(
       "회원탈퇴를 진행하시려면 비밀번호를 입력해주세요."
     );
-    const isValidPassword = await validatePassword(
-      userInfo?.id || 0,
-      enterPassword || ""
-    );
+    const isValidPassword = await validatePassword(enterPassword || "");
 
     if (isValidPassword) {
       try {
