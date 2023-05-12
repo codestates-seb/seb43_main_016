@@ -5,8 +5,6 @@ import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
 
-// const API_URL = "https://wish17.store";
-
 const StudyPost = () => {
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
