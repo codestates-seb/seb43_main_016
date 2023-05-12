@@ -2,7 +2,7 @@ import { useState, useEffect, FormEvent } from "react";
 import ProfileImg from "../components/ProfileImg";
 import styled from "styled-components";
 import axios from "axios";
-import { myIdState } from "../recoil/atoms/MyIdState";
+import { myIdState } from "../recoil/atoms/myIdState";
 import { useRecoilValue } from "recoil";
 
 interface UserInfoResponseDto {
@@ -73,24 +73,21 @@ const ProfileInfo = () => {
   // TODO Edit 버튼 클릭 시, 유저 비밀번호를 검증하고 isEdit 상태를 업데이트하는 코드
   const handleEditBtn = async (e: FormEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setIsEdit(true);
-    // const enterPassword = prompt(
-    //   "개인정보를 수정하려면 비밀번호를 확인이 필요합니다"
-    // );
 
-    // try {
-    //   const isValidPassword = await validatePassword(
-    //     userInfo?.id || 0,
-    //     enterPassword || ""
-    //   );
-    //   if (isValidPassword) {
-    //     setIsEdit(true);
-    //   } else {
-    //     alert("비밀번호를 확인하세요");
-    //   }
-    // } catch (error) {
-    //   alert("비밀번호를 확인하세요");
-    // }
+    const enterPassword = prompt(
+      "개인정보를 수정하려면 비밀번호를 확인이 필요합니다"
+    );
+
+    try {
+      const isValidPassword = await validatePassword(enterPassword || "");
+      if (isValidPassword) {
+        setIsEdit(true);
+      } else {
+        alert("비밀번호를 확인하세요");
+      }
+    } catch (error) {
+      alert("비밀번호를 확인하세요");
+    }
   };
 
   // TODO input 태그의 값이 변경될 때, userInfo 상태를 업데이트하는 코드
@@ -132,10 +129,7 @@ const ProfileInfo = () => {
     const enterPassword = prompt(
       "회원탈퇴를 진행하시려면 비밀번호를 입력해주세요."
     );
-    const isValidPassword = await validatePassword(
-      userInfo?.id || 0,
-      enterPassword || ""
-    );
+    const isValidPassword = await validatePassword(enterPassword || "");
 
     if (isValidPassword) {
       try {
