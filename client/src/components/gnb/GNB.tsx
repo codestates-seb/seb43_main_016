@@ -4,32 +4,53 @@ import axios from "axios";
 import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
+import { getAccessToken } from "../../pages/utils/Auth";
 import { useRecoilState } from "recoil";
-import { myIdState } from "../../recoil/atoms/MyIdState";
+import { LogInState } from "../../recoil/atoms/LogInState";
+//import { useRecoilState } from "recoil";
+//import { myIdState } from "../../recoil/atoms/MyIdState";
 
+const accessToken = getAccessToken();
 const GNB = () => {
-  const [myId, setMyId] = useRecoilState(myIdState);
   const [profileImage, setProfileImage] = useState("");
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (myId > 0) {
+    if (isLoggedIn) {
+      setIsLoading(true);
       axios
-        .get(`${import.meta.env.VITE_APP_API_URL}/members/${myId}`)
-        .then((res) => setProfileImage(res.data.profileImage));
+        .get(`${import.meta.env.VITE_APP_API_URL}/members`, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        })
+        .then((res) => {
+          setProfileImage(res.data.profileImage);
+          setIsLoading(false);
+        });
     }
-  }, [myId]);
+  }, [isLoggedIn]);
 
   return (
     <>
-      <GNBDiv>
-        <GNBBlock>
-          <HomeLink to="/">
-            <img src={logo} />
-          </HomeLink>
-        </GNBBlock>
+      {isLoading ? (
+        <GNBDiv></GNBDiv>
+      ) : (
+        <GNBDiv>
+          <GNBBlock>
+            <HomeLink to="/">
+              <img src={logo} />
+            </HomeLink>
+          </GNBBlock>
 
-        <User setMyId={setMyId} profileImage={profileImage} />
-      </GNBDiv>
+          <User
+            profileImage={profileImage}
+            isLoggedIn={isLoggedIn}
+            setIsLoggedIn={setIsLoggedIn}
+          />
+        </GNBDiv>
+      )}
     </>
   );
 };
