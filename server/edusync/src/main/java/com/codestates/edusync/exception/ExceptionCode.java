@@ -16,6 +16,7 @@ public enum ExceptionCode {
     STUDYGROUP_POST_COMMENT_ALLOWED_ONLY_FOR_LEADER(403, "스터디장에게만 있는 권한입니다."),
     STUDYGROUP_POST_COMMENT_NOT_MATCHED(400, "해당 댓글은 해당 스터디 모집글에 존재하지 않습니다. 댓글의 식별자와 스터디 모집글의 식별자를 확인해주세요!"),
     TIME_SCHEDULE_NOT_FOUND(404, "일정이 존재하지 않습니다."),
+    INVALID_PROVIDER(400, "지원하지 않는 인증 제공자입니다.")
     ;
 
     @Getter
