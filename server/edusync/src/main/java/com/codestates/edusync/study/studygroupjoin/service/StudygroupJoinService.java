@@ -54,7 +54,12 @@ public class StudygroupJoinService {
      * @return
      */
     public List<StudygroupJoin> findStudygroupJoinCandidateList(Long studygroupId) {
-        return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
+        Member member = memberService.findVerifyMemberWhoLoggedIn();
+        Studygroup studygroup = studygroupService.findStudygroup(studygroupId);
+
+        if (member.getId() == studygroup.getLeaderMember().getId()) {
+            return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
+        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }
 
     /**
@@ -71,12 +76,12 @@ public class StudygroupJoinService {
      * @param studygroupId
      */
     public void createStudygroupJoin(Long studygroupId) {
-        StudygroupJoin studygroupJoin = new StudygroupJoin();
         Member member = memberService.findVerifyMemberWhoLoggedIn();
-        studygroupJoin.setMember(member);
-        studygroupJoin.setStudygroup(studygroupService.findStudygroup(studygroupId));
 
         if (findStudygroupJoinCandidate(studygroupId, member.getNickName()) == null) {
+            StudygroupJoin studygroupJoin = new StudygroupJoin();
+            studygroupJoin.setMember(member);
+            studygroupJoin.setStudygroup(studygroupService.findStudygroup(studygroupId));
             studygroupJoinRepository.save(studygroupJoin);
         } else throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
     }
@@ -146,14 +151,12 @@ public class StudygroupJoinService {
         Member member = memberService.findVerifyMemberWhoLoggedIn();
         Studygroup studygroup = studygroupService.findStudygroup(studygroupId);
 
-        if (member.getId() != studygroup.getLeaderMember().getId()) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        } else {
+        if (member.getId() == studygroup.getLeaderMember().getId()) {
             StudygroupJoin studygroupJoin = findStudygroupJoinCandidate(studygroupId, nickName);
             if (studygroupJoin != null) {
                 studygroupJoinRepository.delete(studygroupJoin);
             } else throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
-        }
+        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }
 
     /**
@@ -165,13 +168,11 @@ public class StudygroupJoinService {
         Member member = memberService.findVerifyMemberWhoLoggedIn();
         Studygroup studygroup = studygroupService.findStudygroup(studygroupId);
 
-        if (member.getId() != studygroup.getLeaderMember().getId()) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        } else {
+        if (member.getId() == studygroup.getLeaderMember().getId()) {
             StudygroupJoin studygroupJoin = findStudygroupJoin(studygroupId, nickName);
             if (studygroupJoin != null) {
                 studygroupJoinRepository.delete(studygroupJoin);
             } else throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        }
+        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }
 }

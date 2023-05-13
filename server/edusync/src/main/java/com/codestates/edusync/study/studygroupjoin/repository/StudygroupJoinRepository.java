@@ -6,6 +6,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 
 public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, Long> {
-    List<StudygroupJoin> findAllByStudygroupIdAndIsApprovedIsFalse(Long StudygroupId);
-    List<StudygroupJoin> findAllByStudygroupIdAndIsApprovedIsTrue(Long StudygroupId);
+    List<StudygroupJoin> findAllByStudygroupIdAndIsApprovedIsFalse(Long studygroupId);
+    List<StudygroupJoin> findAllByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
 }
