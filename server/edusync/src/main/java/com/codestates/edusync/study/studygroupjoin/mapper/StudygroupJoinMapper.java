@@ -19,7 +19,9 @@ public interface StudygroupJoinMapper {
     default StudygroupJoinDto.Response studygroupJoinToStudygroupJoinDtos(List<StudygroupJoin> studygroupJoinList) {
         StudygroupJoinDto.Response studygroupJoinDto = new StudygroupJoinDto.Response();
         List<String> nickName =
-                studygroupJoinList.stream().map(e -> e.getMember().getNickName()).collect(Collectors.toList());
+                studygroupJoinList.stream()
+                      .map(e -> e.getMember().getNickName())
+                      .collect(Collectors.toList());
         studygroupJoinDto.setNickName(nickName);
         return studygroupJoinDto;
     }
