@@ -6,6 +6,7 @@ import org.mapstruct.Mapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
 public interface StudygroupJoinMapper {
@@ -17,8 +18,10 @@ public interface StudygroupJoinMapper {
      */
     default StudygroupJoinDto.Response studygroupJoinToStudygroupJoinDtos(List<StudygroupJoin> studygroupJoinList) {
         StudygroupJoinDto.Response studygroupJoinDto = new StudygroupJoinDto.Response();
-        List<String> nickName = new ArrayList<>(studygroupJoinList.size());
-        studygroupJoinList.stream().map(e -> nickName.add(e.getMember().getNickName()));
+        List<String> nickName =
+                studygroupJoinList.stream()
+                      .map(e -> e.getMember().getNickName())
+                      .collect(Collectors.toList());
         studygroupJoinDto.setNickName(nickName);
         return studygroupJoinDto;
     }

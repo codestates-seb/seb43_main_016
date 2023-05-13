@@ -18,7 +18,8 @@ public enum ExceptionCode {
     TIME_SCHEDULE_NOT_FOUND(404, "일정이 존재하지 않습니다."),
     STUDYGROUP_JOIN_NOT_FOUND(404, "가입된 스터디를 찾을 수 없습니다."),
     STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND(404, "해당 스터디에 신청한 내역이 없습니다."),
-    STUDYGOURP_JOIN_CANDIDATE_EXISTS(409, "이미 신청한 스터디 입니다.")
+    STUDYGOURP_JOIN_CANDIDATE_EXISTS(409, "이미 신청한 스터디 입니다."),
+    INVALID_PROVIDER(400, "지원하지 않는 인증 제공자입니다.")
     ;
 
     @Getter
