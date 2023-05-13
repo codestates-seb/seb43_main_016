@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState } from "react";
-//import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
@@ -9,8 +8,6 @@ import { validateEmptyInput } from "./utils/loginUtils";
 import { setAccessToken, setRefreshToken } from "./utils/Auth";
 import { useSetRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
-//import { useSetRecoilState } from "recoil";
-//import { myIdState } from "../recoil/atoms/MyIdState";
 import Google from "../components/GoogleLogin";
 
 const Login = () => {

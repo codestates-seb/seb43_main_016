@@ -5,15 +5,39 @@ import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
 
-const API_URL = "http://localhost:8080";
+// const API_URL = "https://wish17.store";
 
 const StudyPost = () => {
-  const [postText, setPostText] = useState<string>("");
-  const [maxPeople, setMaxPeople] = useState<number>(0);
+  const [title, setTitle] = useState<string>("");
+  const [startDate, setStartDate] = useState<string>("");
+  const [endDate, setEndDate] = useState<string>("");
+  const [startTime, setStartTime] = useState<string>("00:00");
+  const [endTime, setEndTime] = useState<string>("00:00");
+  const [minPeople, setMinPeople] = useState<number>(1);
+  const [maxPeople, setMaxPeople] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
+  const [postText, setPostText] = useState<string>("");
 
   const navigate = useNavigate();
 
+  const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(e.target.value);
+  };
+  const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartDate(e.target.value);
+  };
+  const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndDate(e.target.value);
+  };
+  const handleStartTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStartTime(e.target.value);
+  };
+  const handleEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEndTime(e.target.value);
+  };
+  const handleMinPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMinPeople(+e.target.value);
+  };
   const handleMaxPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMaxPeople(+e.target.value);
   };
@@ -22,21 +46,47 @@ const StudyPost = () => {
   };
 
   const handlePostButton = async () => {
-    // console.log("Submitting form with values:", {
-    //   maxClassmateCount: maxPeople,
-    //   platform: `${platform}`,
-    //   introduction: `${postText}`,
-    // });
+    console.log("Submitting form with values:", {
+      studyName: `${title}`,
+      studyPeriodStart: `${startDate}`,
+      studyPeriodEnd: `${endDate}`,
+      daysOfWeek: [3, 4, 5],
+      studyTimeStart: `${startTime}`,
+      studyTimeEnd: `${endTime}`,
+      minClassmateCount: minPeople,
+      maxClassmateCount: maxPeople,
+      platform: `${platform}`,
+      introduction: `${postText}`,
+      tags: {
+        백엔드: "javascript",
+        프론트엔드: "javascript",
+      },
+    });
     try {
-      const response = await axios.post(`${API_URL}/studygroup/1`, {
-        maxClassmateCount: maxPeople,
-        platform: `${platform}`,
-        introduction: `${postText}`,
-      });
-      console.log("POST request successful:", response.data);
+      const res = await axios.post(
+        `${import.meta.env.VITE_APP_API_URL}/studygroup`,
+        {
+          studyName: `${title}`,
+          studyPeriodStart: `${startDate}`,
+          studyPeriodEnd: `${endDate}`,
+          daysOfWeek: [3, 4, 5],
+          studyTimeStart: `${startTime}`,
+          studyTimeEnd: `${endTime}`,
+          minClassmateCount: minPeople,
+          maxClassmateCount: maxPeople,
+          platform: `${platform}`,
+          introduction: `${postText}`,
+          tags: {
+            백엔드: "javascript",
+            프론트엔드: "javascript",
+          },
+        }
+      );
+      console.log("POST request successful:", res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
+      alert("스터디 등록이 실패했습니다!");
       console.error("Error during POST request:", error);
     }
   };
@@ -46,13 +96,31 @@ const StudyPost = () => {
       <StudyPostBody>
         <StudyPostTop>
           <span>스터디 등록</span>
-          <input type="text" placeholder="제목을 입력하세요"></input>
+          <input
+            type="text"
+            placeholder="제목을 입력하세요"
+            value={title}
+            onChange={handleTitle}
+            required
+          />
         </StudyPostTop>
 
         <StudyPostMain>
           <StudyPostInfo>
             <span>일정</span>
-            <input type="text"></input>
+            <input
+              type="date"
+              value={startDate}
+              onChange={handleStartDate}
+              required
+            />
+            <p>~</p>
+            <input
+              type="date"
+              value={endDate}
+              onChange={handleEndDate}
+              required
+            />
           </StudyPostInfo>
           <StudyPostInfo>
             <span>요일</span>
@@ -60,13 +128,33 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>시각</span>
-            <input type="text"></input>
+            <input
+              type="time"
+              value={startTime}
+              onChange={handleStartTime}
+              required
+            />
+            <p>~</p>
+            <input
+              type="time"
+              value={endTime}
+              onChange={handleEndTime}
+              required
+            />
           </StudyPostInfo>
           <StudyPostInfo>
-            <span>최대 인원</span>
+            <span>인원</span>
             <input
               type="number"
               min="1"
+              value={minPeople}
+              onChange={handleMinPeople}
+              required
+            />
+            <p>~</p>
+            <input
+              type="number"
+              min={minPeople}
               value={maxPeople}
               onChange={handleMaxPeople}
               required
@@ -76,15 +164,15 @@ const StudyPost = () => {
             <span>플랫폼</span>
             <input type="url" value={platform} onChange={handlePlatform} />
           </StudyPostInfo>
+          <StudyPostInfo>
+            <span>태그</span>
+            <input type="text" />
+          </StudyPostInfo>
           <StudyPostInput>
             <TextEditor
               handleContentChange={setPostText}
-              onFocus={function (): void {
-                throw new Error("Function not implemented.");
-              }}
-              onBlur={function (): void {
-                throw new Error("Function not implemented.");
-              }}
+              onFocus={function (): void {}}
+              onBlur={function (): void {}}
             />
           </StudyPostInput>
           <StudyPostButtonWrapper>
@@ -175,6 +263,9 @@ const StudyPostInfo = styled.div`
     height: 40px;
     border: 1px solid #ccc;
     border-radius: 0;
+  }
+  p {
+    padding: 0 10px;
   }
 `;
 

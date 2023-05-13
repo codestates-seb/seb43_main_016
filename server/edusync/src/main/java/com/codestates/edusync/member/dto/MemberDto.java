@@ -23,7 +23,6 @@ public class MemberDto {
     public static class Patch {
         private long id;
         private String nickName;
-        @NotBlank(message = "비밀번호는 공백이 아니어야 합니다.")
         private String password; // 비번 변경 요청시 비밀번호 입력하도록 나중에 기능 추가
 
         public void setId(long id) {
@@ -40,8 +39,14 @@ public class MemberDto {
 
     @Getter
     @NoArgsConstructor
-    public static class PostDetail{
+    public static class Detail{
         private String withMe;
         private String aboutMe;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class CheckPassword{
+        private String password;
     }
 }

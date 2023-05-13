@@ -7,8 +7,6 @@ import User from "./User";
 import { getAccessToken } from "../../pages/utils/Auth";
 import { useRecoilState } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
-//import { useRecoilState } from "recoil";
-//import { myIdState } from "../../recoil/atoms/MyIdState";
 
 const accessToken = getAccessToken();
 const GNB = () => {
