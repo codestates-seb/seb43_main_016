@@ -19,7 +19,6 @@ spring:
     log-request-details: true
   jpa:
     defer-datasource-initialization: true
-    hibernate.ddl-auto: update
     open-in-view: false
     show-sql: true
     properties:
@@ -48,7 +47,7 @@ spring:
             authorization-grant-type: authorization_code
             client-name: Kakao
             provider: kakao
-            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            redirect-uri: "https://wish17.store/login/oauth2/code/kakao"
             scope:
               - profile_nickname
               - profile_image

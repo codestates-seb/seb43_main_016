@@ -20,7 +20,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @AllArgsConstructor
 @Transactional
@@ -101,7 +100,7 @@ public class MemberService implements VerifyMember {
      * <h2>email 을 이용해서 회원을 검색하는 메서드</h2>
      * email 로 회원 검색 후 검증하여 리턴해준다.
      * @param email
-     * @return
+     * @return 토큰정보와 일치하는 member
      */
     @Transactional(readOnly = true)
     public Member findVerifiedMember(String email) {
