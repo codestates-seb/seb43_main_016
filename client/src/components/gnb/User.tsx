@@ -1,19 +1,23 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
-import { useRecoilValue } from "recoil";
-import { isLoggedInSelector } from "../../recoil/selectors/IsLoggedInSelector";
-import { googleLogout } from "@react-oauth/google";
+//import { useRecoilValue } from "recoil";
+//import { isLoggedInSelector } from "../../recoil/selectors/IsLoggedInSelector";
+//import { googleLogout } from "@react-oauth/google";
 import { removeTokens } from "../../pages/utils/Auth";
 
-const User = ({ setMyId, profileImage }: any) => {
+type GNB = {
+  profileImage: string;
+  isLoggedIn: boolean;
+  setIsLoggedIn: (value: boolean) => void;
+};
+
+const User = ({ profileImage, isLoggedIn, setIsLoggedIn }: GNB) => {
   const navigate = useNavigate();
-  const isLoggedIn = useRecoilValue(isLoggedInSelector);
 
   const handleLogout = (): void => {
     removeTokens();
-    setMyId(0);
-    googleLogout();
+    setIsLoggedIn(false);
     navigate("/");
   };
 
