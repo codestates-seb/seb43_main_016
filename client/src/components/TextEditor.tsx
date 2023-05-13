@@ -4,8 +4,8 @@ import ClassicEditor from "@ckeditor/ckeditor5-build-classic";
 import { useState } from "react";
 
 type Props = {
-  onFocus: () => void;
-  onBlur: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   handleContentChange: (content: string) => void;
 };
 

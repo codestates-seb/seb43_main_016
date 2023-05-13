@@ -61,26 +61,22 @@ const StudyPost = () => {
       },
     });
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_APP_API_URL}/studygroup`,
-        {
-          studyName: `${title}`,
-          studyPeriodStart: `${startDate}`,
-          studyPeriodEnd: `${endDate}`,
-          daysOfWeek: [3, 4, 5],
-          studyTimeStart: `${startTime}`,
-          studyTimeEnd: `${endTime}`,
-          minClassmateCount: minPeople,
-          maxClassmateCount: maxPeople,
-          platform: `${platform}`,
-          introduction: `${postText}`,
-          tags: {
-            백엔드: "javascript",
-            프론트엔드: "javascript",
-          },
-        }
-      );
-      console.log("POST request successful:", res.data);
+      await axios.post(`${import.meta.env.VITE_APP_API_URL}/studygroup`, {
+        studyName: `${title}`,
+        studyPeriodStart: `${startDate}`,
+        studyPeriodEnd: `${endDate}`,
+        daysOfWeek: [3, 4, 5],
+        studyTimeStart: `${startTime}`,
+        studyTimeEnd: `${endTime}`,
+        minClassmateCount: minPeople,
+        maxClassmateCount: maxPeople,
+        platform: `${platform}`,
+        introduction: `${postText}`,
+        tags: {
+          백엔드: "javascript",
+          프론트엔드: "javascript",
+        },
+      });
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
@@ -167,15 +163,11 @@ const StudyPost = () => {
             <input type="text" />
           </StudyPostInfo>
           <StudyPostInput>
-            <TextEditor
-              handleContentChange={setPostText}
-              onFocus={function (): void {}}
-              onBlur={function (): void {}}
-            />
+            <TextEditor handleContentChange={setPostText} />
           </StudyPostInput>
           <StudyPostButtonWrapper>
             <StudyPostButton onClick={handlePostButton}>
-              스터디 등록!!
+              스터디 등록
             </StudyPostButton>
           </StudyPostButtonWrapper>
         </StudyPostMain>
