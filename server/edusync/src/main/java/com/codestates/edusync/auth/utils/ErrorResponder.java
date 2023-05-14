@@ -1,4 +1,4 @@
-package com.codestates.edusync.audit.utils;
+package com.codestates.edusync.auth.utils;
 
 import com.codestates.edusync.exception.ErrorResponse;
 import com.google.gson.Gson;
