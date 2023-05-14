@@ -1,6 +1,5 @@
-package com.codestates.edusync.response;
+package com.codestates.edusync.exception;
 
-import com.codestates.edusync.exception.ExceptionCode;
 import lombok.Getter;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.BindingResult;

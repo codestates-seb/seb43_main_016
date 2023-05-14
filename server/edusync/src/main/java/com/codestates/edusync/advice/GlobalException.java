@@ -1,7 +1,7 @@
 package com.codestates.edusync.advice;
 
 import com.codestates.edusync.exception.BusinessLogicException;
-import com.codestates.edusync.response.ErrorResponse;
+import com.codestates.edusync.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

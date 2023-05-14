@@ -1,11 +1,8 @@
 package com.codestates.edusync.auth.handler;
 
 import com.codestates.edusync.audit.utils.ErrorResponder;
-import com.codestates.edusync.response.ErrorResponse;
-import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AuthenticationFailureHandler;
 

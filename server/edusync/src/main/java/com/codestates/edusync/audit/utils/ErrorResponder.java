@@ -1,6 +1,6 @@
 package com.codestates.edusync.audit.utils;
 
-import com.codestates.edusync.response.ErrorResponse;
+import com.codestates.edusync.exception.ErrorResponse;
 import com.google.gson.Gson;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
