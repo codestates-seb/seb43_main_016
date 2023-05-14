@@ -1,4 +1,4 @@
-package com.codestates.edusync.advice;
+package com.codestates.edusync.exception.advice;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ErrorResponse;
