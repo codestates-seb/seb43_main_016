@@ -1,7 +1,7 @@
 package com.codestates.edusync.study.plancalendar.studygroup.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
 import com.codestates.edusync.study.plancalendar.studygroup.utils.CalendarStudygroupManager;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;

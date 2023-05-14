@@ -4,7 +4,7 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.service.MemberService;
-import com.codestates.edusync.searchtag.service.SearchTagService;
+import com.codestates.edusync.studyaddons.searchtag.service.SearchTagService;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.repository.StudygroupRepository;
 import lombok.RequiredArgsConstructor;

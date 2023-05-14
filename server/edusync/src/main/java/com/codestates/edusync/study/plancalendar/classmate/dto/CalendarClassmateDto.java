@@ -1,6 +1,6 @@
 package com.codestates.edusync.study.plancalendar.classmate.dto;
 
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

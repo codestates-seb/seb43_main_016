@@ -1,12 +1,12 @@
 package com.codestates.edusync.study.studygroup.controller;
 
-import com.codestates.edusync.dto.MultiResponseDto;
+import com.codestates.edusync.pagingdto.MultiResponseDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
-import com.codestates.edusync.util.UriCreator;
+import com.codestates.edusync.globalutils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;

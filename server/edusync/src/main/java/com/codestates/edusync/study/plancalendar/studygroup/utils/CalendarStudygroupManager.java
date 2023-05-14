@@ -1,6 +1,6 @@
 package com.codestates.edusync.study.plancalendar.studygroup.utils;
 
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 
 import java.util.List;
 
