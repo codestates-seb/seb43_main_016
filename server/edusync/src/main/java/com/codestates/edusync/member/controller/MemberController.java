@@ -6,7 +6,7 @@ import com.codestates.edusync.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.mapper.MemberMapper;
 import com.codestates.edusync.member.service.MemberService;
-import com.codestates.edusync.util.UriCreator;
+import com.codestates.edusync.globalutils.UriCreator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -21,7 +21,6 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor

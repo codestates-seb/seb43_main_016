@@ -1,4 +1,4 @@
-package com.codestates.edusync.util;
+package com.codestates.edusync.globalutils;
 
 import com.codestates.edusync.member.entity.Member;
 

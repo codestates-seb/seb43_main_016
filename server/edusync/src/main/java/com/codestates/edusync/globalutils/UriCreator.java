@@ -1,4 +1,4 @@
-package com.codestates.edusync.util;
+package com.codestates.edusync.globalutils;
 
 import org.springframework.web.util.UriComponentsBuilder;
 

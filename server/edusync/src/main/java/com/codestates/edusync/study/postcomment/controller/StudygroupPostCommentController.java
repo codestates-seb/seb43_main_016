@@ -4,7 +4,7 @@ import com.codestates.edusync.study.postcomment.dto.StudygroupPostCommentDto;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.postcomment.mapper.StudygroupPostCommentMapper;
 import com.codestates.edusync.study.postcomment.service.StudygroupPostCommentService;
-import com.codestates.edusync.util.UriCreator;
+import com.codestates.edusync.globalutils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
