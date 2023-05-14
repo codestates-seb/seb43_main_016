@@ -1,4 +1,4 @@
-package com.codestates.edusync.dto;
+package com.codestates.edusync.pagingdto;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

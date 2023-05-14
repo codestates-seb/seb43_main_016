@@ -1,6 +1,6 @@
 package com.codestates.edusync.member.controller;
 
-import com.codestates.edusync.dto.MultiResponseDto;
+import com.codestates.edusync.pagingdto.MultiResponseDto;
 import com.codestates.edusync.member.dto.MemberDto;
 import com.codestates.edusync.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.member.entity.Member;

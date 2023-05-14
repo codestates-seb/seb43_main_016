@@ -1,4 +1,4 @@
-package com.codestates.edusync.dto;
+package com.codestates.edusync.pagingdto;
 
 import lombok.Getter;
 import org.springframework.data.domain.Page;

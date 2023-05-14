@@ -1,6 +1,6 @@
 package com.codestates.edusync.study.studygroup.controller;
 
-import com.codestates.edusync.dto.MultiResponseDto;
+import com.codestates.edusync.pagingdto.MultiResponseDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
