@@ -3,7 +3,7 @@ package com.codestates.edusync.study.studygroup.mapper;
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.searchtag.entity.SearchTag;
+import com.codestates.edusync.studyaddons.searchtag.entity.SearchTag;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;

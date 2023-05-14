@@ -1,10 +1,9 @@
-package com.codestates.edusync.searchtag.controller;
+package com.codestates.edusync.studyaddons.searchtag.controller;
 
-import com.codestates.edusync.searchtag.dto.SearchTagDto;
-import com.codestates.edusync.searchtag.dto.SearchTagResponseDto;
-import com.codestates.edusync.searchtag.entity.SearchTag;
-import com.codestates.edusync.searchtag.mapper.SearchTagMapper;
-import com.codestates.edusync.searchtag.service.SearchTagService;
+import com.codestates.edusync.studyaddons.searchtag.dto.SearchTagDto;
+import com.codestates.edusync.studyaddons.searchtag.entity.SearchTag;
+import com.codestates.edusync.studyaddons.searchtag.mapper.SearchTagMapper;
+import com.codestates.edusync.studyaddons.searchtag.service.SearchTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

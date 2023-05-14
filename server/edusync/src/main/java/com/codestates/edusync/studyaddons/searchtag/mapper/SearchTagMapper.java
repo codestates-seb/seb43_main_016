@@ -1,8 +1,8 @@
-package com.codestates.edusync.searchtag.mapper;
+package com.codestates.edusync.studyaddons.searchtag.mapper;
 
-import com.codestates.edusync.searchtag.dto.SearchTagDto;
-import com.codestates.edusync.searchtag.dto.SearchTagResponseDto;
-import com.codestates.edusync.searchtag.entity.SearchTag;
+import com.codestates.edusync.studyaddons.searchtag.dto.SearchTagDto;
+import com.codestates.edusync.studyaddons.searchtag.dto.SearchTagResponseDto;
+import com.codestates.edusync.studyaddons.searchtag.entity.SearchTag;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import org.mapstruct.Mapper;
 
