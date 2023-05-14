@@ -1,7 +1,7 @@
 package com.codestates.edusync.member.entity;
 
 import com.codestates.edusync.audit.Auditable;
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
@@ -13,9 +13,6 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
-
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
 
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;

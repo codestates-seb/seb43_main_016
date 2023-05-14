@@ -1,7 +1,7 @@
 package com.codestates.edusync.study.studygroup.entity;
 
 import com.codestates.edusync.audit.Auditable;
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;

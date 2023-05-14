@@ -1,4 +1,4 @@
-package com.codestates.edusync.infodto.timeschedule.dto;
+package com.codestates.edusync.study.plancalendar.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
@@ -10,12 +10,10 @@ import java.sql.Timestamp;
 @NoArgsConstructor
 @Getter
 @Setter
-public class TimeScheduleSingleResponseDto {
-    private Long id;
+public class TimeScheduleInfoDto {
+    @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
+    private Timestamp start;
 
     @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
-    private Timestamp startTime;
-
-    @JsonFormat(pattern = "MM-dd HH:mm", timezone = "Asia/Seoul")
-    private Timestamp endTime;
+    private Timestamp end;
 }

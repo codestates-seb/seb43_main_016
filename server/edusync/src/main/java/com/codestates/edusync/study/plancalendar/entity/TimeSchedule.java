@@ -1,6 +1,5 @@
-package com.codestates.edusync.infodto.timeschedule.entity;
+package com.codestates.edusync.study.plancalendar.entity;
 
-import com.codestates.edusync.audit.Auditable;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.Getter;
@@ -10,9 +9,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.sql.Timestamp;
 
-import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.EAGER;
-import static javax.persistence.FetchType.LAZY;
 
 @NoArgsConstructor
 @Getter

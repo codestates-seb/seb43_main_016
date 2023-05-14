@@ -1,13 +1,11 @@
 package com.codestates.edusync.study.plancalendar.studygroup.mapper;
 
-import com.codestates.edusync.infodto.timeschedule.dto.TimeScheduleResponseDto;
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.dto.TimeScheduleResponseDto;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.dto.CalendarDto;
-import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
