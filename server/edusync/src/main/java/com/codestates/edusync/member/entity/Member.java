@@ -17,9 +17,6 @@ import java.util.UUID;
 import static javax.persistence.CascadeType.*;
 import static javax.persistence.FetchType.*;
 
-import static javax.persistence.CascadeType.*;
-import static javax.persistence.FetchType.*;
-
 @NoArgsConstructor
 @Getter
 @Setter
