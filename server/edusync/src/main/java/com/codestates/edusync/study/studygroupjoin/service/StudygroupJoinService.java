@@ -2,16 +2,11 @@ package com.codestates.edusync.study.studygroupjoin.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.globalutils.VerifyMember;
-import com.codestates.edusync.globalutils.VerifyStudygroupJoinUtils;
 import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.member.service.MemberService;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
-import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.study.studygroupjoin.repository.StudygroupJoinRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
