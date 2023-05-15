@@ -20,16 +20,3 @@ jobs:
     - uses: actions/labeler@v4
       with:
         repo-token: "${{ secrets.GITHUB_TOKEN }}"
-
-audit: audit/**/*
-auth: auth/**/*
-config: config/**/*
-exception: exception/**/*
-globalutils: globalutils/**/*
-member: member/**/*
-pagingdto: pagingdto/**/*
-study: study/**/*
-studyaddons: studyaddons/**/*
-flyway: /**/*.sql
-yml: /**/*.yml
-gradle: /**/*.gradle
