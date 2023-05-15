@@ -5,18 +5,17 @@ import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Profile from "./pages/Profile";
 import StudyPost from "./pages/StudyPost";
+import "./App.css";
 import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
 import GNB from "./components/gnb/GNB";
 import ProfileCalendar from "./pages/ProfileCalendar";
-import "./App.css";
 import { useRecoilValue } from "recoil";
-import { myIdState } from "./recoil/atoms/myIdState";
-
+import { LogInState } from "./recoil/atoms/LogInState";
 const queryClient = new QueryClient();
 
 function App() {
-  const myId = useRecoilValue(myIdState);
+  const logInState = useRecoilValue(LogInState);
   return (
     <>
       <QueryClientProvider client={queryClient}>
@@ -24,7 +23,10 @@ function App() {
           <GNB />
           <GlobalStyle />
           <Routes>
-            <Route path="/" element={<>{myId}</>} />
+            <Route
+              path="/"
+              element={<>{console.log("loginState", logInState)}</>}
+            />
             <Route path="/profile/*" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />

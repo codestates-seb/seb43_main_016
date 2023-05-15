@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { useEffect } from "react";
 import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
@@ -8,28 +7,14 @@ import logo from "../assets/edusync-logo.png";
 import { validateEmptyInput } from "./utils/loginUtils";
 import { setAccessToken, setRefreshToken } from "./utils/Auth";
 import { useSetRecoilState } from "recoil";
-import { myIdState } from "../recoil/atoms/myIdState";
+import { LogInState } from "../recoil/atoms/LogInState";
 import Google from "../components/GoogleLogin";
-
-type Role = "USER";
-
-interface User {
-  id: number;
-  nickName: string;
-  email: string;
-  password: string;
-  aboutMe: string;
-  memberStatus: string;
-  profileImage: string;
-  roles: Role[];
-  withMe: string;
-}
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [members, setMembers] = useState<User[]>([]);
-  const setMyId = useSetRecoilState(myIdState);
+  const setIsLoggedIn = useSetRecoilState(LogInState);
+
   const navigate = useNavigate();
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,10 +37,7 @@ const Login = () => {
         const refreshToken = data.headers.refresh;
         setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        const foundMember = members.filter((member) => {
-          return member.email === email;
-        });
-        setMyId(foundMember ? foundMember[0].id : 0);
+        setIsLoggedIn(true);
         navigate("/");
       },
       onError: (error) => {
@@ -73,9 +55,9 @@ const Login = () => {
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
       handleLoginButton();
     }
   };
@@ -83,27 +65,10 @@ const Login = () => {
   //  const handleGoogleLogin = () => {
   // Google 로그인 처리
   // };
-  useEffect(() => {
-    axios
-      .get(`${import.meta.env.VITE_APP_API_URL}/members?page=1&size=1`)
-      .then((res) => {
-        const {
-          pageInfo: { totalElements: size },
-        } = res.data;
-
-        axios
-          .get<User[]>(
-            `${import.meta.env.VITE_APP_API_URL}/members?page=1&size=${size}`
-          )
-          .then((res) => {
-            setMembers(Object(res.data).data);
-          });
-      });
-  }, []);
 
   return (
     <Container>
-      <LoginDiv>
+      <LoginDiv onKeyDown={handleKeyDown}>
         <LogoDiv>
           <img src={logo} />
         </LogoDiv>
@@ -124,9 +89,7 @@ const Login = () => {
           />
         </LoginForm>
         <ButtonDiv>
-          <button onClick={handleLoginButton} onKeyDown={handleKeyDown}>
-            Log In
-          </button>
+          <button onClick={handleLoginButton}>Log In</button>
           <div>
             <Google />
           </div>
