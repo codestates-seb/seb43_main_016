@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/edusync-logo.png";
-import googleLogo from "../assets/google-icon.png";
+import Google from "../components/GoogleLogin";
 import { validateEmptyInput } from "./utils/loginUtils";
 const SignUp = () => {
   const [nickName, setNickName] = useState("");
@@ -95,8 +95,8 @@ const SignUp = () => {
           <button type="button" onClick={handleSignUpButton}>
             Sign up
           </button>
-          <div onClick={handleSignUpButton}>
-            <img src={googleLogo} alt="goole-login" />
+          <div>
+            <Google />
           </div>
         </ButtonDiv>
       </SignUpDiv>
@@ -158,11 +158,6 @@ const ButtonDiv = styled.div`
   button {
     width: 71%;
     height: 45px;
-  }
-  img {
-    width: 45px;
-    border: 2px solid #e9e9e9;
-    border-radius: 50%;
   }
 `;
 const LoginLink = styled(Link)`

@@ -2,8 +2,8 @@ import { useState, useEffect, FormEvent } from "react";
 import ProfileImg from "../components/ProfileImg";
 import styled from "styled-components";
 import axios from "axios";
-import { myIdState } from "../recoil/atoms/myIdState";
-import { useRecoilValue } from "recoil";
+//import { myIdState } from "../recoil/atoms/myIdState";
+//import { useRecoilValue } from "recoil";
 
 interface UserInfoResponseDto {
   id: number;
@@ -20,7 +20,7 @@ type UserInfo = Omit<UserInfoResponseDto, "memberStatus">;
 const ProfileInfo = () => {
   const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
   const [isEdit, setIsEdit] = useState<boolean>(false);
-  const myId = useRecoilValue(myIdState);
+  //const myId = useRecoilValue(myIdState);
 
   // TODO 최초 페이지 렌더링 시 유저 정보를 가져오는 코드
   useEffect(() => {
@@ -28,7 +28,7 @@ const ProfileInfo = () => {
       try {
         const token = localStorage.getItem("accessToken");
         const res = await axios.get(
-          `${import.meta.env.VITE_APP_API_URL}/member/${myId}`,
+          `${import.meta.env.VITE_APP_API_URL}/members`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -55,7 +55,7 @@ const ProfileInfo = () => {
       const {
         data: { password },
       } = await axios.get(
-        `${import.meta.env.VITE_APP_API_URL}/members/${myId}/password`,
+        `${import.meta.env.VITE_APP_API_URL}/members/password`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
