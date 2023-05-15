@@ -36,7 +36,6 @@ function App() {
             <Route path="/studycontent" element={<StudyContent />} />
             <Route path="/studypost" element={<StudyPost />} />
             <Route path="/calendar" element={<ProfileCalendar />} />
-            <Route />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
