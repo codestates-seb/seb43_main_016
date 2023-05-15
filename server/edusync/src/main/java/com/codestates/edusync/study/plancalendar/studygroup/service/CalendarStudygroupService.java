@@ -1,12 +1,11 @@
 package com.codestates.edusync.study.plancalendar.studygroup.service;
 
 import com.codestates.edusync.globalutils.VerifyStudygroupCalendarUtils;
-import com.codestates.edusync.globalutils.VerifyStudygroupJoinUtils;
+import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
 import com.codestates.edusync.study.plancalendar.studygroup.utils.CalendarStudygroupManager;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
-import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,7 +23,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     @Override
     public void createTimeSchedulesForStudygroup(Long studygroupId,
-                                                 List<TimeSchedule> timeSchedules) {
+                                                 List<TimeSchedule> timeSchedules,
+                                                 Member loginMember) {
         Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
@@ -37,13 +37,15 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     @Override
     public void createTimeSchedulesOfAllMember(Long studygroupId,
-                                               List<TimeSchedule> timeSchedules) {
+                                               List<TimeSchedule> timeSchedules,
+                                               Member loginMember) {
         // TODO: 2023-05-11 나중에 구현할거임 ! ADV
     }
 
     @Override
     public void updateStudygroupTimeSchedule(Long studygroupId, Long timeScheduleId,
-                                             TimeSchedule timeSchedule) {
+                                             TimeSchedule timeSchedule,
+                                             Member loginMember) {
         TimeSchedule findTimeSchedule = verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
@@ -66,21 +68,21 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     }
 
     @Override
-    public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId) {
+    public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId, Member loginMember) {
         List<TimeSchedule> findTimeSchedules = calendarStudygroupRepository.findAllByStudygroupId(studygroupId);
         
         calendarStudygroupRepository.deleteAll(findTimeSchedules);
     }
 
     @Override
-    public void deleteTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
+    public void deleteTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId, Member loginMember) {
         TimeSchedule findTimeSchedule = verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
         
         calendarStudygroupRepository.delete(findTimeSchedule);
     }
 
     @Override
-    public void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId, Long timeScheduleId) {
+    public void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId, Long timeScheduleId, Member loginMember) {
         // TODO: 2023-05-11 ADV 에서 구현할거임 !!! 
     }
 }

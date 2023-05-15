@@ -1,5 +1,7 @@
 package com.codestates.edusync.study.plancalendar.studygroup.controller;
 
+import com.codestates.edusync.globalutils.VerifyMember;
+import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.dto.CalendarDto;
@@ -8,6 +10,7 @@ import com.codestates.edusync.study.plancalendar.studygroup.service.CalendarStud
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,16 +24,20 @@ import java.util.List;
 public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
     private final CalendarStudygroupMapper mapper;
+    private final VerifyMemberUtils verifyMemberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_TIME_SCHEDULE_URL = "/timeSchedule";
 
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL)
     public ResponseEntity postCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                 @Valid @RequestBody CalendarDto.Post postDto) {
+                                                 @Valid @RequestBody CalendarDto.Post postDto,
+                                                 Authentication authentication) {
+        Member loginMember = verifyMemberUtils.findVerifyMemberWhoLoggedIn(authentication);
         calendarStudygroupService.createTimeSchedulesForStudygroup(
                 studygroupId,
-                mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules())
+                mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules()),
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -39,10 +46,14 @@ public class CalendarStudygroupController {
     @PatchMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
     public ResponseEntity patchCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
-                                                  @Valid @RequestBody CalendarDto.Patch patchDto) {
+                                                  @Valid @RequestBody CalendarDto.Patch patchDto,
+                                                  Authentication authentication) {
+        Member loginMember = verifyMemberUtils.findVerifyMemberWhoLoggedIn(authentication);
+
         calendarStudygroupService.updateStudygroupTimeSchedule(
                 studygroupId, timeScheduleId,
-                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto)
+                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -74,8 +85,10 @@ public class CalendarStudygroupController {
 
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
     public ResponseEntity deleteCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
-        calendarStudygroupService.deleteTimeScheduleByTimeScheduleId(studygroupId, timeScheduleId);
+                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
+                                                   Authentication authentication) {
+        Member loginMember = verifyMemberUtils.findVerifyMemberWhoLoggedIn(authentication);
+        calendarStudygroupService.deleteTimeScheduleByTimeScheduleId(studygroupId, timeScheduleId, loginMember);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
