@@ -15,6 +15,13 @@ import { LogInState } from "./recoil/atoms/LogInState";
 import Redirect from "./pages/Redirect";
 const queryClient = new QueryClient();
 
+// 개발 모드로 실행되었을 때, mocking 라이브러리가 실행되도록 명시하는 코드
+if (process.env.NODE_ENV === "development") {
+  import("./mocks/browser").then(({ worker }) => {
+    worker.start();
+  });
+}
+
 function App() {
   const logInState = useRecoilValue(LogInState);
   return (
