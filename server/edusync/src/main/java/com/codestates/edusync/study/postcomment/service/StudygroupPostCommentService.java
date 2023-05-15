@@ -1,22 +1,18 @@
 package com.codestates.edusync.study.postcomment.service;
 
-import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.globalutils.VerifyStudygroupPostCommentUtils;
+import com.codestates.edusync.globalutils.VerifyStudygroupUtils;
 import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.member.service.MemberService;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.postcomment.repository.StudygroupPostCommentRepository;
 import com.codestates.edusync.study.postcomment.utils.StudygroupPostCommentManager;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
-import com.codestates.edusync.study.studygroup.service.StudygroupService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
-
-import static com.codestates.edusync.exception.ExceptionCode.*;
 
 @Transactional
 @RequiredArgsConstructor

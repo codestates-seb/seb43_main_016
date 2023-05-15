@@ -11,5 +11,15 @@ public interface StudygroupVerifiable {
      * @param studygroupId 스터디 그룹의 식별자
      * @return Studygroup
      */
-    Studygroup findVerifiedStudygroup(Long studygroupId);
+    Studygroup findStudygroup(Long studygroupId);
+
+
+    /**
+     * <h2>스터디 그룹에 대한 리더라면 true</h2>
+     * 해당 스터디 그룹에 대한 리더인지 확인 한다<br>
+     * @param email
+     * @param studygroupId
+     * @return true, false 값으로 리턴한다.<br>
+     */
+    boolean verifyMemberLeaderOfStudygroup(String email, Long studygroupId);
 }

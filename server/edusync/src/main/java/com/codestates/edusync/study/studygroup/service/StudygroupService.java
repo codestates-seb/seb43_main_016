@@ -2,11 +2,11 @@ package com.codestates.edusync.study.studygroup.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.member.entity.Member;
-import com.codestates.edusync.member.service.MemberService;
-import com.codestates.edusync.studyaddons.searchtag.service.SearchTagService;
+import com.codestates.edusync.globalutils.VerifyStudygroupUtils;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.repository.StudygroupRepository;
+import com.codestates.edusync.study.studygroup.utils.StudygroupManager;
+import com.codestates.edusync.studyaddons.searchtag.service.SearchTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -19,33 +19,21 @@ import java.util.Optional;
 @RequiredArgsConstructor
 @Transactional
 @Service
-public class StudygroupService {
-    private final StudygroupRepository repository;
-    private final MemberService memberService;
+public class StudygroupService implements StudygroupManager{
+    private final StudygroupRepository studygroupRepository;
     private final SearchTagService searchTagService;
+    private final VerifyStudygroupUtils studygroupUtills;
 
-    /**
-     * 스터디 등록
-     * 스터디 리더등록을 위한 Member 조회에 대한 의존성 분리 필요해 보임
-     * @param studygroup
-     * @return
-     */
+    @Override
     public Studygroup createStudygruop(Studygroup studygroup) {
-        Member member = memberService.findVerifyMemberWhoLoggedIn();
-        studygroup.setLeaderMember(member);
-        return repository.save(studygroup);
+        return studygroupRepository.save(studygroup);
     }
 
-    /**
-     * 스터디 정보 수정
-     * @param studygroup
-     * @return
-     */
-    public Studygroup updateStudygroup(Studygroup studygroup) {
+    @Override
+    public Studygroup updateStudygroup(String email, Studygroup studygroup) {
         Studygroup findStudygroup = findStudygroup(studygroup.getId());
-        Member member = memberService.findVerifyMemberWhoLoggedIn();
 
-        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
+        if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
             Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
             Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
             Optional.ofNullable(studygroup.getStudyPeriodStart()).ifPresent(findStudygroup::setStudyPeriodStart);
@@ -59,60 +47,39 @@ public class StudygroupService {
             Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
 
-        return repository.save(findStudygroup);
+        return studygroupRepository.save(findStudygroup);
     }
 
-    /**
-     * 스터디 모집 상태 수정
-     * @param studygroupId
-     */
-    public void updateStatusStudygroup(Long studygroupId) {
+    @Override
+    public void updateStatusStudygroup(String email, Long studygroupId) {
         Studygroup findStudygroup = findStudygroup(studygroupId);
-        Member member = memberService.findVerifyMemberWhoLoggedIn();
 
-        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
+        if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
             boolean requited = findStudygroup.getIs_requited();
             if (requited) requited = false;
             else requited = true;
             findStudygroup.setIs_requited(requited);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
 
-        repository.save(findStudygroup);
+        studygroupRepository.save(findStudygroup);
     }
 
-    /**
-     * 스터디 조회
-     * @param studygroupId
-     * @return
-     */
+    @Override
     public Studygroup findStudygroup(Long studygroupId) {
-        Studygroup findStudygroup = repository.findById(studygroupId)
-                .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
+        Studygroup findStudygroup = studygroupUtills.findStudygroup(studygroupId);
         findStudygroup.setSearchTags(searchTagService.getSearchTagList(studygroupId));
         return findStudygroup;
     }
 
-    /**
-     * 스터디 리스트 조회
-     * @param page
-     * @param size
-     * @return
-     */
+    @Override
     public Page<Studygroup> findStudygroups(Integer page, Integer size) {
-        return repository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+        return studygroupRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
-    /**
-     * 스터디 삭제
-     * @param studygroupId
-     * @throws Exception
-     */
-    public void deleteStudygroup(Long studygroupId){
-        Studygroup findStudygroup = findStudygroup(studygroupId);
-        Member member = memberService.findVerifyMemberWhoLoggedIn();
-
-        if (findStudygroup.getLeaderMember().getEmail().equals(member.getEmail())) {
-            repository.deleteById(studygroupId);
+    @Override
+    public void deleteStudygroup(String email, Long studygroupId){
+        if (studygroupUtills.verifyMemberLeaderOfStudygroup(email, studygroupId)) {
+            studygroupRepository.deleteById(studygroupId);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }
 }

@@ -1,17 +1,20 @@
 package com.codestates.edusync.study.studygroup.controller;
 
+import com.codestates.edusync.globalutils.MemberVerifiableUtils;
+import com.codestates.edusync.globalutils.UriCreator;
+import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.pagingdto.MultiResponseDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.study.studygroup.service.StudygroupService;
-import com.codestates.edusync.globalutils.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,6 +30,7 @@ public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
     private final StudygroupMapper studygroupMapper;
     private final StudygroupService studygroupService;
+    private final MemberVerifiableUtils memberVerifiableUtils;
 
     /**
      * 스터디 모집 & 등록
@@ -34,9 +38,11 @@ public class StudygroupController {
      * @return
      */
     @PostMapping(STUDYGROUP_DEFAULT_URI)
-    public ResponseEntity postStudygroup(@Valid @RequestBody StudygroupDto.Post postDto) {
+    public ResponseEntity postStudygroup(Authentication authentication,
+                                         @Valid @RequestBody StudygroupDto.Post postDto) {
 
-        Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto);
+        Member member = memberVerifiableUtils.findVerifyMemberWhoLoggedIn(authentication);
+        Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto, member);
         studygroup = studygroupService.createStudygruop(studygroup);
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
 
@@ -50,10 +56,11 @@ public class StudygroupController {
      * @throws Exception
      */
     @PatchMapping(STUDYGROUP_DEFAULT_URI)
-    public ResponseEntity patchStudygroup(@Valid @RequestBody StudygroupDto.Patch patchDto) {
+    public ResponseEntity patchStudygroup(Authentication authentication,
+                                          @Valid @RequestBody StudygroupDto.Patch patchDto) {
 
         Studygroup studygroup = studygroupMapper.StudygroupDtoPatchToStudygroup(patchDto);
-        studygroup = studygroupService.updateStudygroup(studygroup);
+        studygroup = studygroupService.updateStudygroup(authentication.getName(), studygroup);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
         HttpHeaders headers = new HttpHeaders();
@@ -68,9 +75,10 @@ public class StudygroupController {
      * @return
      */
     @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity patchStudygroupStatus(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+    public ResponseEntity patchStudygroupStatus(Authentication authentication,
+                                                @PathVariable("studygroup-id") @Positive Long studygroupId) {
 
-        studygroupService.updateStatusStudygroup(studygroupId);
+        studygroupService.updateStatusStudygroup(authentication.getName(), studygroupId);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroupId);
         HttpHeaders headers = new HttpHeaders();
@@ -117,8 +125,9 @@ public class StudygroupController {
      * @return
      */
     @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity deleteStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        studygroupService.deleteStudygroup(studygroupId);
+    public ResponseEntity deleteStudygroup(Authentication authentication,
+                                           @PathVariable("studygroup-id") @Positive Long studygroupId) {
+        studygroupService.deleteStudygroup(authentication.getName(), studygroupId);
         return ResponseEntity.noContent().build();
     }
 }

@@ -35,12 +35,14 @@ public class StudygroupJoinController {
      */
     @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/member")
     public ResponseEntity getStudygroupJoins(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                             @RequestParam("join") Boolean join) {
+                                             @RequestParam("join") Boolean join,
+                                             Authentication authentication) {
 
+        Member loginMember = memberVerifiableUtils.findVerifyMemberWhoLoggedIn(authentication);
         List<StudygroupJoin> studygroupJoinList;
 
         if (join)   studygroupJoinList = studygroupJoinService.findStudygroupJoinList(studygroupId); // 멤버 리스트
-        else        studygroupJoinList = studygroupJoinService.findStudygroupJoinCandidateList(studygroupId); // 대기 리스트
+        else        studygroupJoinList = studygroupJoinService.findStudygroupJoinCandidateList(studygroupId, loginMember); // 대기 리스트
 
         StudygroupJoinDto.Response studygroupJoinDtos =
                 studygroupJoinmapper.studygroupJoinToStudygroupJoinDtos(studygroupJoinList);
