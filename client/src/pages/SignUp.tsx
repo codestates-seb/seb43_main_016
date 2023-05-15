@@ -1,6 +1,5 @@
 import styled from "styled-components";
 import { useState } from "react";
-import { KeyboardEvent } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/edusync-logo.png";
@@ -39,23 +38,23 @@ const SignUp = () => {
     else {
       axios
         .post(`${import.meta.env.VITE_APP_API_URL}/members`, {
-          nickName,
           email,
           password,
+          nickName,
         })
         .then(() => navigate("/login"))
         .catch((error) => {
-          if (error?.response?.status === 500) {
-            console.log(error.response.data.message);
-            alert("이미 가입된 이메일 입니다.");
-          } else {
-            console.log(error);
-          }
+          //if (error?.response?.error === "Internal Server Error") {
+          //  console.log(error.response.data.message);
+          //  alert("이미 가입된 이메일 입니다.");
+          //} else {
+          console.log(error);
+          // }
         })
         .finally(() => {});
     }
   };
-  const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
       handleSignUpButton();
@@ -64,7 +63,7 @@ const SignUp = () => {
 
   return (
     <Container>
-      <SignUpDiv>
+      <SignUpDiv onKeyDown={handleKeyDown}>
         <LogoDiv>
           <img src={logo} />
         </LogoDiv>
@@ -93,11 +92,7 @@ const SignUp = () => {
           />
         </SignUpForm>
         <ButtonDiv>
-          <button
-            type="button"
-            onClick={handleSignUpButton}
-            onKeyDown={handleKeyDown}
-          >
+          <button type="button" onClick={handleSignUpButton}>
             Sign up
           </button>
           <div onClick={handleSignUpButton}>
