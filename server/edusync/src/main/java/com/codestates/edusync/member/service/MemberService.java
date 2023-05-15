@@ -5,7 +5,7 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.member.repository.MemberRepository;
-import com.codestates.edusync.util.VerifyMember;
+import com.codestates.edusync.globalutils.VerifyMember;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;

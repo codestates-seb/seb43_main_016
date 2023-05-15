@@ -21,7 +21,7 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-import static com.codestates.edusync.audit.utils.ErrorResponder.sendErrorResponse;
+import static com.codestates.edusync.auth.utils.ErrorResponder.sendErrorResponse;
 
 // JWT 검증 필터 구현 클래스
 // 클라이언트 측에서 전송된 request header에 포함된 JWT에 대해 검증 작업을 수행하는 코드

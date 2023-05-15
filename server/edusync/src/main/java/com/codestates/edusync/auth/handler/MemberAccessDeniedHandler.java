@@ -1,6 +1,6 @@
 package com.codestates.edusync.auth.handler;
 
-import com.codestates.edusync.audit.utils.ErrorResponder;
+import com.codestates.edusync.auth.utils.ErrorResponder;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;

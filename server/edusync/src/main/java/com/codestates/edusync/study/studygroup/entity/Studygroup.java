@@ -1,11 +1,11 @@
 package com.codestates.edusync.study.studygroup.entity;
 
 import com.codestates.edusync.audit.Auditable;
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.study.studygroupjoin.entity.StudygroupJoin;
-import com.codestates.edusync.searchtag.entity.SearchTag;
+import com.codestates.edusync.studyaddons.searchtag.entity.SearchTag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
