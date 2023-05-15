@@ -56,5 +56,10 @@ public interface SearchTagManager {
      */
     void deleteSearchTags(Long studygroupId);
 
+    /**
+     * 업데이트 !!!!
+     * @param studygroupId
+     * @param searchTags
+     */
     void updateSearchTags(Long studygroupId, List<SearchTag> searchTags);
 }
