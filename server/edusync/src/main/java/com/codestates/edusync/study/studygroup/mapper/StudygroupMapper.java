@@ -22,7 +22,7 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto) {
+    default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto, Member member) {
         Studygroup studygroup = new Studygroup();
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
@@ -36,6 +36,7 @@ public interface StudygroupMapper {
         studygroup.setMemberCountCurrent(studygroupDto.getMemberCountCurrent());
         studygroup.setPlatform(studygroupDto.getPlatform());
         studygroup.setIs_requited(false);
+        studygroup.setLeaderMember(member);
 
         List<SearchTag> resultTags = new ArrayList<>();
         studygroupDto.getTags()
