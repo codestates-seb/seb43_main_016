@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { getStudyInfo } from "../api/StudyGroupApi";
+import { getStudyInfo } from "../apis/StudyGroupApi";
 
 // Props로 전달받은 id(스터디 그룹의 아이디)를 정의
 interface ReadStudyInfoProps {
@@ -33,7 +33,7 @@ const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
   const [studyInfo, setStudyInfo] = useState<StudyResponseDto | null>(null);
   // const accessToken = localStorage.getItem("accessToken");
   // meta 데이터는 index.html에 위치하며, 모든 계층의 상위에 위치한 전역 데이터이다. env 파일은 meta 데이터에 저장된 특별한 전역 변수 관리 툴이며, 이를 통해 .env 파일에 저장된 데이터를 가져올 수 있다.
-  const accessToken = `Bearer ${import.meta.env.VITE_TEST_ACCESS_TOKEN}`
+  const accessToken = `Bearer ${import.meta.env.VITE_TEST_ACCESS_TOKEN}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,7 +50,10 @@ const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
       <div>스터디 명 : {studyInfo?.studyName}</div>
       <div>스터디 인원 : {studyInfo?.memberCountCurrent}</div>
       <div>스터디 플랫폼 : {studyInfo?.platform}</div>
-      <div>스터디 기간 : {studyInfo?.studyPeriodStart} ~ {studyInfo?.studyPeriodEnd}</div>
+      <div>
+        스터디 기간 : {studyInfo?.studyPeriodStart} ~{" "}
+        {studyInfo?.studyPeriodEnd}
+      </div>
       {/* 태그는 어떻게 가져오지? */}
       <div>태그 : </div>
       <button type="button">스터디 정보 수정</button>
