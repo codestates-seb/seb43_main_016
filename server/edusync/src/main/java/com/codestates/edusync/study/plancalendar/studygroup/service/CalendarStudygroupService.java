@@ -1,6 +1,7 @@
 package com.codestates.edusync.study.plancalendar.studygroup.service;
 
 import com.codestates.edusync.globalutils.VerifyStudygroupCalendarUtils;
+import com.codestates.edusync.globalutils.VerifyStudygroupJoinUtils;
 import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
 import com.codestates.edusync.study.plancalendar.studygroup.utils.CalendarStudygroupManager;
@@ -18,13 +19,13 @@ import java.util.Optional;
 @Service
 public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final CalendarStudygroupRepository calendarStudygroupRepository;
-    private final StudygroupService studygroupService;
     private final VerifyStudygroupCalendarUtils verifyStudygroupCalendarUtils;
+    private final VerifyStudygroupUtils verifyStudygroupUtils;
 
     @Override
     public void createTimeSchedulesForStudygroup(Long studygroupId,
                                                  List<TimeSchedule> timeSchedules) {
-        Studygroup findStudygroup = studygroupService.findStudygroup(studygroupId);
+        Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
             ts.setStudygroup(findStudygroup);
