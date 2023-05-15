@@ -25,13 +25,12 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
     private final StudygroupPostCommentRepository studygroupPostCommentRepository;
     private final VerifyStudygroupPostCommentUtils verifyStudygroupPostCommentUtils;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
-    private final VerifyMemberUtils verifyMemberUtils;
 
     @Override
     public StudygroupPostComment createStudygroupPostComment(Long studygroupId,
-                                                             StudygroupPostComment comment) {
-        Member findMember = verifyMemberUtils.findVerifyMemberWhoLoggedIn();
-        comment.setMember(findMember);
+                                                             StudygroupPostComment comment,
+                                                             Member loginMember) {
+        comment.setMember(loginMember);
 
         Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
         comment.setStudygroup(findStudygroup);
@@ -41,11 +40,11 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
 
     @Override
     public StudygroupPostComment updateStudygroupPostComment(Long studygroupId, Long commentId,
-                                                             StudygroupPostComment patchComment) {
-        Member findMember = verifyMemberUtils.findVerifyMemberWhoLoggedIn();
+                                                             StudygroupPostComment patchComment,
+                                                             Member loginMember) {
         StudygroupPostComment findComment = verifyStudygroupPostCommentUtils.findVerifyStudygroupPostComment(commentId);
         
-        verifyStudygroupPostCommentUtils.verifyStudygroupPostComment(findMember.getId(), studygroupId, findComment);
+        verifyStudygroupPostCommentUtils.verifyStudygroupPostComment(loginMember.getId(), studygroupId, findComment);
         
         Optional.ofNullable(patchComment.getContent())
                 .ifPresent(findComment::setContent);
@@ -59,21 +58,19 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
     }
 
     @Override
-    public void deleteStudygroupPostComment(Long studygroupId, Long commentId) {
-        Member findMember = verifyMemberUtils.findVerifyMemberWhoLoggedIn();
+    public void deleteStudygroupPostComment(Long studygroupId, Long commentId, Member loginMember) {
         StudygroupPostComment findComment = verifyStudygroupPostCommentUtils.findVerifyStudygroupPostComment(commentId);
 
-        verifyStudygroupPostCommentUtils.verifyStudygroupPostComment(findMember.getId(), studygroupId, findComment);
+        verifyStudygroupPostCommentUtils.verifyStudygroupPostComment(loginMember.getId(), studygroupId, findComment);
 
         studygroupPostCommentRepository.delete(findComment);
     }
 
     @Override
-    public void deleteAllStudygroupPostCommentByStudygroupId(Long studygroupId) {
-        Member findMember = verifyMemberUtils.findVerifyMemberWhoLoggedIn();
+    public void deleteAllStudygroupPostCommentByStudygroupId(Long studygroupId, Member loginMember) {
         Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
 
-        verifyStudygroupPostCommentUtils.verifyStudygroupMemberLeader(findMember.getId(), findStudygroup);
+        verifyStudygroupPostCommentUtils.verifyStudygroupMemberLeader(loginMember.getId(), findStudygroup);
         
         studygroupPostCommentRepository.deleteAllByStudygroupId(studygroupId);
     }
