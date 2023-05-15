@@ -22,8 +22,11 @@ interface Tag {
 }
 
 const ManageStudyInfo = () => {
+<<<<<<< HEAD
 
-  const [info, setInfo] = useState<Event | null>(null);
+=======
+>>>>>>> 70471a0af1229d93bfea0455a1e8d555b0025b66
+  const [_info, setInfo] = useState<Event | null>(null);
 
   useEffect(() => {
     fetch(`http://${import.meta.env.VITE_APP_API_UR}/studygroup`)
