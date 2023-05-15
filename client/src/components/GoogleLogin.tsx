@@ -1,21 +1,22 @@
-import { useGoogleLogin } from "@react-oauth/google";
 import googleLogo from "../assets/google-icon.png";
-
 import styled from "styled-components";
+
 function Google() {
-  const login = useGoogleLogin({
-    onSuccess: (tokenResponse) => console.log(tokenResponse),
-    onError: () => console.log("Login Failed"),
-  });
+  const googleHref = `${
+    import.meta.env.VITE_APP_API_URL
+  }/oauth2/authorization/google`;
 
   return (
     <div>
-      <GoogleLoginButton onClick={() => login()}>
-        <img src={googleLogo} alt="goole-login" />
+      <GoogleLoginButton>
+        <a href={googleHref}>
+          <img src={googleLogo} alt="goole-login" />
+        </a>
       </GoogleLoginButton>
     </div>
   );
 }
+
 const GoogleLoginButton = styled.div`
   img {
     width: 45px;

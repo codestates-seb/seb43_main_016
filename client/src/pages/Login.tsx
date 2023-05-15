@@ -55,9 +55,9 @@ const Login = () => {
     }
   };
 
-  const handleKeyDown = (event: React.KeyboardEvent<HTMLButtonElement>) => {
-    if (event.key === "Enter") {
-      event.preventDefault();
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
       handleLoginButton();
     }
   };
@@ -68,7 +68,7 @@ const Login = () => {
 
   return (
     <Container>
-      <LoginDiv>
+      <LoginDiv onKeyDown={handleKeyDown}>
         <LogoDiv>
           <img src={logo} />
         </LogoDiv>
@@ -89,9 +89,7 @@ const Login = () => {
           />
         </LoginForm>
         <ButtonDiv>
-          <button onClick={handleLoginButton} onKeyDown={handleKeyDown}>
-            Log In
-          </button>
+          <button onClick={handleLoginButton}>Log In</button>
           <div>
             <Google />
           </div>

@@ -12,6 +12,7 @@ import GNB from "./components/gnb/GNB";
 import ProfileCalendar from "./pages/ProfileCalendar";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "./recoil/atoms/LogInState";
+import Redirect from "./pages/Redirect";
 const queryClient = new QueryClient();
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
             <Route path="/profile/*" element={<Profile />} />
             <Route path="/login" element={<Login />} />
             <Route path="/signup" element={<SignUp />} />
+            <Route path="/oauth/redirect" element={<Redirect />} />
             <Route path="/studylist" element={<StudyList />} />
             <Route path="/studycontent" element={<StudyContent />} />
             <Route path="/studypost" element={<StudyPost />} />
