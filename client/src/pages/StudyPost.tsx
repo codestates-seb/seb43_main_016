@@ -6,6 +6,16 @@ import axios from "axios";
 import TextEditor from "../components/TextEditor";
 
 const StudyPost = () => {
+  const enum daysOfWeekList {
+    "월",
+    "화",
+    "수",
+    "목",
+    "금",
+    "토",
+    "일",
+  }
+
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -61,22 +71,26 @@ const StudyPost = () => {
       },
     });
     try {
-      await axios.post(`${import.meta.env.VITE_APP_API_URL}/studygroup`, {
-        studyName: `${title}`,
-        studyPeriodStart: `${startDate}`,
-        studyPeriodEnd: `${endDate}`,
-        daysOfWeek: [3, 4, 5],
-        studyTimeStart: `${startTime}`,
-        studyTimeEnd: `${endTime}`,
-        minClassmateCount: minPeople,
-        maxClassmateCount: maxPeople,
-        platform: `${platform}`,
-        introduction: `${postText}`,
-        tags: {
-          백엔드: "javascript",
-          프론트엔드: "javascript",
-        },
-      });
+      const res = await axios.post(
+        `${import.meta.env.VITE_APP_API_URL}/studygroup`,
+        {
+          studyName: `${title}`,
+          studyPeriodStart: `${startDate}`,
+          studyPeriodEnd: `${endDate}`,
+          daysOfWeek: [3, 4, 5],
+          studyTimeStart: `${startTime}`,
+          studyTimeEnd: `${endTime}`,
+          minClassmateCount: minPeople,
+          maxClassmateCount: maxPeople,
+          platform: `${platform}`,
+          introduction: `${postText}`,
+          tags: {
+            백엔드: "javascript",
+            프론트엔드: "javascript",
+          },
+        }
+      );
+      console.table(res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
@@ -118,7 +132,14 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>요일</span>
-            <input type="text"></input>
+            <div>
+              {/* {daysOfWeekList.map((day, index) => {
+            <div className="checkbox" key={index}>
+                <input type="checkbox" id={day} />
+                <label htmlFor={day}>{day}</label>
+                </div>
+              })} */}
+            </div>
           </StudyPostInfo>
           <StudyPostInfo>
             <span>시각</span>
