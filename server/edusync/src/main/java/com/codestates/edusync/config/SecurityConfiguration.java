@@ -1,10 +1,10 @@
 package com.codestates.edusync.config;
 
-import com.codestates.edusync.auth.filter.JwtAuthenticationFilter;
-import com.codestates.edusync.auth.filter.JwtVerificationFilter;
-import com.codestates.edusync.auth.handler.*;
-import com.codestates.edusync.auth.jwt.JwtTokenizer;
-import com.codestates.edusync.auth.utils.CustomAuthorityUtils;
+import com.codestates.edusync.filter.JwtAuthenticationFilter;
+import com.codestates.edusync.filter.JwtVerificationFilter;
+import com.codestates.edusync.security.auth.jwt.JwtTokenizer;
+import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
+import com.codestates.edusync.handler.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
