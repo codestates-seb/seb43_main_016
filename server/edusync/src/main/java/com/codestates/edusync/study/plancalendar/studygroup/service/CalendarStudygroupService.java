@@ -1,6 +1,6 @@
 package com.codestates.edusync.study.plancalendar.studygroup.service;
 
-import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.globalutils.VerifyStudygroupCalendarUtils;
 import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
 import com.codestates.edusync.study.plancalendar.studygroup.utils.CalendarStudygroupManager;
@@ -13,14 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_FOUND;
-
 @Transactional
 @RequiredArgsConstructor
 @Service
 public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final CalendarStudygroupRepository calendarStudygroupRepository;
     private final StudygroupService studygroupService;
+    private final VerifyStudygroupCalendarUtils verifyStudygroupCalendarUtils;
 
     @Override
     public void createTimeSchedulesForStudygroup(Long studygroupId,
@@ -44,7 +43,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     @Override
     public void updateStudygroupTimeSchedule(Long studygroupId, Long timeScheduleId,
                                              TimeSchedule timeSchedule) {
-        TimeSchedule findTimeSchedule = findVerifyTimeSchedule(timeScheduleId);
+        TimeSchedule findTimeSchedule = verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getContent()).ifPresent(findTimeSchedule::setContent);
@@ -62,7 +61,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     @Override
     public TimeSchedule getSingleTimeScheduleById(Long studygroupId, Long timeScheduleId) {
 
-        return findVerifyTimeSchedule(timeScheduleId);
+        return verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
     }
 
     @Override
@@ -74,7 +73,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     @Override
     public void deleteTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
-        TimeSchedule findTimeSchedule = findVerifyTimeSchedule(timeScheduleId);
+        TimeSchedule findTimeSchedule = verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
         
         calendarStudygroupRepository.delete(findTimeSchedule);
     }
@@ -82,19 +81,5 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     @Override
     public void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId, Long timeScheduleId) {
         // TODO: 2023-05-11 ADV 에서 구현할거임 !!! 
-    }
-
-    /**
-     * <h2>일정 조회</h2>
-     * 일정 식별자에 해당하는 일정이 존재하는지 확인<br>
-     * <font color=white>404 Not Found </font> 일정이 존재하지 않음 !<br>
-     * @param timeScheduleId
-     * @return
-     */
-    private TimeSchedule findVerifyTimeSchedule(Long timeScheduleId) {
-        return calendarStudygroupRepository.findById(timeScheduleId)
-                .orElseThrow( () ->
-                        new BusinessLogicException(TIME_SCHEDULE_NOT_FOUND)
-                );
     }
 }
