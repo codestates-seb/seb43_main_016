@@ -11,7 +11,7 @@ public interface CalendarStudygroupManager {
      * 일정 리스트를 입력 받아, Time Schedule 을 생성 한다.<br>
      * 각각의 Time Schedule 은 <font color="white">해당 스터디 그룹의 일정</font>과 연결 된다.<br>
      * 스터디 그룹만의 캘린더에는 member 식별자 컬럼을 매핑하지 않는다.<br>
-     * @param studyGroupId  스터디 그룹의 식별자
+     * @param studygroupId  스터디 그룹의 식별자
      * @param timeSchedules 일정 리스트
      */
     void createTimeSchedulesForStudygroup(Long studygroupId, List<TimeSchedule> timeSchedules);
@@ -21,7 +21,7 @@ public interface CalendarStudygroupManager {
      * 일정 리스트를 입력 받아, Time Schedule 을 생성 한다.<br>
      * 각각의 Time Schedule 은 <font color="white">해당 스터디 그룹에 속해 있는 스터디 원들의 일정</font>과 연결 된다.<br>
      * 스터디 그룹에 속한 스터디 맴버의 일정에는 studygroup 식별자 컬럼과 member 식별자 컬럼을 전부 매핑한다.<br>
-     * @param studyGroupId  스터디 그룹의 식별자
+     * @param studygroupId  스터디 그룹의 식별자
      * @param timeSchedules 일정 리스트
      */
     void createTimeSchedulesOfAllMember(Long studygroupId, List<TimeSchedule> timeSchedules);
