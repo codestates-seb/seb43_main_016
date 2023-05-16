@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.study.postcomment.utils;
+package com.codestates.edusync.model.study.postcomment.service;
 
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
@@ -14,7 +14,7 @@ public interface StudygroupPostCommentManager {
      * @param comment      댓글
      * @param loginMember  로그인 중인 맴버
      */
-    StudygroupPostComment createStudygroupPostComment(Long studygroupId, StudygroupPostComment comment, Member loginMember);
+    StudygroupPostComment create(Long studygroupId, StudygroupPostComment comment, Member loginMember);
 
     /**
      * <h2>댓글을 수정한다</h2>
@@ -24,7 +24,7 @@ public interface StudygroupPostCommentManager {
      * @param comment      댓글
      * @param loginMember  로그인 중인 맴버
      */
-    StudygroupPostComment updateStudygroupPostComment(Long studygroupId, Long commentId, StudygroupPostComment comment, Member loginMember);
+    StudygroupPostComment update(Long studygroupId, Long commentId, StudygroupPostComment comment, Member loginMember);
 
     /**
      * <h2>댓글들을 전부 조회한다</h2>
@@ -32,7 +32,7 @@ public interface StudygroupPostCommentManager {
      * @param studygroupId 스터디 모집글 식별자
      * @return             스터디 모집글의 댓글 리스트
      */
-    List<StudygroupPostComment> getAllStudygroupPostComments(Long studygroupId);
+    List<StudygroupPostComment> getAll(Long studygroupId);
 
     /**
      * <h2>스터디 모질글의 댓글을 삭제한다</h2>
@@ -41,7 +41,7 @@ public interface StudygroupPostCommentManager {
      * @param studygroupPostCommentId
      * @param loginMember             로그인 중인 맴버
      */
-    void deleteStudygroupPostComment(Long studygroupId, Long studygroupPostCommentId, Member loginMember);
+    void delete(Long studygroupId, Long studygroupPostCommentId, Member loginMember);
 
     /**
      * <h2>스터디 모집글의 댓글을 전부 삭제한다</h2>
@@ -49,5 +49,5 @@ public interface StudygroupPostCommentManager {
      * @param studygroupId
      * @param loginMember  로그인 중인 맴버
      */
-    void deleteAllStudygroupPostCommentByStudygroupId(Long studygroupId, Member loginMember);
+    void deleteAllByStudygroupId(Long studygroupId, Member loginMember);
 }

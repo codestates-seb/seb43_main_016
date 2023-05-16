@@ -43,7 +43,7 @@ public class StudygroupPostCommentController {
         Member loginMember = memberVerificationService.getLoggedIn(authentication);
 
         StudygroupPostComment createdStudygroupPostComment =
-                studygroupPostCommentService.createStudygroupPostComment(
+                studygroupPostCommentService.create(
                         studygroupId,
                         mapper.studygroupPostCommentPostDtoToStudygroupPostComment(postDto),
                         loginMember
@@ -71,7 +71,7 @@ public class StudygroupPostCommentController {
         Member loginMember = memberVerificationService.getLoggedIn(authentication);
 
         StudygroupPostComment updatedStudygroupPostComment =
-                studygroupPostCommentService.updateStudygroupPostComment(
+                studygroupPostCommentService.update(
                         studygroupId, commentId,
                         mapper.studygroupPostCommentPatchDtoToStudygroupPostComment(patchDto),
                         loginMember
@@ -87,7 +87,7 @@ public class StudygroupPostCommentController {
      */
     @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL + "s")
     public ResponseEntity getStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        List<StudygroupPostComment> findComments = studygroupPostCommentService.getAllStudygroupPostComments(studygroupId);
+        List<StudygroupPostComment> findComments = studygroupPostCommentService.getAll(studygroupId);
 
         return new ResponseEntity<>(
                 mapper.studygroupPostCommentToStudygroupPostCommentResponseDtos(findComments),
@@ -107,7 +107,7 @@ public class StudygroupPostCommentController {
                                                       Authentication authentication) {
         Member loginMember = memberVerificationService.getLoggedIn(authentication);
 
-        studygroupPostCommentService.deleteStudygroupPostComment(studygroupId, commentId, loginMember);
+        studygroupPostCommentService.delete(studygroupId, commentId, loginMember);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -122,7 +122,7 @@ public class StudygroupPostCommentController {
                                                          Authentication authentication) {
         Member loginMember = memberVerificationService.getLoggedIn(authentication);
 
-        studygroupPostCommentService.deleteAllStudygroupPostCommentByStudygroupId(studygroupId, loginMember);
+        studygroupPostCommentService.deleteAllByStudygroupId(studygroupId, loginMember);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

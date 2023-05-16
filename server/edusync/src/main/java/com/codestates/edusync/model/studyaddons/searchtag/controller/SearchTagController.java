@@ -29,7 +29,7 @@ public class SearchTagController {
     public ResponseEntity postSearchTags(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                           @Valid @RequestBody SearchTagDto dto) {
         dto.setStudygroupId(studygroupId);
-        searchTagService.createSearchTags(mapper.searchTagDtoToSearchTags(dto));
+        searchTagService.createList(mapper.searchTagDtoToSearchTags(dto));
 
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
@@ -38,21 +38,21 @@ public class SearchTagController {
     public ResponseEntity patchSearchTags(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                           @Valid @RequestBody SearchTagDto dto) {
         dto.setStudygroupId(studygroupId);
-        searchTagService.updateSearchTags(studygroupId, mapper.searchTagDtoToSearchTags(dto));
+        searchTagService.updateList(studygroupId, mapper.searchTagDtoToSearchTags(dto));
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     @DeleteMapping(DEFAULT_SEARCH_TAG_URL + DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
     public ResponseEntity deleteSearchTagsWithStudygroupId(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        searchTagService.deleteSearchTags(studygroupId);
+        searchTagService.deleteList(studygroupId);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @DeleteMapping(DEFAULT_SEARCH_TAG_URL)
     public ResponseEntity deleteSearchTagsWithSearchTagList(@Valid @RequestBody SearchTagDto dto) {
-        searchTagService.deleteSearchTags(mapper.searchTagDtoToSearchTags(dto));
+        searchTagService.deleteList(mapper.searchTagDtoToSearchTags(dto));
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -63,7 +63,7 @@ public class SearchTagController {
      */
     @GetMapping(DEFAULT_SEARCH_TAG_URL + "/all")
     public ResponseEntity getAllSearchTags() {
-        List<SearchTag> tags = searchTagService.getAllSearchTagList();
+        List<SearchTag> tags = searchTagService.getAllList();
 
         return new ResponseEntity<>(
                 mapper.searchTagsToSearchTagResponseDto(tags),
@@ -78,7 +78,7 @@ public class SearchTagController {
      */
     @GetMapping(DEFAULT_SEARCH_TAG_URL)
     public ResponseEntity getSearchTagsWithKey(@RequestParam("key") String key) {
-        List<SearchTag> tags = searchTagService.getSearchTagList(key);
+        List<SearchTag> tags = searchTagService.getList(key);
 
         return new ResponseEntity<>(
                 mapper.searchTagsToSearchTagResponseDto(tags),
@@ -93,7 +93,7 @@ public class SearchTagController {
      */
     @GetMapping(DEFAULT_SEARCH_TAG_URL + DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
     public ResponseEntity getSearchTagsWithStudygroupId(@PathVariable("studygroup-id") Long studygroupId) {
-        List<SearchTag> tags = searchTagService.getSearchTagList(studygroupId);
+        List<SearchTag> tags = searchTagService.getList(studygroupId);
 
         return new ResponseEntity<>(
                 mapper.searchTagsToSearchTagResponseDto(tags),
