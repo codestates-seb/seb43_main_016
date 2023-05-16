@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.plancalendar.entity;
 
+import com.codestates.edusync.model.common.entity.BaseEntity;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.Getter;
@@ -15,11 +16,7 @@ import static javax.persistence.FetchType.EAGER;
 @Getter
 @Setter
 @Entity
-public class TimeSchedule {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class TimeSchedule extends BaseEntity {
     @Column(length = 100)
     private String title;
 

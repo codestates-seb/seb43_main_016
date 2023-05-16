@@ -41,8 +41,8 @@ public class StudygroupJoinController {
         Member loginMember = memberUtils.getLoggedIn(authentication);
         List<StudygroupJoin> studygroupJoinList;
 
-        if (join)   studygroupJoinList = studygroupJoinService.findStudygroupJoinList(studygroupId); // 멤버 리스트
-        else        studygroupJoinList = studygroupJoinService.findStudygroupJoinCandidateList(studygroupId, loginMember); // 대기 리스트
+        if (join)   studygroupJoinList = studygroupJoinService.getAllMemberList(studygroupId); // 멤버 리스트
+        else        studygroupJoinList = studygroupJoinService.getAllCandidateList(studygroupId, loginMember); // 대기 리스트
 
         StudygroupJoinDto.Response studygroupJoinDtos =
                 studygroupJoinmapper.studygroupJoinToStudygroupJoinDtos(studygroupJoinList);
@@ -59,7 +59,7 @@ public class StudygroupJoinController {
                                              Authentication authentication) {
         Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupJoinService.createStudygroupJoin(studygroupId, loginMember);
+        studygroupJoinService.createCandidate(studygroupId, loginMember);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -73,7 +73,7 @@ public class StudygroupJoinController {
                                                         Authentication authentication) {
         Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupJoinService.deleteStudygroupJoinCandidate(studygroupId, loginMember);
+        studygroupJoinService.deleteCandidateSelf(studygroupId, loginMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -87,7 +87,7 @@ public class StudygroupJoinController {
                                                Authentication authentication) {
         Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupJoinService.deleteStudygroupJoin(studygroupId, loginMember);
+        studygroupJoinService.deleteMemberSelf(studygroupId, loginMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -103,7 +103,7 @@ public class StudygroupJoinController {
                                                     Authentication authentication) {
         Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupJoinService.approveStudygroupJoin(studygroupId, studygroupJoinDto.getNickName(), loginMember);
+        studygroupJoinService.approveCandidateByNickName(studygroupId, studygroupJoinDto.getNickName(), loginMember);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -119,7 +119,7 @@ public class StudygroupJoinController {
                                                      Authentication authentication) {
         Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupJoinService.rejectStudygroupJoinCandidate(studygroupId, studygroupJoinDto.getNickName(), loginMember);
+        studygroupJoinService.rejectCandidateByNickName(studygroupId, studygroupJoinDto.getNickName(), loginMember);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -135,7 +135,7 @@ public class StudygroupJoinController {
                                                    Authentication authentication) {
         Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupJoinService.deleteStudygroupJoinKick(studygroupId, studygroupJoinDto.getNickName(), loginMember);
+        studygroupJoinService.kickOutMemberByNickName(studygroupId, studygroupJoinDto.getNickName(), loginMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

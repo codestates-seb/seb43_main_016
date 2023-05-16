@@ -7,7 +7,7 @@ import com.codestates.edusync.model.member.dto.MemberDto;
 import com.codestates.edusync.model.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.mapper.MemberMapper;
-import com.codestates.edusync.model.common.controller.UriCreator;
+import com.codestates.edusync.model.common.service.UriCreator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

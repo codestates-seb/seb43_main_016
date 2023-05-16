@@ -14,7 +14,7 @@ import java.util.Optional;
 
 @RequiredArgsConstructor
 @Component
-public class MemberUtils implements MemberVerificationService {
+public class MemberUtils implements MemberVerificationManager {
     private final MemberRepository memberRepository;
 
     @Override
