@@ -4,8 +4,7 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
-
-// const API_URL = "https://wish17.store";
+import DaysOfWeek from "../components/DaysOfWeek";
 
 const StudyPost = () => {
   const [title, setTitle] = useState<string>("");
@@ -82,7 +81,7 @@ const StudyPost = () => {
           },
         }
       );
-      console.log("POST request successful:", res.data);
+      console.table(res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
@@ -124,7 +123,9 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>요일</span>
-            <input type="text"></input>
+            <div>
+              <DaysOfWeek />
+            </div>
           </StudyPostInfo>
           <StudyPostInfo>
             <span>시각</span>
@@ -169,11 +170,7 @@ const StudyPost = () => {
             <input type="text" />
           </StudyPostInfo>
           <StudyPostInput>
-            <TextEditor
-              handleContentChange={setPostText}
-              onFocus={function (): void {}}
-              onBlur={function (): void {}}
-            />
+            <TextEditor handleContentChange={setPostText} />
           </StudyPostInput>
           <StudyPostButtonWrapper>
             <StudyPostButton onClick={handlePostButton}>

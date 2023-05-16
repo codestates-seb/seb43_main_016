@@ -1,39 +1,45 @@
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import axios from "axios";
 import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
-import { getAccessToken } from "../../pages/utils/Auth";
+import tokenRequestApi from "../../apis/TokenRequestApi";
 import { useRecoilState } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
 
-const accessToken = getAccessToken();
 const GNB = () => {
   const [profileImage, setProfileImage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (isLoggedIn) {
-      setIsLoading(true);
-      axios
-        .get(`${import.meta.env.VITE_APP_API_URL}/members`, {
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-          },
-        })
-        .then((res) => {
-          setProfileImage(res.data.profileImage);
-          setIsLoading(false);
-        });
+      setTimeout(() => {
+        tokenRequestApi
+          .get("/members")
+          .then((res) => {
+            console.log(res);
+            setProfileImage(res.data.profileImage);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 100);
     }
+    setIsLoading(false);
   }, [isLoggedIn]);
-
   return (
     <>
       {isLoading ? (
-        <GNBDiv></GNBDiv>
+        <GNBDiv>
+          <GNBBlock>
+            <HomeLink to="/">
+              <img src={logo} />
+            </HomeLink>
+          </GNBBlock>
+        </GNBDiv>
       ) : (
         <GNBDiv>
           <GNBBlock>

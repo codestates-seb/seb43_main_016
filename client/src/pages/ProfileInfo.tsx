@@ -11,7 +11,6 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-import { useNavigate } from "react-router-dom";
 
 const ProfileInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -22,7 +21,6 @@ const ProfileInfo = () => {
     null
   );
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
-  const naviagte = useNavigate(); // 유저정보가 없거나, 잘못되었을 경우 예외처리를 위한 코드
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
   useEffect(() => {

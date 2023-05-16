@@ -255,7 +255,10 @@ interface StudyGroupMemberWaitingListDto {
 }
 
 // TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회하는 코드
-export async function getStudyGroupMemberWaitingList(id: number, accessToken: string | null) {
+export async function getStudyGroupMemberWaitingList(
+  id: number,
+  accessToken: string | null
+) {
   if (!accessToken) throw new Error("Access token is not defined.");
 
   const config = {
@@ -269,7 +272,10 @@ export async function getStudyGroupMemberWaitingList(id: number, accessToken: st
       `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join-false`,
       config
     );
-    console.log("Study group member waiting list retrieved successfully:", response);
+    console.log(
+      "Study group member waiting list retrieved successfully:",
+      response
+    );
     return response.data;
   } catch (error) {
     console.error("Error retrieving study group member waiting list:", error);
@@ -284,8 +290,11 @@ interface StudyGroupMemberListDto {
 }
 
 // TODO : StudyGroup에 가입된 멤버 리스트
-export async function getStudyGroupMemberList(id: number, accessToken: string | null) {
-  if(!accessToken) throw new Error("Access token is not defined.");
+export async function getStudyGroupMemberList(
+  id: number,
+  accessToken: string | null
+) {
+  if (!accessToken) throw new Error("Access token is not defined.");
 
   const config = {
     headers: {
@@ -300,7 +309,7 @@ export async function getStudyGroupMemberList(id: number, accessToken: string | 
     );
     console.log("Study group member list retrieved successfully:", response);
     return response.data;
-    } catch (error) {
+  } catch (error) {
     console.error("Error retrieving study group member list:", error);
   }
 }

@@ -100,7 +100,6 @@ export const updateMemberProfileImage = async (
   try {
     await axios.patch(
       `${import.meta.env.VITE_APP_API_URL}/members/profile-image`,
-
       config
     );
   } catch (error) {
