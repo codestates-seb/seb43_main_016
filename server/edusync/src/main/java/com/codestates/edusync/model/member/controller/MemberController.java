@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.member.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
+import com.codestates.edusync.model.common.utils.MemberVerificationService;
 import com.codestates.edusync.model.member.service.MemberService;
 import com.codestates.edusync.model.member.dto.MemberDto;
 import com.codestates.edusync.model.member.dto.MemberJoinResponseDto;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
-    private final VerifyMemberUtils verifyMemberUtils;
+    private final MemberVerificationService memberVerificationService;
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
@@ -59,14 +59,14 @@ public class MemberController {
 
     @GetMapping
     public ResponseEntity getMember(Authentication authentication) {
-        Member member = verifyMemberUtils.get(authentication.getName());
+        Member member = memberVerificationService.get(authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(member);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     @PostMapping("/list")
     public ResponseEntity getMembersByUUID(@RequestBody MemberDto.UuidListRequest uuidListRequestDto) {
-        List<Member> members = verifyMemberUtils.getList(uuidListRequestDto.getData());
+        List<Member> members = memberVerificationService.getList(uuidListRequestDto.getData());
         List<MemberJoinResponseDto> responseDtos = members.stream()
                 .map(memberMapper::memberToMemberResponse)
                 .collect(Collectors.toList());

@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.study.studygroup.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
+import com.codestates.edusync.model.common.utils.MemberVerificationService;
 import com.codestates.edusync.model.common.utils.UriCreator;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
@@ -30,7 +30,7 @@ public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
     private final StudygroupMapper studygroupMapper;
     private final StudygroupService studygroupService;
-    private final VerifyMemberUtils verifyMemberUtils;
+    private final MemberVerificationService memberVerificationService;
 
     /**
      * 스터디 모집 & 등록
@@ -41,7 +41,7 @@ public class StudygroupController {
     public ResponseEntity postStudygroup(Authentication authentication,
                                          @Valid @RequestBody StudygroupDto.Post postDto) {
 
-        Member member = verifyMemberUtils.getLoggedIn(authentication);
+        Member member = memberVerificationService.getLoggedIn(authentication);
         Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto, member);
         studygroup = studygroupService.createStudygruop(studygroup);
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
