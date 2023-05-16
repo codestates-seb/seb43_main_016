@@ -1,6 +1,6 @@
 package com.codestates.edusync.model.study.studygroupjoin.controller;
 
-import com.codestates.edusync.model.common.utils.MemberUtils;
+import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.study.studygroupjoin.dto.StudygroupJoinDto;
@@ -26,7 +26,7 @@ public class StudygroupJoinController {
     private static final String DEFAULT_CANDIDATE_URL = "/candidate";
     private final StudygroupJoinService studygroupJoinService;
     private final StudygroupJoinMapper studygroupJoinmapper;
-    private final MemberUtils memberUtils;
+    private final VerifyMemberUtils verifyMemberUtils;
 
     /**
      * 스터디 멤버 리스트 및 가입 대기 리스트 조회
@@ -38,7 +38,7 @@ public class StudygroupJoinController {
                                              @RequestParam("join") Boolean join,
                                              Authentication authentication) {
 
-        Member loginMember = memberUtils.getLoggedIn(authentication);
+        Member loginMember = verifyMemberUtils.getLoggedIn(authentication);
         List<StudygroupJoin> studygroupJoinList;
 
         if (join)   studygroupJoinList = studygroupJoinService.findStudygroupJoinList(studygroupId); // 멤버 리스트
@@ -57,7 +57,7 @@ public class StudygroupJoinController {
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_JOIN_URL)
     public ResponseEntity postStudygroupJoin(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                              Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
+        Member loginMember = verifyMemberUtils.getLoggedIn(authentication);
 
         studygroupJoinService.createStudygroupJoin(studygroupId, loginMember);
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -71,7 +71,7 @@ public class StudygroupJoinController {
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_JOIN_URL)
     public ResponseEntity deleteStudygroupJoinCandidate(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                         Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
+        Member loginMember = verifyMemberUtils.getLoggedIn(authentication);
 
         studygroupJoinService.deleteStudygroupJoinCandidate(studygroupId, loginMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -85,7 +85,7 @@ public class StudygroupJoinController {
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/member")
     public ResponseEntity deleteStudygroupJoin(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
+        Member loginMember = verifyMemberUtils.getLoggedIn(authentication);
 
         studygroupJoinService.deleteStudygroupJoin(studygroupId, loginMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -101,7 +101,7 @@ public class StudygroupJoinController {
     public ResponseEntity postStudygroupJoinApprove(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                     @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto,
                                                     Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
+        Member loginMember = verifyMemberUtils.getLoggedIn(authentication);
 
         studygroupJoinService.approveStudygroupJoin(studygroupId, studygroupJoinDto.getNickName(), loginMember);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -117,7 +117,7 @@ public class StudygroupJoinController {
     public ResponseEntity deleteStudygroupJoinReject(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                      @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto,
                                                      Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
+        Member loginMember = verifyMemberUtils.getLoggedIn(authentication);
 
         studygroupJoinService.rejectStudygroupJoinCandidate(studygroupId, studygroupJoinDto.getNickName(), loginMember);
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -133,7 +133,7 @@ public class StudygroupJoinController {
     public ResponseEntity deleteStudygroupJoinKick(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                    @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto,
                                                    Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
+        Member loginMember = verifyMemberUtils.getLoggedIn(authentication);
 
         studygroupJoinService.deleteStudygroupJoinKick(studygroupId, studygroupJoinDto.getNickName(), loginMember);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

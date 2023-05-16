@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.common.controller;
+package com.codestates.edusync.model.common.utils;
 
 import org.springframework.web.util.UriComponentsBuilder;
 

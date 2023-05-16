@@ -1,13 +1,13 @@
 package com.codestates.edusync.model.member.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.utils.MemberUtils;
+import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
 import com.codestates.edusync.model.member.service.MemberService;
 import com.codestates.edusync.model.member.dto.MemberDto;
 import com.codestates.edusync.model.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.mapper.MemberMapper;
-import com.codestates.edusync.model.common.controller.UriCreator;
+import com.codestates.edusync.model.common.utils.UriCreator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
-    private final MemberUtils memberUtils;
+    private final VerifyMemberUtils verifyMemberUtils;
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {
@@ -59,14 +59,14 @@ public class MemberController {
 
     @GetMapping
     public ResponseEntity getMember(Authentication authentication) {
-        Member member = memberUtils.get(authentication.getName());
+        Member member = verifyMemberUtils.get(authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(member);
         return new ResponseEntity(responseDto, HttpStatus.OK);
     }
 
     @PostMapping("/list")
     public ResponseEntity getMembersByUUID(@RequestBody MemberDto.UuidListRequest uuidListRequestDto) {
-        List<Member> members = memberUtils.getList(uuidListRequestDto.getData());
+        List<Member> members = verifyMemberUtils.getList(uuidListRequestDto.getData());
         List<MemberJoinResponseDto> responseDtos = members.stream()
                 .map(memberMapper::memberToMemberResponse)
                 .collect(Collectors.toList());
