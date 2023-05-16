@@ -2,7 +2,7 @@ package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
-import com.codestates.edusync.model.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
+import com.codestates.edusync.model.study.plancalendar.repository.CalendarStudygroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

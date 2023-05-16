@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.study.plancalendar.studygroup.dto;
+package com.codestates.edusync.model.study.plancalendar.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;

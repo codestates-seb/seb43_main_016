@@ -1,8 +1,8 @@
-package com.codestates.edusync.model.study.plancalendar.studygroup.mapper;
+package com.codestates.edusync.model.study.plancalendar.mapper;
 
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
-import com.codestates.edusync.model.study.plancalendar.studygroup.dto.CalendarDto;
+import com.codestates.edusync.model.study.plancalendar.dto.CalendarDto;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;

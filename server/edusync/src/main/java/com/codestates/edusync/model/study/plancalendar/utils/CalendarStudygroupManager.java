@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.study.plancalendar.studygroup.utils;
+package com.codestates.edusync.model.study.plancalendar.utils;
 
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
