@@ -67,7 +67,7 @@ const StudyPost = () => {
           studyName: `${title}`,
           studyPeriodStart: `${startDate}`,
           studyPeriodEnd: `${endDate}`,
-          daysOfWeek: [3, 4, 5],
+          daysOfWeek: checked,
           studyTimeStart: `${startTime}`,
           studyTimeEnd: `${endTime}`,
           minClassmateCount: minPeople,
