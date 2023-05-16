@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.member.service;
 
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
-import com.codestates.edusync.model.common.service.MemberUtils;
+import com.codestates.edusync.model.common.utils.MemberVerificationService;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -24,11 +24,11 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-    private final MemberUtils memberUtils;
+    private final MemberVerificationService memberVerificationService;
 
     public Member createMember(Member member) {
-        memberUtils.checkEmailExists(member.getEmail());
-        memberUtils.checkNicknameExists(member.getNickName());
+        memberVerificationService.checkEmailExists(member.getEmail());
+        memberVerificationService.checkNicknameExists(member.getNickName());
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
@@ -50,8 +50,8 @@ public class MemberService {
     @Transactional(propagation = Propagation.REQUIRED, isolation = Isolation.SERIALIZABLE)
     public Member updateMember(Member member, String email) {
 
-        Member findMember = memberUtils.get(email);
-        memberUtils.checkNicknameExists(member.getNickName());
+        Member findMember = memberVerificationService.get(email);
+        memberVerificationService.checkNicknameExists(member.getNickName());
 
         Optional.ofNullable(member.getNickName())
                 .ifPresent(name -> findMember.setNickName(name));
@@ -76,7 +76,7 @@ public class MemberService {
     }
 
     public void deleteMember(String email) {
-        Member findMember = memberUtils.get(email);
+        Member findMember = memberVerificationService.get(email);
         String newEmail = "del_" + findMember.getId() + "_" + findMember.getEmail();
 
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
@@ -86,7 +86,7 @@ public class MemberService {
     }
 
     public boolean checkPassword(String password, String email){
-        Member member = memberUtils.get(email);
+        Member member = memberVerificationService.get(email);
         return passwordEncoder.matches(password, member.getPassword());
     }
 }

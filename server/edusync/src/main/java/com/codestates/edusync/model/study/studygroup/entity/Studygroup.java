@@ -5,7 +5,7 @@ import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComme
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
-import com.codestates.edusync.model.searchtag.entity.SearchTag;
+import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -25,10 +25,6 @@ import static javax.persistence.FetchType.*;
 @Setter
 @Entity
 public class Studygroup extends Auditable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(length = 50, nullable = false)
     private String studyName;
 

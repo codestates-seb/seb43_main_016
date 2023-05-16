@@ -1,11 +1,10 @@
 package com.codestates.edusync.model.study.postcomment.service;
 
-import com.codestates.edusync.model.common.service.VerifyStudygroupPostCommentUtils;
-import com.codestates.edusync.model.common.service.VerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupPostCommentUtils;
+import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.repository.StudygroupPostCommentRepository;
-import com.codestates.edusync.model.study.postcomment.utils.StudygroupPostCommentManager;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -20,12 +19,12 @@ import java.util.Optional;
 public class StudygroupPostCommentService implements StudygroupPostCommentManager {
     private final StudygroupPostCommentRepository studygroupPostCommentRepository;
     private final VerifyStudygroupPostCommentUtils verifyStudygroupPostCommentUtils;
-    private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final VerifyVerifyStudygroupUtils verifyStudygroupUtils;
 
     @Override
-    public StudygroupPostComment createStudygroupPostComment(Long studygroupId,
-                                                             StudygroupPostComment comment,
-                                                             Member loginMember) {
+    public StudygroupPostComment create(Long studygroupId,
+                                        StudygroupPostComment comment,
+                                        Member loginMember) {
         comment.setMember(loginMember);
 
         Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
@@ -35,9 +34,9 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
     }
 
     @Override
-    public StudygroupPostComment updateStudygroupPostComment(Long studygroupId, Long commentId,
-                                                             StudygroupPostComment patchComment,
-                                                             Member loginMember) {
+    public StudygroupPostComment update(Long studygroupId, Long commentId,
+                                        StudygroupPostComment patchComment,
+                                        Member loginMember) {
         StudygroupPostComment findComment = verifyStudygroupPostCommentUtils.findVerifyStudygroupPostComment(commentId);
         
         verifyStudygroupPostCommentUtils.verifyStudygroupPostComment(loginMember.getId(), studygroupId, findComment);
@@ -49,12 +48,12 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
     }
 
     @Override
-    public List<StudygroupPostComment> getAllStudygroupPostComments(Long studygroupId) {
+    public List<StudygroupPostComment> getAll(Long studygroupId) {
         return studygroupPostCommentRepository.findAllByStudygroupId(studygroupId);
     }
 
     @Override
-    public void deleteStudygroupPostComment(Long studygroupId, Long commentId, Member loginMember) {
+    public void delete(Long studygroupId, Long commentId, Member loginMember) {
         StudygroupPostComment findComment = verifyStudygroupPostCommentUtils.findVerifyStudygroupPostComment(commentId);
 
         verifyStudygroupPostCommentUtils.verifyStudygroupPostComment(loginMember.getId(), studygroupId, findComment);
@@ -63,7 +62,7 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
     }
 
     @Override
-    public void deleteAllStudygroupPostCommentByStudygroupId(Long studygroupId, Member loginMember) {
+    public void deleteAllByStudygroupId(Long studygroupId, Member loginMember) {
         Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
 
         verifyStudygroupPostCommentUtils.verifyStudygroupMemberLeader(loginMember.getId(), findStudygroup);
