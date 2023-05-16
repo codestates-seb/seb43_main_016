@@ -1,6 +1,6 @@
 package com.codestates.edusync.model.study.plancalendar.studygroup.controller;
 
-import com.codestates.edusync.model.common.utils.VerifyVerifyMemberUtils;
+import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.studygroup.mapper.CalendarStudygroupMapper;
@@ -24,7 +24,7 @@ import java.util.List;
 public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
     private final CalendarStudygroupMapper mapper;
-    private final VerifyVerifyMemberUtils verifyMemberUtils;
+    private final VerifyMemberUtils verifyMemberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_TIME_SCHEDULE_URL = "/timeSchedule";

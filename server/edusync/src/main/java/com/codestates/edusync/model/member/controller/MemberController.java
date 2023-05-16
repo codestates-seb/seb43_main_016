@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.member.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.utils.VerifyVerifyMemberUtils;
+import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
 import com.codestates.edusync.model.member.service.MemberService;
 import com.codestates.edusync.model.member.dto.MemberDto;
 import com.codestates.edusync.model.member.dto.MemberJoinResponseDto;
@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper memberMapper;
-    private final VerifyVerifyMemberUtils verifyMemberUtils;
+    private final VerifyMemberUtils verifyMemberUtils;
 
     @PostMapping
     public ResponseEntity postMember(@Valid @RequestBody MemberDto.Post requestBody) {

@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.member.service;
 
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
-import com.codestates.edusync.model.common.utils.VerifyVerifyMemberUtils;
+import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;
@@ -24,7 +24,7 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
-    private final VerifyVerifyMemberUtils verifyMemberUtils;
+    private final VerifyMemberUtils verifyMemberUtils;
 
     public Member createMember(Member member) {
         verifyMemberUtils.checkEmailExists(member.getEmail());
