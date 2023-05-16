@@ -79,17 +79,23 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
           <ModalExplain>변경할 비밀번호</ModalExplain>
           <UserInfoEditInput
             name="password"
+            type="password"
             value={modalState.password}
             onChange={handleInputChange}
           />
           <ModalExplain>변경할 비밀번호 확인</ModalExplain>
           <UserInfoEditInput
             name="passwordCheck"
+            type="password"
             value={modalState.passwordCheck}
             onChange={handleInputChange}
           />
-          <ModalButton onClick={handleSaveClick}>저장</ModalButton>
-          <ModalButton onClick={handleCancelClick}>취소</ModalButton>
+          <ModalButton type="button" onClick={handleSaveClick}>
+            저장
+          </ModalButton>
+          <ModalButton type="button" onClick={handleCancelClick}>
+            취소
+          </ModalButton>
         </form>
       </Modal>
     </>

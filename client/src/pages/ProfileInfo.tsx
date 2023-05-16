@@ -6,11 +6,11 @@ import {
   updateMemberDetail,
   MemberDetailDto,
   deleteMember,
+  MemberPasswordCheckDto,
+  checkMemberPassword,
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-
-// TODO accessToken에 접근하는 방법 문의하기.
 
 const ProfileInfo = () => {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
@@ -31,14 +31,30 @@ const ProfileInfo = () => {
         setMemberInfo(info);
       } catch (error) {
         alert("로그인이 필요합니다.");
+        console.error(error);
       }
     };
     fetchMemberInfo();
   }, []);
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
-  const handleEditClick = () => {
-    setIsModalOpen(true);
+  const handleEditClick = async () => {
+    const enteredPassword = prompt(
+      "개인정보 수정 전 비밀번호를 확인해야 합니다."
+    ); // ! 해당 부분 추후 모달창으로 대체
+    const accessToken = localStorage.getItem("accessToken");
+
+    if (!enteredPassword) return; // 비밀번호 입력을 취소하면 함수 종료
+    // 비밀번호 검증
+    try {
+      const passwordCheckDto: MemberPasswordCheckDto = {
+        password: enteredPassword,
+      };
+      await checkMemberPassword(accessToken, passwordCheckDto);
+      setIsModalOpen(true); // 비밀번호 검증이 성공하면 모달 열기
+    } catch (error) {
+      alert("비밀번호가 일치하지 않습니다.");
+    }
   };
 
   // TODO Edit 버튼을 클릭 시, 유저의 자기소개, 원하는 동료상을 수정할 수 있도록 상태를 변경하는 코드
@@ -46,7 +62,7 @@ const ProfileInfo = () => {
     setIsIntroduceEdit(true);
   };
 
-  // TODO Edit 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 수정할 수 있도록 상태를 변경하는 코드
+  // TODO input 창의 유저의 자기소개 및 원하는 동료상을 수정할 수 있도록 상태를 변경하는 코드
   const handleIntroduceChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { value } = e.target;
     setIntroduceInfo({
@@ -67,6 +83,7 @@ const ProfileInfo = () => {
       setIsIntroduceEdit(false);
     } catch (error) {
       console.error(error);
+      setIsIntroduceEdit(false);
     }
   };
 
@@ -88,29 +105,27 @@ const ProfileInfo = () => {
       </ProfileImage>
       {/* 유저의 기본정보가 입력되는 자리 */}
       <ProfileBaseInfo>
-        <ProfileInput disabled>{memberInfo?.nickName}</ProfileInput>
-        <ProfileInput disabled>{memberInfo?.email}</ProfileInput>
-        <ProfileInput disabled>{memberInfo?.roles}</ProfileInput>
+        <ProfileInput disabled value={memberInfo?.nickName} />
+        <ProfileInput disabled value={memberInfo?.email} />
+        <ProfileInput disabled value={memberInfo?.roles} />
         <EditButton onClick={handleEditClick}>Edit</EditButton>
       </ProfileBaseInfo>
       {/* 유저의 자기소개와 원하는 유형의 팀원을 정리하는 자리 */}
       <IntroduceAndDesired>
-        {isIntroduceEdit ? (
+        {!isIntroduceEdit ? (
           <>
-            <IntroduceAndDesiredInput>
-              {memberInfo?.aboutMe}
-            </IntroduceAndDesiredInput>
-            <IntroduceAndDesiredInput>
-              {memberInfo?.withMe}
-            </IntroduceAndDesiredInput>
+            <IntroduceAndDesiredInput value={memberInfo?.aboutMe} />
+            <IntroduceAndDesiredInput value={memberInfo?.withMe} />
           </>
         ) : (
           <>
             <IntroduceAndDesiredInput
+              type="text"
               placeholder={memberInfo?.aboutMe}
               onChange={handleIntroduceChange}
             />
             <IntroduceAndDesiredInput
+              type="text"
               placeholder={memberInfo?.withMe}
               onChange={handleIntroduceChange}
             />

@@ -1,12 +1,87 @@
 import { useState, useEffect } from "react";
+<<<<<<< HEAD
+import {
+  deleteStudyGroupInfo,
+  getStudyGroupInfo,
+  StudyInfoDto,
+} from "../apis/StudyGroupApi";
+import styled from "styled-components";
+import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
+=======
 import styled from "styled-components";
 import { getStudyInfo } from "../apis/StudyGroupApi";
+>>>>>>> 07650a94e7d83111bd34b6e152fb8d16e31faf84
 
 // Props로 전달받은 id(스터디 그룹의 아이디)를 정의
 interface ReadStudyInfoProps {
   id: number;
 }
 
+<<<<<<< HEAD
+const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
+  const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
+  const [isModalOpen, setModalOpen] = useState(false);
+
+  const accessToken = localStorage.getItem("accessToken");
+
+  // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
+  useEffect(() => {
+    const fetchStudyGroupInfo = async () => {
+      try {
+        const studyInfo = await getStudyGroupInfo(id);
+        setStudyInfo(studyInfo);
+      } catch (error) {
+        console.error("권한이 없습니다");
+      }
+    };
+
+    fetchStudyGroupInfo();
+  }, []);
+
+  // TODO : 스터디 정보를 수정하는 코드
+  const handleEditClick = () => {
+    setModalOpen(true);
+  };
+
+  // TODO : 스터디 정보를 삭제하는 코드
+  const handleDeleteClick = async () => {
+    if (accessToken === undefined) {
+      alert("권한이 없습니다.");
+      return;
+    }
+    try {
+      await deleteStudyGroupInfo(id, accessToken);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  return (
+    <Wrapper>
+      <div>스터디 명: {studyInfo?.studyName}</div>
+      <div>스터디 인원: {studyInfo?.memberCountCurrent}</div>
+      <div>스터디 플랫폼: {studyInfo?.platform}</div>
+      <div>
+        스터디 기간: {studyInfo?.studyPeriodStart} ~ {studyInfo?.studyPeriodEnd}
+      </div>
+      <div>태그: </div>
+      <button type="button" onClick={handleEditClick}>
+        스터디 정보 수정
+      </button>
+      <div>{studyInfo?.introduction}</div>
+
+      {/* StudyInfoEditModal */}
+      {isModalOpen && (
+        <StudyInfoEditModal
+          isOpen={isModalOpen}
+          closeModal={() => setModalOpen(false)}
+          studyInfo={studyInfo}
+        />
+      )}
+      <button type="button" onClick={handleDeleteClick}>
+        스터디 삭제
+      </button>
+=======
 // res.data로 전달받은 스터디 그룹 정보의 타입을 정의
 interface StudyResponseDto {
   id: number;
@@ -59,6 +134,7 @@ const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
       <button type="button">스터디 정보 수정</button>
       <div></div>
       <div>{studyInfo?.introduction}</div>
+>>>>>>> 07650a94e7d83111bd34b6e152fb8d16e31faf84
     </Wrapper>
   );
 };
