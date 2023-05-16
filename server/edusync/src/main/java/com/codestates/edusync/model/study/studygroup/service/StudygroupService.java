@@ -24,13 +24,13 @@ public class StudygroupService implements StudygroupManager{
     private final VerifyVerifyStudygroupUtils studygroupUtills;
 
     @Override
-    public Studygroup createStudygruop(Studygroup studygroup) {
+    public Studygroup create(Studygroup studygroup) {
         return studygroupRepository.save(studygroup);
     }
 
     @Override
-    public Studygroup updateStudygroup(String email, Studygroup studygroup) {
-        Studygroup findStudygroup = findStudygroup(studygroup.getId());
+    public Studygroup update(String email, Studygroup studygroup) {
+        Studygroup findStudygroup = get(studygroup.getId());
 
         if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
             Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
@@ -50,8 +50,8 @@ public class StudygroupService implements StudygroupManager{
     }
 
     @Override
-    public void updateStatusStudygroup(String email, Long studygroupId) {
-        Studygroup findStudygroup = findStudygroup(studygroupId);
+    public void updateStatus(String email, Long studygroupId) {
+        Studygroup findStudygroup = get(studygroupId);
 
         if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
             boolean requited = findStudygroup.getIs_requited();
@@ -64,19 +64,19 @@ public class StudygroupService implements StudygroupManager{
     }
 
     @Override
-    public Studygroup findStudygroup(Long studygroupId) {
+    public Studygroup get(Long studygroupId) {
         Studygroup findStudygroup = studygroupUtills.findStudygroup(studygroupId);
         findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
         return findStudygroup;
     }
 
     @Override
-    public Page<Studygroup> findStudygroups(Integer page, Integer size) {
+    public Page<Studygroup> getAll(Integer page, Integer size) {
         return studygroupRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
     @Override
-    public void deleteStudygroup(String email, Long studygroupId){
+    public void delete(String email, Long studygroupId){
         if (studygroupUtills.verifyMemberLeaderOfStudygroup(email, studygroupId)) {
             studygroupRepository.deleteById(studygroupId);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
