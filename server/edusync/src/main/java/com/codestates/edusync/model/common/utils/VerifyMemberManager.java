@@ -8,7 +8,7 @@ import java.util.List;
 /*
   상태 코드에 대한 설명 참조: https://www.rfc-editor.org/rfc/rfc7231
  */
-public interface MemberVerificationService {
+public interface VerifyMemberManager {
     /**
      * <h2>email 을 이용해서 회원을 검색하는 메서드</h2>
      * email 로 회원 검색 후 검증하여 리턴해준다.

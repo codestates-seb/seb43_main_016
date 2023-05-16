@@ -1,6 +1,6 @@
 package com.codestates.edusync.model.study.studygroupjoin.controller;
 
-import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
+import com.codestates.edusync.model.common.utils.VerifyVerifyMemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.study.studygroupjoin.dto.StudygroupJoinDto;
@@ -26,7 +26,7 @@ public class StudygroupJoinController {
     private static final String DEFAULT_CANDIDATE_URL = "/candidate";
     private final StudygroupJoinService studygroupJoinService;
     private final StudygroupJoinMapper studygroupJoinmapper;
-    private final VerifyMemberUtils verifyMemberUtils;
+    private final VerifyVerifyMemberUtils verifyMemberUtils;
 
     /**
      * 스터디 멤버 리스트 및 가입 대기 리스트 조회

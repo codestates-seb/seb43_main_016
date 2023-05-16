@@ -1,6 +1,6 @@
 package com.codestates.edusync.model.study.postcomment.controller;
 
-import com.codestates.edusync.model.common.utils.VerifyMemberUtils;
+import com.codestates.edusync.model.common.utils.VerifyVerifyMemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.mapper.StudygroupPostCommentMapper;
@@ -25,7 +25,7 @@ import java.util.List;
 public class StudygroupPostCommentController {
     private final StudygroupPostCommentService studygroupPostCommentService;
     private final StudygroupPostCommentMapper mapper;
-    private final VerifyMemberUtils verifyMemberUtils;
+    private final VerifyVerifyMemberUtils verifyMemberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_STUDYGROUP_POST_COMMENT_URL = "/comment";
