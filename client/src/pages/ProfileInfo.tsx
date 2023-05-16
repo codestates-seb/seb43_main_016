@@ -1,5 +1,4 @@
 import styled from "styled-components";
-<<<<<<< HEAD
 import ProfileImg from "../components/ProfileImg";
 import {
   getMemberInfo,
@@ -10,16 +9,10 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-=======
-import axios from "axios";
-//import { myIdState } from "../recoil/atoms/myIdState";
-//import { useRecoilValue } from "recoil";
->>>>>>> 70471a0af1229d93bfea0455a1e8d555b0025b66
 
 // TODO accessToken에 접근하는 방법 문의하기.
 
 const ProfileInfo = () => {
-<<<<<<< HEAD
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoResponseDto | null>(
     null
@@ -28,33 +21,14 @@ const ProfileInfo = () => {
     null
   );
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
-=======
-  const [userInfo, setUserInfo] = useState<UserInfo | null>(null);
-  const [isEdit, setIsEdit] = useState<boolean>(false);
-  //const myId = useRecoilValue(myIdState);
->>>>>>> 70471a0af1229d93bfea0455a1e8d555b0025b66
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
   useEffect(() => {
     const fetchMemberInfo = async () => {
       try {
-<<<<<<< HEAD
         const accessToken = localStorage.getItem("accessToken");
         const info = await getMemberInfo(accessToken);
         setMemberInfo(info);
-=======
-        const token = localStorage.getItem("accessToken");
-        const res = await axios.get(
-          `${import.meta.env.VITE_APP_API_URL}/members`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-        const data = res.data;
-        setUserInfo(data);
->>>>>>> 70471a0af1229d93bfea0455a1e8d555b0025b66
       } catch (error) {
         alert("로그인이 필요합니다.");
       }
@@ -85,27 +59,12 @@ const ProfileInfo = () => {
   const handleSaveClick = async () => {
     const accessToken = localStorage.getItem("accessToken");
     try {
-<<<<<<< HEAD
       const memberDetailDto: MemberDetailDto = {
         aboutMe: introduceInfo?.aboutMe || "",
         withMe: introduceInfo?.withMe || "",
       };
       await updateMemberDetail(accessToken, memberDetailDto);
       setIsIntroduceEdit(false);
-=======
-      const {
-        data: { password },
-      } = await axios.get(
-        `${import.meta.env.VITE_APP_API_URL}/members/password`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        }
-      );
-
-      return enteredPassword === password;
->>>>>>> 70471a0af1229d93bfea0455a1e8d555b0025b66
     } catch (error) {
       console.error(error);
     }
