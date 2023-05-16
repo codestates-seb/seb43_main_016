@@ -1,6 +1,6 @@
-package com.codestates.edusync.model.searchtag.utils;
+package com.codestates.edusync.model.studyaddons.searchtag.utils;
 
-import com.codestates.edusync.model.searchtag.entity.SearchTag;
+import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 
 import java.util.List;
 

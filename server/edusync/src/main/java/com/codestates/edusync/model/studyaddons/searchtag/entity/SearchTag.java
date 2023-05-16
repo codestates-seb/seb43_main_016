@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.searchtag.entity;
+package com.codestates.edusync.model.studyaddons.searchtag.entity;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.Getter;

@@ -1,9 +1,9 @@
-package com.codestates.edusync.model.searchtag.mapper;
+package com.codestates.edusync.model.studyaddons.searchtag.mapper;
 
-import com.codestates.edusync.model.searchtag.entity.SearchTag;
+import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
-import com.codestates.edusync.model.searchtag.dto.SearchTagDto;
-import com.codestates.edusync.model.searchtag.dto.SearchTagResponseDto;
+import com.codestates.edusync.model.studyaddons.searchtag.dto.SearchTagDto;
+import com.codestates.edusync.model.studyaddons.searchtag.dto.SearchTagResponseDto;
 import org.mapstruct.Mapper;
 
 import java.util.ArrayList;

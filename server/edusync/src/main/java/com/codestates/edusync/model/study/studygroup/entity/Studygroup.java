@@ -5,7 +5,7 @@ import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComme
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
-import com.codestates.edusync.model.searchtag.entity.SearchTag;
+import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

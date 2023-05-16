@@ -1,8 +1,8 @@
-package com.codestates.edusync.model.searchtag.service;
+package com.codestates.edusync.model.studyaddons.searchtag.service;
 
-import com.codestates.edusync.model.searchtag.entity.SearchTag;
-import com.codestates.edusync.model.searchtag.repository.SearchTagRepository;
-import com.codestates.edusync.model.searchtag.utils.SearchTagManager;
+import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
+import com.codestates.edusync.model.studyaddons.searchtag.repository.SearchTagRepository;
+import com.codestates.edusync.model.studyaddons.searchtag.utils.SearchTagManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

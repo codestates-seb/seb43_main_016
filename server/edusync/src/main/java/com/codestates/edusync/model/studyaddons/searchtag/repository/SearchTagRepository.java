@@ -1,6 +1,6 @@
-package com.codestates.edusync.model.searchtag.repository;
+package com.codestates.edusync.model.studyaddons.searchtag.repository;
 
-import com.codestates.edusync.model.searchtag.entity.SearchTag;
+import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
