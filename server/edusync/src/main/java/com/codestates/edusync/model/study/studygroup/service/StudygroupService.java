@@ -2,10 +2,11 @@ package com.codestates.edusync.model.study.studygroup.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.service.VerifyStudygroupUtils;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
-import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
+import com.codestates.edusync.model.study.studygroup.utils.StudygroupManager;
+import com.codestates.edusync.model.searchtag.service.SearchTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -21,16 +22,16 @@ import java.util.Optional;
 public class StudygroupService implements StudygroupManager{
     private final StudygroupRepository studygroupRepository;
     private final SearchTagService searchTagService;
-    private final VerifyVerifyStudygroupUtils studygroupUtills;
+    private final VerifyStudygroupUtils studygroupUtills;
 
     @Override
-    public Studygroup create(Studygroup studygroup) {
+    public Studygroup createStudygruop(Studygroup studygroup) {
         return studygroupRepository.save(studygroup);
     }
 
     @Override
-    public Studygroup update(String email, Studygroup studygroup) {
-        Studygroup findStudygroup = get(studygroup.getId());
+    public Studygroup updateStudygroup(String email, Studygroup studygroup) {
+        Studygroup findStudygroup = findStudygroup(studygroup.getId());
 
         if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
             Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
@@ -50,8 +51,8 @@ public class StudygroupService implements StudygroupManager{
     }
 
     @Override
-    public void updateStatus(String email, Long studygroupId) {
-        Studygroup findStudygroup = get(studygroupId);
+    public void updateStatusStudygroup(String email, Long studygroupId) {
+        Studygroup findStudygroup = findStudygroup(studygroupId);
 
         if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
             boolean requited = findStudygroup.getIs_requited();
@@ -64,19 +65,19 @@ public class StudygroupService implements StudygroupManager{
     }
 
     @Override
-    public Studygroup get(Long studygroupId) {
+    public Studygroup findStudygroup(Long studygroupId) {
         Studygroup findStudygroup = studygroupUtills.findStudygroup(studygroupId);
-        findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
+        findStudygroup.setSearchTags(searchTagService.getSearchTagList(studygroupId));
         return findStudygroup;
     }
 
     @Override
-    public Page<Studygroup> getAll(Integer page, Integer size) {
+    public Page<Studygroup> findStudygroups(Integer page, Integer size) {
         return studygroupRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
     }
 
     @Override
-    public void delete(String email, Long studygroupId){
+    public void deleteStudygroup(String email, Long studygroupId){
         if (studygroupUtills.verifyMemberLeaderOfStudygroup(email, studygroupId)) {
             studygroupRepository.deleteById(studygroupId);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);

@@ -4,7 +4,7 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
-import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
+import com.codestates.edusync.model.searchtag.entity.SearchTag;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import org.mapstruct.Mapper;

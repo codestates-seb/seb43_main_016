@@ -1,12 +1,12 @@
 package com.codestates.edusync.model.study.postcomment.controller;
 
-import com.codestates.edusync.model.common.utils.MemberVerificationService;
+import com.codestates.edusync.model.common.service.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.mapper.StudygroupPostCommentMapper;
 import com.codestates.edusync.model.study.postcomment.service.StudygroupPostCommentService;
 import com.codestates.edusync.model.study.postcomment.dto.StudygroupPostCommentDto;
-import com.codestates.edusync.model.common.utils.UriCreator;
+import com.codestates.edusync.model.common.controller.UriCreator;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +25,7 @@ import java.util.List;
 public class StudygroupPostCommentController {
     private final StudygroupPostCommentService studygroupPostCommentService;
     private final StudygroupPostCommentMapper mapper;
-    private final MemberVerificationService memberVerificationService;
+    private final MemberUtils memberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_STUDYGROUP_POST_COMMENT_URL = "/comment";
@@ -40,10 +40,10 @@ public class StudygroupPostCommentController {
     public ResponseEntity postStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                     @Valid @RequestBody StudygroupPostCommentDto.Post postDto,
                                                     Authentication authentication) {
-        Member loginMember = memberVerificationService.getLoggedIn(authentication);
+        Member loginMember = memberUtils.getLoggedIn(authentication);
 
         StudygroupPostComment createdStudygroupPostComment =
-                studygroupPostCommentService.create(
+                studygroupPostCommentService.createStudygroupPostComment(
                         studygroupId,
                         mapper.studygroupPostCommentPostDtoToStudygroupPostComment(postDto),
                         loginMember
@@ -68,10 +68,10 @@ public class StudygroupPostCommentController {
                                                      @PathVariable("comment-id") @Positive Long commentId,
                                                      @Valid @RequestBody StudygroupPostCommentDto.Patch patchDto,
                                                      Authentication authentication) {
-        Member loginMember = memberVerificationService.getLoggedIn(authentication);
+        Member loginMember = memberUtils.getLoggedIn(authentication);
 
         StudygroupPostComment updatedStudygroupPostComment =
-                studygroupPostCommentService.update(
+                studygroupPostCommentService.updateStudygroupPostComment(
                         studygroupId, commentId,
                         mapper.studygroupPostCommentPatchDtoToStudygroupPostComment(patchDto),
                         loginMember
@@ -87,7 +87,7 @@ public class StudygroupPostCommentController {
      */
     @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL + "s")
     public ResponseEntity getStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId) {
-        List<StudygroupPostComment> findComments = studygroupPostCommentService.getAll(studygroupId);
+        List<StudygroupPostComment> findComments = studygroupPostCommentService.getAllStudygroupPostComments(studygroupId);
 
         return new ResponseEntity<>(
                 mapper.studygroupPostCommentToStudygroupPostCommentResponseDtos(findComments),
@@ -105,9 +105,9 @@ public class StudygroupPostCommentController {
     public ResponseEntity deleteStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                       @PathVariable("comment-id") @Positive Long commentId,
                                                       Authentication authentication) {
-        Member loginMember = memberVerificationService.getLoggedIn(authentication);
+        Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupPostCommentService.delete(studygroupId, commentId, loginMember);
+        studygroupPostCommentService.deleteStudygroupPostComment(studygroupId, commentId, loginMember);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -120,9 +120,9 @@ public class StudygroupPostCommentController {
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/all")
     public ResponseEntity deleteAllStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                          Authentication authentication) {
-        Member loginMember = memberVerificationService.getLoggedIn(authentication);
+        Member loginMember = memberUtils.getLoggedIn(authentication);
 
-        studygroupPostCommentService.deleteAllByStudygroupId(studygroupId, loginMember);
+        studygroupPostCommentService.deleteAllStudygroupPostCommentByStudygroupId(studygroupId, loginMember);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
