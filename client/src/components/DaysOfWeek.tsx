@@ -1,18 +1,21 @@
 import styled from "styled-components";
 import { useState } from "react";
 
-const DaysOfWeek = () => {
+interface DaysOfWeekProps {
+  checked: string[];
+  setChecked: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
   const daysOfWeekList: string[] = ["월", "화", "수", "목", "금", "토", "일"];
 
-  const [checked, setChecked] = useState<string[]>([]);
-
-  const handleCheck = (event: { target: { checked: any; value: string } }) => {
+  const handleCheck = (e: { target: { checked: any; value: string } }) => {
     let updatedList = [...checked];
-    if (event.target.checked) {
-      updatedList = [...checked, event.target.value];
+    if (e.target.checked) {
+      updatedList = [...checked, e.target.value];
       //   console.log(checked);
     } else {
-      updatedList.splice(checked.indexOf(event.target.value), 1);
+      updatedList.splice(checked.indexOf(e.target.value), 1);
     }
     setChecked(updatedList);
   };
@@ -22,7 +25,12 @@ const DaysOfWeek = () => {
       {daysOfWeekList.map((item: string, index: number) => {
         return (
           <CheckBox key={index}>
-            <input value={item} type="checkbox" onChange={handleCheck} />
+            <input
+              value={item}
+              type="checkbox"
+              onChange={handleCheck}
+              checked={checked.includes(item)}
+            />
             <label id={item}>{item}</label>
           </CheckBox>
         );
@@ -51,8 +59,8 @@ const CheckBox = styled.div`
   }
 
   input {
-    width: 18px;
-    height: 18px;
+    width: 15px;
+    height: 15px;
     border: none;
   }
 `;

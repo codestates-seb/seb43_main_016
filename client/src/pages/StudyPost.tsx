@@ -10,14 +10,13 @@ const StudyPost = () => {
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
+  const [checked, setChecked] = useState<string[]>([]);
   const [startTime, setStartTime] = useState<string>("00:00");
   const [endTime, setEndTime] = useState<string>("00:00");
   const [minPeople, setMinPeople] = useState<number>(1);
   const [maxPeople, setMaxPeople] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
   const [postText, setPostText] = useState<string>("");
-
-  const navigate = useNavigate();
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(e.target.value);
@@ -49,7 +48,7 @@ const StudyPost = () => {
       studyName: `${title}`,
       studyPeriodStart: `${startDate}`,
       studyPeriodEnd: `${endDate}`,
-      daysOfWeek: [3, 4, 5],
+      daysOfWeek: checked,
       studyTimeStart: `${startTime}`,
       studyTimeEnd: `${endTime}`,
       minClassmateCount: minPeople,
@@ -90,6 +89,8 @@ const StudyPost = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <StudyPostContainer>
       <StudyPostBody>
@@ -124,7 +125,7 @@ const StudyPost = () => {
           <StudyPostInfo>
             <span>요일</span>
             <div>
-              <DaysOfWeek />
+              <DaysOfWeek checked={checked} setChecked={setChecked} />
             </div>
           </StudyPostInfo>
           <StudyPostInfo>
