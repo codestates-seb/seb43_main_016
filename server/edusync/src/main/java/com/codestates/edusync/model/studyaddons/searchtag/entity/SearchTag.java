@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.studyaddons.searchtag.entity;
 
+import com.codestates.edusync.model.common.entity.BaseEntity;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,11 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
-public class SearchTag {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class SearchTag extends BaseEntity {
     @Column(length = 20)
     private String tagKey;
 

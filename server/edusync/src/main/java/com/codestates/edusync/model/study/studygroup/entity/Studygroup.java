@@ -25,10 +25,6 @@ import static javax.persistence.FetchType.*;
 @Setter
 @Entity
 public class Studygroup extends Auditable {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
     @Column(length = 50, nullable = false)
     private String studyName;
 
