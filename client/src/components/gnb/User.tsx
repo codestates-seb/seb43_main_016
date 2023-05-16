@@ -1,9 +1,7 @@
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import tokenRequestApi from "../../apis/TokenRequestApi";
 import { useNavigate } from "react-router-dom";
-//import { useRecoilValue } from "recoil";
-//import { isLoggedInSelector } from "../../recoil/selectors/IsLoggedInSelector";
-//import { googleLogout } from "@react-oauth/google";
 import { removeTokens } from "../../pages/utils/Auth";
 
 type GNB = {
@@ -16,6 +14,7 @@ const User = ({ profileImage, isLoggedIn, setIsLoggedIn }: GNB) => {
   const navigate = useNavigate();
 
   const handleLogout = (): void => {
+    tokenRequestApi.setAccessToken(null);
     removeTokens();
     setIsLoggedIn(false);
     navigate("/");
