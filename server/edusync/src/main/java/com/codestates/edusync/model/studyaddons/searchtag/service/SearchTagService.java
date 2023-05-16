@@ -14,38 +14,38 @@ import java.util.List;
 public class SearchTagService implements SearchTagManager {
     private final SearchTagRepository searchTagRepository;
 
-    public List<SearchTag> getSearchTagList(Long studygroupId) { return searchTagRepository.findAllByStudygroupId(studygroupId); }
+    public List<SearchTag> getList(Long studygroupId) { return searchTagRepository.findAllByStudygroupId(studygroupId); }
 
     @Override
-    public List<SearchTag> getSearchTagList(String key) {
+    public List<SearchTag> getList(String key) {
         return searchTagRepository.findAllByTagKey(key);
     }
 
     @Override
-    public List<SearchTag> getAllSearchTagList() {
+    public List<SearchTag> getAllList() {
         return searchTagRepository.findAll();
     }
 
     @Override
-    public List<SearchTag> createSearchTags(List<SearchTag> tags) {
+    public List<SearchTag> createList(List<SearchTag> tags) {
 
         return searchTagRepository.saveAll(tags);
     }
 
     @Override
-    public void deleteSearchTags(List<SearchTag> tags) {
+    public void deleteList(List<SearchTag> tags) {
         tags.forEach(tag -> searchTagRepository.deleteByTagKeyAndTagValue(tag.getTagKey(), tag.getTagValue()));
     }
 
     @Override
-    public void deleteSearchTags(Long studygroupId) {
+    public void deleteList(Long studygroupId) {
         searchTagRepository.deleteAllByStudygroupId(studygroupId);
     }
 
     @Override
-    public void updateSearchTags(Long studygroupId, List<SearchTag> searchTags) {
+    public void updateList(Long studygroupId, List<SearchTag> searchTags) {
         searchTagRepository.deleteAllByStudygroupId(studygroupId);
 
-        createSearchTags(searchTags);
+        createList(searchTags);
     }
 }
