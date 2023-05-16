@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.studygroupjoin.entity;
 
+import com.codestates.edusync.model.common.entity.Auditable;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.Getter;
@@ -14,11 +15,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
-public class StudygroupJoin {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
+public class StudygroupJoin extends Auditable {
     @Column(name = "is_approved")
     private Boolean isApproved = false;
 
