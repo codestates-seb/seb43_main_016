@@ -1,16 +1,16 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import tokenRequestApi from "../apis/TokenRequestApi";
+
 function Redirect() {
   const navigate = useNavigate();
   useEffect(() => {
-    // URL에서 Access Token 추출
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
 
-    // Access Token이 유효한 경우, 로컬 스토리지에 저장
     if (accessToken && refreshToken) {
-      localStorage.setItem("accessToken", accessToken);
+      tokenRequestApi.setAccessToken(accessToken);
       localStorage.setItem("refreshToken", refreshToken);
     }
 
