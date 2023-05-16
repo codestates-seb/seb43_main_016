@@ -26,8 +26,8 @@ const ProfileInfo = () => {
   useEffect(() => {
     const fetchMemberInfo = async () => {
       try {
-        const accessToken = localStorage.getItem("accessToken");
-        const info = await getMemberInfo(accessToken);
+        //const accessToken = localStorage.getItem("accessToken");
+        const info = await getMemberInfo();
         setMemberInfo(info);
       } catch (error) {
         alert("로그인이 필요합니다.");
@@ -42,7 +42,7 @@ const ProfileInfo = () => {
     const enteredPassword = prompt(
       "개인정보 수정 전 비밀번호를 확인해야 합니다."
     ); // ! 해당 부분 추후 모달창으로 대체
-    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = localStorage.getItem("accessToken");
 
     if (!enteredPassword) return; // 비밀번호 입력을 취소하면 함수 종료
     // 비밀번호 검증
@@ -50,7 +50,7 @@ const ProfileInfo = () => {
       const passwordCheckDto: MemberPasswordCheckDto = {
         password: enteredPassword,
       };
-      await checkMemberPassword(accessToken, passwordCheckDto);
+      await checkMemberPassword(passwordCheckDto);
       setIsModalOpen(true); // 비밀번호 검증이 성공하면 모달 열기
     } catch (error) {
       alert("비밀번호가 일치하지 않습니다.");
@@ -73,13 +73,13 @@ const ProfileInfo = () => {
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
   const handleSaveClick = async () => {
-    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = localStorage.getItem("accessToken");
     try {
       const memberDetailDto: MemberDetailDto = {
         aboutMe: introduceInfo?.aboutMe || "",
         withMe: introduceInfo?.withMe || "",
       };
-      await updateMemberDetail(accessToken, memberDetailDto);
+      await updateMemberDetail(memberDetailDto);
       setIsIntroduceEdit(false);
     } catch (error) {
       console.error(error);
@@ -89,9 +89,9 @@ const ProfileInfo = () => {
 
   // TODO DELETE 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에서 DELETE하는 코드
   const handleDeleteClick = async () => {
-    const accessToken = localStorage.getItem("accessToken");
+    //const accessToken = localStorage.getItem("accessToken");
     try {
-      await deleteMember(accessToken);
+      await deleteMember();
     } catch (error) {
       console.error(error);
     }

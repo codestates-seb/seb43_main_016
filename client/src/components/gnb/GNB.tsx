@@ -19,7 +19,6 @@ const GNB = () => {
         tokenRequestApi
           .get("/members")
           .then((res) => {
-            console.log(res);
             setProfileImage(res.data.profileImage);
             setIsLoading(false);
           })
@@ -47,7 +46,18 @@ const GNB = () => {
               <img src={logo} />
             </HomeLink>
           </GNBBlock>
-
+          <Link to="/studylist">
+            <span>스터디리스트</span>
+          </Link>
+          <Link to="/studycontent">
+            <span>스터디컨텐츠</span>
+          </Link>
+          <Link to="/studypost">
+            <span>포스트</span>
+          </Link>
+          <Link to="/calendar">
+            <span>캘린더</span>
+          </Link>
           <User
             profileImage={profileImage}
             isLoggedIn={isLoggedIn}
@@ -67,7 +77,6 @@ const GNBDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  color: #2759a2;
 `;
 const GNBBlock = styled.div`
   width: 150px;

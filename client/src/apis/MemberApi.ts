@@ -1,4 +1,4 @@
-import axios from "axios";
+import tokenRequestApi from "./TokenRequestApi";
 
 export interface MemberInfoResponseDto {
   uuid: string;
@@ -38,18 +38,12 @@ export interface MemberPasswordCheckDto {
 // response = MemberInfoResponseDto
 // headers = { Authorization: `Bearer ${accessToken}` }
 
-export const getMemberInfo = async (accessToken: string | null) => {
-  if (!accessToken) throw new Error("Access token is not defined.");
+export const getMemberInfo = async (/*accessToken: string | null*/) => {
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
   try {
-    const response = await axios.get<MemberInfoResponseDto>(
-      `${import.meta.env.VITE_APP_API_URL}/members`,
-      config
+    const response = await tokenRequestApi.get<MemberInfoResponseDto>(
+      `/members`
     );
     const data = response.data;
     return data;
@@ -64,19 +58,14 @@ export const getMemberInfo = async (accessToken: string | null) => {
 // method = PATCH
 // headers = { Authorization: `Bearer ${accessToken}` }
 export const updateMember = async (
-  accessToken: string | null,
+  //accessToken: string | null,
   data: MemberUpdateDto
 ) => {
-  if (!accessToken) throw new Error("로그인 상태를 확인해주세요.");
+  //if (!accessToken) throw new Error("로그인 상태를 확인해주세요.");
   if (!data) throw new Error("입력값을 확인해주세요.");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    data,
-  };
+
   try {
-    await axios.patch(`${import.meta.env.VITE_APP_API_URL}/members`, config);
+    await tokenRequestApi.patch(`/members`);
   } catch (error) {
     throw new Error("유저정보를 업데이트 하는데 실패했습니다.");
   }
@@ -87,21 +76,15 @@ export const updateMember = async (
 // method = PATCH
 // headers = { Authorization: `Bearer ${accessToken}` }
 export const updateMemberProfileImage = async (
-  accessToken: string | null,
+  //accessToken: string | null,
   data: MemberProfileUpdateImageDto
 ) => {
   const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     data,
   };
 
   try {
-    await axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/members/profile-image`,
-      config
-    );
+    await tokenRequestApi.patch(`/members/profile-image`, { config });
   } catch (error) {
     throw new Error("프로필 사진을 업로드하는데 실패했습니다.");
   }
@@ -113,21 +96,11 @@ export const updateMemberProfileImage = async (
 // headers = { Authorization: `Bearer ${accessToken}` }
 
 export const updateMemberDetail = async (
-  accessToken: string | null,
+  //accessToken: string | null,
   memberDetailDto: MemberDetailDto
 ) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
   try {
-    await axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/members/detail`,
-      memberDetailDto,
-      config
-    );
+    await tokenRequestApi.patch(`/members/detail`, memberDetailDto);
   } catch (error) {
     throw new Error("상세정보를 업데이트하는데 실패했습니다.");
   }
@@ -138,15 +111,9 @@ export const updateMemberDetail = async (
 // method = DELETE
 // headers = { Authorization: `Bearer ${accessToken}` }
 
-export const deleteMember = async (accessToken: string | null) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
+export const deleteMember = async (/*accessToken: string | null*/) => {
   try {
-    await axios.delete(`${import.meta.env.VITE_APP_API_URL}/members`, config);
+    await tokenRequestApi.delete(`/members`);
   } catch (error) {
     throw new Error("회원탈퇴에 실패했습니다.");
   }
@@ -158,21 +125,11 @@ export const deleteMember = async (accessToken: string | null) => {
 // headers = { Authorization: `Bearer ${accessToken}` }
 
 export const checkMemberPassword = async (
-  accessToken: string | null,
+  //accessToken: string | null,
   memberPasswordCheckDto: MemberPasswordCheckDto
 ) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
   try {
-    await axios.post(
-      `${import.meta.env.VITE_APP_API_URL}/members/password`,
-      memberPasswordCheckDto,
-      config
-    );
+    await tokenRequestApi.post(`/members/password`, memberPasswordCheckDto);
   } catch (error) {
     throw new Error("비밀번호가 일치하지 않습니다.");
   }

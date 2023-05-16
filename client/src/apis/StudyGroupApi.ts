@@ -1,4 +1,5 @@
 import axios from "axios";
+import tokenRequestApi from "./TokenRequestApi";
 
 // ====================== 스터디 그룹 정보 조회 (GET) ===========================
 // TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
@@ -54,24 +55,14 @@ export interface StudyGroupUpdateDto {
 
 // TODO : StudyGroup의 정보를 수정하는 코드
 export async function updateStudyGroupInfo(
-  data: StudyGroupUpdateDto,
-  accessToken: string | null
+  data: StudyGroupUpdateDto
+  //accessToken: string | null
 ) {
   // * (accessToken === null)이 안되는 이유 : null이 아닌 undefined를 검사해야 하기 때문에!
-  if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   try {
-    const response = await axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup`,
-      data,
-      config
-    );
+    const response = await tokenRequestApi.patch(`/studygroup`, data);
     console.log("Study group information updated successfully:", response.data);
   } catch (error) {
     console.error("Error updating study group information:", error);
@@ -81,22 +72,13 @@ export async function updateStudyGroupInfo(
 // ====================== 스터디 그룹 삭제 (DELETE) ===========================
 // TODO : StudyGroup의 정보를 삭제하는 코드
 export async function deleteStudyGroupInfo(
-  id: number,
-  accessToken: string | null
+  id: number
+  //accessToken: string | null
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}`,
-      config
-    );
+    const response = await tokenRequestApi.delete(`/studygroup/${id}`);
     console.log("Study group information deleted successfully:", response);
   } catch (error) {
     console.error("Error deleting study group information:", error);
@@ -112,24 +94,17 @@ interface StudyGroupRecruitmentStatusUpdateDto {
 // TODO : StudyGroup의 모집 상태를 수정
 export async function updateStudyGroupRecruitmentStatus(
   id: number,
-  accessToken: string | null,
+  //accessToken: string | null,
   data: StudyGroupRecruitmentStatusUpdateDto
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     data,
   };
 
   try {
-    const response = await axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}`,
-
-      config
-    );
+    const response = await tokenRequestApi.patch(`/studygroup/${id}`, config);
     console.log(
       "Study group recruitment status updated successfully:",
       response
@@ -148,21 +123,18 @@ interface StudyGroupMemberApprovalDto {
 // TODO : StudyGroup으로의 가입을 승인하는 코드
 export async function approveStudyGroupApplication(
   id: number,
-  accessToken: string | null,
+  //accessToken: string | null,
   data: StudyGroupMemberApprovalDto
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     data,
   };
 
   try {
-    const response = await axios.post(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/candidate`,
+    const response = await tokenRequestApi.post(
+      `/studygroup/${id}/candidate`,
       config
     );
     console.log("Study group application approved successfully:", response);
@@ -174,21 +146,18 @@ export async function approveStudyGroupApplication(
 // TODO : StudyGroup으로의 가입을 거절하는 코드
 export async function rejectStudyGroupApplication(
   id: number,
-  accessToken: string | null,
+  //accessToken: string | null,
   data: StudyGroupMemberApprovalDto
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     data,
   };
 
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/candidate`,
+    const response = await tokenRequestApi.delete(
+      `/studygroup/${id}/candidate`,
       config
     );
     console.log("Study group application rejected successfully:", response);
@@ -200,21 +169,18 @@ export async function rejectStudyGroupApplication(
 // TODO : StudyGroup에서 강제 퇴출시키는 코드
 export async function forceExitStudyGroup(
   id: number,
-  accessToken: string | null,
+  //accessToken: string | null,
   data: StudyGroupMemberApprovalDto
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
     data,
   };
 
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/kick`,
+    const response = await tokenRequestApi.delete(
+      `/studygroup/${id}/kick`,
       config
     );
     console.log("Study group member forced to exit successfully:", response);
@@ -226,22 +192,13 @@ export async function forceExitStudyGroup(
 // ====================== 스터디원 가입 신청 철회 ===========================
 // TODO : StudyGroup의 가입 신청을 철회하는 코드
 export async function cancelStudyGroupApplication(
-  id: number,
-  accessToken: string | null
+  id: number
+  //accessToken: string | null
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   try {
-    const response = await axios.delete(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/join`,
-      config
-    );
+    const response = await tokenRequestApi.delete(`/studygroup/${id}/join`);
     console.log("Study group application canceled successfully:", response);
   } catch (error) {
     console.error("Error canceling study group application:", error);
@@ -256,21 +213,14 @@ interface StudyGroupMemberWaitingListDto {
 
 // TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회하는 코드
 export async function getStudyGroupMemberWaitingList(
-  id: number,
-  accessToken: string | null
+  id: number
+  //accessToken: string | null
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   try {
     const response = await axios.get<StudyGroupMemberWaitingListDto>(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join-false`,
-      config
+      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join-false`
     );
     console.log(
       "Study group member waiting list retrieved successfully:",
@@ -291,21 +241,14 @@ interface StudyGroupMemberListDto {
 
 // TODO : StudyGroup에 가입된 멤버 리스트
 export async function getStudyGroupMemberList(
-  id: number,
-  accessToken: string | null
+  id: number
+  //accessToken: string | null
 ) {
-  if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
+  //if (!accessToken) throw new Error("Access token is not defined.");
 
   try {
-    const response = await axios.get<StudyGroupMemberListDto>(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member`,
-      config
+    const response = await tokenRequestApi.get<StudyGroupMemberListDto>(
+      `/studygroup/${id}/member`
     );
     console.log("Study group member list retrieved successfully:", response);
     return response.data;
