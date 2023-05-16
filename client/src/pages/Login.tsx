@@ -4,11 +4,12 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/edusync-logo.png";
+import tokenRequestApi from "../apis/TokenRequestApi";
 import { validateEmptyInput } from "./utils/loginUtils";
-import { setAccessToken, setRefreshToken } from "./utils/Auth";
 import { useSetRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import Google from "../components/GoogleLogin";
+import { setRefreshToken } from "./utils/Auth";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -27,7 +28,7 @@ const Login = () => {
 
   const loginMutation = useMutation(
     () =>
-      axios.post(`${import.meta.env.VITE_APP_API_URL}/members/login`, {
+      tokenRequestApi.post("/members/login", {
         email,
         password,
       }),
@@ -35,7 +36,7 @@ const Login = () => {
       onSuccess: (data) => {
         const accessToken = data.headers.authorization;
         const refreshToken = data.headers.refresh;
-        setAccessToken(accessToken);
+        tokenRequestApi.setAccessToken(accessToken);
         setRefreshToken(refreshToken);
         setIsLoggedIn(true);
         navigate("/");
