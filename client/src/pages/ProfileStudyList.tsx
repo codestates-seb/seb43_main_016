@@ -1,55 +1,79 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
-import styled from "styled-components";
-import WaitingList from "../components/WaitingList";
-import { Link } from "react-router-dom";
+// import axios from "axios";
 
-interface StudyInfoResponseDto {
-  studyId: number;
-  studyName: string;
-  tags: string[];
-  studyProfileImage: string;
-}
 
-interface ProfileStudyListCardProps {
-  study: StudyInfoResponseDto;
-}
+  import { useEffect, useState } from "react";
+  import styled from "styled-components";
+  import WaitingList from "../components/WaitingList";
+  import { Link } from "react-router-dom";
 
-const ProfileStudyListCard = ({ study }: ProfileStudyListCardProps) => {
-  return (
-    <Box>
-      <Link to={`/profile/${study.studyId}`}>
-        <ImageWrapper>
-          <img src={study.studyProfileImage} alt={study.studyName} />
-        </ImageWrapper>
-        <Title>{study.studyName}</Title>
-        <Tags>{study.tags}</Tags>
-      </Link>
-    </Box>
-  );
-};
+  interface StudyInfoResponseDto {
+    studyId: number;
+    studyName: string;
+    tags: string[];
+    studyProfileImage: string;
+  }
 
-const ProfileStudyList = () => {
-  const [studyList, setStudyList] = useState<StudyInfoResponseDto[]>([]);
+  interface ProfileStudyListCardProps {
+    study: StudyInfoResponseDto;
+  }
 
-  useEffect(() => {
-    axios.get("http://localhost:3001/members/2").then((response) => {
-      const studyLists = response.data.studyLists;
-      setStudyList(studyLists);
-    });
-  }, []);
+  const ProfileStudyListCard = ({ study }: ProfileStudyListCardProps) => {
+    return (
+      <Box>
+        <Link to={`/profile/${study.studyId}`}>
+          <ImageWrapper>
+            <img src={study.studyProfileImage} alt={study.studyName} />
+          </ImageWrapper>
+          <Title>{study.studyName}</Title>
+          <Tags>{study.tags.join(", ")}</Tags>
+        </Link>
+      </Box>
+    );
+  };
 
-  return (
-    <>
-      <WaitingList />
-      {studyList.map((study) => (
-        <ProfileStudyListCard key={study.studyId} study={study} />
-      ))}
-    </>
-  );
-};
+  const ProfileStudyList = () => {
+    const [studyList, setStudyList] = useState<StudyInfoResponseDto[]>([]);
 
-export default ProfileStudyList;
+    useEffect(() => {
+
+        // ! 엔드포인트가 나오면 추후 적용 or apis 폴더로 이동
+        // useEffect(() => {
+        //   axios.get("http://localhost:3001/members/").then((response) => {
+        //     const studyLists = response.data.studyLists;
+        //     setStudyList(studyLists);
+        //   });
+        // }, []);
+
+      // TODO 임시로 더미 데이터 생성
+      const dummyData: StudyInfoResponseDto[] = [
+        {
+          studyId: 1,
+          studyName: "Study 1",
+          tags: ["Tag 1", "Tag 2", "Tag 3"],
+          studyProfileImage: "https://example.com/image1.jpg",
+        },
+        {
+          studyId: 2,
+          studyName: "Study 2",
+          tags: ["Tag 4", "Tag 5"],
+          studyProfileImage: "https://example.com/image2.jpg",
+        },
+      ];
+
+      setStudyList(dummyData);
+    }, []);
+
+    return (
+      <>
+        <WaitingList />
+        {studyList.map((study) => (
+          <ProfileStudyListCard key={study.studyId} study={study} />
+        ))}
+      </>
+    );
+  };
+
+  export default ProfileStudyList;
 
 const Box = styled.div`
   box-sizing: border-box;

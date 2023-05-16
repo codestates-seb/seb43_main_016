@@ -46,7 +46,6 @@ export const getMemberInfo = async (accessToken: string | null) => {
       Authorization: `Bearer ${accessToken}`,
     },
   };
-
   try {
     const response = await axios.get<MemberInfoResponseDto>(
       `${import.meta.env.VITE_APP_API_URL}/members`,
@@ -55,7 +54,7 @@ export const getMemberInfo = async (accessToken: string | null) => {
     const data = response.data;
     return data;
   } catch (error) {
-    console.error(error)
+    console.error(error);
     throw new Error("유저 정보를 불러오는데 실패했습니다.");
   }
 };
@@ -66,22 +65,18 @@ export const getMemberInfo = async (accessToken: string | null) => {
 // headers = { Authorization: `Bearer ${accessToken}` }
 export const updateMember = async (
   accessToken: string | null,
-  memberUpdateDto: MemberUpdateDto
+  data: MemberUpdateDto
 ) => {
   if (!accessToken) throw new Error("로그인 상태를 확인해주세요.");
-  if (!memberUpdateDto) throw new Error("입력값을 확인해주세요.");
+  if (!data) throw new Error("입력값을 확인해주세요.");
   const config = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+    data,
   };
-
   try {
-    await axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/members`,
-      memberUpdateDto,
-      config
-    );
+    await axios.patch(`${import.meta.env.VITE_APP_API_URL}/members`, config);
   } catch (error) {
     throw new Error("유저정보를 업데이트 하는데 실패했습니다.");
   }
@@ -93,18 +88,19 @@ export const updateMember = async (
 // headers = { Authorization: `Bearer ${accessToken}` }
 export const updateMemberProfileImage = async (
   accessToken: string | null,
-  MemberProfileUpdateImageDto: MemberProfileUpdateImageDto
+  data: MemberProfileUpdateImageDto
 ) => {
   const config = {
     headers: {
       Authorization: `Bearer ${accessToken}`,
     },
+    data,
   };
 
   try {
     await axios.patch(
       `${import.meta.env.VITE_APP_API_URL}/members/profile-image`,
-      MemberProfileUpdateImageDto,
+
       config
     );
   } catch (error) {

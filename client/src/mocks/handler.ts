@@ -1,5 +1,6 @@
 import { RestRequest, rest } from "msw";
 import { MemberPasswordCheckDto } from "../apis/MemberApi";
+import { getStudyGroupInfo } from "../apis/StudyGroupApi";
 
 interface LoginRequestBody {
   email: string;
@@ -180,12 +181,34 @@ export const handlers = [
   ),
 
   // TODO DELETE 테스트
-  rest.delete(`${import.meta.env.VITE_APP_API_URL}/members`, (req: RestRequest, res, ctx) => {
-    const accessToken = req.headers.get('Authorization')?.replace('Bearer ', '');
-    if (accessToken === 'Bearer your-access-token') {
-      return res(ctx.status(200), ctx.json({ message: '회원 정보가 삭제되었습니다.' }));
-    } else {
-      return res(ctx.status(401), ctx.json({ error: 'Unauthorized' }));
+  rest.delete(
+    `${import.meta.env.VITE_APP_API_URL}/members`,
+    (req: RestRequest, res, ctx) => {
+      const accessToken = req.headers
+        .get("Authorization")
+        ?.replace("Bearer ", "");
+      if (accessToken === "Bearer your-access-token") {
+        return res(
+          ctx.status(200),
+          ctx.json({ message: "회원 정보가 삭제되었습니다." })
+        );
+      } else {
+        return res(ctx.status(401), ctx.json({ error: "Unauthorized" }));
+      }
     }
-  })
+  ),
+
+  // TODO 스터디 그룹 조회 테스트
+  rest.get(`${import.meta.env.VITE_APP_API_URL}/studygroups/:id`, async (req, res, ctx) => {
+    try {
+      const studyGroupId = Number(req.params.id);
+      const studyInfo = await getStudyGroupInfo(studyGroupId);
+      console.log(studyInfo);
+      return res(ctx.json(studyInfo));
+    } catch (error) {
+      return res(ctx.status(403), ctx.json({ message: "권한이 없습니다" }));
+    }
+  }),
+
+  // TODO 스터디 그룹 수정 테스트
 ];
