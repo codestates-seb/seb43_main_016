@@ -16,7 +16,7 @@ public interface CalendarStudygroupManager {
      * @param timeSchedules 일정 리스트
      * @param loginMember   로그인 중인 맴버
      */
-    void createTimeSchedulesForStudygroup(Long studygroupId, List<TimeSchedule> timeSchedules, Member loginMember);
+    void createTimeSchedules(Long studygroupId, List<TimeSchedule> timeSchedules, Member loginMember);
 
     /**
      * <h2>스터디 맴버의 캘린더에 일정 리스트를 생성한다</h2>
@@ -38,7 +38,7 @@ public interface CalendarStudygroupManager {
      * @param timeSchedule   변경할 일정 내용
      * @param loginMember    로그인 중인 맴버
      */
-    void updateStudygroupTimeSchedule(Long studygroupId, Long timeScheduleId, TimeSchedule timeSchedule, Member loginMember);
+    void updateTimeSchedule(Long studygroupId, Long timeScheduleId, TimeSchedule timeSchedule, Member loginMember);
 
     /**
      * <h2>스터디 그룹에 해당하는 일정 리스트를 조회한다</h2>
@@ -46,7 +46,7 @@ public interface CalendarStudygroupManager {
      * @param studygroupId
      * @return
      */
-    List<TimeSchedule> getTimeSchedulesByStudygroupId(Long studygroupId);
+    List<TimeSchedule> getTimeSchedules(Long studygroupId);
 
 
     /**
@@ -56,7 +56,7 @@ public interface CalendarStudygroupManager {
      * @param timeScheduleId 일정의 식별자
      * @return
      */
-    TimeSchedule getSingleTimeScheduleById(Long studygroupId, Long timeScheduleId);
+    TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId);
 
     /**
      * <h2>모든 스터디 맴버와 스터디 그룹의 일정을 삭제한다</h2>
@@ -64,7 +64,7 @@ public interface CalendarStudygroupManager {
      * @param studygroupId studygroup 의 식별자
      * @param loginMember  로그인 중인 맴버
      */
-    void deleteAllTimeSchedulesByStudygroupId(Long studygroupId, Member loginMember);
+    void deleteAllTimeSchedulesById(Long studygroupId, Member loginMember);
 
     /**
      * <h2>스터디 그룹의 해당 일정을 삭제한다</h2>

@@ -22,9 +22,9 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final VerifyVerifyStudygroupUtils verifyStudygroupUtils;
 
     @Override
-    public void createTimeSchedulesForStudygroup(Long studygroupId,
-                                                 List<TimeSchedule> timeSchedules,
-                                                 Member loginMember) {
+    public void createTimeSchedules(Long studygroupId,
+                                    List<TimeSchedule> timeSchedules,
+                                    Member loginMember) {
         Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
@@ -43,9 +43,9 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     }
 
     @Override
-    public void updateStudygroupTimeSchedule(Long studygroupId, Long timeScheduleId,
-                                             TimeSchedule timeSchedule,
-                                             Member loginMember) {
+    public void updateTimeSchedule(Long studygroupId, Long timeScheduleId,
+                                   TimeSchedule timeSchedule,
+                                   Member loginMember) {
         TimeSchedule findTimeSchedule = verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
@@ -57,18 +57,18 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     }
 
     @Override
-    public List<TimeSchedule> getTimeSchedulesByStudygroupId(Long studygroupId) {
+    public List<TimeSchedule> getTimeSchedules(Long studygroupId) {
         return calendarStudygroupRepository.findAllByStudygroupId(studygroupId);
     }
 
     @Override
-    public TimeSchedule getSingleTimeScheduleById(Long studygroupId, Long timeScheduleId) {
+    public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
 
         return verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
     }
 
     @Override
-    public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId, Member loginMember) {
+    public void deleteAllTimeSchedulesById(Long studygroupId, Member loginMember) {
         List<TimeSchedule> findTimeSchedules = calendarStudygroupRepository.findAllByStudygroupId(studygroupId);
         
         calendarStudygroupRepository.deleteAll(findTimeSchedules);

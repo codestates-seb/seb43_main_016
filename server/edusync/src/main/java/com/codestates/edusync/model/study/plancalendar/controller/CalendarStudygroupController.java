@@ -34,7 +34,7 @@ public class CalendarStudygroupController {
                                                  @Valid @RequestBody CalendarDto.Post postDto,
                                                  Authentication authentication) {
         Member loginMember = memberVerificationService.getLoggedIn(authentication);
-        calendarStudygroupService.createTimeSchedulesForStudygroup(
+        calendarStudygroupService.createTimeSchedules(
                 studygroupId,
                 mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules()),
                 loginMember
@@ -50,7 +50,7 @@ public class CalendarStudygroupController {
                                                   Authentication authentication) {
         Member loginMember = memberVerificationService.getLoggedIn(authentication);
 
-        calendarStudygroupService.updateStudygroupTimeSchedule(
+        calendarStudygroupService.updateTimeSchedule(
                 studygroupId, timeScheduleId,
                 mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
                 loginMember
@@ -63,7 +63,7 @@ public class CalendarStudygroupController {
     public ResponseEntity getAllTimeScheduleOfStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId) {
 
         List<TimeSchedule> findTimeSchedules =
-                calendarStudygroupService.getTimeSchedulesByStudygroupId(studygroupId);
+                calendarStudygroupService.getTimeSchedules(studygroupId);
 
         List<TimeScheduleResponseDto.TimeScheduleDto> responseDtos =
                 mapper.timeScheduleListToTimeScheduleResponseDto(findTimeSchedules);
@@ -75,7 +75,7 @@ public class CalendarStudygroupController {
     public ResponseEntity getTimeScheduleOfStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                       @PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
         TimeSchedule findTimeSchedule =
-                calendarStudygroupService.getSingleTimeScheduleById(studygroupId, timeScheduleId);
+                calendarStudygroupService.getSingleTimeScheduleByTimeScheduleId(studygroupId, timeScheduleId);
 
         TimeScheduleResponseDto responseDto =
                 mapper.timeScheduleToTimeScheduleResponseDto(findTimeSchedule);
