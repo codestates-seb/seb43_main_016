@@ -22,6 +22,10 @@ interface Tag {
 }
 
 const ManageStudyInfo = () => {
+<<<<<<< HEAD
+
+=======
+>>>>>>> 70471a0af1229d93bfea0455a1e8d555b0025b66
   const [_info, setInfo] = useState<Event | null>(null);
 
   useEffect(() => {
