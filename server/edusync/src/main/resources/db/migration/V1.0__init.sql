@@ -18,13 +18,13 @@ create table if not exists member
     constraint pk_member_id primary key (id),
     constraint uk_member_email unique (email),
     constraint uk_member_nick_name unique (nick_name)
-);
+    );
 
 create table if not exists member_roles
 (
     member_id bigint not null,
     roles     varchar(30)
-);
+    );
 
 create table if not exists studygroup_join
 (
@@ -35,7 +35,7 @@ create table if not exists studygroup_join
     studygroup_id bigint,
 
     constraint pk_studygroup_join_id primary key (id)
-);
+    );
 
 create table if not exists studygroup
 (
@@ -60,7 +60,7 @@ create table if not exists studygroup
     leader_member_id       bigint,
 
     constraint pk_studygroup_id primary key (id)
-);
+    );
 
 create table if not exists search_tag
 (
@@ -71,7 +71,7 @@ create table if not exists search_tag
     studygroup_id bigint,
 
     constraint pk_search_tag_id primary key (id)
-);
+    );
 
 create table if not exists studygroup_post_comment
 (
@@ -84,7 +84,7 @@ create table if not exists studygroup_post_comment
     member_id     bigint,
 
     constraint pk_studygroup_post_comment_id primary key (id)
-);
+    );
 
 create table if not exists time_schedule
 (
@@ -98,7 +98,7 @@ create table if not exists time_schedule
     studygroup_id bigint,
 
     constraint pk_time_schedule_id primary key (id)
-);
+    );
 
 alter table member_roles
     add constraint fk_member_roles_member_id
