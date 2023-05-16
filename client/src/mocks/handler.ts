@@ -1,30 +1,191 @@
-import { rest } from "msw";
+import { RestRequest, rest } from "msw";
+import { MemberPasswordCheckDto } from "../apis/MemberApi";
 
-interface LoginDto {
+interface LoginRequestBody {
   email: string;
   password: string;
 }
 
+interface LoginResponse {
+  data: string;
+}
+
+interface UserInfo {
+  uuid: string;
+  email: string;
+  profileImage: string;
+  nickName: string;
+  aboutMe: string;
+  withMe: string;
+  memberStatus: string;
+  roles: string[];
+}
+
+interface data {
+  nickName: string;
+  password: string;
+}
+
+interface profileDetailData {
+  aboutMe: string;
+  withMe: string;
+}
+
+interface passwordData {
+  password: string;
+}
+
 export const handlers = [
+  // TODO 로그인 기능 테스트
+  rest.post<LoginRequestBody, LoginResponse>(
+    `${import.meta.env.VITE_APP_API_URL}/members/login`,
+    (req, res, ctx) => {
+      const { email, password } = req.body;
 
-  rest.post<LoginDto>("/members/login", (req, res, ctx) => {
-    const { email, password } = req.body;
+      // 로그인 정보 확인 로직
 
-    // 로그인 로직 처리
-    if (email === "test1@gmail.com" && password === "test") {
-      // 로그인 성공한 경우 액세스 토큰 발급
-      const accessToken = "mock-access-token";
+      if (email === "user1@gmail.com" && password === "user1") {
+        const accessToken = "your-access-token"; // 모의 액세스 토큰 값
 
-      // 액세스 토큰을 응답에 포함하여 반환
-      return res(
-        ctx.status(200),
-        ctx.json({
-          accessToken: accessToken,
-        })
-      );
-    } else {
-      // 로그인 실패한 경우 오류 응답
-      return res(ctx.status(401), ctx.json({ message: "Invalid credentials" }));
+        return res(
+          ctx.status(200),
+          ctx.set("Authorization", `Bearer ${accessToken}`),
+          ctx.json({ message: "로그인 성공", data: accessToken })
+        );
+      } else {
+        return res(ctx.status(401), ctx.json({ error: "인증 실패" }));
+      }
     }
-  }),
+  ),
+
+  // TODO 회원정보 요청 테스트
+  rest.get(
+    `${import.meta.env.VITE_APP_API_URL}/members`,
+    (req: RestRequest, res, ctx) => {
+      const accessToken = req.headers
+        .get("Authorization")
+        ?.replace("Bearer ", "");
+
+      // 액세스 토큰과 일치하는 유저 정보를 반환
+      if (accessToken === "Bearer your-access-token") {
+        // 모의 액세스 토큰 값으로 수정
+
+        const userInfo: UserInfo = {
+          uuid: "b1c452bf-4b2f-4ea5-89f3-a241795495ba",
+          email: "test5555@gmail.com",
+          profileImage: "https://avatars.githubusercontent.com/u/120456261?v=4",
+          nickName: "테스트5555",
+          aboutMe: "test5555_aboutMe",
+          withMe: "test5555_aboutMe",
+          memberStatus: "MEMBER_ACTIVE",
+          roles: ["LEADER"],
+        };
+
+        return res(ctx.status(200), ctx.json(userInfo));
+      } else {
+        return res(ctx.status(401), ctx.json({ error: "Unauthorized" }));
+      }
+    }
+  ),
+
+  // TODO 회원정보 수정 테스트
+  rest.patch(
+    `${import.meta.env.VITE_APP_API_URL}/members`,
+    (req: RestRequest, res, ctx) => {
+      const accessToken = req.headers
+        .get("Authorization")
+        ?.replace("Bearer ", "");
+
+      if (accessToken === "Bearer your-access-token") {
+        // 모의 액세스 토큰 값으로 수정
+        const data: data = {
+          nickName: "테스트5550",
+          password: "user5550",
+        };
+
+        return res(ctx.status(200), ctx.json(data));
+      } else {
+        return res(ctx.status(401), ctx.json({ error: "Unauthorized" }));
+      }
+    }
+  ),
+
+  // TODO 회원정보 수정 테스트
+  rest.patch(
+    `${import.meta.env.VITE_APP_API_URL}/members`,
+    (req: RestRequest, res, ctx) => {
+      const accessToken = req.headers
+        .get("Authorization")
+        ?.replace("Bearer ", "");
+
+      if (accessToken === "Bearer your-access-token") {
+        // 모의 액세스 토큰 값으로 수정
+        const data: data = {
+          nickName: "테스트5550",
+          password: "user5550",
+        };
+
+        return res(ctx.status(200), ctx.json(data));
+      } else {
+        return res(ctx.status(401), ctx.json({ error: "Unauthorized" }));
+      }
+    }
+  ),
+
+  // TODO 비밀번호 검증 테스트
+  rest.post(
+    `${import.meta.env.VITE_APP_API_URL}/members/password`,
+    (req: RestRequest<MemberPasswordCheckDto>, res, ctx) => {
+      const accessToken = req.headers
+        .get("Authorization")
+        ?.replace("Bearer ", "");
+
+      const requestPassword = req.body?.password;
+      const handlerPassword = "user5555";
+
+      if (accessToken === "Bearer your-access-token") {
+        if (requestPassword === handlerPassword) {
+          const data: passwordData = {
+            password: "user5555",
+          };
+          return res(ctx.status(200), ctx.json(data));
+        } else {
+          return res(ctx.status(400), ctx.json({ error: "Invalid password" }));
+        }
+      } else {
+        return res(ctx.status(401), ctx.json({ error: "Unauthorized" }));
+      }
+    }
+  ),
+
+  // TODO 자기소개, 함께하고 싶은 동료 테스트
+  rest.patch(
+    `${import.meta.env.VITE_APP_API_URL}/members/detail`,
+    (req: RestRequest, res, ctx) => {
+      const accessToken = req.headers
+        .get("Authorization")
+        ?.replace("Bearer ", "");
+
+      if (accessToken === "Bearer your-access-token") {
+        // 모의 액세스 토큰 값으로 수정
+        const data: profileDetailData = {
+          aboutMe: "테스트5550",
+          withMe: "테스트5550",
+        };
+        return res(ctx.status(200), ctx.json(data));
+      } else {
+        return res(ctx.status(401), ctx.json({ error: "Unauthorized" }));
+      }
+    }
+  ),
+
+  // TODO DELETE 테스트
+  rest.delete(`${import.meta.env.VITE_APP_API_URL}/members`, (req: RestRequest, res, ctx) => {
+    const accessToken = req.headers.get('Authorization')?.replace('Bearer ', '');
+    if (accessToken === 'Bearer your-access-token') {
+      return res(ctx.status(200), ctx.json({ message: '회원 정보가 삭제되었습니다.' }));
+    } else {
+      return res(ctx.status(401), ctx.json({ error: 'Unauthorized' }));
+    }
+  })
 ];

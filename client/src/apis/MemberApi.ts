@@ -1,6 +1,7 @@
 import axios from "axios";
 
 export interface MemberInfoResponseDto {
+  uuid: string;
   email: string;
   profileImage: string;
   nickName: string;
@@ -54,6 +55,7 @@ export const getMemberInfo = async (accessToken: string | null) => {
     const data = response.data;
     return data;
   } catch (error) {
+    console.error(error)
     throw new Error("유저 정보를 불러오는데 실패했습니다.");
   }
 };
