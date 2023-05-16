@@ -5,7 +5,6 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
-import com.codestates.edusync.model.study.studygroup.utils.StudygroupManager;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;

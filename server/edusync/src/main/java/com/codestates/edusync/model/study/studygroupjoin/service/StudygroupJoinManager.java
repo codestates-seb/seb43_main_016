@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.study.studygroupjoin.utils;
+package com.codestates.edusync.model.study.studygroupjoin.service;
 
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;

@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.study.studygroup.utils;
+package com.codestates.edusync.model.study.studygroup.service;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import org.springframework.data.domain.Page;

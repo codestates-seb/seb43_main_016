@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.studyaddons.searchtag.utils;
+package com.codestates.edusync.model.studyaddons.searchtag.service;
 
 import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 
