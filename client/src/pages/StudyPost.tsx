@@ -4,18 +4,9 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
+import DaysOfWeek from "../components/DaysOfWeek";
 
 const StudyPost = () => {
-  const enum daysOfWeekList {
-    "월",
-    "화",
-    "수",
-    "목",
-    "금",
-    "토",
-    "일",
-  }
-
   const [title, setTitle] = useState<string>("");
   const [startDate, setStartDate] = useState<string>("");
   const [endDate, setEndDate] = useState<string>("");
@@ -133,12 +124,7 @@ const StudyPost = () => {
           <StudyPostInfo>
             <span>요일</span>
             <div>
-              {/* {daysOfWeekList.map((day, index) => {
-            <div className="checkbox" key={index}>
-                <input type="checkbox" id={day} />
-                <label htmlFor={day}>{day}</label>
-                </div>
-              })} */}
+              <DaysOfWeek />
             </div>
           </StudyPostInfo>
           <StudyPostInfo>
