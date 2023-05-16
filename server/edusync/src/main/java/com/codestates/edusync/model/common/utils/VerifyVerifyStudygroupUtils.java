@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class VerifyStudygroupUtils implements StudygroupVerifiable {
+public class VerifyVerifyStudygroupUtils implements VerifyStudygroupManager {
     private final StudygroupRepository studygroupRepository;
 
     @Override

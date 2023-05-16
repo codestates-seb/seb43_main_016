@@ -2,7 +2,7 @@ package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 
-public interface StudygroupVerifiable {
+public interface VerifyStudygroupManager {
     /**
      * <h2>검색할 스터디 그룹에 대한 검증</h2>
      * 해당 스터디 그룹이 존재하는지 확인 후,<br>
