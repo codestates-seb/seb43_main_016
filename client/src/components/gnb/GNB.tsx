@@ -13,20 +13,23 @@ const GNB = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
+    setIsLoading(true);
     if (isLoggedIn) {
-      setIsLoading(true);
-      tokenRequestApi
-        .get("/members")
-        .then((res) => {
-          setProfileImage(res.data.profileImage);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      setTimeout(() => {
+        tokenRequestApi
+          .get("/members")
+          .then((res) => {
+            console.log(res);
+            setProfileImage(res.data.profileImage);
+            setIsLoading(false);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      }, 100);
     }
+    setIsLoading(false);
   }, [isLoggedIn]);
-
   return (
     <>
       {isLoading ? (
@@ -36,12 +39,6 @@ const GNB = () => {
               <img src={logo} />
             </HomeLink>
           </GNBBlock>
-
-          <User
-            profileImage={profileImage}
-            isLoggedIn={isLoggedIn}
-            setIsLoggedIn={setIsLoggedIn}
-          />
         </GNBDiv>
       ) : (
         <GNBDiv>
