@@ -1,7 +1,5 @@
-package com.codestates.edusync.infodto.timeschedule.entity;
+package com.codestates.edusync.study.plancalendar.entity;
 
-import com.codestates.edusync.audit.Auditable;
-import com.codestates.edusync.member.entity.Member;
 import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

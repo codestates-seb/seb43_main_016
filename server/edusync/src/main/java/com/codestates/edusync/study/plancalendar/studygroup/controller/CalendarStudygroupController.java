@@ -1,11 +1,10 @@
 package com.codestates.edusync.study.plancalendar.studygroup.controller;
 
-import com.codestates.edusync.infodto.timeschedule.dto.TimeScheduleResponseDto;
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.dto.TimeScheduleResponseDto;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.dto.CalendarDto;
 import com.codestates.edusync.study.plancalendar.studygroup.mapper.CalendarStudygroupMapper;
 import com.codestates.edusync.study.plancalendar.studygroup.service.CalendarStudygroupService;
-import com.codestates.edusync.study.studygroup.entity.Studygroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

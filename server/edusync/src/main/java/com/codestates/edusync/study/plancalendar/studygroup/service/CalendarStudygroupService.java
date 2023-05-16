@@ -1,7 +1,7 @@
 package com.codestates.edusync.study.plancalendar.studygroup.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
-import com.codestates.edusync.infodto.timeschedule.entity.TimeSchedule;
+import com.codestates.edusync.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.study.plancalendar.studygroup.repository.CalendarStudygroupRepository;
 import com.codestates.edusync.study.plancalendar.studygroup.utils.CalendarStudygroupManager;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codestates.edusync.exception.ExceptionCode.STUDYGROUP_POST_COMMENT_NOT_FOUND;
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_FOUND;
 
 @RequiredArgsConstructor
