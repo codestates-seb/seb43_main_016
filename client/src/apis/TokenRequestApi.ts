@@ -11,7 +11,7 @@ tokenRequestApi.interceptors.request.use(
   (config) => {
     config.headers = config.headers || {};
     if (accessToken) {
-      config.headers.Authorization = `Bearer ${accessToken}`;
+      config.headers.authorization = `${accessToken}`;
     }
     return config;
   },
@@ -21,14 +21,14 @@ tokenRequestApi.interceptors.request.use(
 );
 
 const extendAccessToken = async () => {
-  const expirationTime = 60 * 1000; // 1분
+  const expirationTime = 4 * 60 * 1000;
   const timeToExpire =
     new Date(Number(new Date()) + expirationTime).getTime() -
     new Date().getTime();
 
-  // 1분 미만일 때 자동으로 accessToken을 갱신
   setTimeout(async () => {
     const refreshToken = getRefreshToken();
+    if (!refreshToken) return;
 
     try {
       const response = await eduApi.post(`/refresh`, null, {
@@ -36,8 +36,7 @@ const extendAccessToken = async () => {
           Refresh: `${refreshToken}`,
         },
       });
-
-      const { accessToken: newAccessToken } = response.data;
+      const { authorization: newAccessToken } = response.headers;
       tokenRequestApi.setAccessToken(newAccessToken);
 
       console.log("accessToken 갱신됨");
@@ -48,8 +47,10 @@ const extendAccessToken = async () => {
 };
 
 tokenRequestApi.setAccessToken = (token): void => {
-  accessToken = token;
-  extendAccessToken();
+  if (token) {
+    accessToken = token;
+    extendAccessToken();
+  }
 };
 
 export default tokenRequestApi;
