@@ -23,7 +23,7 @@ public interface StudygroupManager {
      * 스터디 모집 상태 수정
      * @param studygroupId
      */
-    void updateStatus(String email, Long studygroupId);
+    boolean updateStatus(String email, Long studygroupId);
 
     /**
      * 스터디 조회

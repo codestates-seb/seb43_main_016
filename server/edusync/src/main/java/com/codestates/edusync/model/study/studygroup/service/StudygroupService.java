@@ -50,17 +50,19 @@ public class StudygroupService implements StudygroupManager{
     }
 
     @Override
-    public void updateStatus(String email, Long studygroupId) {
+    public boolean updateStatus(String email, Long studygroupId) {
         Studygroup findStudygroup = get(studygroupId);
 
-        if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
+        if (!findStudygroup.getLeaderMember().getEmail().equals(email)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        } else {
             boolean requited = findStudygroup.getIs_requited();
             if (requited) requited = false;
             else requited = true;
             findStudygroup.setIs_requited(requited);
-        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-
-        studygroupRepository.save(findStudygroup);
+            studygroupRepository.save(findStudygroup);
+        }
+        return findStudygroup.getIs_requited();
     }
 
     @Override
