@@ -76,8 +76,7 @@ public class StudygroupService implements StudygroupManager{
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
         }
 
-        boolean requited = findStudygroup.getIsRecruited();
-        findStudygroup.setIsRecruited(!requited);
+        findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
 
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
