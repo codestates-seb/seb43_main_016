@@ -150,6 +150,17 @@ public interface StudygroupMapper {
     }
 
     /**
+     * 스터디 모집 상태 Response Dto
+     * @param status
+     * @return
+     */
+    default StudygroupResponseDto.Status statusDto(boolean status) {
+        StudygroupResponseDto.Status statusDto = new StudygroupResponseDto.Status();
+        statusDto.setStatus(status);
+        return statusDto;
+    }
+
+    /**
      * 스터디 리스트 조회 시, 각 스터디를 ResponseDto 로 매핑
      * @param studygroup
      * @return
