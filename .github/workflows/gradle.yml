@@ -43,9 +43,7 @@ jobs:
         distribution: 'temurin'
       
     - name: Grant execute permission for gradlew
-      run: 
-        pwd
-        chmod 400 ./gradlew
+      run: chmod 400 ./gradlew
 
     - name: Build with Gradle
       run: ./gradlew build --spring.profiles.active=server
