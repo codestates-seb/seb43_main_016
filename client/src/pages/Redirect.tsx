@@ -6,8 +6,9 @@ import { useSetRecoilState } from "recoil";
 
 function Redirect() {
   const navigate = useNavigate();
+  const setIsLoggedIn = useSetRecoilState(LogInState);
+
   useEffect(() => {
-    const setIsLoggedIn = useSetRecoilState(LogInState);
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
@@ -16,6 +17,7 @@ function Redirect() {
       tokenRequestApi.setAccessToken(accessToken);
       localStorage.setItem("refreshToken", refreshToken);
       setIsLoggedIn(true);
+      navigate("/");
     }
     navigate("/");
   }, []);

@@ -10,8 +10,6 @@ import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
 import GNB from "./components/gnb/GNB";
 import ProfileCalendar from "./pages/ProfileCalendar";
-import { useRecoilValue } from "recoil";
-import { LogInState } from "./recoil/atoms/LogInState";
 import Redirect from "./pages/Redirect";
 //import { worker } from "./mocks/browser";
 import useRefreshToken from "./hooks/useRefreshToken";
@@ -35,8 +33,6 @@ function App() {
 }
 
 function AppContent() {
-  const logInState = useRecoilValue(LogInState);
-
   const fetched = useRefreshToken();
 
   return (
@@ -48,7 +44,11 @@ function AppContent() {
           <Routes>
             <Route
               path="/"
-              element={<>{console.log("loginState", logInState)}</>}
+              element={
+                <>
+                  <span>홈</span>
+                </>
+              }
             />
             <Route path="/profile/*" element={<Profile />} />
             <Route path="/login" element={<Login />} />

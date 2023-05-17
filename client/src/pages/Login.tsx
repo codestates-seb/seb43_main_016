@@ -33,11 +33,11 @@ const Login = () => {
       }),
     {
       onSuccess: (data) => {
+        setIsLoggedIn(true);
         const accessToken = data.headers.authorization;
         const refreshToken = data.headers.refresh;
         tokenRequestApi.setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        setIsLoggedIn(true);
         navigate("/");
       },
       onError: (error) => {
