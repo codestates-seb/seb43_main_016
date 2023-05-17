@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.study.postcomment.service;
 
-import com.codestates.edusync.model.common.service.VerifyStudygroupPostCommentUtils;
-import com.codestates.edusync.model.common.service.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupPostCommentUtils;
+import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.repository.StudygroupPostCommentRepository;

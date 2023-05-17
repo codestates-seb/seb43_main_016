@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.member.service;
 
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
-import com.codestates.edusync.model.common.service.MemberUtils;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.repository.MemberRepository;
 import lombok.AllArgsConstructor;

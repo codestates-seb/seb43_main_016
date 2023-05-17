@@ -1,8 +1,8 @@
 package com.codestates.edusync.model.study.studygroup.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.service.MemberUtils;
-import com.codestates.edusync.model.common.service.UriCreator;
+import com.codestates.edusync.model.common.utils.MemberUtils;
+import com.codestates.edusync.model.common.utils.UriCreator;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.mapper.StudygroupMapper;

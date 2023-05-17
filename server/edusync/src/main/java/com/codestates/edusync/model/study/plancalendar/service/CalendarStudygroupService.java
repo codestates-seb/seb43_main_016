@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
-import com.codestates.edusync.model.common.service.VerifyStudygroupCalendarUtils;
-import com.codestates.edusync.model.common.service.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupCalendarUtils;
+import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;

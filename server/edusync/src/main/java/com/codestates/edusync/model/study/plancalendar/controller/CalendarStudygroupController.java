@@ -1,6 +1,6 @@
 package com.codestates.edusync.model.study.plancalendar.controller;
 
-import com.codestates.edusync.model.common.service.MemberUtils;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.mapper.CalendarStudygroupMapper;

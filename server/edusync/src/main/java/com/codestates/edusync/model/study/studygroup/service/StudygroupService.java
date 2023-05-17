@@ -2,7 +2,7 @@ package com.codestates.edusync.model.study.studygroup.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.model.common.service.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;

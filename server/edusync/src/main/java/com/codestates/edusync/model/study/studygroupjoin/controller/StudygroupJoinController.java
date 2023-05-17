@@ -1,6 +1,6 @@
 package com.codestates.edusync.model.study.studygroupjoin.controller;
 
-import com.codestates.edusync.model.common.service.MemberUtils;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.study.studygroupjoin.dto.StudygroupJoinDto;
