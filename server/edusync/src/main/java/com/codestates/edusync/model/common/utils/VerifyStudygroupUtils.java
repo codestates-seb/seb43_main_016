@@ -19,7 +19,7 @@ public class VerifyStudygroupUtils implements VerifyStudygroupManager {
     }
 
     @Override
-    public boolean verifyMemberLeaderOfStudygroup(String email, Long studygroupId) {
+    public boolean isMemberLeaderOfStudygroup(String email, Long studygroupId) {
         Studygroup findStudygroup = findVerifyStudygroup(studygroupId);
         return findStudygroup.getLeaderMember().getEmail().equals(email);
     }

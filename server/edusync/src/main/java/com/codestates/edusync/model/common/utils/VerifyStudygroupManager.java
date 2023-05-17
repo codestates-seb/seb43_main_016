@@ -21,5 +21,5 @@ public interface VerifyStudygroupManager {
      * @param studygroupId
      * @return true, false 값으로 리턴한다.<br>
      */
-    boolean verifyMemberLeaderOfStudygroup(String email, Long studygroupId);
+    boolean isMemberLeaderOfStudygroup(String email, Long studygroupId);
 }

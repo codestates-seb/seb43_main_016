@@ -77,7 +77,7 @@ public class StudygroupService implements StudygroupManager{
 
     @Override
     public void delete(String email, Long studygroupId){
-        if (studygroupUtills.verifyMemberLeaderOfStudygroup(email, studygroupId)) {
+        if (studygroupUtills.isMemberLeaderOfStudygroup(email, studygroupId)) {
             studygroupRepository.deleteById(studygroupId);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }
