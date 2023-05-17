@@ -12,6 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "search_tag")
 public class SearchTag extends BaseEntity {
     @Column(length = 20)
     private String tagKey;

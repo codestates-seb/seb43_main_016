@@ -3,9 +3,10 @@ package com.codestates.edusync.model.common.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 public class TimeRangeDto {
 
@@ -14,30 +15,31 @@ public class TimeRangeDto {
     public static class Post {
         @NotNull
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp startTime;
+        private LocalDateTime studyTimeStart;
 
         @NotNull
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp endTime;
+        private LocalDateTime studyTimeEnd;
     }
 
     @NoArgsConstructor
     @Getter
     public static class Patch {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp startTime;
+        private LocalDateTime studyTimeStart;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp endTime;
+        private LocalDateTime studyTimeEnd;
     }
 
     @NoArgsConstructor
     @Getter
+    @Setter
     public static class Response {
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp startTime;
+        private LocalDateTime studyTimeStart;
 
         @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp endTime;
+        private LocalDateTime studyTimeEnd;
     }
 }
