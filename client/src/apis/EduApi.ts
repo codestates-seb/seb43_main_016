@@ -1,7 +1,9 @@
 import axios, { AxiosInstance } from "axios";
 
-const eduApi: AxiosInstance = axios.create({
+export const eduApi: AxiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}`,
 });
 
-export default eduApi;
+export const socialLoginApi = `${
+  import.meta.env.VITE_APP_API_URL
+}/oauth2/authorization`;

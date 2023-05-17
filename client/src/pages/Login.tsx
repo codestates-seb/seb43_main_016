@@ -8,7 +8,9 @@ import { validateEmptyInput } from "./utils/loginUtils";
 import { useSetRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import { setRefreshToken } from "./utils/Auth";
-import GoogleButton from "../components/GoogleButton";
+import GoogleButton from "../components/social-login-button/GoogleButton";
+import KakaoButton from "../components/social-login-button/KakaoButton";
+import NaverButton from "../components/social-login-button/NaverButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -95,6 +97,8 @@ const Login = () => {
       <SignUpLink to="/signup">회원가입하러 가기</SignUpLink>
       <SocialLoginDiv>
         <GoogleButton />
+        <KakaoButton />
+        <NaverButton />
       </SocialLoginDiv>
     </Container>
   );
@@ -160,6 +164,10 @@ const SignUpLink = styled(Link)`
   color: #ffffff;
   font-size: 11px;
 `;
-const SocialLoginDiv = styled.div``;
+const SocialLoginDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 export default Login;
