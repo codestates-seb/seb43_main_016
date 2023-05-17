@@ -13,14 +13,14 @@ public class VerifyStudygroupUtils implements VerifyStudygroupManager {
     private final StudygroupRepository studygroupRepository;
 
     @Override
-    public Studygroup verifyStudygroup(Long studygroupId) {
+    public Studygroup findVerifyStudygroup(Long studygroupId) {
         return studygroupRepository.findById(studygroupId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
     }
 
     @Override
     public boolean verifyMemberLeaderOfStudygroup(String email, Long studygroupId) {
-        Studygroup findStudygroup = verifyStudygroup(studygroupId);
+        Studygroup findStudygroup = findVerifyStudygroup(studygroupId);
         return findStudygroup.getLeaderMember().getEmail().equals(email);
     }
 }
