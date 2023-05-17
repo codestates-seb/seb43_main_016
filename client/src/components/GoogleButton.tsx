@@ -1,7 +1,7 @@
 import googleLogo from "../assets/google-icon.png";
 import styled from "styled-components";
 
-function Google() {
+function GoogleButton() {
   const googleHref = `${
     import.meta.env.VITE_APP_API_URL
   }/oauth2/authorization/google`;
@@ -24,4 +24,4 @@ const GoogleLoginButton = styled.div`
     border-radius: 50%;
   }
 `;
-export default Google;
+export default GoogleButton;

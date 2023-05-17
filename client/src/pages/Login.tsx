@@ -7,8 +7,8 @@ import tokenRequestApi from "../apis/TokenRequestApi";
 import { validateEmptyInput } from "./utils/loginUtils";
 import { useSetRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
-import Google from "../components/GoogleLogin";
 import { setRefreshToken } from "./utils/Auth";
+import GoogleButton from "../components/GoogleButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -90,12 +90,12 @@ const Login = () => {
         </LoginForm>
         <ButtonDiv>
           <button onClick={handleLoginButton}>Log In</button>
-          <div>
-            <Google />
-          </div>
         </ButtonDiv>
       </LoginDiv>
       <SignUpLink to="/signup">회원가입하러 가기</SignUpLink>
+      <SocialLoginDiv>
+        <GoogleButton />
+      </SocialLoginDiv>
     </Container>
   );
 };
@@ -149,7 +149,7 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-between;
   button {
-    width: 71%;
+    width: 100%;
     height: 45px;
   }
   img {
@@ -160,5 +160,6 @@ const SignUpLink = styled(Link)`
   color: #ffffff;
   font-size: 11px;
 `;
+const SocialLoginDiv = styled.div``;
 
 export default Login;

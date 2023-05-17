@@ -16,6 +16,7 @@ import Redirect from "./pages/Redirect";
 //import { worker } from "./mocks/browser";
 import useRefreshToken from "./hooks/useRefreshToken";
 import Modal from "react-modal";
+
 const queryClient = new QueryClient();
 
 // 개발 모드로 실행되었을 때, mocking 라이브러리가 실행되도록 명시하는 코드
@@ -35,27 +36,32 @@ function App() {
 
 function AppContent() {
   const logInState = useRecoilValue(LogInState);
-  useRefreshToken();
+
+  const fetched = useRefreshToken();
 
   return (
     <>
-      <GNB />
-      <GlobalStyle />
-      <Routes>
-        <Route
-          path="/"
-          element={<>{console.log("loginState", logInState)}</>}
-        />
-        <Route path="/profile/*" element={<Profile />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<SignUp />} />
-        <Route path="/oauth/redirect" element={<Redirect />} />
-        <Route path="/studylist" element={<StudyList />} />
-        <Route path="/studycontent" element={<StudyContent />} />
-        <Route path="/studypost" element={<StudyPost />} />
-        <Route path="/calendar" element={<ProfileCalendar />} />
-        <Route />
-      </Routes>
+      {fetched && (
+        <>
+          <GNB />
+          <GlobalStyle />
+          <Routes>
+            <Route
+              path="/"
+              element={<>{console.log("loginState", logInState)}</>}
+            />
+            <Route path="/profile/*" element={<Profile />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="/oauth/redirect" element={<Redirect />} />
+            <Route path="/studylist" element={<StudyList />} />
+            <Route path="/studycontent" element={<StudyContent />} />
+            <Route path="/studypost" element={<StudyPost />} />
+            <Route path="/calendar" element={<ProfileCalendar />} />
+            <Route />
+          </Routes>
+        </>
+      )}
     </>
   );
 }
