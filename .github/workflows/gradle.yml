@@ -36,13 +36,10 @@ jobs:
         distribution: 'temurin'
       
     - name: Path Relocation
-      run: /usr/bin/git config --global --add safe.directory /home/runner/work/seb43_main_016/seb43_main_016/server/edusync
+      working-directory: /home/runner/work/seb43_main_016/seb43_main_016/server/edusync
       
     - name: Grant execute permission for gradlew
       run: chmod +x server/edusync/gradlew
-      
-    - name: Build with Gradle2
-      run: ./server/edusync/gradlew build --spring.profiles.active=server
       
     - name: Build with Gradle1
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
