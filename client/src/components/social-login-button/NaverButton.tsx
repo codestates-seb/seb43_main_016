@@ -1,4 +1,4 @@
-import naverLogo from "../assets/naver-icon.png";
+import naverLogo from "../../assets/naver-icon.png";
 import styled from "styled-components";
 import { socialLoginApi } from "../../apis/EduApi";
 

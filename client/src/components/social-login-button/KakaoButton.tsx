@@ -1,4 +1,4 @@
-import kakaoLogo from "../assets/kakao-icon.png";
+import kakaoLogo from "../../assets/kakao-icon.png";
 import styled from "styled-components";
 import { socialLoginApi } from "../../apis/EduApi";
 

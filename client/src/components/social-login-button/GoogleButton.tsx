@@ -1,4 +1,4 @@
-import googleLogo from "../assets/google-icon.png";
+import googleLogo from "../../assets/google-icon.png";
 import styled from "styled-components";
 import { socialLoginApi } from "../../apis/EduApi";
 
