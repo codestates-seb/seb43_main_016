@@ -45,7 +45,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: 
         pwd
-        chmod 400 ./server/edusync/gradlew
+        chmod 400 ./gradlew
 
     - name: Build with Gradle
-      run: ./server/edusync/gradlew build --spring.profiles.active=server
+      run: ./gradlew build --spring.profiles.active=server
