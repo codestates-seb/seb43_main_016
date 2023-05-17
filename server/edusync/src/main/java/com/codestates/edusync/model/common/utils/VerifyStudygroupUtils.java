@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.common.service;
+package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
@@ -9,18 +9,18 @@ import org.springframework.stereotype.Component;
 
 @RequiredArgsConstructor
 @Component
-public class VerifyVerifyStudygroupUtils implements VerifyStudygroupManager {
+public class VerifyStudygroupUtils implements VerifyStudygroupManager {
     private final StudygroupRepository studygroupRepository;
 
     @Override
-    public Studygroup findStudygroup(Long studygroupId) {
+    public Studygroup findVerifyStudygroup(Long studygroupId) {
         return studygroupRepository.findById(studygroupId)
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.STUDYGROUP_NOT_FOUND));
     }
 
     @Override
-    public boolean verifyMemberLeaderOfStudygroup(String email, Long studygroupId) {
-        Studygroup findStudygroup = findStudygroup(studygroupId);
+    public boolean isMemberLeaderOfStudygroup(String email, Long studygroupId) {
+        Studygroup findStudygroup = findVerifyStudygroup(studygroupId);
         return findStudygroup.getLeaderMember().getEmail().equals(email);
     }
 }

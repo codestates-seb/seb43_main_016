@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.common.service;
+package com.codestates.edusync.model.common.utils;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

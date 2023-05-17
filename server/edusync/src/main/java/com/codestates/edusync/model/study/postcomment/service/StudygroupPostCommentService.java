@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.study.postcomment.service;
 
-import com.codestates.edusync.model.common.service.VerifyStudygroupPostCommentUtils;
-import com.codestates.edusync.model.common.service.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupPostCommentUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.repository.StudygroupPostCommentRepository;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public class StudygroupPostCommentService implements StudygroupPostCommentManager {
     private final StudygroupPostCommentRepository studygroupPostCommentRepository;
     private final VerifyStudygroupPostCommentUtils verifyStudygroupPostCommentUtils;
-    private final VerifyVerifyStudygroupUtils verifyStudygroupUtils;
+    private final VerifyStudygroupUtils verifyStudygroupUtils;
 
     @Override
     public StudygroupPostComment create(Long studygroupId,
@@ -27,7 +27,7 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
                                         Member loginMember) {
         comment.setMember(loginMember);
 
-        Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup findStudygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
         comment.setStudygroup(findStudygroup);
 
         return studygroupPostCommentRepository.save(comment);
@@ -63,7 +63,7 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
 
     @Override
     public void deleteAllByStudygroupId(Long studygroupId, Member loginMember) {
-        Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup findStudygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
 
         verifyStudygroupPostCommentUtils.verifyStudygroupMemberLeader(loginMember.getId(), findStudygroup);
         

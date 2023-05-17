@@ -21,6 +21,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "member")
 public class Member extends Auditable {
     @Id // 식별자 등록
     @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별자를 자동으로 생성

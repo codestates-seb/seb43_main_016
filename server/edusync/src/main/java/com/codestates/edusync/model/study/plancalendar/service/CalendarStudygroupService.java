@@ -1,7 +1,8 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
-import com.codestates.edusync.model.common.service.VerifyStudygroupCalendarUtils;
-import com.codestates.edusync.model.common.service.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.entity.TimeRange;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupCalendarUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
@@ -10,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -19,13 +21,13 @@ import java.util.Optional;
 public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final CalendarStudygroupRepository calendarStudygroupRepository;
     private final VerifyStudygroupCalendarUtils verifyStudygroupCalendarUtils;
-    private final VerifyVerifyStudygroupUtils verifyStudygroupUtils;
+    private final VerifyStudygroupUtils verifyStudygroupUtils;
 
     @Override
     public void createTimeSchedules(Long studygroupId,
                                     List<TimeSchedule> timeSchedules,
                                     Member loginMember) {
-        Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup findStudygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
             ts.setStudygroup(findStudygroup);
@@ -50,9 +52,17 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getContent()).ifPresent(findTimeSchedule::setContent);
-        Optional.ofNullable(timeSchedule.getStartTime()).ifPresent(findTimeSchedule::setStartTime);
-        Optional.ofNullable(timeSchedule.getEndTime()).ifPresent(findTimeSchedule::setEndTime);
-        
+
+        findTimeSchedule.setTime(
+                new TimeRange(
+                        (timeSchedule.getTime().getStudyTimeStart() == null ?
+                                findTimeSchedule.getTime().getStudyTimeStart()
+                                : timeSchedule.getTime().getStudyTimeStart() ),
+                        (timeSchedule.getTime().getStudyTimeEnd() == null ?
+                                findTimeSchedule.getTime().getStudyTimeEnd()
+                                : timeSchedule.getTime().getStudyTimeEnd() ) )
+        );
+
         calendarStudygroupRepository.save(findTimeSchedule);
     }
 

@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.studygroup.dto;
 
+import com.codestates.edusync.model.common.dto.DateRangeDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -11,18 +12,10 @@ import java.util.HashMap;
 @NoArgsConstructor
 @Getter
 @Setter
-public class StudygroupResponseDto {
+public class StudygroupResponseDto extends DateRangeDto.Response {
     private Long id;
     private String studyName;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Timestamp studyPeriodStart;
-    @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
-    private Timestamp studyPeriodEnd;
     private String daysOfWeek;
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-    private Timestamp studyTimeStart;
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-    private Timestamp studyTimeEnd;
     private Integer memberCountMin;
     private Integer memberCountMax;
     private Integer memberCountCurrent;

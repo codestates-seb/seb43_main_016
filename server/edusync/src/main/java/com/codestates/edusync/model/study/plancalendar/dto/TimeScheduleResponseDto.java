@@ -1,11 +1,14 @@
 package com.codestates.edusync.model.study.plancalendar.dto;
 
+import com.codestates.edusync.model.common.dto.DateRangeDto;
+import com.codestates.edusync.model.common.dto.TimeRangeDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @NoArgsConstructor
 @Getter
@@ -16,28 +19,6 @@ public class TimeScheduleResponseDto {
     private String studyName;
     private String platform;
 
-    private TimeScheduleDto timeScheduleInfo;
-    private CalendarInfoDto calendarInfo;
-
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class CalendarInfoDto {
-        @JsonFormat(pattern = "MM-dd", timezone = "Asia/Seoul")
-        private Timestamp startDate;
-
-        @JsonFormat(pattern = "MM-dd", timezone = "Asia/Seoul")
-        private Timestamp endDate;
-    }
-
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class TimeScheduleDto {
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp startTime;
-
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-        private Timestamp endTime;
-    }
+    private TimeRangeDto.Response timeScheduleInfo;
+    private DateRangeDto.Response calendarInfo;
 }

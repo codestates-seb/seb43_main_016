@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.common.service;
+package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 
@@ -11,7 +11,7 @@ public interface VerifyStudygroupManager {
      * @param studygroupId 스터디 그룹의 식별자
      * @return Studygroup
      */
-    Studygroup findStudygroup(Long studygroupId);
+    Studygroup findVerifyStudygroup(Long studygroupId);
 
 
     /**
@@ -21,5 +21,5 @@ public interface VerifyStudygroupManager {
      * @param studygroupId
      * @return true, false 값으로 리턴한다.<br>
      */
-    boolean verifyMemberLeaderOfStudygroup(String email, Long studygroupId);
+    boolean isMemberLeaderOfStudygroup(String email, Long studygroupId);
 }

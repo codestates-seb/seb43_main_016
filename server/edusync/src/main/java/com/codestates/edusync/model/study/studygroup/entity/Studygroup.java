@@ -1,6 +1,8 @@
 package com.codestates.edusync.model.study.studygroup.entity;
 
 import com.codestates.edusync.model.common.entity.Auditable;
+import com.codestates.edusync.model.common.entity.DateRange;
+import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.member.entity.Member;
@@ -24,6 +26,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "studygroup")
 public class Studygroup extends Auditable {
     @Column(length = 50, nullable = false)
     private String studyName;
@@ -37,21 +40,11 @@ public class Studygroup extends Auditable {
     @Column(length = 50, name = "days_of_week")
     private String daysOfWeek;
 
-    @Column(name = "study_period_start")
-    @JsonFormat(pattern = "yyyy.MM.dd")
-    private Timestamp studyPeriodStart;
+    @Embedded
+    private DateRange date;
 
-    @Column(name = "study_period_end")
-    @JsonFormat(pattern = "yyyy.MM.dd")
-    private Timestamp studyPeriodEnd;
-
-    @Column(name = "study_time_start")
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-    private Timestamp studyTimeStart;
-
-    @Column(name = "study_time_end")
-    @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-    private Timestamp studyTimeEnd;
+    @Embedded
+    private TimeRange time;
 
     @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<TimeSchedule> timeSchedules = new ArrayList<>();
@@ -71,8 +64,8 @@ public class Studygroup extends Auditable {
     @Column(length = 50, nullable = false)
     private String platform;
 
-    @Column
-    private Boolean is_requited;
+    @Column(name = "is_recruited")
+    private Boolean isRecruited;
 
     @ManyToOne(cascade = {PERSIST, MERGE}, fetch = EAGER)
     @JoinColumn(name = "leader_member_id")
