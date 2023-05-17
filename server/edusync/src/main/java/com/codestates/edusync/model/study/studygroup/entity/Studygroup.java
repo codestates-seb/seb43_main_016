@@ -3,19 +3,16 @@ package com.codestates.edusync.model.study.studygroup.entity;
 import com.codestates.edusync.model.common.entity.Auditable;
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
-import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
-import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
+import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 

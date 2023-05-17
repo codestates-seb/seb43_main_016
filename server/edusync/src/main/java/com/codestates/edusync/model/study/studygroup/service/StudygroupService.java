@@ -4,6 +4,7 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +26,11 @@ public class StudygroupService implements StudygroupManager{
     private final StudygroupRepository studygroupRepository;
     private final SearchTagService searchTagService;
     private final VerifyStudygroupUtils studygroupUtils;
+    private final MemberUtils memberUtils;
 
     @Override
-    public Studygroup create(Studygroup studygroup) {
+    public Studygroup create(Studygroup studygroup, Authentication authentication) {
+        studygroup.setLeaderMember(memberUtils.getLoggedIn(authentication));
         return studygroupRepository.save(studygroup);
     }
 

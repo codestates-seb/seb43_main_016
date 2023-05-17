@@ -1,15 +1,12 @@
 package com.codestates.edusync.model.study.studygroup.dto;
 
 import com.codestates.edusync.model.common.dto.DateRangeDto;
-import com.codestates.edusync.model.common.dto.TimeRangeDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.List;
 

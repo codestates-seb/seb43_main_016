@@ -1,14 +1,12 @@
 package com.codestates.edusync.model.study.studygroup.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.UriCreator;
-import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
+import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.model.study.studygroup.service.StudygroupService;
-import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
-import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -30,7 +28,6 @@ public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
     private final StudygroupMapper studygroupMapper;
     private final StudygroupService studygroupService;
-    private final MemberUtils memberUtils;
 
     /**
      * 스터디 모집 & 등록
@@ -41,9 +38,8 @@ public class StudygroupController {
     public ResponseEntity postStudygroup(Authentication authentication,
                                          @Valid @RequestBody StudygroupDto.Post postDto) {
 
-        Member member = memberUtils.getLoggedIn(authentication);
-        Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto, member);
-        studygroup = studygroupService.create(studygroup);
+        Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto);
+        studygroup = studygroupService.create(studygroup, authentication);
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
 
         return ResponseEntity.created(location).build();

@@ -2,6 +2,7 @@ package com.codestates.edusync.model.study.studygroup.service;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 
 public interface StudygroupManager {
 
@@ -10,7 +11,7 @@ public interface StudygroupManager {
      * @param studygroup
      * @return
      */
-    Studygroup create(Studygroup studygroup);
+    Studygroup create(Studygroup studygroup, Authentication authentication);
 
     /**
      * 스터디 정보 수정

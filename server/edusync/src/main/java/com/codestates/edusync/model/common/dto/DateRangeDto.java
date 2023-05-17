@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
@@ -14,21 +15,21 @@ public class DateRangeDto {
     @Getter
     public static class Post extends TimeRangeDto.Post {
         @NotNull
-        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime studyPeriodStart;
 
         @NotNull
-        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime studyPeriodEnd;
     }
 
     @NoArgsConstructor
     @Getter
     public static class Patch extends TimeRangeDto.Patch {
-        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime studyPeriodStart;
 
-        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime studyPeriodEnd;
     }
 
