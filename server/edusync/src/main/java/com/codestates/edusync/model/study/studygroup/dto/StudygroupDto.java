@@ -22,7 +22,7 @@ public class StudygroupDto {
         @NotNull
         private String studyName;
 
-        private List<Integer> daysOfWeek;
+        private List<String> daysOfWeek;
 
         @Positive
         private Integer memberCountMin;
