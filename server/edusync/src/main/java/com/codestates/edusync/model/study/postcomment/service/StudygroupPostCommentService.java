@@ -1,7 +1,7 @@
 package com.codestates.edusync.model.study.postcomment.service;
 
 import com.codestates.edusync.model.common.utils.VerifyStudygroupPostCommentUtils;
-import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.repository.StudygroupPostCommentRepository;
@@ -19,7 +19,7 @@ import java.util.Optional;
 public class StudygroupPostCommentService implements StudygroupPostCommentManager {
     private final StudygroupPostCommentRepository studygroupPostCommentRepository;
     private final VerifyStudygroupPostCommentUtils verifyStudygroupPostCommentUtils;
-    private final VerifyVerifyStudygroupUtils verifyStudygroupUtils;
+    private final VerifyStudygroupUtils verifyStudygroupUtils;
 
     @Override
     public StudygroupPostComment create(Long studygroupId,

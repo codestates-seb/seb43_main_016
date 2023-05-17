@@ -2,7 +2,7 @@ package com.codestates.edusync.model.study.studygroupjoin.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.model.common.utils.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 public class StudygroupJoinService implements StudygroupJoinManager {
     private final StudygroupJoinRepository studygroupJoinRepository;
-    private final VerifyVerifyStudygroupUtils verifyStudygroupUtils;
+    private final VerifyStudygroupUtils verifyStudygroupUtils;
 
     @Override
     public StudygroupJoin getCandidateByNickName(Long studygroupId, String nickName) {
