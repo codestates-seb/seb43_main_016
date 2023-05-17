@@ -38,36 +38,39 @@ public class StudygroupService implements StudygroupManager{
     public Studygroup update(String email, Studygroup studygroup) {
         Studygroup findStudygroup = get(studygroup.getId());
 
-        if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
-            Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
-            Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
+        if (!findStudygroup.getLeaderMember().getEmail().equals(email)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        }
 
-            findStudygroup.setDate(
-                    new DateRange(
-                            (studygroup.getDate().getStudyPeriodStart() == null ?
-                                    findStudygroup.getDate().getStudyPeriodStart()
-                                    : studygroup.getDate().getStudyPeriodStart() ),
-                            (studygroup.getDate().getStudyPeriodEnd() == null ?
-                                    findStudygroup.getDate().getStudyPeriodEnd()
-                                    : studygroup.getDate().getStudyPeriodEnd() )
-                    )
-            );
-            findStudygroup.setTime(
-                    new TimeRange(
-                            (studygroup.getTime().getStudyTimeStart() == null ?
-                                    findStudygroup.getTime().getStudyTimeStart()
-                                    : studygroup.getTime().getStudyTimeStart() ),
-                            (studygroup.getTime().getStudyTimeEnd() == null ?
-                                    findStudygroup.getTime().getStudyTimeEnd()
-                                    : studygroup.getTime().getStudyTimeEnd() )
-                    )
-            );
-            Optional.ofNullable(studygroup.getIntroduction()).ifPresent(findStudygroup::setIntroduction);
-            Optional.ofNullable(studygroup.getMemberCountMin()).ifPresent(findStudygroup::setMemberCountMin);
-            Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
-            Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
-            Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
-        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
+        Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
+
+        findStudygroup.setDate(
+                new DateRange(
+                        (studygroup.getDate().getStudyPeriodStart() == null ?
+                                findStudygroup.getDate().getStudyPeriodStart()
+                                : studygroup.getDate().getStudyPeriodStart() ),
+                        (studygroup.getDate().getStudyPeriodEnd() == null ?
+                                findStudygroup.getDate().getStudyPeriodEnd()
+                                : studygroup.getDate().getStudyPeriodEnd() )
+                )
+        );
+        findStudygroup.setTime(
+                new TimeRange(
+                        (studygroup.getTime().getStudyTimeStart() == null ?
+                                findStudygroup.getTime().getStudyTimeStart()
+                                : studygroup.getTime().getStudyTimeStart() ),
+                        (studygroup.getTime().getStudyTimeEnd() == null ?
+                                findStudygroup.getTime().getStudyTimeEnd()
+                                : studygroup.getTime().getStudyTimeEnd() )
+                )
+        );
+        Optional.ofNullable(studygroup.getIntroduction()).ifPresent(findStudygroup::setIntroduction);
+        Optional.ofNullable(studygroup.getMemberCountMin()).ifPresent(findStudygroup::setMemberCountMin);
+        Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
+        Optional.ofNullable(studygroup.getMemberCountCurrent()).ifPresent(findStudygroup::setMemberCountCurrent);
+        Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
+        Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
         return studygroupRepository.save(findStudygroup);
     }
@@ -81,7 +84,6 @@ public class StudygroupService implements StudygroupManager{
         }
 
         findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
-
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
     }
