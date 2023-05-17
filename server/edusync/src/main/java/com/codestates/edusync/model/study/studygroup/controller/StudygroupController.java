@@ -20,6 +20,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Validated
@@ -109,7 +110,8 @@ public class StudygroupController {
                                             @RequestParam("size") @Positive Integer size){
 
         Page<Studygroup> studygroupPage = studygroupService.getWithPaging(page-1, size);
-        List<Studygroup> studygroupList = studygroupPage.getContent();
+        List<Studygroup> studygroupList =
+                studygroupPage.getContent().stream().map(e -> studygroupService.get(e.getId())).collect(Collectors.toList());
         List<StudygroupResponseDto.DtoList> responseDtoList =
                 studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
 
