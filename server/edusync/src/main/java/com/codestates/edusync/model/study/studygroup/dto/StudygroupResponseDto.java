@@ -49,6 +49,15 @@ public class StudygroupResponseDto {
     public static class DtoList {
         private Long id;
         private String title;
-        //private
+    }
+
+    /**
+     * 스터디 모집 상태
+     */
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class Status {
+        private Boolean status;
     }
 }

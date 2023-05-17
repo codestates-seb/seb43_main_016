@@ -78,13 +78,14 @@ public class StudygroupController {
     public ResponseEntity patchStudygroupStatus(Authentication authentication,
                                                 @PathVariable("studygroup-id") @Positive Long studygroupId) {
 
-        studygroupService.updateStatus(authentication.getName(), studygroupId);
+        boolean status = studygroupService.updateStatus(authentication.getName(), studygroupId);
+        StudygroupResponseDto.Status statusDto = studygroupMapper.statusDto(status);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroupId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
 
-        return new ResponseEntity<>(headers, HttpStatus.OK);
+        return new ResponseEntity<>(statusDto, headers, HttpStatus.OK);
     }
 
     /**
