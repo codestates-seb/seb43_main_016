@@ -38,7 +38,7 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
       
-    - name: Build with Gradle
+    - name: Build with Gradle22
       run: ./gradlew build --spring.profiles.active=server
       
     - name: Build with Gradle
