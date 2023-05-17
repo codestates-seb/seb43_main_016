@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.plancalendar.dto;
 
+import com.codestates.edusync.model.common.dto.TimeRangeDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,34 +32,20 @@ public class CalendarDto {
 
         @NoArgsConstructor
         @Getter
-        public static class Post {
+        public static class Post extends TimeRangeDto.Post {
             @NotNull
             private String title;
 
             @Nullable
             private String content;
-
-            @NotNull
-            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-            private Timestamp startTime;
-
-            @NotNull
-            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-            private Timestamp endTime;
         }
 
         @NoArgsConstructor
         @Getter
-        public static class Patch {
+        public static class Patch extends TimeRangeDto.Patch {
             private Long id;
             private String title;
             private String content;
-
-            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-            private Timestamp startTime;
-
-            @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
-            private Timestamp endTime;
         }
 
     }
