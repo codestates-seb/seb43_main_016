@@ -35,13 +35,16 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
       
-    - name: Path Relocation
-      working-directory: /home/runner/work/seb43_main_016/seb43_main_016/server/edusync
-      
     - name: Grant execute permission for gradlew
       run: chmod +x server/edusync/gradlew
+      working-directory: /home/runner/work/seb43_main_016/seb43_main_016/server/edusync
+      
+    - name: Build with Gradle2
+      run: ./gradlew build
+      working-directory: /home/runner/work/seb43_main_016/seb43_main_016/server/edusync
       
     - name: Build with Gradle1
       uses: gradle/gradle-build-action@67421db6bd0bf253fb4bd25b31ebb98943c375e1
       with:
         arguments: build
+
