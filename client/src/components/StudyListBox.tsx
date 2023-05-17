@@ -1,7 +1,19 @@
 import styled from "styled-components";
-// import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 // import axios from "axios";
+// import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
+
+// const [data, setData] = useState<StudyInfoDto[]>([]);
+
+// useEffect(() => {
+//   const fetchData = async () => {
+//     const result = await getStudyGroupInfo(1);
+//     setData(result);
+//   };
+
+//   fetchData();
+// }, []);
 
 const StudyListBox = () => {
   return (
@@ -9,7 +21,10 @@ const StudyListBox = () => {
       <Link to="/studycontent">
         <StudyListImage></StudyListImage>
         <StudyListTitle>
-          <h3>TypeScript 스터디 모집</h3>
+          {/* {data.map((item: StudyInfoDto) => (
+            <h3 key={item.id}>{item.studyName}</h3>
+          ))} */}
+          <h3>testtesttest</h3>
         </StudyListTitle>
         <StudyListTag>
           <div>javascript</div>

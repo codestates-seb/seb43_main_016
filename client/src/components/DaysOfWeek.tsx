@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { useState } from "react";
 
 interface DaysOfWeekProps {
   checked: string[];

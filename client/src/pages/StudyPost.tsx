@@ -168,7 +168,6 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>태그</span>
-            <input type="text" />
           </StudyPostInfo>
           <StudyPostInput>
             <TextEditor handleContentChange={setPostText} />
