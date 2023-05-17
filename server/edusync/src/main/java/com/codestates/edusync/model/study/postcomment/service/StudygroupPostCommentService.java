@@ -27,7 +27,7 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
                                         Member loginMember) {
         comment.setMember(loginMember);
 
-        Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup findStudygroup = verifyStudygroupUtils.verifyStudygroup(studygroupId);
         comment.setStudygroup(findStudygroup);
 
         return studygroupPostCommentRepository.save(comment);
@@ -63,7 +63,7 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
 
     @Override
     public void deleteAllByStudygroupId(Long studygroupId, Member loginMember) {
-        Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup findStudygroup = verifyStudygroupUtils.verifyStudygroup(studygroupId);
 
         verifyStudygroupPostCommentUtils.verifyStudygroupMemberLeader(loginMember.getId(), findStudygroup);
         

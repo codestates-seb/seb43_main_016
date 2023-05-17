@@ -25,7 +25,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     public void createTimeSchedules(Long studygroupId,
                                     List<TimeSchedule> timeSchedules,
                                     Member loginMember) {
-        Studygroup findStudygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup findStudygroup = verifyStudygroupUtils.verifyStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
             ts.setStudygroup(findStudygroup);

@@ -11,7 +11,7 @@ public interface VerifyStudygroupManager {
      * @param studygroupId 스터디 그룹의 식별자
      * @return Studygroup
      */
-    Studygroup findStudygroup(Long studygroupId);
+    Studygroup verifyStudygroup(Long studygroupId);
 
 
     /**

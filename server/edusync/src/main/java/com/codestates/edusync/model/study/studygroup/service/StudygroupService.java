@@ -65,7 +65,7 @@ public class StudygroupService implements StudygroupManager{
 
     @Override
     public Studygroup get(Long studygroupId) {
-        Studygroup findStudygroup = studygroupUtills.findStudygroup(studygroupId);
+        Studygroup findStudygroup = studygroupUtills.verifyStudygroup(studygroupId);
         findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
         return findStudygroup;
     }

@@ -38,7 +38,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public List<StudygroupJoin> getAllCandidateList(Long studygroupId, Member loginMember) {
-        Studygroup studygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup studygroup = verifyStudygroupUtils.verifyStudygroup(studygroupId);
 
         if (loginMember.getId() != studygroup.getLeaderMember().getId()) {
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
@@ -57,7 +57,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         } else {
             StudygroupJoin studygroupJoin = new StudygroupJoin();
             studygroupJoin.setMember(loginMember);
-            studygroupJoin.setStudygroup(verifyStudygroupUtils.findStudygroup(studygroupId));
+            studygroupJoin.setStudygroup(verifyStudygroupUtils.verifyStudygroup(studygroupId));
             studygroupJoinRepository.save(studygroupJoin);
         }
     }
@@ -92,7 +92,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void approveCandidateByNickName(Long studygroupId, String nickName, Member loginMember) {
-        Studygroup studygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup studygroup = verifyStudygroupUtils.verifyStudygroup(studygroupId);
 
         if (loginMember.getId() != studygroup.getLeaderMember().getId()) {
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
@@ -107,7 +107,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void rejectCandidateByNickName(Long studygroupId, String nickName, Member loginMember) {
-        Studygroup studygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup studygroup = verifyStudygroupUtils.verifyStudygroup(studygroupId);
 
         if (loginMember.getId() == studygroup.getLeaderMember().getId()) {
             StudygroupJoin studygroupJoin = getCandidateByNickName(studygroupId, nickName);
@@ -119,7 +119,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void kickOutMemberByNickName(Long studygroupId, String nickName, Member loginMember) {
-        Studygroup studygroup = verifyStudygroupUtils.findStudygroup(studygroupId);
+        Studygroup studygroup = verifyStudygroupUtils.verifyStudygroup(studygroupId);
 
         if (loginMember.getId() == studygroup.getLeaderMember().getId()) {
             StudygroupJoin studygroupJoin = getMemberByNickName(studygroupId, nickName);
