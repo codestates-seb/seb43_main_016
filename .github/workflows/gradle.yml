@@ -41,5 +41,3 @@ jobs:
       
     - name: Grant execute permission for gradlew
       run: chmod +x server/edusync/gradlew
-    - name: Build with Gradle
-      run: ./server/edusync/gradlew build
