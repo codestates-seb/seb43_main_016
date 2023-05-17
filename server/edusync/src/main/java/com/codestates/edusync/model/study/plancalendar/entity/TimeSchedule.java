@@ -1,6 +1,7 @@
 package com.codestates.edusync.model.study.plancalendar.entity;
 
 import com.codestates.edusync.model.common.entity.BaseEntity;
+import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.Getter;
@@ -8,7 +9,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
-import java.sql.Timestamp;
 
 import static javax.persistence.FetchType.EAGER;
 
@@ -16,6 +16,7 @@ import static javax.persistence.FetchType.EAGER;
 @Getter
 @Setter
 @Entity
+@Table(name = "time_schedule")
 public class TimeSchedule extends BaseEntity {
     @Column(length = 100)
     private String title;
@@ -23,10 +24,8 @@ public class TimeSchedule extends BaseEntity {
     @Column(length = 200)
     private String content;
 
-    @Column
-    private Timestamp startTime;
-    @Column
-    private Timestamp endTime;
+    @Embedded
+    private TimeRange time;
 
     @ManyToOne(fetch = EAGER)
     @JoinColumn(name = "studygroup_id")

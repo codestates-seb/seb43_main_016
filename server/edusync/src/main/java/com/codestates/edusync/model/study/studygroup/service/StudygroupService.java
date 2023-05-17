@@ -2,7 +2,9 @@ package com.codestates.edusync.model.study.studygroup.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.model.common.service.VerifyVerifyStudygroupUtils;
+import com.codestates.edusync.model.common.entity.DateRange;
+import com.codestates.edusync.model.common.entity.TimeRange;
+import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
@@ -21,7 +23,7 @@ import java.util.Optional;
 public class StudygroupService implements StudygroupManager{
     private final StudygroupRepository studygroupRepository;
     private final SearchTagService searchTagService;
-    private final VerifyVerifyStudygroupUtils studygroupUtills;
+    private final VerifyStudygroupUtils studygroupUtils;
 
     @Override
     public Studygroup create(Studygroup studygroup) {
@@ -35,10 +37,27 @@ public class StudygroupService implements StudygroupManager{
         if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
             Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
             Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
-            Optional.ofNullable(studygroup.getStudyPeriodStart()).ifPresent(findStudygroup::setStudyPeriodStart);
-            Optional.ofNullable(studygroup.getStudyPeriodEnd()).ifPresent(findStudygroup::setStudyPeriodEnd);
-            Optional.ofNullable(studygroup.getStudyTimeStart()).ifPresent(findStudygroup::setStudyTimeStart);
-            Optional.ofNullable(studygroup.getStudyTimeEnd()).ifPresent(findStudygroup::setStudyTimeEnd);
+
+            findStudygroup.setDate(
+                    new DateRange(
+                            (studygroup.getDate().getStudyPeriodStart() == null ?
+                                    findStudygroup.getDate().getStudyPeriodStart()
+                                    : studygroup.getDate().getStudyPeriodStart() ),
+                            (studygroup.getDate().getStudyPeriodEnd() == null ?
+                                    findStudygroup.getDate().getStudyPeriodEnd()
+                                    : studygroup.getDate().getStudyPeriodEnd() )
+                    )
+            );
+            findStudygroup.setTime(
+                    new TimeRange(
+                            (studygroup.getTime().getStudyTimeStart() == null ?
+                                    findStudygroup.getTime().getStudyTimeStart()
+                                    : studygroup.getTime().getStudyTimeStart() ),
+                            (studygroup.getTime().getStudyTimeEnd() == null ?
+                                    findStudygroup.getTime().getStudyTimeEnd()
+                                    : studygroup.getTime().getStudyTimeEnd() )
+                    )
+            );
             Optional.ofNullable(studygroup.getIntroduction()).ifPresent(findStudygroup::setIntroduction);
             Optional.ofNullable(studygroup.getMemberCountMin()).ifPresent(findStudygroup::setMemberCountMin);
             Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
@@ -55,19 +74,17 @@ public class StudygroupService implements StudygroupManager{
 
         if (!findStudygroup.getLeaderMember().getEmail().equals(email)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        } else {
-            boolean requited = findStudygroup.getIs_requited();
-            if (requited) requited = false;
-            else requited = true;
-            findStudygroup.setIs_requited(requited);
-            studygroupRepository.save(findStudygroup);
         }
-        return findStudygroup.getIs_requited();
+
+        findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
+
+        studygroupRepository.save(findStudygroup);
+        return findStudygroup.getIsRecruited();
     }
 
     @Override
     public Studygroup get(Long studygroupId) {
-        Studygroup findStudygroup = studygroupUtills.findStudygroup(studygroupId);
+        Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
         findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
         return findStudygroup;
     }
@@ -79,7 +96,7 @@ public class StudygroupService implements StudygroupManager{
 
     @Override
     public void delete(String email, Long studygroupId){
-        if (studygroupUtills.verifyMemberLeaderOfStudygroup(email, studygroupId)) {
+        if (studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId)) {
             studygroupRepository.deleteById(studygroupId);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }

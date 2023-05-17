@@ -1,13 +1,13 @@
 package com.codestates.edusync.model.member.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.service.MemberUtils;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.service.MemberService;
 import com.codestates.edusync.model.member.dto.MemberDto;
 import com.codestates.edusync.model.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.mapper.MemberMapper;
-import com.codestates.edusync.model.common.service.UriCreator;
+import com.codestates.edusync.model.common.utils.UriCreator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;

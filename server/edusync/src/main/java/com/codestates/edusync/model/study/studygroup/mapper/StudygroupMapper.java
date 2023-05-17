@@ -2,6 +2,8 @@ package com.codestates.edusync.model.study.studygroup.mapper;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
+import com.codestates.edusync.model.common.entity.DateRange;
+import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
@@ -26,16 +28,24 @@ public interface StudygroupMapper {
         Studygroup studygroup = new Studygroup();
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
-        studygroup.setStudyPeriodStart(studygroupDto.getStudyPeriodStart());
-        studygroup.setStudyPeriodEnd(studygroupDto.getStudyPeriodEnd());
-        studygroup.setStudyTimeStart(studygroupDto.getStudyTimeStart());
-        studygroup.setStudyTimeEnd(studygroupDto.getStudyTimeEnd());
+        studygroup.setDate(
+                new DateRange(
+                        studygroupDto.getStudyPeriodStart(),
+                        studygroupDto.getStudyPeriodEnd()
+                )
+        );
+        studygroup.setTime(
+                new TimeRange(
+                        studygroupDto.getStudyTimeStart(),
+                        studygroupDto.getStudyTimeEnd()
+                )
+        );
         studygroup.setIntroduction(studygroupDto.getIntroduction());
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
         studygroup.setMemberCountCurrent(studygroupDto.getMemberCountCurrent());
         studygroup.setPlatform(studygroupDto.getPlatform());
-        studygroup.setIs_requited(false);
+        studygroup.setIsRecruited(false);
         studygroup.setLeaderMember(member);
 
         List<SearchTag> resultTags = new ArrayList<>();
@@ -66,17 +76,17 @@ public interface StudygroupMapper {
         StudygroupResponseDto responseDto = new StudygroupResponseDto();
         responseDto.setId(studygroup.getId());
         responseDto.setStudyName(studygroup.getStudyName());
-        responseDto.setStudyPeriodStart(studygroup.getStudyPeriodStart());
-        responseDto.setStudyPeriodEnd(studygroup.getStudyPeriodEnd());
+        responseDto.setStudyPeriodStart(studygroup.getDate().getStudyPeriodStart());
+        responseDto.setStudyPeriodEnd(studygroup.getDate().getStudyPeriodEnd());
         responseDto.setDaysOfWeek(studygroup.getDaysOfWeek());
-        responseDto.setStudyTimeStart(studygroup.getStudyTimeStart());
-        responseDto.setStudyTimeEnd(studygroup.getStudyTimeEnd());
+        responseDto.setStudyTimeStart(studygroup.getTime().getStudyTimeStart());
+        responseDto.setStudyTimeEnd(studygroup.getTime().getStudyTimeEnd());
         responseDto.setMemberCountMin(studygroup.getMemberCountMin());
         responseDto.setMemberCountMax(studygroup.getMemberCountMax());
         responseDto.setMemberCountCurrent(studygroup.getMemberCountCurrent());
         responseDto.setPlatform(studygroup.getPlatform());
         responseDto.setIntroduction(studygroup.getIntroduction());
-        responseDto.setRequited(studygroup.getIs_requited());
+        responseDto.setRequited(studygroup.getIsRecruited());
         responseDto.setTags(tags);
         responseDto.setLeader(memberToStudyLeader(studygroup.getLeaderMember()));
         return responseDto;
@@ -107,10 +117,18 @@ public interface StudygroupMapper {
         studygroup.setId(studygroupDto.getId());
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
-        studygroup.setStudyPeriodStart(studygroupDto.getStudyPeriodStart());
-        studygroup.setStudyPeriodEnd(studygroupDto.getStudyPeriodEnd());
-        studygroup.setStudyTimeStart(studygroupDto.getStudyTimeStart());
-        studygroup.setStudyTimeEnd(studygroupDto.getStudyTimeEnd());
+        studygroup.setDate(
+                new DateRange(
+                        studygroupDto.getStudyPeriodStart(),
+                        studygroupDto.getStudyPeriodEnd()
+                )
+        );
+        studygroup.setTime(
+                new TimeRange(
+                        studygroupDto.getStudyTimeStart(),
+                        studygroupDto.getStudyTimeEnd()
+                )
+        );
         studygroup.setIntroduction(studygroupDto.getIntroduction());
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());

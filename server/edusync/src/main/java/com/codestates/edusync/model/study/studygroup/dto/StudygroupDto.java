@@ -1,5 +1,7 @@
 package com.codestates.edusync.model.study.studygroup.dto;
 
+import com.codestates.edusync.model.common.dto.DateRangeDto;
+import com.codestates.edusync.model.common.dto.TimeRangeDto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,27 +18,11 @@ public class StudygroupDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Post {
+    public static class Post extends DateRangeDto.Post {
         @NotNull
         private String studyName;
 
-        @NotNull
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private Timestamp studyPeriodStart;
-
-        @NotNull
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private Timestamp studyPeriodEnd;
-
         private List<Integer> daysOfWeek;
-
-        @NotNull
-        @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-        private Timestamp studyTimeStart;
-
-        @NotNull
-        @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-        private Timestamp studyTimeEnd;
 
         @Positive
         private Integer memberCountMin;
@@ -59,25 +45,13 @@ public class StudygroupDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Patch {
+    public static class Patch extends DateRangeDto.Patch {
         @NotNull
         private Long id;
 
         private String studyName;
 
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private Timestamp studyPeriodStart;
-
-        @JsonFormat(pattern = "yyyy-MM-dd")
-        private Timestamp studyPeriodEnd;
-
         private List<Integer> daysOfWeek;
-
-        @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-        private Timestamp studyTimeStart;
-
-        @JsonFormat(pattern = "HH:mm", timezone = "Asia/Seoul")
-        private Timestamp studyTimeEnd;
 
         @Positive
         private Integer memberCountMin;
