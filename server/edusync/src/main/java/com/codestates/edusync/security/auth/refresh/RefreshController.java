@@ -37,7 +37,7 @@ public class RefreshController {
         if (refreshTokenHeader != null && refreshTokenHeader.startsWith("Bearer ")) {
             String refreshToken = refreshTokenHeader.substring(7);
             try {
-                Optional<RefreshToken> refreshTokenObj = refreshTokenRepository.findByRtk(refreshToken);
+                Optional<RefreshToken> refreshTokenObj = refreshTokenRepository.findById(refreshToken);
                 if (!refreshTokenObj.isPresent()) {
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token [redis]");
                 }
