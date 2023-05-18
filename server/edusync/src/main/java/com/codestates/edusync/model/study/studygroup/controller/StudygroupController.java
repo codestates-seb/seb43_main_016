@@ -111,7 +111,7 @@ public class StudygroupController {
                                             @RequestParam("size") @Positive Integer size){
 
         Page<Studygroup> studygroupPage = studygroupService.getWithPaging(page-1, size);
-        List<Studygroup> studygroupList =
+        List<Studygroup> studygroupList = // Stream 내부에서 Service 다량 쿼리 발생, 로직 수정 필요
                 studygroupPage.getContent().stream().map(e -> studygroupService.get(e.getId())).collect(Collectors.toList());
         List<StudygroupResponseDto.DtoList> responseDtoList =
                 studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
@@ -129,5 +129,20 @@ public class StudygroupController {
                                            @PathVariable("studygroup-id") @Positive Long studygroupId) {
         studygroupService.delete(authentication.getName(), studygroupId);
         return ResponseEntity.noContent().build();
+    }
+
+    /**
+     * 스터디 리더 권한 이전
+     * @param authentication
+     * @param studygroupId
+     * @return
+     */
+    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/privileges")
+    public ResponseEntity patchStudygroupLeader(Authentication authentication,
+                                                @PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                @RequestBody StudygroupDto.PatchLeader patchLeader) {
+
+        studygroupService.patchLeader(authentication.getName(), studygroupId, patchLeader.getNickName());
+        return ResponseEntity.ok().build();
     }
 }

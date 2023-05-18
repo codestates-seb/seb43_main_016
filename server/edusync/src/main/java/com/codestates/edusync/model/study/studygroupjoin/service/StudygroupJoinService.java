@@ -21,7 +21,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     private final VerifyStudygroupUtils verifyStudygroupUtils;
     private final MemberUtils memberUtils;
 
-    private Member getMember(String email) {
+    private Member getLoginMember(String email) {
         return memberUtils.getLoggedIn(email);
     }
 
@@ -54,12 +54,12 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void createCandidate(Long studygroupId, String email) {
-        Member loginMember = getMember(email);
+        Member loginMember = getLoginMember(email);
         if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_EXISTS);
         }
         if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_EXISTS);
         }
         StudygroupJoin studygroupJoin = new StudygroupJoin();
         studygroupJoin.setMember(loginMember);
@@ -78,7 +78,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     public void delStudygroupJoin(Long studygroupId, String email, boolean isMember) {
-        Member loginMember = getMember(email);
+        Member loginMember = getLoginMember(email);
         StudygroupJoin studygroupJoin = null;
         List<StudygroupJoin> studygroupJoins;
 
@@ -128,5 +128,12 @@ public class StudygroupJoinService implements StudygroupJoinManager {
             if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
         }
         return studygroupJoin;
+    }
+
+    @Override
+    public void leaderChanged(Member newLeader, Member oldLeader) {
+        StudygroupJoin studygroupJoin = studygroupJoinRepository.findByMemberId(newLeader.getId());
+        studygroupJoin.setMember(oldLeader);
+        studygroupJoinRepository.save(studygroupJoin);
     }
 }
