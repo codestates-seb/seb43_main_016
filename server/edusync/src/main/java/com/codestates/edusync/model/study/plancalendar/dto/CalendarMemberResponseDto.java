@@ -11,7 +11,7 @@ import java.util.Map;
 @NoArgsConstructor
 @Getter
 @Setter
-public class CalendarStudygroupResponseDto extends TimeRangeDto.Response {
+public class CalendarMemberResponseDto extends TimeRangeDto.Response {
     private Long id;
     private Long groupId;
 

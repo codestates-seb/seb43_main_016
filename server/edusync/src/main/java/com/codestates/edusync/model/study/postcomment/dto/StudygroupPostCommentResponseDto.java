@@ -11,5 +11,5 @@ public class StudygroupPostCommentResponseDto {
     private Long commentId;
     private Long studygroupId;
     private Long memberId;
-    private String content;
+    private String platform;
 }
