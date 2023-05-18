@@ -3,6 +3,7 @@ package com.codestates.edusync.config;
 import com.codestates.edusync.filter.JwtAuthenticationFilter;
 import com.codestates.edusync.filter.JwtVerificationFilter;
 import com.codestates.edusync.security.auth.jwt.JwtTokenizer;
+import com.codestates.edusync.security.auth.token.TokenService;
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.handler.*;
 import lombok.RequiredArgsConstructor;
@@ -34,6 +35,7 @@ public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final OAuth2MemberSuccessHandler oAuth2MemberSuccessHandler;
+    private final TokenService tokenService;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -88,7 +90,7 @@ public class SecurityConfiguration {
         public void configure(HttpSecurity builder) throws Exception {  // configure() 메서드를 오버라이드해서 Configuration을 커스터마이징
             AuthenticationManager authenticationManager = builder.getSharedObject(AuthenticationManager.class);  // AuthenticationManager 객체 가져오기
 
-            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer);  // JwtAuthenticationFilter를 생성하면서 JwtAuthenticationFilter에서 사용되는 AuthenticationManager와 JwtTokenizer를 DI
+            JwtAuthenticationFilter jwtAuthenticationFilter = new JwtAuthenticationFilter(authenticationManager, jwtTokenizer, tokenService);  // JwtAuthenticationFilter를 생성하면서 JwtAuthenticationFilter에서 사용되는 AuthenticationManager와 JwtTokenizer를 DI
             jwtAuthenticationFilter.setFilterProcessesUrl("/members/login"); // setFilterProcessesUrl() 메서드를 통해 디폴트 request URL인 “/login”을 “/members/login”으로 변경
             jwtAuthenticationFilter.setAuthenticationSuccessHandler(new MemberAuthenticationSuccessHandler());  // 인증 성공시 사용할 객체 등록
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());  // 인증 실패시 사용할 객체 등록

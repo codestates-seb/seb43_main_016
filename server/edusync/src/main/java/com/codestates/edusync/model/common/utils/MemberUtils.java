@@ -31,6 +31,19 @@ public class MemberUtils implements MemberVerificationManager {
     }
 
     @Override
+    public Member getById(Long memberId) {
+        Optional<Member> optionalMember =
+                memberRepository.findById(memberId);
+
+        Member findMember =
+                optionalMember.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%s 회원을 찾을 수 없습니다.", memberId)));
+        checkIsActive(findMember);
+
+        return findMember;
+    }
+
+    @Override
     @Transactional(readOnly = true)
     public List<Member> getList(List<String> uuids) {
         return memberRepository.findByUuidIn(uuids);

@@ -3,10 +3,13 @@ package com.codestates.edusync.security.auth.refresh;
 import com.codestates.edusync.security.auth.jwt.JwtTokenizer;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.repository.MemberRepository;
+import com.codestates.edusync.security.auth.token.TokenService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -21,16 +24,24 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/refresh")
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class RefreshController {
     private final JwtTokenizer jwtTokenizer;
     private final MemberRepository memberRepository;
+    private final TokenService tokenService;
+    private final RefreshTokenRepository refreshTokenRepository;
+
     @PostMapping
     public ResponseEntity<String> refreshAccessToken(HttpServletRequest request) { // 리프레쉬 토큰 받으면 엑세스 토큰 재발급
         String refreshTokenHeader = request.getHeader("Refresh");
         if (refreshTokenHeader != null && refreshTokenHeader.startsWith("Bearer ")) {
             String refreshToken = refreshTokenHeader.substring(7);
             try {
+                Optional<RefreshToken> refreshTokenObj = refreshTokenRepository.findById(refreshToken);
+                if (!refreshTokenObj.isPresent()) {
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid refresh token [redis]");
+                }
+
                 Jws<Claims> claims = jwtTokenizer.getClaims(refreshToken, jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey()));
 
                 String email = claims.getBody().getSubject();
@@ -38,7 +49,7 @@ public class RefreshController {
 
                 if (optionalMember.isPresent()) {
                     Member member = optionalMember.get();
-                    String accessToken = delegateAccessToken(member);
+                    String accessToken = tokenService.delegateAccessToken(member);
 
                     return ResponseEntity.ok().header("Authorization", "Bearer " + accessToken).body("Access token refreshed");
                 } else {
@@ -50,21 +61,5 @@ public class RefreshController {
         } else {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Missing refresh token");
         }
-    }
-
-    private String delegateAccessToken(Member member) { // 코드의 중복...찝찝하다.
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", member.getEmail());
-        claims.put("roles", member.getRoles());
-        claims.put("nickName", member.getNickName());
-
-        String subject = member.getEmail();
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-        String accessToken = jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
-        return accessToken;
     }
 }
