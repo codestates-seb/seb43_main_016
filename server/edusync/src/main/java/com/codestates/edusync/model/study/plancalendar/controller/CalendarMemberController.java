@@ -53,11 +53,12 @@ public class CalendarMemberController {
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
-    @GetMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL + "s")
-    public ResponseEntity getAllTimeScheduleOfMember(@PathVariable("member-uuid") @Positive String memberUuid) {
+    @GetMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
+    public ResponseEntity getAllTimeScheduleOfMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
+                                                     Authentication authentication) {
 
         List<TimeSchedule> findTimeSchedules =
-                calendarMemberService.getTimeSchedules(memberUuid);
+                calendarMemberService.getTimeSchedules(authentication.getPrincipal().toString());
 
         List<TimeRangeDto.Response> responseDtos =
                 mapper.timeScheduleListToTimeScheduleResponseDto(findTimeSchedules);
