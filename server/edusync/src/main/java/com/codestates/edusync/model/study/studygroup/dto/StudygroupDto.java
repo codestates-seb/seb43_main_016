@@ -43,9 +43,6 @@ public class StudygroupDto {
     @Getter
     @Setter
     public static class Patch extends DateRangeDto.Patch {
-        @NotNull
-        private Long id;
-
         private String studyName;
 
         private List<String> daysOfWeek;

@@ -54,9 +54,10 @@ public class StudygroupController {
      */
     @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity patchStudygroup(Authentication authentication,
+                                          @Positive @PathVariable("studygroup-id") Long studygroupId,
                                           @Valid @RequestBody StudygroupDto.Patch patchDto) {
 
-        Studygroup studygroup = studygroupMapper.StudygroupDtoPatchToStudygroup(patchDto);
+        Studygroup studygroup = studygroupMapper.StudygroupDtoPatchToStudygroup(studygroupId, patchDto);
         studygroup = studygroupService.update(authentication.getName(), studygroup);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
