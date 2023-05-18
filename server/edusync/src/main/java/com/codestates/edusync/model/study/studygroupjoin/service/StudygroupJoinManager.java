@@ -1,6 +1,5 @@
 package com.codestates.edusync.model.study.studygroupjoin.service;
 
-import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 
 import java.util.List;
@@ -28,7 +27,7 @@ public interface StudygroupJoinManager {
      * @param studygroupId
      * @return
      */
-    List<StudygroupJoin> getAllCandidateList(Long studygroupId, Member loginMember);
+    List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email);
 
     /**
      * 스터디 멤버 리스트 조회
@@ -41,38 +40,38 @@ public interface StudygroupJoinManager {
      * 스터디 가입 신청
      * @param studygroupId
      */
-    void createCandidate(Long studygroupId, Member loginMember);
+    void createCandidate(Long studygroupId, String email);
 
     /**
      * 스터디 가입 신청 철회
      * @param studygroupId
      */
-    void deleteCandidateSelf(Long studygroupId, Member loginMember);
+    void deleteCandidateSelf(Long studygroupId, String email);
 
     /**
      * 스터디 탈퇴
      * @param studygroupId
      */
-    void deleteMemberSelf(Long studygroupId, Member loginMember);
+    void deleteMemberSelf(Long studygroupId, String email);
 
     /**
      * 스터디 리더가 가입 승인
      * @param studygroupId
      * @param nickName
      */
-    void approveCandidateByNickName(Long studygroupId, String nickName, Member loginMember);
+    void approveCandidateByNickName(Long studygroupId, String nickName, String email);
 
     /**
      * 스터디 리더가 가입 거절
      * @param studygroupId
      * @param nickName
      */
-    void rejectCandidateByNickName(Long studygroupId, String nickName, Member loginMember);
+    void rejectCandidateByNickName(Long studygroupId, String nickName, String email);
 
     /**
      * 스터디 리더가 멤버 강퇴
      * @param studygroupId
      * @param nickName
      */
-    void kickOutMemberByNickName(Long studygroupId, String nickName, Member loginMember);
+    void kickOutMemberByNickName(Long studygroupId, String nickName, String email);
 }

@@ -16,7 +16,7 @@ public interface CalendarStudygroupManager {
      * @param timeSchedules 일정 리스트
      * @param loginMember   로그인 중인 맴버
      */
-    void createTimeSchedules(Long studygroupId, List<TimeSchedule> timeSchedules, Member loginMember);
+    void createTimeSchedules(Long studygroupId, List<TimeSchedule> timeSchedules, String email);
 
     /**
      * <h2>스터디 맴버의 캘린더에 일정 리스트를 생성한다</h2>
@@ -27,7 +27,7 @@ public interface CalendarStudygroupManager {
      * @param timeSchedules 일정 리스트
      * @param loginMember   로그인 중인 맴버
      */
-    void createTimeSchedulesOfAllMember(Long studygroupId, List<TimeSchedule> timeSchedules, Member loginMember);
+    void createTimeSchedulesOfAllMember(Long studygroupId, List<TimeSchedule> timeSchedules, String email);
 
     /**
      * <h2>하나의 일정을 수정한다.</h2>
@@ -38,7 +38,7 @@ public interface CalendarStudygroupManager {
      * @param timeSchedule   변경할 일정 내용
      * @param loginMember    로그인 중인 맴버
      */
-    void updateTimeSchedule(Long studygroupId, Long timeScheduleId, TimeSchedule timeSchedule, Member loginMember);
+    void updateTimeSchedule(Long studygroupId, Long timeScheduleId, TimeSchedule timeSchedule, String email);
 
     /**
      * <h2>스터디 그룹에 해당하는 일정 리스트를 조회한다</h2>
@@ -64,7 +64,7 @@ public interface CalendarStudygroupManager {
      * @param studygroupId studygroup 의 식별자
      * @param loginMember  로그인 중인 맴버
      */
-    void deleteAllTimeSchedules(Long studygroupId, Member loginMember);
+    void deleteAllTimeSchedules(Long studygroupId, String email);
 
     /**
      * <h2>스터디 그룹의 해당 일정을 삭제한다</h2>
@@ -73,7 +73,7 @@ public interface CalendarStudygroupManager {
      * @param timeScheduleId timeSchedule 의 식별자
      * @param loginMember    로그인 중인 맴버
      */
-    void deleteTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId, Member loginMember);
+    void deleteTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId, String email);
 
     /**
      * <h2>스터디 그룹의 일정과 스터디 그룹에 속한 맴버의 동일한 시간의 일정을 삭제한다. </h2>
@@ -83,5 +83,5 @@ public interface CalendarStudygroupManager {
      * @param timeScheduleId
      * @param loginMember    로그인 중인 맴버
      */
-    void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId, Long timeScheduleId, Member loginMember);
+    void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId, Long timeScheduleId, String email);
 }

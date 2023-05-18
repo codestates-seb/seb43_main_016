@@ -9,9 +9,10 @@ public interface StudygroupManager {
     /**
      * 스터디 등록
      * @param studygroup
+     * @param email
      * @return
      */
-    Studygroup create(Studygroup studygroup, Authentication authentication);
+    Studygroup create(Studygroup studygroup, String email);
 
     /**
      * 스터디 정보 수정

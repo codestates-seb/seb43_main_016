@@ -40,7 +40,7 @@ public class StudygroupController {
                                          @Valid @RequestBody StudygroupDto.Post postDto) {
 
         Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto);
-        studygroup = studygroupService.create(studygroup, authentication);
+        studygroup = studygroupService.create(studygroup, authentication.getPrincipal().toString());
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
 
         return ResponseEntity.created(location).build();
