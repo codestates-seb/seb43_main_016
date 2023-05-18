@@ -29,7 +29,7 @@ export interface StudyInfoDto {
 // TODO : StudyGroup의 정보를 조회하는 코드
 export async function getStudyGroupInfo(id: number) {
   const response = await axios.get<StudyInfoDto>(
-    `${import.meta.env.VITE_APP_API_URL}/studygroups/${id}`
+    `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}`
   );
   return response.data;
 }

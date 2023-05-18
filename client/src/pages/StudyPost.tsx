@@ -1,86 +1,71 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+// import axios from "axios";
 
 import TextEditor from "../components/TextEditor";
 import DaysOfWeek from "../components/DaysOfWeek";
+import tokenRequestApi from "../apis/TokenRequestApi";
 
 const StudyPost = () => {
-  const [title, setTitle] = useState<string>("");
-  const [startDate, setStartDate] = useState<string>("");
-  const [endDate, setEndDate] = useState<string>("");
-  const [startTime, setStartTime] = useState<string>("00:00");
-  const [endTime, setEndTime] = useState<string>("00:00");
-  const [minPeople, setMinPeople] = useState<number>(1);
-  const [maxPeople, setMaxPeople] = useState<number>(1);
+  const [studyName, setStudyName] = useState<string>("");
+  const [studyPeriodStart, setStudyPeriodStart] = useState<string>("");
+  const [studyPeriodEnd, setStudyPeriodEnd] = useState<string>("");
+  const [checked, setChecked] = useState<string[]>([]);
+  const [studyTimeStart, setStudyTimeStart] = useState<string>("00:00");
+  const [studyTimeEnd, setStudyTimeEnd] = useState<string>("00:00");
+  const [memberCountMin, setMemberCountMin] = useState<number>(1);
+  const [memberCountMax, setMemberCountMax] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
-  const [postText, setPostText] = useState<string>("");
-
-  const navigate = useNavigate();
+  const [introduction, setIntroduction] = useState<string>("");
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(e.target.value);
+    setStudyName(e.target.value);
   };
-  const handleStartDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStartDate(e.target.value);
+  const handleStudyPeriodStart = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStudyPeriodStart(e.target.value);
   };
-  const handleEndDate = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEndDate(e.target.value);
+  const handleStudyPeriodEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStudyPeriodEnd(e.target.value);
   };
-  const handleStartTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStartTime(e.target.value);
+  const handleStudyTimeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStudyTimeStart(e.target.value);
   };
-  const handleEndTime = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEndTime(e.target.value);
+  const handleStudyTimeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setStudyTimeEnd(e.target.value);
   };
-  const handleMinPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMinPeople(+e.target.value);
+  const handleMemberCountMin = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMemberCountMin(+e.target.value);
   };
-  const handleMaxPeople = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMaxPeople(+e.target.value);
+  const handleMemberCountMax = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setMemberCountMax(+e.target.value);
   };
   const handlePlatform = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlatform(e.target.value);
   };
 
   const handlePostButton = async () => {
-    console.log("Submitting form with values:", {
-      studyName: `${title}`,
-      studyPeriodStart: `${startDate}`,
-      studyPeriodEnd: `${endDate}`,
-      daysOfWeek: [3, 4, 5],
-      studyTimeStart: `${startTime}`,
-      studyTimeEnd: `${endTime}`,
-      minClassmateCount: minPeople,
-      maxClassmateCount: maxPeople,
-      platform: `${platform}`,
-      introduction: `${postText}`,
+    const StudyPostDto = {
+      studyName,
+      studyPeriodStart: "2023-05-01T18:00",
+      studyPeriodEnd: "2023-05-10T20:00",
+      daysOfWeek: checked,
+      studyTimeStart: "2023-05-01T18:00",
+      studyTimeEnd: "2023-05-01T20:00",
+      memberCountMin,
+      memberCountMax,
+      platform,
+      introduction,
       tags: {
         백엔드: "javascript",
         프론트엔드: "javascript",
       },
-    });
+    };
+
+    console.log(StudyPostDto);
+
     try {
-      const res = await axios.post(
-        `${import.meta.env.VITE_APP_API_URL}/studygroup`,
-        {
-          studyName: `${title}`,
-          studyPeriodStart: `${startDate}`,
-          studyPeriodEnd: `${endDate}`,
-          daysOfWeek: [3, 4, 5],
-          studyTimeStart: `${startTime}`,
-          studyTimeEnd: `${endTime}`,
-          minClassmateCount: minPeople,
-          maxClassmateCount: maxPeople,
-          platform: `${platform}`,
-          introduction: `${postText}`,
-          tags: {
-            백엔드: "javascript",
-            프론트엔드: "javascript",
-          },
-        }
-      );
+      const res = await tokenRequestApi.post("/studygroup", StudyPostDto);
       console.table(res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
@@ -90,6 +75,8 @@ const StudyPost = () => {
     }
   };
 
+  const navigate = useNavigate();
+
   return (
     <StudyPostContainer>
       <StudyPostBody>
@@ -98,7 +85,7 @@ const StudyPost = () => {
           <input
             type="text"
             placeholder="제목을 입력하세요"
-            value={title}
+            value={studyName}
             onChange={handleTitle}
             required
           />
@@ -109,37 +96,37 @@ const StudyPost = () => {
             <span>일정</span>
             <input
               type="date"
-              value={startDate}
-              onChange={handleStartDate}
+              value={studyPeriodStart}
+              onChange={handleStudyPeriodStart}
               required
             />
             <p>~</p>
             <input
               type="date"
-              value={endDate}
-              onChange={handleEndDate}
+              value={studyPeriodEnd}
+              onChange={handleStudyPeriodEnd}
               required
             />
           </StudyPostInfo>
           <StudyPostInfo>
             <span>요일</span>
             <div>
-              <DaysOfWeek />
+              <DaysOfWeek checked={checked} setChecked={setChecked} />
             </div>
           </StudyPostInfo>
           <StudyPostInfo>
             <span>시각</span>
             <input
               type="time"
-              value={startTime}
-              onChange={handleStartTime}
+              value={studyTimeStart}
+              onChange={handleStudyTimeStart}
               required
             />
             <p>~</p>
             <input
               type="time"
-              value={endTime}
-              onChange={handleEndTime}
+              value={studyTimeEnd}
+              onChange={handleStudyTimeEnd}
               required
             />
           </StudyPostInfo>
@@ -148,16 +135,16 @@ const StudyPost = () => {
             <input
               type="number"
               min="1"
-              value={minPeople}
-              onChange={handleMinPeople}
+              value={memberCountMin}
+              onChange={handleMemberCountMin}
               required
             />
             <p>~</p>
             <input
               type="number"
-              min={minPeople}
-              value={maxPeople}
-              onChange={handleMaxPeople}
+              min={memberCountMin}
+              value={memberCountMax}
+              onChange={handleMemberCountMax}
               required
             />
           </StudyPostInfo>
@@ -167,10 +154,9 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>태그</span>
-            <input type="text" />
           </StudyPostInfo>
           <StudyPostInput>
-            <TextEditor handleContentChange={setPostText} />
+            <TextEditor handleContentChange={setIntroduction} />
           </StudyPostInput>
           <StudyPostButtonWrapper>
             <StudyPostButton onClick={handlePostButton}>
