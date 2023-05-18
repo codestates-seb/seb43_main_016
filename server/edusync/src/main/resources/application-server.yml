@@ -17,11 +17,15 @@ spring:
     pathmatch:
       matching-strategy: ant_path_matcher
     log-request-details: true
+  flyway:
+    #location: classpath:db/migration 스키마 defaults 경로
+    enabled: true # flyway 활성화, default로 true 이지만 명시적으로 작성
+    baseline-on-migrate: true # flyway 변경 이력 테이블 생성 여부
   redis:
     host: localhost
     port: 6379
   jpa:
-    defer-datasource-initialization: true
+    defer-datasource-initialization: false
     open-in-view: false
     show-sql: true
     properties:
