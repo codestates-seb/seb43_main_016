@@ -24,7 +24,7 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto, Member member) {
+    default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto) {
         Studygroup studygroup = new Studygroup();
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
@@ -46,7 +46,6 @@ public interface StudygroupMapper {
         studygroup.setMemberCountCurrent(studygroupDto.getMemberCountCurrent());
         studygroup.setPlatform(studygroupDto.getPlatform());
         studygroup.setIsRecruited(false);
-        studygroup.setLeaderMember(member);
 
         List<SearchTag> resultTags = new ArrayList<>();
         studygroupDto.getTags()
@@ -73,12 +72,21 @@ public interface StudygroupMapper {
         studygroup.getSearchTags()
                 .forEach(st -> tags.put(st.getTagKey(), st.getTagValue()));
 
+        String[] dayString = studygroup.getDaysOfWeek()
+                .replace('[', ' ')
+                .replace(']', ' ')
+                .replaceAll("\\p{Z}", "")
+                .split(",");
+
+        List<String> daysOfWeek =  new ArrayList<>();
+        for(String day : dayString) daysOfWeek.add(day);
+
         StudygroupResponseDto responseDto = new StudygroupResponseDto();
         responseDto.setId(studygroup.getId());
         responseDto.setStudyName(studygroup.getStudyName());
         responseDto.setStudyPeriodStart(studygroup.getDate().getStudyPeriodStart());
         responseDto.setStudyPeriodEnd(studygroup.getDate().getStudyPeriodEnd());
-        responseDto.setDaysOfWeek(studygroup.getDaysOfWeek());
+        responseDto.setDaysOfWeek(daysOfWeek);
         responseDto.setStudyTimeStart(studygroup.getTime().getStudyTimeStart());
         responseDto.setStudyTimeEnd(studygroup.getTime().getStudyTimeEnd());
         responseDto.setMemberCountMin(studygroup.getMemberCountMin());
@@ -86,7 +94,7 @@ public interface StudygroupMapper {
         responseDto.setMemberCountCurrent(studygroup.getMemberCountCurrent());
         responseDto.setPlatform(studygroup.getPlatform());
         responseDto.setIntroduction(studygroup.getIntroduction());
-        responseDto.setRequited(studygroup.getIsRecruited());
+        responseDto.setIsRecruited((studygroup.getIsRecruited()));
         responseDto.setTags(tags);
         responseDto.setLeader(memberToStudyLeader(studygroup.getLeaderMember()));
         return responseDto;
@@ -169,6 +177,7 @@ public interface StudygroupMapper {
         StudygroupResponseDto.DtoList dtoList = new StudygroupResponseDto.DtoList();
         dtoList.setId(studygroup.getId());
         dtoList.setTitle(studygroup.getStudyName());
+        dtoList.setTagValues(studygroup.getSearchTags().stream().map(SearchTag::getTagValue).collect(Collectors.toList()));
         return dtoList;
     }
 

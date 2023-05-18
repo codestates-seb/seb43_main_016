@@ -1,13 +1,12 @@
 package com.codestates.edusync.model.study.studygroup.dto;
 
 import com.codestates.edusync.model.common.dto.DateRangeDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
+import java.util.List;
 
 @NoArgsConstructor
 @Getter
@@ -15,13 +14,13 @@ import java.util.HashMap;
 public class StudygroupResponseDto extends DateRangeDto.Response {
     private Long id;
     private String studyName;
-    private String daysOfWeek;
+    private List<String> daysOfWeek;
     private Integer memberCountMin;
     private Integer memberCountMax;
     private Integer memberCountCurrent;
     private String platform;
     private String introduction;
-    private Boolean requited;
+    private Boolean isRecruited;
     private HashMap<String, String> tags;
     private StudyLeader leader;
 
@@ -42,6 +41,7 @@ public class StudygroupResponseDto extends DateRangeDto.Response {
     public static class DtoList {
         private Long id;
         private String title;
+        private List<String> tagValues;
     }
 
     /**

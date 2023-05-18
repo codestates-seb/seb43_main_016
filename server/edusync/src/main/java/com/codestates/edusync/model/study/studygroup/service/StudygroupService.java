@@ -4,6 +4,7 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
@@ -12,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,9 +26,11 @@ public class StudygroupService implements StudygroupManager{
     private final StudygroupRepository studygroupRepository;
     private final SearchTagService searchTagService;
     private final VerifyStudygroupUtils studygroupUtils;
+    private final MemberUtils memberUtils;
 
     @Override
-    public Studygroup create(Studygroup studygroup) {
+    public Studygroup create(Studygroup studygroup, Authentication authentication) {
+        studygroup.setLeaderMember(memberUtils.getLoggedIn(authentication));
         return studygroupRepository.save(studygroup);
     }
 
@@ -34,36 +38,39 @@ public class StudygroupService implements StudygroupManager{
     public Studygroup update(String email, Studygroup studygroup) {
         Studygroup findStudygroup = get(studygroup.getId());
 
-        if (findStudygroup.getLeaderMember().getEmail().equals(email)) {
-            Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
-            Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
+        if (!findStudygroup.getLeaderMember().getEmail().equals(email)) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        }
 
-            findStudygroup.setDate(
-                    new DateRange(
-                            (studygroup.getDate().getStudyPeriodStart() == null ?
-                                    findStudygroup.getDate().getStudyPeriodStart()
-                                    : studygroup.getDate().getStudyPeriodStart() ),
-                            (studygroup.getDate().getStudyPeriodEnd() == null ?
-                                    findStudygroup.getDate().getStudyPeriodEnd()
-                                    : studygroup.getDate().getStudyPeriodEnd() )
-                    )
-            );
-            findStudygroup.setTime(
-                    new TimeRange(
-                            (studygroup.getTime().getStudyTimeStart() == null ?
-                                    findStudygroup.getTime().getStudyTimeStart()
-                                    : studygroup.getTime().getStudyTimeStart() ),
-                            (studygroup.getTime().getStudyTimeEnd() == null ?
-                                    findStudygroup.getTime().getStudyTimeEnd()
-                                    : studygroup.getTime().getStudyTimeEnd() )
-                    )
-            );
-            Optional.ofNullable(studygroup.getIntroduction()).ifPresent(findStudygroup::setIntroduction);
-            Optional.ofNullable(studygroup.getMemberCountMin()).ifPresent(findStudygroup::setMemberCountMin);
-            Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
-            Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
-            Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
-        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
+        Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
+
+        findStudygroup.setDate(
+                new DateRange(
+                        (studygroup.getDate().getStudyPeriodStart() == null ?
+                                findStudygroup.getDate().getStudyPeriodStart()
+                                : studygroup.getDate().getStudyPeriodStart() ),
+                        (studygroup.getDate().getStudyPeriodEnd() == null ?
+                                findStudygroup.getDate().getStudyPeriodEnd()
+                                : studygroup.getDate().getStudyPeriodEnd() )
+                )
+        );
+        findStudygroup.setTime(
+                new TimeRange(
+                        (studygroup.getTime().getStudyTimeStart() == null ?
+                                findStudygroup.getTime().getStudyTimeStart()
+                                : studygroup.getTime().getStudyTimeStart() ),
+                        (studygroup.getTime().getStudyTimeEnd() == null ?
+                                findStudygroup.getTime().getStudyTimeEnd()
+                                : studygroup.getTime().getStudyTimeEnd() )
+                )
+        );
+        Optional.ofNullable(studygroup.getIntroduction()).ifPresent(findStudygroup::setIntroduction);
+        Optional.ofNullable(studygroup.getMemberCountMin()).ifPresent(findStudygroup::setMemberCountMin);
+        Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
+        Optional.ofNullable(studygroup.getMemberCountCurrent()).ifPresent(findStudygroup::setMemberCountCurrent);
+        Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
+        Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
         return studygroupRepository.save(findStudygroup);
     }
@@ -77,7 +84,6 @@ public class StudygroupService implements StudygroupManager{
         }
 
         findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
-
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
     }
