@@ -36,8 +36,9 @@ public class StudygroupJoinController {
                                              Authentication authentication) {
         List<StudygroupJoin> studygroupJoinList;
 
-        if (join)   studygroupJoinList = studygroupJoinService.getAllMemberList(studygroupId); // 멤버 리스트
-        else        studygroupJoinList = studygroupJoinService.getAllCandidateList(studygroupId, authentication.getPrincipal().toString()); // 대기 리스트
+        if (join) studygroupJoinList = studygroupJoinService.getAllMemberList(studygroupId); // 멤버 리스트
+        else      studygroupJoinList = studygroupJoinService.getAllCandidateList
+                (studygroupId, authentication.getPrincipal().toString(), true); // 대기 리스트
 
         StudygroupJoinDto.Response studygroupJoinDtos =
                 studygroupJoinmapper.studygroupJoinToStudygroupJoinDtos(studygroupJoinList);
