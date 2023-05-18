@@ -47,6 +47,7 @@ public enum ExceptionCode {
      */
     INVALID_PROVIDER(400, "지원하지 않는 인증 제공자입니다."),
     INTERNAL_SERVER_ERROR(500, "내부 서버 오류"),
+
     ;
 
     @Getter
