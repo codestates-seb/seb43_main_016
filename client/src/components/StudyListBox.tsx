@@ -1,15 +1,34 @@
 import styled from "styled-components";
-// import { useState } from "react";
+// import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import axios from "axios";
+// import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
 
 const StudyListBox = () => {
+  // const [data, setData] = useState<any>("");
+
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const result = await getStudyGroupInfo(2);
+  //       console.log(result);
+  //       setData(result);
+  //     } catch (error) {
+  //       console.error("Error during GET request:", error);
+  //     }
+  //   };
+
+  //   fetchData();
+  // }, []);
+
   return (
     <StudyListBoxContainer>
       <Link to="/studycontent">
         <StudyListImage></StudyListImage>
         <StudyListTitle>
-          <h3>TypeScript 스터디 모집</h3>
+          {/* {data.map((item: StudyInfoDto) => (
+            <h3 key={item.id}>{item.studyName}</h3>
+          ))} */}
+          <h3>Dummy Title</h3>
         </StudyListTitle>
         <StudyListTag>
           <div>javascript</div>

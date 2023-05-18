@@ -6,6 +6,7 @@ import { getRefreshToken } from "../pages/utils/Auth";
 import { useNavigate } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
+import { removeTokens } from "../pages/utils/Auth";
 
 function useRefreshToken() {
   const [isLoginState, setIsLoggedIn] = useRecoilState(LogInState);
@@ -16,12 +17,17 @@ function useRefreshToken() {
   useEffect(() => {
     if (!isLoginState) setFetched(true);
 
-    if (isLoginState && refreshToken === null) {
-      setIsLoggedIn(false);
+    if (!isLoginState && refreshToken) {
+      removeTokens();
       setFetched(true);
       navigate("/login");
     }
-    if (refreshToken) {
+    if (isLoginState && (refreshToken === null || refreshToken === "undefined")) {
+      removeTokens();
+      setIsLoggedIn(false);
+      setFetched(true);
+      navigate("/login");
+    } else if (refreshToken) {
       eduApi
         .post("/refresh", null, {
           headers: {

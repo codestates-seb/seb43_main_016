@@ -1,18 +1,19 @@
 import styled from "styled-components";
-import { useState } from "react";
 
-const DaysOfWeek = () => {
+interface DaysOfWeekProps {
+  checked: string[];
+  setChecked: React.Dispatch<React.SetStateAction<string[]>>;
+}
+
+const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
   const daysOfWeekList: string[] = ["월", "화", "수", "목", "금", "토", "일"];
 
-  const [checked, setChecked] = useState<string[]>([]);
-
-  const handleCheck = (event: { target: { checked: any; value: string } }) => {
+  const handleCheck = (e: { target: { checked: any; value: string } }) => {
     let updatedList = [...checked];
-    if (event.target.checked) {
-      updatedList = [...checked, event.target.value];
-      //   console.log(checked);
+    if (e.target.checked) {
+      updatedList = [...checked, e.target.value];
     } else {
-      updatedList.splice(checked.indexOf(event.target.value), 1);
+      updatedList.splice(checked.indexOf(e.target.value), 1);
     }
     setChecked(updatedList);
   };
@@ -21,10 +22,15 @@ const DaysOfWeek = () => {
     <DaysOfWeekContainer>
       {daysOfWeekList.map((item: string, index: number) => {
         return (
-          <CheckBox key={index}>
-            <input value={item} type="checkbox" onChange={handleCheck} />
+          <div className="checkbox" key={index}>
+            <input
+              value={item}
+              type="checkbox"
+              onChange={handleCheck}
+              checked={checked.includes(item)}
+            />
             <label id={item}>{item}</label>
-          </CheckBox>
+          </div>
         );
       })}
     </DaysOfWeekContainer>
@@ -32,27 +38,27 @@ const DaysOfWeek = () => {
 };
 
 const DaysOfWeekContainer = styled.div`
-  width: 700px;
+  width: 640px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-`;
 
-const CheckBox = styled.div`
-  width: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  label {
-    font-size: 16px;
-    color: #1f1f1f;
-    padding-left: 2px;
+  .checkbox {
+    width: 42px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
-  input {
-    width: 18px;
-    height: 18px;
+  .checkbox > label {
+    font-size: 15px;
+    color: #1f1f1f;
+    padding-left: 4px;
+  }
+
+  .checkbox > input {
+    width: 14px;
+    height: 14px;
     border: none;
   }
 `;
