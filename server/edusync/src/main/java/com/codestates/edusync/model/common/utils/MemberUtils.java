@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.common.service;
+package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
@@ -71,9 +71,7 @@ public class MemberUtils implements MemberVerificationManager {
             throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s는 이미 사용중인 닉네임입니다.", nickName));
     }
 
-    public Member getLoggedIn(Authentication authentication) {
-        String email = authentication.getPrincipal().toString();
-
+    public Member getLoggedIn(String email) {
         return get(email);
     }
 }

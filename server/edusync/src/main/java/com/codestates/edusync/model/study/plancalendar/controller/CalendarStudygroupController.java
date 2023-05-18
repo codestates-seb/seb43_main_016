@@ -1,6 +1,7 @@
 package com.codestates.edusync.model.study.plancalendar.controller;
 
-import com.codestates.edusync.model.common.service.MemberUtils;
+import com.codestates.edusync.model.common.dto.TimeRangeDto;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.mapper.CalendarStudygroupMapper;
@@ -24,7 +25,6 @@ import java.util.List;
 public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
     private final CalendarStudygroupMapper mapper;
-    private final MemberUtils memberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_TIME_SCHEDULE_URL = "/timeSchedule";
@@ -33,11 +33,10 @@ public class CalendarStudygroupController {
     public ResponseEntity postCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                  @Valid @RequestBody CalendarDto.Post postDto,
                                                  Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
         calendarStudygroupService.createTimeSchedules(
                 studygroupId,
                 mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules()),
-                loginMember
+                authentication.getPrincipal().toString()
         );
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -48,12 +47,10 @@ public class CalendarStudygroupController {
                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                   @Valid @RequestBody CalendarDto.Patch patchDto,
                                                   Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
         calendarStudygroupService.updateTimeSchedule(
                 studygroupId, timeScheduleId,
                 mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
-                loginMember
+                authentication.getPrincipal().toString()
         );
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -65,7 +62,7 @@ public class CalendarStudygroupController {
         List<TimeSchedule> findTimeSchedules =
                 calendarStudygroupService.getTimeSchedules(studygroupId);
 
-        List<TimeScheduleResponseDto.TimeScheduleDto> responseDtos =
+        List<TimeRangeDto.Response> responseDtos =
                 mapper.timeScheduleListToTimeScheduleResponseDto(findTimeSchedules);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
@@ -75,7 +72,9 @@ public class CalendarStudygroupController {
     public ResponseEntity getTimeScheduleOfStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                       @PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
         TimeSchedule findTimeSchedule =
-                calendarStudygroupService.getSingleTimeScheduleByTimeScheduleId(studygroupId, timeScheduleId);
+                calendarStudygroupService.getSingleTimeScheduleByTimeScheduleId(
+                        studygroupId, timeScheduleId
+                );
 
         TimeScheduleResponseDto responseDto =
                 mapper.timeScheduleToTimeScheduleResponseDto(findTimeSchedule);
@@ -87,8 +86,10 @@ public class CalendarStudygroupController {
     public ResponseEntity deleteCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                    @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                    Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-        calendarStudygroupService.deleteTimeScheduleByTimeScheduleId(studygroupId, timeScheduleId, loginMember);
+        calendarStudygroupService.deleteTimeScheduleByTimeScheduleId(
+                studygroupId, timeScheduleId,
+                authentication.getPrincipal().toString()
+        );
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

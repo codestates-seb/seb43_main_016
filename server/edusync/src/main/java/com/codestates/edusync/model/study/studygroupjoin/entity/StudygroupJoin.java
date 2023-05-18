@@ -15,6 +15,7 @@ import static javax.persistence.FetchType.*;
 @Getter
 @Setter
 @Entity
+@Table(name = "studygroup_join")
 public class StudygroupJoin extends Auditable {
     @Column(name = "is_approved")
     private Boolean isApproved = false;

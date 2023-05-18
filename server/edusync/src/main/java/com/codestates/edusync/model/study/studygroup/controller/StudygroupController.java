@@ -1,14 +1,12 @@
 package com.codestates.edusync.model.study.studygroup.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
-import com.codestates.edusync.model.common.service.MemberUtils;
-import com.codestates.edusync.model.common.service.UriCreator;
-import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.common.utils.UriCreator;
+import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
+import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.mapper.StudygroupMapper;
 import com.codestates.edusync.model.study.studygroup.service.StudygroupService;
-import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
-import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
@@ -22,6 +20,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.net.URI;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Validated
@@ -30,7 +29,6 @@ public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
     private final StudygroupMapper studygroupMapper;
     private final StudygroupService studygroupService;
-    private final MemberUtils memberUtils;
 
     /**
      * 스터디 모집 & 등록
@@ -41,9 +39,8 @@ public class StudygroupController {
     public ResponseEntity postStudygroup(Authentication authentication,
                                          @Valid @RequestBody StudygroupDto.Post postDto) {
 
-        Member member = memberUtils.getLoggedIn(authentication);
-        Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto, member);
-        studygroup = studygroupService.create(studygroup);
+        Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto);
+        studygroup = studygroupService.create(studygroup, authentication.getPrincipal().toString());
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
 
         return ResponseEntity.created(location).build();
@@ -55,7 +52,7 @@ public class StudygroupController {
      * @return
      * @throws Exception
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI)
+    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity patchStudygroup(Authentication authentication,
                                           @Valid @RequestBody StudygroupDto.Patch patchDto) {
 
@@ -74,17 +71,18 @@ public class StudygroupController {
      * @param studygroupId
      * @return
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
+    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/status")
     public ResponseEntity patchStudygroupStatus(Authentication authentication,
                                                 @PathVariable("studygroup-id") @Positive Long studygroupId) {
 
-        studygroupService.updateStatus(authentication.getName(), studygroupId);
+        boolean status = studygroupService.updateStatus(authentication.getName(), studygroupId);
+        StudygroupResponseDto.Status statusDto = studygroupMapper.statusDto(status);
 
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroupId);
         HttpHeaders headers = new HttpHeaders();
         headers.setLocation(location);
 
-        return new ResponseEntity<>(headers, HttpStatus.OK);
+        return new ResponseEntity<>(statusDto, headers, HttpStatus.OK);
     }
 
     /**
@@ -112,7 +110,8 @@ public class StudygroupController {
                                             @RequestParam("size") @Positive Integer size){
 
         Page<Studygroup> studygroupPage = studygroupService.getWithPaging(page-1, size);
-        List<Studygroup> studygroupList = studygroupPage.getContent();
+        List<Studygroup> studygroupList =
+                studygroupPage.getContent().stream().map(e -> studygroupService.get(e.getId())).collect(Collectors.toList());
         List<StudygroupResponseDto.DtoList> responseDtoList =
                 studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
 

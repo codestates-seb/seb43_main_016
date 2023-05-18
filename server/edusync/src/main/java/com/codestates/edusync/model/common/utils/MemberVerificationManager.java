@@ -1,4 +1,4 @@
-package com.codestates.edusync.model.common.service;
+package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.model.member.entity.Member;
 import org.springframework.security.core.Authentication;
@@ -59,9 +59,10 @@ public interface MemberVerificationManager {
 
     /**
      * <h2>현재 로그인 된 사용자의 정보를 리턴해주는 메서드</h2>
-     * security context에서 인증 정보를 받아 해당 사용자의 member 객체를 리턴
-     * @param authentication
+     * security context에서 인증 정보를 받아 해당 사용자의 member 객체를 리턴<br>
+     * {@link #get(String)} 으로도 사용할 수 있지만, 명시적으로 개별로 정의<br>
+     * @param email
      * @return 접속 중인 Member 의 정보
      */
-    Member getLoggedIn(Authentication authentication);
+    Member getLoggedIn(String email);
 }

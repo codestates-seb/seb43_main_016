@@ -2,15 +2,17 @@ package com.codestates.edusync.model.study.studygroup.service;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import org.springframework.data.domain.Page;
+import org.springframework.security.core.Authentication;
 
 public interface StudygroupManager {
 
     /**
      * 스터디 등록
      * @param studygroup
+     * @param email
      * @return
      */
-    Studygroup create(Studygroup studygroup);
+    Studygroup create(Studygroup studygroup, String email);
 
     /**
      * 스터디 정보 수정
@@ -23,7 +25,7 @@ public interface StudygroupManager {
      * 스터디 모집 상태 수정
      * @param studygroupId
      */
-    void updateStatus(String email, Long studygroupId);
+    boolean updateStatus(String email, Long studygroupId);
 
     /**
      * 스터디 조회
