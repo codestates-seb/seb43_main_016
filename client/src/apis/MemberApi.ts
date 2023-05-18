@@ -1,10 +1,7 @@
 import tokenRequestApi from "./TokenRequestApi";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
-
 // * recoil에서 전역 LogInState를 가져와서 isLogin 변수에 할당
-const isLoggedIn = useRecoilValue(LogInState);
-
 // =============== 유저정보 요청(GET) ===============
 // TODO : 유저정보 get 요청 DTO 타입 정의
 export interface MemberInfoResponseDto {
@@ -20,6 +17,7 @@ export interface MemberInfoResponseDto {
 
 // TODO: 유저정보 get 요청하는 axios 코드
 export const getMemberInfo = async () => {
+  const isLoggedIn = useRecoilValue(LogInState);
   // * 로그인 상태가 아닌 경우 에러 발생
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
 
@@ -45,6 +43,7 @@ export interface MemberUpdateDto {
 
 // TODO: Member의 아이디와 비밀번호 수정 요청을 보내는 코드
 export const updateMember = async (data: MemberUpdateDto) => {
+  const isLoggedIn = useRecoilValue(LogInState);
   // 액세스 토큰이 정의되지 않았을 경우 에러 발생
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
   // 입력 데이터가 없을 경우 에러 발생

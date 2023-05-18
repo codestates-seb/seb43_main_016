@@ -3,8 +3,6 @@ import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import tokenRequestApi from "./TokenRequestApi";
 
-const isLoggedIn = useRecoilValue(LogInState);
-
 // ====================== 스터디 그룹 정보 조회 (GET) ===========================
 // TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
 export interface StudyInfoDto {
@@ -59,6 +57,7 @@ export interface StudyGroupUpdateDto {
 
 // TODO : StudyGroup의 정보를 수정하는 코드
 export async function updateStudyGroupInfo(data: StudyGroupUpdateDto) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
@@ -72,6 +71,7 @@ export async function updateStudyGroupInfo(data: StudyGroupUpdateDto) {
 // ====================== 스터디 그룹 삭제 (DELETE) ===========================
 // TODO : StudyGroup의 정보를 삭제하는 코드
 export async function deleteStudyGroupInfo(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
@@ -96,6 +96,7 @@ export async function updateStudyGroupRecruitmentStatus(
   id: number,
   data: StudyGroupRecruitmentStatusUpdateDto
 ) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
@@ -117,6 +118,7 @@ export async function approveStudyGroupApplication(
   id: number,
   data: StudyGroupMemberApprovalDto
 ) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
@@ -135,6 +137,7 @@ export async function rejectStudyGroupApplication(
   id: number,
   data: StudyGroupMemberApprovalDto
 ) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("Access token is not defined.");
 
   try {
@@ -154,6 +157,7 @@ export async function forceExitStudyGroup(
   id: number,
   data: StudyGroupMemberApprovalDto
 ) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인하세요");
 
   try {
@@ -170,6 +174,7 @@ export async function forceExitStudyGroup(
 // ====================== 스터디원 가입 신청 철회 ===========================
 // TODO : StudyGroup의 가입 신청을 철회하는 코드
 export async function cancelStudyGroupApplication(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("Access token is not defined.");
 
   try {
@@ -188,6 +193,7 @@ interface StudyGroupMemberWaitingListDto {
 
 // TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회하는 코드
 export async function getStudyGroupMemberWaitingList(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
@@ -213,6 +219,7 @@ interface StudyGroupMemberListDto {
 
 // TODO : StudyGroup에 가입된 멤버 리스트
 export async function getStudyGroupMemberList(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("Access token is not defined.");
 
   try {

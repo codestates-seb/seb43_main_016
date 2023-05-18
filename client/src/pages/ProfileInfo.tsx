@@ -20,6 +20,7 @@ const ProfileInfo = () => {
   const [introduceInfo, setIntroduceInfo] = useState<MemberDetailDto | null>(
     null
   );
+  // 멤버 정보 수정 (클라이언트에서 수정된 데이터)
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
