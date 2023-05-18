@@ -29,8 +29,8 @@ public class StudygroupService implements StudygroupManager{
     private final MemberUtils memberUtils;
 
     @Override
-    public Studygroup create(Studygroup studygroup, Authentication authentication) {
-        studygroup.setLeaderMember(memberUtils.getLoggedIn(authentication));
+    public Studygroup create(Studygroup studygroup, String email) {
+        studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
         return studygroupRepository.save(studygroup);
     }
 
