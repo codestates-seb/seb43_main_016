@@ -1,30 +1,33 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import axios from "axios";
-// import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
-
-// const [data, setData] = useState<StudyInfoDto[]>([]);
-
-// useEffect(() => {
-//   const fetchData = async () => {
-//     const result = await getStudyGroupInfo(1);
-//     setData(result);
-//   };
-
-//   fetchData();
-// }, []);
+import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
 
 const StudyListBox = () => {
+  const [data, setData] = useState<any>("");
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const result = await getStudyGroupInfo(2);
+        console.log(result);
+        setData(result);
+      } catch (error) {
+        console.error("Error during GET request:", error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <StudyListBoxContainer>
       <Link to="/studycontent">
         <StudyListImage></StudyListImage>
         <StudyListTitle>
-          {/* {data.map((item: StudyInfoDto) => (
+          {data.map((item: StudyInfoDto) => (
             <h3 key={item.id}>{item.studyName}</h3>
-          ))} */}
-          <h3>testtesttest</h3>
+          ))}
         </StudyListTitle>
         <StudyListTag>
           <div>javascript</div>

@@ -12,7 +12,6 @@ const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
     let updatedList = [...checked];
     if (e.target.checked) {
       updatedList = [...checked, e.target.value];
-      //   console.log(checked);
     } else {
       updatedList.splice(checked.indexOf(e.target.value), 1);
     }
@@ -58,8 +57,6 @@ const CheckBox = styled.div`
   }
 
   input {
-    width: 15px;
-    height: 15px;
     border: none;
   }
 `;
