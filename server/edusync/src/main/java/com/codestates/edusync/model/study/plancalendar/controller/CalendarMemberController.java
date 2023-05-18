@@ -66,7 +66,7 @@ public class CalendarMemberController {
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
-    @GetMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
+    @GetMapping("/{timeschedule-id}")
     public ResponseEntity getSingleTimeSchedule(@PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
         TimeSchedule findTimeSchedule =
                 calendarMemberService.getSingleTimeScheduleByTimeScheduleId(
