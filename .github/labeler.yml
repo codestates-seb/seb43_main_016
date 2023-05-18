@@ -3,7 +3,10 @@ auth: auth/**/*
 config: config/**/*
 exception: exception/**/*
 member: member/**/*
-model: study/**/*
+plancalendar: plancalendar/**/*
+postcomment: postcomment/**/*
+studygroup: studygroup/**/*
+studygroupjoin: studygroupjoin
 flyway: /**/*.sql
 yml: /**/*.yml
 gradle: /**/*.gradle
