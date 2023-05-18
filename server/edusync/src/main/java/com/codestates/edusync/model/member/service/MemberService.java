@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @AllArgsConstructor
@@ -88,5 +90,28 @@ public class MemberService {
     public boolean checkPassword(String password, String email){
         Member member = memberUtils.get(email);
         return passwordEncoder.matches(password, member.getPassword());
+    }
+
+    public Map<String, String> checkProvider(String email){
+        Member member = memberUtils.get(email);
+
+        String provider;
+
+        if(member.getProvider()==Member.Provider.LOCAL){
+            provider = "LOCAL";
+        }else if(member.getProvider()==Member.Provider.GOOGLE){
+            provider = "GOOGLE";
+        }else if(member.getProvider()==Member.Provider.NAVER){
+            provider = "NAVER";
+        }else if(member.getProvider()==Member.Provider.KAKAO){
+            provider = "KAKAO";
+        }else{
+            provider = "Error";
+        }
+
+        Map<String, String> response = new HashMap<>();
+        response.put("provider", provider);
+
+        return response;
     }
 }

@@ -5,7 +5,6 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
-import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.repository.StudygroupJoinRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +20,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     private final StudygroupJoinRepository studygroupJoinRepository;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
     private final MemberUtils memberUtils;
+
+    private Member getMember(String email) {
+        return memberUtils.getLoggedIn(email);
+    }
 
     @Override
     public StudygroupJoin getCandidateByNickName(Long studygroupId, String nickName) {
@@ -39,13 +42,9 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
-
-        if (loginMember.getId() != studygroup.getLeaderMember().getId()) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        } else return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
+    public List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email, boolean isLeader) {
+        if (isLeader) verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
+        return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
     }
 
     @Override
@@ -55,86 +54,79 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void createCandidate(Long studygroupId, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+        Member loginMember = getMember(email);
         if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
             throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
-        } else {
-            StudygroupJoin studygroupJoin = new StudygroupJoin();
-            studygroupJoin.setMember(loginMember);
-            studygroupJoin.setStudygroup(verifyStudygroupUtils.findVerifyStudygroup(studygroupId));
-            studygroupJoinRepository.save(studygroupJoin);
         }
+        if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_EXISTS);
+        }
+        StudygroupJoin studygroupJoin = new StudygroupJoin();
+        studygroupJoin.setMember(loginMember);
+        studygroupJoin.setStudygroup(verifyStudygroupUtils.findVerifyStudygroup(studygroupId));
+        studygroupJoinRepository.save(studygroupJoin);
     }
 
     @Override
     public void deleteCandidateSelf(Long studygroupId, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        StudygroupJoin studygroupJoin = null;
-
-        for (StudygroupJoin sj : getAllCandidateList(studygroupId, email)) {
-            if (sj.getMember().getEmail().equals(loginMember.getEmail())) {
-                studygroupJoin = sj;
-                studygroupJoinRepository.delete(sj);
-                break;
-            }
-        }
-        if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
+        delStudygroupJoin(studygroupId, email, false);
     }
 
     @Override
     public void deleteMemberSelf(Long studygroupId, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        StudygroupJoin studygroupJoin = null;
+        delStudygroupJoin(studygroupId, email, true);
+    }
 
-        for (StudygroupJoin sj : getAllMemberList(studygroupId)) {
+    public void delStudygroupJoin(Long studygroupId, String email, boolean isMember) {
+        Member loginMember = getMember(email);
+        StudygroupJoin studygroupJoin = null;
+        List<StudygroupJoin> studygroupJoins;
+
+        if (isMember) studygroupJoins = getAllMemberList(studygroupId);
+        else studygroupJoins = getAllCandidateList(studygroupId, email, false);
+
+        for (StudygroupJoin sj : studygroupJoins) {
             if (sj.getMember().getEmail().equals(loginMember.getEmail())) {
                 studygroupJoin = sj;
                 studygroupJoinRepository.delete(sj);
                 break;
             }
         }
-        if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_NOT_FOUND);
+
+        if (studygroupJoin == null)
+            if (isMember) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_NOT_FOUND);
+            else          throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
     }
 
     @Override
     public void approveCandidateByNickName(Long studygroupId, String nickName, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
-
-        if (loginMember.getId() != studygroup.getLeaderMember().getId()) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        } else {
-            StudygroupJoin studygroupJoin = getCandidateByNickName(studygroupId, nickName);
-            if (studygroupJoin != null) {
-                studygroupJoin.setIsApproved(true);
-                studygroupJoinRepository.save(studygroupJoin);
-            } else throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
-        }
+        verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
+        StudygroupJoin studygroupJoin = getStudygroupJoin(studygroupId, nickName, false);
+        studygroupJoin.setIsApproved(true);
+        studygroupJoinRepository.save(studygroupJoin);
     }
 
     @Override
     public void rejectCandidateByNickName(Long studygroupId, String nickName, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
-
-        if (loginMember.getId() == studygroup.getLeaderMember().getId()) {
-            StudygroupJoin studygroupJoin = getCandidateByNickName(studygroupId, nickName);
-            if (studygroupJoin != null) {
-                studygroupJoinRepository.delete(studygroupJoin);
-            } else throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
-        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
+        studygroupJoinRepository.delete(getStudygroupJoin(studygroupId, nickName, false));
     }
 
     @Override
     public void kickOutMemberByNickName(Long studygroupId, String nickName, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
+        verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
+        studygroupJoinRepository.delete(getStudygroupJoin(studygroupId, nickName, true));
+    }
 
-        if (loginMember.getId() == studygroup.getLeaderMember().getId()) {
-            StudygroupJoin studygroupJoin = getMemberByNickName(studygroupId, nickName);
-            if (studygroupJoin != null) {
-                studygroupJoinRepository.delete(studygroupJoin);
-            } else throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+    private StudygroupJoin getStudygroupJoin(Long studygroupId, String nickName, boolean isMember) {
+        StudygroupJoin studygroupJoin;
+        if (isMember) {
+            studygroupJoin = getMemberByNickName(studygroupId, nickName);
+            if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        } else {
+            studygroupJoin = getCandidateByNickName(studygroupId, nickName);
+            if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
+        }
+        return studygroupJoin;
     }
 }

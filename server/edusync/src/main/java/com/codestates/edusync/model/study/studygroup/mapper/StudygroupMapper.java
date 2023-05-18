@@ -43,7 +43,6 @@ public interface StudygroupMapper {
         studygroup.setIntroduction(studygroupDto.getIntroduction());
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
-        studygroup.setMemberCountCurrent(studygroupDto.getMemberCountCurrent());
         studygroup.setPlatform(studygroupDto.getPlatform());
         studygroup.setIsRecruited(false);
 
@@ -120,9 +119,9 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default Studygroup StudygroupDtoPatchToStudygroup(StudygroupDto.Patch studygroupDto){
+    default Studygroup StudygroupDtoPatchToStudygroup(Long studyGroupId, StudygroupDto.Patch studygroupDto){
         Studygroup studygroup = new Studygroup();
-        studygroup.setId(studygroupDto.getId());
+        studygroup.setId(studyGroupId);
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
         studygroup.setDate(
@@ -140,7 +139,6 @@ public interface StudygroupMapper {
         studygroup.setIntroduction(studygroupDto.getIntroduction());
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
-        studygroup.setMemberCountCurrent(studygroupDto.getMemberCountCurrent());
         studygroup.setPlatform(studygroupDto.getPlatform());
 
         List<SearchTag> resultTags = new ArrayList<>();

@@ -13,7 +13,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -36,11 +35,8 @@ public class StudygroupService implements StudygroupManager{
 
     @Override
     public Studygroup update(String email, Studygroup studygroup) {
+        studygroupUtils.studygroupLeaderCheck(email, studygroup.getId());
         Studygroup findStudygroup = get(studygroup.getId());
-
-        if (!findStudygroup.getLeaderMember().getEmail().equals(email)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        }
 
         Optional.ofNullable(studygroup.getStudyName()).ifPresent(findStudygroup::setStudyName);
         Optional.ofNullable(studygroup.getDaysOfWeek()).ifPresent(findStudygroup::setDaysOfWeek);
@@ -77,12 +73,8 @@ public class StudygroupService implements StudygroupManager{
 
     @Override
     public boolean updateStatus(String email, Long studygroupId) {
+        studygroupUtils.studygroupLeaderCheck(email, studygroupId);
         Studygroup findStudygroup = get(studygroupId);
-
-        if (!findStudygroup.getLeaderMember().getEmail().equals(email)) {
-            throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
-        }
-
         findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();

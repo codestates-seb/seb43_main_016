@@ -27,9 +27,6 @@ public class StudygroupDto {
         @Positive
         private Integer memberCountMax;
 
-        @Positive
-        private Integer memberCountCurrent;
-
         @NotNull
         private String platform;
 
@@ -43,9 +40,6 @@ public class StudygroupDto {
     @Getter
     @Setter
     public static class Patch extends DateRangeDto.Patch {
-        @NotNull
-        private Long id;
-
         private String studyName;
 
         private List<String> daysOfWeek;
@@ -56,8 +50,6 @@ public class StudygroupDto {
         @Positive
         private Integer memberCountMax;
 
-        @Positive
-        private Integer memberCountCurrent;
 
         private String platform;
 
