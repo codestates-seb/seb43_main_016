@@ -34,7 +34,7 @@ public class CalendarStudygroupDto {
             private String title;
 
             @Nullable
-            private String content;
+            private String platform;
         }
 
         @NoArgsConstructor
@@ -42,7 +42,7 @@ public class CalendarStudygroupDto {
         public static class Patch extends TimeRangeDto.Patch {
             private Long id;
             private String title;
-            private String content;
+            private String platform;
         }
 
     }

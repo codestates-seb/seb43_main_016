@@ -16,7 +16,7 @@ public class CalendarStudygroupResponseDto extends TimeRangeDto.Response {
     private Long groupId;
 
     private String title;
-    private String content;
+    private String platform;
     private Boolean allDay;
 
     private String description;

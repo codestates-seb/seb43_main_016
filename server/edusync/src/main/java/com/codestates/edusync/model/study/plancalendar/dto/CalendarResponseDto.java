@@ -1,12 +1,10 @@
 package com.codestates.edusync.model.study.plancalendar.dto;
 
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,7 +16,7 @@ public class CalendarResponseDto extends TimeRangeDto.Response {
     private Long groupId;
 
     private String title;
-    private String content;
+    private String platform;
     private Boolean allDay;
 
     private String description;

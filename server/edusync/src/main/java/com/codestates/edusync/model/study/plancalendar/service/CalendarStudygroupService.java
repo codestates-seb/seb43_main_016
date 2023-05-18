@@ -37,7 +37,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         timeSchedules.forEach(ts -> {
             ts.setStudygroup(findStudygroup);
             ts.setTitle(findStudygroup.getStudyName());
-            ts.setContent((findStudygroup.getPlatform()));
+            ts.setPlatform((findStudygroup.getPlatform()));
         } );
         calendarRepository.saveAll(timeSchedules);
 
@@ -66,7 +66,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                         timeSchedules.forEach(ts -> {
                             TimeSchedule result = new TimeSchedule();
                             result.setTitle(ts.getTitle());
-                            result.setContent(ts.getContent());
+                            result.setPlatform(ts.getPlatform());
                             result.setTime(ts.getTime());
                             result.setMember(studygroupJoin.getMember());
                             result.setStudygroup(findStudygroup);
@@ -87,7 +87,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
-        Optional.ofNullable(timeSchedule.getContent()).ifPresent(findTimeSchedule::setContent);
+        Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
 
         findTimeSchedule.setTime(
                 new TimeRange(
@@ -126,7 +126,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
         findTimeSchedules.forEach(ts -> {
             Optional.ofNullable(timeSchedule.getTitle()).ifPresent(ts::setTitle);
-            Optional.ofNullable(timeSchedule.getContent()).ifPresent(ts::setContent);
+            Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(ts::setPlatform);
 
             ts.setTime(
                     new TimeRange(
@@ -169,9 +169,9 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     public void deleteTimeScheduleByTimeScheduleId(Long studygroupId,
                                                    Long timeScheduleId,
                                                    String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+        studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId);
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
-        
+
         calendarRepository.delete(findTimeSchedule);
     }
 }

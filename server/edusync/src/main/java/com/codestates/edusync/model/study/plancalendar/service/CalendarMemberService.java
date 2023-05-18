@@ -7,7 +7,6 @@ import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.repository.CalendarRepository;
-import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,7 +39,7 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
         TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
-        Optional.ofNullable(timeSchedule.getContent()).ifPresent(findTimeSchedule::setContent);
+        Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
 
         findTimeSchedule.setTime(
                 new TimeRange(
