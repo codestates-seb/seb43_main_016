@@ -13,9 +13,17 @@ public interface MemberVerificationManager {
      * <h2>email 을 이용해서 회원을 검색하는 메서드</h2>
      * email 로 회원 검색 후 검증하여 리턴해준다.
      * @param email
-     * @return 토큰정보와 일치하는 member
+     * @return 이메일과 일치하는 member
      */
     Member get(String email);
+
+    /**
+     * <h2>id 을 이용해서 회원을 검색하는 메서드</h2>
+     * email 로 회원 검색 후 검증하여 리턴해준다.
+     * @param id
+     * @return id와 일치하는 member
+     */
+    Member getById(Long id);
 
     /**
      * <h2> uuid를 이용해서 회원을 검색하는 메서드</h2>
