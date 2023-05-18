@@ -66,12 +66,11 @@ public class CalendarMemberController {
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
-    @GetMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
-    public ResponseEntity getTimeScheduleOfMember(@PathVariable("member-uuid") @Positive String memberUuid,
-                                                      @PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
+    @GetMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
+    public ResponseEntity getSingleTimeSchedule(@PathVariable("timeschedule-id") @Positive Long timeScheduleId) {
         TimeSchedule findTimeSchedule =
                 calendarMemberService.getSingleTimeScheduleByTimeScheduleId(
-                        memberUuid, timeScheduleId
+                        timeScheduleId
                 );
 
         TimeScheduleResponseDto responseDto =
@@ -80,7 +79,7 @@ public class CalendarMemberController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
-    @DeleteMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
+    @DeleteMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
     public ResponseEntity deleteCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                Authentication authentication) {
         calendarMemberService.deleteTimeScheduleByTimeScheduleId(

@@ -24,21 +24,6 @@ public class CalendarMemberService {
     private final VerifyStudygroupUtils verifyStudygroupUtils;
     private final MemberUtils memberUtils;
 
-    public void createTimeSchedulesWithStudygroup(Long studygroupId,
-                                                  List<TimeSchedule> timeSchedules,
-                                                  String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        Studygroup findStudygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
-
-        timeSchedules.forEach(ts -> {
-            ts.setStudygroup(findStudygroup);
-            ts.setMember(loginMember);
-            ts.setTitle(findStudygroup.getStudyName());
-            ts.setContent((findStudygroup.getPlatform()));
-        } );
-        calendarRepository.saveAll(timeSchedules);
-    }
-
 public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
                                                 String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
@@ -46,14 +31,6 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
         timeSchedule.setMember(loginMember);
 
         calendarRepository.save(timeSchedule);
-    }
-
-    public void createTimeSchedulesOfAllMember(String memberUuid,
-                                               List<TimeSchedule> timeSchedules,
-                                               String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-
-        // TODO: 2023-05-11 나중에 구현할거임 ! ADV
     }
 
     public void updateTimeSchedule(Long timeScheduleId,
@@ -82,7 +59,7 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
         return calendarRepository.findAllByMemberEmail(email);
     }
 
-    public TimeSchedule getSingleTimeScheduleByTimeScheduleId(String memberUuid, Long timeScheduleId) {
+    public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long timeScheduleId) {
 
         return verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
     }
@@ -93,12 +70,5 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
         TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         calendarRepository.delete(findTimeSchedule);
-    }
-
-    public void deleteTimeScheduleWithSameTimeOfMember(String memberUuid,
-                                                       Long timeScheduleId,
-                                                       String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        // TODO: 2023-05-11 ADV 에서 구현할거임 !!! 
     }
 }

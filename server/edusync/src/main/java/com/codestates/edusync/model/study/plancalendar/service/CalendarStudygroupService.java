@@ -1,27 +1,31 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
+import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.model.common.entity.TimeRange;
-import com.codestates.edusync.model.common.utils.MemberUtils;
-import com.codestates.edusync.model.common.utils.VerifyCalendarUtils;
-import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.*;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.repository.CalendarRepository;
+import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static com.codestates.edusync.exception.ExceptionCode.YOU_ARE_NOT_STUDYGROUP_LEADER;
 
 @Transactional
 @RequiredArgsConstructor
 @Service
 public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final CalendarRepository calendarRepository;
-    private final VerifyCalendarUtils verifyCalendarUtils;
-    private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final VerifyCalendarUtils calendarUtils;
+    private final VerifyStudygroupUtils studygroupUtils;
+    private final VerifyTimeScheduleUtils timeScheduleUtils;
     private final MemberUtils memberUtils;
 
     @Override
@@ -29,7 +33,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                                     List<TimeSchedule> timeSchedules,
                                     String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
-        Studygroup findStudygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
+        Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
             ts.setStudygroup(findStudygroup);
@@ -37,23 +41,51 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
             ts.setContent((findStudygroup.getPlatform()));
         } );
         calendarRepository.saveAll(timeSchedules);
+
+        createTimeSchedulesOfAllMember(
+                studygroupId,
+                timeSchedules,
+                email
+        );
     }
 
-    @Override
+
     public void createTimeSchedulesOfAllMember(Long studygroupId,
                                                List<TimeSchedule> timeSchedules,
                                                String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
+        Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
-        // TODO: 2023-05-11 나중에 구현할거임 ! ADV
+        if(!findStudygroup.getLeaderMember().getId().equals(loginMember.getId())) {
+            throw new BusinessLogicException(YOU_ARE_NOT_STUDYGROUP_LEADER);
+        }
+
+        List<TimeSchedule> newTimeSchedules = new ArrayList<>();
+        findStudygroup.getStudygroupJoins()
+                .forEach(studygroupJoin -> {
+                    if( studygroupJoin.getIsApproved() ) {
+                        timeSchedules.forEach(ts -> {
+                            TimeSchedule result = new TimeSchedule();
+                            result.setTitle(ts.getTitle());
+                            result.setContent(ts.getContent());
+                            result.setTime(ts.getTime());
+                            result.setMember(studygroupJoin.getMember());
+                            result.setStudygroup(findStudygroup);
+                            newTimeSchedules.add(result);
+                        });
+                    }
+                });
+
+        calendarRepository.saveAll(newTimeSchedules);
     }
+
 
     @Override
     public void updateTimeSchedule(Long studygroupId, Long timeScheduleId,
                                    TimeSchedule timeSchedule,
                                    String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
-        TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getContent()).ifPresent(findTimeSchedule::setContent);
@@ -71,6 +103,42 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         calendarRepository.save(findTimeSchedule);
     }
 
+    public void updateTimeSchedulesOfAllMember(Long studygroupId, Long timeScheduleId,
+                                               TimeSchedule timeSchedule,
+                                               String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
+        Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
+
+        if(!findStudygroup.getLeaderMember().getId().equals(loginMember.getId())) {
+            throw new BusinessLogicException(YOU_ARE_NOT_STUDYGROUP_LEADER);
+        }
+
+        TimeSchedule referenceOfTimeSchedule = timeScheduleUtils.findVerifyTimeSchedule(timeScheduleId);
+
+        List<TimeSchedule> findTimeSchedules =
+                calendarRepository.findAllByTimeStudyTimeStart(
+                        referenceOfTimeSchedule.getTime().getStudyTimeStart()
+                );
+
+
+        findTimeSchedules.forEach(ts -> {
+            Optional.ofNullable(timeSchedule.getTitle()).ifPresent(ts::setTitle);
+            Optional.ofNullable(timeSchedule.getContent()).ifPresent(ts::setContent);
+
+            ts.setTime(
+                    new TimeRange(
+                            (timeSchedule.getTime().getStudyTimeStart() == null ?
+                                    ts.getTime().getStudyTimeStart()
+                                    : timeSchedule.getTime().getStudyTimeStart() ),
+                            (timeSchedule.getTime().getStudyTimeEnd() == null ?
+                                    ts.getTime().getStudyTimeEnd()
+                                    : timeSchedule.getTime().getStudyTimeEnd() ) )
+            );
+        });
+
+        calendarRepository.saveAll(findTimeSchedules);
+    }
+
     @Override
     public List<TimeSchedule> getTimeSchedules(Long studygroupId) {
         return calendarRepository.findAllByStudygroupIdAndMemberIsNull(studygroupId);
@@ -79,7 +147,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     @Override
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
 
-        return verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        return calendarUtils.findVerifyTimeSchedule(timeScheduleId);
     }
 
     @Override
@@ -96,16 +164,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                                                    Long timeScheduleId,
                                                    String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
-        TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
         
         calendarRepository.delete(findTimeSchedule);
-    }
-
-    @Override
-    public void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId,
-                                                       Long timeScheduleId,
-                                                       String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        // TODO: 2023-05-11 ADV 에서 구현할거임 !!! 
     }
 }
