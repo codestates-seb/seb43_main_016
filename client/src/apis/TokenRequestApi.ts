@@ -1,5 +1,5 @@
 import axios, { AxiosInstance } from "axios";
-import eduApi from "./EduApi";
+import { eduApi } from "./EduApi";
 import { getRefreshToken } from "../pages/utils/Auth";
 
 let accessToken: string | null = null;

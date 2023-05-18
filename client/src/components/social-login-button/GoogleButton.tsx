@@ -1,10 +1,9 @@
-import googleLogo from "../assets/google-icon.png";
+import googleLogo from "../../assets/google-icon.png";
 import styled from "styled-components";
+import { socialLoginApi } from "../../apis/EduApi";
 
-function Google() {
-  const googleHref = `${
-    import.meta.env.VITE_APP_API_URL
-  }/oauth2/authorization/google`;
+function GoogleButton() {
+  const googleHref = `${socialLoginApi}/google`;
 
   return (
     <div>
@@ -19,9 +18,9 @@ function Google() {
 
 const GoogleLoginButton = styled.div`
   img {
-    width: 45px;
-    border: 2px solid #e9e9e9;
+    width: 50px;
     border-radius: 50%;
+    margin: 15px;
   }
 `;
-export default Google;
+export default GoogleButton;

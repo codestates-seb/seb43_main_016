@@ -36,6 +36,7 @@ const GlobalStyle = createGlobalStyle`
   }
   a{
     text-decoration: none;
+    color: #2759a2;
   }
 `;
 

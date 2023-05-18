@@ -6,7 +6,6 @@ import {
 } from "../apis/StudyGroupApi";
 import styled from "styled-components";
 import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
-
 // Props로 전달받은 id(스터디 그룹의 아이디)를 정의
 interface ReadStudyInfoProps {
   id: number;
@@ -15,8 +14,6 @@ interface ReadStudyInfoProps {
 const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
   const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
-
-  const accessToken = localStorage.getItem("accessToken");
 
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
@@ -39,10 +36,10 @@ const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
 
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
-    if (accessToken === undefined) {
-      alert("권한이 없습니다.");
-      return;
-    }
+    //if (accessToken === undefined) {
+    //  alert("권한이 없습니다.");
+    //  return;
+    //}
     try {
       await deleteStudyGroupInfo(id);
     } catch (error) {

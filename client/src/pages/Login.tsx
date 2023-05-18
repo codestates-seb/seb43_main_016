@@ -7,8 +7,10 @@ import tokenRequestApi from "../apis/TokenRequestApi";
 import { validateEmptyInput } from "./utils/loginUtils";
 import { useSetRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
-import Google from "../components/GoogleLogin";
 import { setRefreshToken } from "./utils/Auth";
+import GoogleButton from "../components/social-login-button/GoogleButton";
+import KakaoButton from "../components/social-login-button/KakaoButton";
+import NaverButton from "../components/social-login-button/NaverButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -33,11 +35,11 @@ const Login = () => {
       }),
     {
       onSuccess: (data) => {
+        setIsLoggedIn(true);
         const accessToken = data.headers.authorization;
         const refreshToken = data.headers.refresh;
         tokenRequestApi.setAccessToken(accessToken);
         setRefreshToken(refreshToken);
-        setIsLoggedIn(true);
         navigate("/");
       },
       onError: (error) => {
@@ -90,12 +92,14 @@ const Login = () => {
         </LoginForm>
         <ButtonDiv>
           <button onClick={handleLoginButton}>Log In</button>
-          <div>
-            <Google />
-          </div>
         </ButtonDiv>
       </LoginDiv>
       <SignUpLink to="/signup">회원가입하러 가기</SignUpLink>
+      <SocialLoginDiv>
+        <GoogleButton />
+        <KakaoButton />
+        <NaverButton />
+      </SocialLoginDiv>
     </Container>
   );
 };
@@ -149,7 +153,7 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-between;
   button {
-    width: 71%;
+    width: 100%;
     height: 45px;
   }
   img {
@@ -159,6 +163,11 @@ const SignUpLink = styled(Link)`
   text-decoration-line: none;
   color: #ffffff;
   font-size: 11px;
+`;
+const SocialLoginDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default Login;
