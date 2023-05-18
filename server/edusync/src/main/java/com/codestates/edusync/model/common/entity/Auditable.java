@@ -17,5 +17,6 @@ public abstract class Auditable extends BaseEntity {
     private LocalDateTime createdAt;
 
     @LastModifiedDate // 조회한 Entity의 값을 변경할 때 시간 자동 저장(수정)
+    @Column(name = "modified_at")
     private LocalDateTime modifiedAt;
 }

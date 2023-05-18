@@ -40,7 +40,7 @@ public class StudygroupController {
                                          @Valid @RequestBody StudygroupDto.Post postDto) {
 
         Studygroup studygroup = studygroupMapper.StudygroupDtoPostToStudygroup(postDto);
-        studygroup = studygroupService.create(studygroup, authentication);
+        studygroup = studygroupService.create(studygroup, authentication.getPrincipal().toString());
         URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
 
         return ResponseEntity.created(location).build();
@@ -52,7 +52,7 @@ public class StudygroupController {
      * @return
      * @throws Exception
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI)
+    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
     public ResponseEntity patchStudygroup(Authentication authentication,
                                           @Valid @RequestBody StudygroupDto.Patch patchDto) {
 
@@ -71,7 +71,7 @@ public class StudygroupController {
      * @param studygroupId
      * @return
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
+    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/status")
     public ResponseEntity patchStudygroupStatus(Authentication authentication,
                                                 @PathVariable("studygroup-id") @Positive Long studygroupId) {
 

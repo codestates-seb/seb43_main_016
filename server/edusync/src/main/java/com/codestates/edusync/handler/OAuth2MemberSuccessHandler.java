@@ -1,6 +1,7 @@
 package com.codestates.edusync.handler;
 
 import com.codestates.edusync.security.auth.jwt.JwtTokenizer;
+import com.codestates.edusync.security.auth.token.TokenService;
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
@@ -31,12 +32,14 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberRepository memberRepository;
+    private final TokenService tokenService;
 
     public OAuth2MemberSuccessHandler(JwtTokenizer jwtTokenizer,
-                                      CustomAuthorityUtils authorityUtils, MemberRepository memberRepository) {
+                                      CustomAuthorityUtils authorityUtils, MemberRepository memberRepository, TokenService tokenService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.memberRepository = memberRepository;
+        this.tokenService = tokenService;
     }
 
     @Override
@@ -99,8 +102,8 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, Member member) throws IOException {
-        String accessToken = delegateAccessToken(member);  // JWT Access Token 생성
-        String refreshToken = delegateRefreshToken(member.getEmail());  // Refresh Token 생성
+        String accessToken = tokenService.delegateAccessToken(member);  // JWT Access Token 생성
+        String refreshToken = tokenService.delegateRefreshToken(member);  // Refresh Token 생성
 
         response.setHeader("Authorization", accessToken);  // 클리이언트한테 Access Token 보내주기 (이후에 클라이언트 측에서 백엔드 애플리케이션 측에 요청을 보낼 때마다 request header에 추가해서 클라이언트 측의 자격을 증명하는데 사용)
         response.setHeader("Refresh", refreshToken);                   // 클리이언트한테 Refresh Token 보내주기
@@ -114,33 +117,6 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         for (String headerName : response.getHeaderNames()) {
             log.info(headerName + ": " + response.getHeader(headerName));
         }
-    }
-
-    private String delegateAccessToken(Member member) { // Todo 코드의 중복 어떻게 해결하는게 좋을까?
-        Map<String, Object> claims = new HashMap<>();
-        claims.put("email", member.getEmail());
-        claims.put("nickName", member.getNickName());
-        claims.put("roles", member.getRoles());
-
-        String subject = member.getEmail();
-
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
-
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-        String accessToken = "Bearer " + jwtTokenizer.generateAccessToken(claims, subject, expiration, base64EncodedSecretKey);
-
-        return accessToken;
-    }
-
-    private String delegateRefreshToken(String username) {
-        String subject = username;
-        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
-        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
-
-        String refreshToken = "Bearer " + jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
-
-        return refreshToken;
     }
 
     private URI createURI(String accessToken, String refreshToken) {

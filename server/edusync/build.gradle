@@ -45,6 +45,8 @@ dependencies {
 	annotationProcessor 'org.mapstruct:mapstruct-processor:1.5.2.Final'
 	implementation 'org.springframework.boot:spring-boot-starter-mail' // 이메일 전송용
 
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis' // RTK관리를 위한 redis
+
 	implementation 'com.google.code.gson:gson' // (dto를) json으로 쉽게 바꿔주는 util 라이브러리
 
 	implementation 'io.jsonwebtoken:jjwt-api:0.11.5' // JWT 기능을 위한 jjwt 라이브러리
