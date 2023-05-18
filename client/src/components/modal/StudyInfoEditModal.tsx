@@ -40,8 +40,6 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
     tags: {}, // Replace with the actual tags object
   });
 
-  const accessToken = localStorage.getItem("accessToken");
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setModalState((prevState) => ({
@@ -51,13 +49,13 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
   };
 
   const handleSaveClick = async () => {
-    if (accessToken === undefined) {
-      alert("권한이 없습니다.");
-      return;
-    }
+    // if (accessToken === undefined) {
+    //   alert("권한이 없습니다.");
+    //   return;
+    // }
 
     try {
-      await updateStudyGroupInfo(modalState, accessToken);
+      await updateStudyGroupInfo(modalState);
       closeModal();
     } catch (error) {
       alert("스터디 그룹 정보를 업데이트하는 중에 오류가 발생했습니다.");

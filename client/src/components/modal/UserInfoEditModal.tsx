@@ -25,7 +25,6 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
     password: "",
     passwordCheck: "",
   });
-  const accessToken = localStorage.getItem("accessToken");
 
   // TODO : form에 입력된 유저의 닉네임, 비밀번호를 상태에 저장하는 코드s
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -49,7 +48,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
         nickName: modalState.nickname,
         password: modalState.password,
       };
-      updateMember(accessToken, updateDto);
+      updateMember(updateDto);
       closeModal();
     } catch (error) {
       alert("로그인이 필요합니다.");
