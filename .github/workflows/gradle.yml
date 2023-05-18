@@ -10,18 +10,10 @@ name: Java CI with Gradle
 on:
   push:
     branches:
-      - 'main'
-      - 'dev'
       - 'be'
-    paths:
-      - "server/edusync/**"
   pull_request:
     branches:
-      - 'main'
-      - 'dev'
       - 'be'
-    paths:
-      - "server/edusync/**"
 
 permissions:
   contents: read
