@@ -120,9 +120,9 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default Studygroup StudygroupDtoPatchToStudygroup(StudygroupDto.Patch studygroupDto){
+    default Studygroup StudygroupDtoPatchToStudygroup(Long studyGroupId, StudygroupDto.Patch studygroupDto){
         Studygroup studygroup = new Studygroup();
-        studygroup.setId(studygroupDto.getId());
+        studygroup.setId(studyGroupId);
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
         studygroup.setDate(
