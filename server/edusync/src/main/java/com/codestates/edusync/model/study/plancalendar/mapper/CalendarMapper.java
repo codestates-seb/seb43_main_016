@@ -2,9 +2,10 @@ package com.codestates.edusync.model.study.plancalendar.mapper;
 
 import com.codestates.edusync.model.common.dto.DateRangeDto;
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
+import com.codestates.edusync.model.study.plancalendar.dto.CalendarMemberDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
-import com.codestates.edusync.model.study.plancalendar.dto.CalendarDto;
+import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupDto;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Named;
@@ -12,14 +13,15 @@ import org.mapstruct.Named;
 import java.util.List;
 
 @Mapper(componentModel = "spring")
-public interface CalendarStudygroupMapper {
+public interface CalendarMapper {
 
     @Named("PostDtoToEntity")
-    TimeSchedule timeSchedulePostDtoToTimeSchedule(CalendarDto.TimeScheduleDto.Post timeSchedule);
+    TimeSchedule timeSchedulePostDtoToTimeSchedule(CalendarStudygroupDto.TimeScheduleDto.Post postStudygroupDto);
 
     @IterableMapping(qualifiedByName = "PostDtoToEntity")
-    List<TimeSchedule> timeSchedulePostDtoListToTimeScheduleList(List<CalendarDto.TimeScheduleDto.Post> timeSchedules);
-    TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarDto.Patch patchDto);
+    List<TimeSchedule> timeSchedulePostDtoListToTimeScheduleList(List<CalendarStudygroupDto.TimeScheduleDto.Post> timeSchedules);
+
+    TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarStudygroupDto.Patch patchDto);
 
     List<TimeRangeDto.Response> timeScheduleListToTimeScheduleResponseDto(List<TimeSchedule> timeSchedules);
 
@@ -29,6 +31,12 @@ public interface CalendarStudygroupMapper {
         result.setStudyName(ts.getStudygroup().getStudyName());
         result.setPlatform(ts.getStudygroup().getPlatform());
 
+        setDateAndTimeIntoTimeScheduleResponseDto(ts, result);
+
+        return result;
+    }
+
+    static void setDateAndTimeIntoTimeScheduleResponseDto(TimeSchedule ts, TimeScheduleResponseDto result) {
         TimeRangeDto.Response resultTR = new TimeRangeDto.Response();
         resultTR.setStudyTimeStart(ts.getTime().getStudyTimeStart());
         resultTR.setStudyTimeEnd(ts.getTime().getStudyTimeEnd());
@@ -38,7 +46,10 @@ public interface CalendarStudygroupMapper {
         resultDR.setStudyPeriodStart(ts.getStudygroup().getDate().getStudyPeriodStart());
         resultDR.setStudyPeriodEnd(ts.getStudygroup().getDate().getStudyPeriodEnd());
         result.setCalendarInfo(resultDR);
-
-        return result;
     }
+
+
+    TimeSchedule memberTimeSchedulePostDtoToTimeSchedule(CalendarMemberDto.TimeScheduleDto.Post postMemberDto);
+    TimeSchedule memberTimeSchedulePatchDtoToTimeSchedule(CalendarMemberDto.Patch patchDto);
+
 }

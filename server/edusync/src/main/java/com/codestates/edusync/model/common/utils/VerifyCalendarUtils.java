@@ -2,7 +2,7 @@ package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
-import com.codestates.edusync.model.study.plancalendar.repository.CalendarStudygroupRepository;
+import com.codestates.edusync.model.study.plancalendar.repository.CalendarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -10,9 +10,9 @@ import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_F
 
 @RequiredArgsConstructor
 @Component
-public class VerifyStudygroupCalendarUtils {
+public class VerifyCalendarUtils {
 
-    private final CalendarStudygroupRepository calendarStudygroupRepository;
+    private final CalendarRepository calendarRepository;
 
     /**
      * <h2>일정 조회</h2>
@@ -22,7 +22,7 @@ public class VerifyStudygroupCalendarUtils {
      * @return
      */
     public TimeSchedule findVerifyTimeSchedule(Long timeScheduleId) {
-        return calendarStudygroupRepository.findById(timeScheduleId)
+        return calendarRepository.findById(timeScheduleId)
                 .orElseThrow( () ->
                         new BusinessLogicException(TIME_SCHEDULE_NOT_FOUND)
                 );

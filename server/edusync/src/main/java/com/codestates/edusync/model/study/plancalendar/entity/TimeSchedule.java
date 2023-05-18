@@ -22,7 +22,7 @@ public class TimeSchedule extends BaseEntity {
     private String title;
 
     @Column(length = 200)
-    private String content;
+    private String platform;
 
     @Embedded
     private TimeRange time;

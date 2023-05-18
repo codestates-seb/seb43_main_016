@@ -1,7 +1,5 @@
 package com.codestates.edusync.model.study.postcomment.controller;
 
-import com.codestates.edusync.model.common.utils.MemberUtils;
-import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.mapper.StudygroupPostCommentMapper;
 import com.codestates.edusync.model.study.postcomment.service.StudygroupPostCommentService;
