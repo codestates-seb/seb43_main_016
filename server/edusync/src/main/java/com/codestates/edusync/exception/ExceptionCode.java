@@ -39,6 +39,7 @@ public enum ExceptionCode {
      * 스터디 그룹 신청 관련 에렄 코드
       */
     STUDYGROUP_JOIN_NOT_FOUND(404, "가입된 스터디를 찾을 수 없습니다."),
+    STUDYGOURP_JOIN_EXISTS(409, "이미 가입한 스터디 입니다."),
     STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND(404, "해당 스터디에 신청한 내역이 없습니다."),
     STUDYGOURP_JOIN_CANDIDATE_EXISTS(409, "이미 신청한 스터디 입니다."),
 

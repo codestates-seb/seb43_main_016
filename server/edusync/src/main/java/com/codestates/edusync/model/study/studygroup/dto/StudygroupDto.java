@@ -27,9 +27,6 @@ public class StudygroupDto {
         @Positive
         private Integer memberCountMax;
 
-        @Positive
-        private Integer memberCountCurrent;
-
         @NotNull
         private String platform;
 
@@ -53,8 +50,6 @@ public class StudygroupDto {
         @Positive
         private Integer memberCountMax;
 
-        @Positive
-        private Integer memberCountCurrent;
 
         private String platform;
 

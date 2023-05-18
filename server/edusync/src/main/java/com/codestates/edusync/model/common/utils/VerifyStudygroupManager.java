@@ -22,4 +22,13 @@ public interface VerifyStudygroupManager {
      * @return true, false 값으로 리턴한다.<br>
      */
     boolean isMemberLeaderOfStudygroup(String email, Long studygroupId);
+
+
+    /**
+     * 스터디 그룹 리더 검증
+     * @param email
+     * @param studygroupId
+     * @return
+     */
+    void studygroupLeaderCheck(String email, Long studygroupId);
 }

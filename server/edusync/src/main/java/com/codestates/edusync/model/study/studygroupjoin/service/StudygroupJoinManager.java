@@ -27,7 +27,7 @@ public interface StudygroupJoinManager {
      * @param studygroupId
      * @return
      */
-    List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email);
+    List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email, boolean isLeader);
 
     /**
      * 스터디 멤버 리스트 조회

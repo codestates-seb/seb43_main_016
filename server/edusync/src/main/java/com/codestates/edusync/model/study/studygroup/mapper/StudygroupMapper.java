@@ -43,7 +43,6 @@ public interface StudygroupMapper {
         studygroup.setIntroduction(studygroupDto.getIntroduction());
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
-        studygroup.setMemberCountCurrent(studygroupDto.getMemberCountCurrent());
         studygroup.setPlatform(studygroupDto.getPlatform());
         studygroup.setIsRecruited(false);
 
@@ -140,7 +139,6 @@ public interface StudygroupMapper {
         studygroup.setIntroduction(studygroupDto.getIntroduction());
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
-        studygroup.setMemberCountCurrent(studygroupDto.getMemberCountCurrent());
         studygroup.setPlatform(studygroupDto.getPlatform());
 
         List<SearchTag> resultTags = new ArrayList<>();
