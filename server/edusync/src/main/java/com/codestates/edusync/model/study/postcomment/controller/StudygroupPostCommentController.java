@@ -25,7 +25,6 @@ import java.util.List;
 public class StudygroupPostCommentController {
     private final StudygroupPostCommentService studygroupPostCommentService;
     private final StudygroupPostCommentMapper mapper;
-    private final MemberUtils memberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_STUDYGROUP_POST_COMMENT_URL = "/comment";
@@ -40,13 +39,11 @@ public class StudygroupPostCommentController {
     public ResponseEntity postStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                     @Valid @RequestBody StudygroupPostCommentDto.Post postDto,
                                                     Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
         StudygroupPostComment createdStudygroupPostComment =
                 studygroupPostCommentService.create(
                         studygroupId,
                         mapper.studygroupPostCommentPostDtoToStudygroupPostComment(postDto),
-                        loginMember
+                        authentication.getPrincipal().toString()
                 );
 
         URI location = UriCreator.createUri(
@@ -68,13 +65,11 @@ public class StudygroupPostCommentController {
                                                      @PathVariable("comment-id") @Positive Long commentId,
                                                      @Valid @RequestBody StudygroupPostCommentDto.Patch patchDto,
                                                      Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
         StudygroupPostComment updatedStudygroupPostComment =
                 studygroupPostCommentService.update(
                         studygroupId, commentId,
                         mapper.studygroupPostCommentPatchDtoToStudygroupPostComment(patchDto),
-                        loginMember
+                        authentication.getPrincipal().toString()
                 );
 
         return new ResponseEntity<>(HttpStatus.OK);
@@ -105,9 +100,10 @@ public class StudygroupPostCommentController {
     public ResponseEntity deleteStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                       @PathVariable("comment-id") @Positive Long commentId,
                                                       Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupPostCommentService.delete(studygroupId, commentId, loginMember);
+        studygroupPostCommentService.delete(
+                studygroupId, commentId,
+                authentication.getPrincipal().toString()
+        );
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
@@ -120,9 +116,10 @@ public class StudygroupPostCommentController {
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/all")
     public ResponseEntity deleteAllStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                          Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupPostCommentService.deleteAllByStudygroupId(studygroupId, loginMember);
+        studygroupPostCommentService.deleteAllByStudygroupId(
+                studygroupId,
+                authentication.getPrincipal().toString()
+        );
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

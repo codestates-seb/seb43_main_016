@@ -25,7 +25,6 @@ import java.util.List;
 public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
     private final CalendarStudygroupMapper mapper;
-    private final MemberUtils memberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
     private static final String DEFAULT_TIME_SCHEDULE_URL = "/timeSchedule";
