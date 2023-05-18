@@ -3,8 +3,11 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import logo from "../assets/edusync-logo.png";
-import Google from "../components/GoogleLogin";
+import GoogleButton from "../components/social-login-button/GoogleButton";
+import KakaoButton from "../components/social-login-button/KakaoButton";
+import NaverButton from "../components/social-login-button/NaverButton";
 import { validateEmptyInput } from "./utils/loginUtils";
+
 const SignUp = () => {
   const [nickName, setNickName] = useState("");
   const [email, setEmail] = useState("");
@@ -95,12 +98,14 @@ const SignUp = () => {
           <button type="button" onClick={handleSignUpButton}>
             Sign up
           </button>
-          <div>
-            <Google />
-          </div>
         </ButtonDiv>
       </SignUpDiv>
       <LoginLink to="/login">로그인하러 가기</LoginLink>
+      <SocialLoginDiv>
+        <GoogleButton />
+        <KakaoButton />
+        <NaverButton />
+      </SocialLoginDiv>
     </Container>
   );
 };
@@ -156,7 +161,7 @@ const ButtonDiv = styled.div`
   display: flex;
   justify-content: space-between;
   button {
-    width: 71%;
+    width: 100%;
     height: 45px;
   }
 `;
@@ -164,6 +169,11 @@ const LoginLink = styled(Link)`
   text-decoration-line: none;
   color: #ffffff;
   font-size: 11px;
+`;
+const SocialLoginDiv = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 export default SignUp;

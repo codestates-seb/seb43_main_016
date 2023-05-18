@@ -1,9 +1,13 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import tokenRequestApi from "../apis/TokenRequestApi";
+import { LogInState } from "../recoil/atoms/LogInState";
+import { useSetRecoilState } from "recoil";
 
 function Redirect() {
   const navigate = useNavigate();
+  const setIsLoggedIn = useSetRecoilState(LogInState);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
@@ -12,9 +16,9 @@ function Redirect() {
     if (accessToken && refreshToken) {
       tokenRequestApi.setAccessToken(accessToken);
       localStorage.setItem("refreshToken", refreshToken);
+      setIsLoggedIn(true);
+      navigate("/");
     }
-
-    // 로그인 후에 메인 페이지로 리다이렉트
     navigate("/");
   }, []);
 
