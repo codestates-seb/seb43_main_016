@@ -13,7 +13,6 @@ const ProfileImg = ({ profileImage }: Props) => {
     const selectedFile: File | undefined = e.target.files?.[0];
 
     if (selectedFile) {
-      console.log(selectedFile); // ! 구현 완료 시 삭제되어야 할 코드
 
       // 파일의 유효성 검사
       const allowedTypes: string[] = ["image/png", "image/jpeg", "image/jpg"]; // 파일의 타입은 png, jpeg, jpg만 허용

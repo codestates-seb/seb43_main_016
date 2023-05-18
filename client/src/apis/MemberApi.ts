@@ -1,5 +1,12 @@
-import axios from "axios";
+import tokenRequestApi from "./TokenRequestApi";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
 
+// * recoil에서 전역 LogInState를 가져와서 isLogin 변수에 할당
+const isLoggedIn = useRecoilValue(LogInState);
+
+// =============== 유저정보 요청(GET) ===============
+// TODO : 유저정보 get 요청 DTO 타입 정의
 export interface MemberInfoResponseDto {
   uuid: string;
   email: string;
@@ -11,168 +18,99 @@ export interface MemberInfoResponseDto {
   roles: string[];
 }
 
+// TODO: 유저정보 get 요청하는 axios 코드
+export const getMemberInfo = async () => {
+  // * 로그인 상태가 아닌 경우 에러 발생
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
+
+  try {
+    // tokenRequestApi를 사용하여 /members 엔드포인트로 GET 요청 전송
+    const response = await tokenRequestApi.get<MemberInfoResponseDto>(
+      "/members"
+    );
+    // 응답 데이터 추출
+    const data = response.data;
+    return data; // 데이터 반환
+  } catch (error) {
+    console.error("유저 정보를 불러오는데 실패했습니다.", error);
+    throw new Error("유저 정보를 불러오는데 실패했습니다."); // 실패 시 에러 발생
+  }
+};
+
+// =============== 유저 기본정보 업데이트(PATCH) ===============
 export interface MemberUpdateDto {
   nickName: string;
   password: string;
 }
 
+// TODO: Member의 아이디와 비밀번호 수정 요청을 보내는 코드
+export const updateMember = async (data: MemberUpdateDto) => {
+  // 액세스 토큰이 정의되지 않았을 경우 에러 발생
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
+  // 입력 데이터가 없을 경우 에러 발생
+  if (!data) throw new Error("입력값을 확인해주세요.");
+
+  try {
+    // tokenRequestApi를 사용하여 /members 엔드포인트로 PATCH 요청 전송
+    await tokenRequestApi.patch("/members", data);
+  } catch (error) {
+    console.error("유저정보를 업데이트 하는데 실패했습니다.", error);
+    throw new Error("유저정보를 업데이트 하는데 실패했습니다."); // 실패 시 에러 발생
+  }
+};
+
+// =============== 유저 프로필 사진 업데이트(PATCH) ===============
 export interface MemberProfileUpdateImageDto {
   profileImage: string;
 }
+// TODO : Member의 프로필 사진의 수정 요청을 보내는 코드
+export const updateMemberProfileImage = async (
+  data: MemberProfileUpdateImageDto
+) => {
+  try {
+    await tokenRequestApi.patch("/members/profile-image", data);
+  } catch (error) {
+    console.error("프로필 사진을 업로드하는데 실패했습니다.", error);
+    throw new Error("프로필 사진을 업로드하는데 실패했습니다.");
+  }
+};
 
+// =============== 유저 자기소개 / 선호하는 사람 업데이트(PATCH) ===============
 export interface MemberDetailDto {
   aboutMe: string;
   withMe: string;
 }
 
-export interface MemberPasswordCheckDto {
-  password: string;
-}
-
-// TODO : AccessToken 정의
-// const accessToken = localStorage.getItem("accessToken");
-
-// TODO : Member의 정보를 가져오는 코드
-// url = http://ec2-43-202-20-65.ap-northeast-2.compute.amazonaws.com/members
-// method = GET
-// response = MemberInfoResponseDto
-// headers = { Authorization: `Bearer ${accessToken}` }
-
-export const getMemberInfo = async (accessToken: string | null) => {
-  if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-  try {
-    const response = await axios.get<MemberInfoResponseDto>(
-      `${import.meta.env.VITE_APP_API_URL}/members`,
-      config
-    );
-    const data = response.data;
-    return data;
-  } catch (error) {
-    console.error(error);
-    throw new Error("유저 정보를 불러오는데 실패했습니다.");
-  }
-};
-
-// TODO : Member의 아이디와 비밀번호 수정 요청을 보내는 코드
-// url = http://ec2-43-202-20-65.ap-northeast-2.compute.amazonaws.com/members
-// method = PATCH
-// headers = { Authorization: `Bearer ${accessToken}` }
-export const updateMember = async (
-  accessToken: string | null,
-  data: MemberUpdateDto
-) => {
-  if (!accessToken) throw new Error("로그인 상태를 확인해주세요.");
-  if (!data) throw new Error("입력값을 확인해주세요.");
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    data,
-  };
-  try {
-    await axios.patch(`${import.meta.env.VITE_APP_API_URL}/members`, config);
-  } catch (error) {
-    throw new Error("유저정보를 업데이트 하는데 실패했습니다.");
-  }
-};
-
-// TODO : Member의 프로필 사진의 수정 요청을 보내는 코드
-// url = http://ec2-43-202-20-65.ap-northeast-2.compute.amazonaws.com/members/profile-image
-// method = PATCH
-// headers = { Authorization: `Bearer ${accessToken}` }
-export const updateMemberProfileImage = async (
-  accessToken: string | null,
-  data: MemberProfileUpdateImageDto
-) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-    data,
-  };
-
-  try {
-    await axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/members/profile-image`,
-      config
-    );
-  } catch (error) {
-    throw new Error("프로필 사진을 업로드하는데 실패했습니다.");
-  }
-};
-
 // TODO : Member의 자기소개, 선호하는 사람 수정 요청을 보내는 코드
-// url = http://ec2-43-202-20-65.ap-northeast-2.compute.amazonaws.com/members/detail
-// method = PATCH
-// headers = { Authorization: `Bearer ${accessToken}` }
-
-export const updateMemberDetail = async (
-  accessToken: string | null,
-  memberDetailDto: MemberDetailDto
-) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
+export const updateMemberDetail = async (memberDetailDto: MemberDetailDto) => {
   try {
-    await axios.patch(
-      `${import.meta.env.VITE_APP_API_URL}/members/detail`,
-      memberDetailDto,
-      config
-    );
+    await tokenRequestApi.patch("/members/detail", memberDetailDto);
   } catch (error) {
+    console.error("상세정보를 업데이트하는데 실패했습니다.", error);
     throw new Error("상세정보를 업데이트하는데 실패했습니다.");
   }
 };
 
+// =============== 유저 탈퇴(DELETE) ===============
 // TODO : Member의 회원 탈퇴 요청을 보내는 코드
-// url = http://ec2-43-202-20-65.ap-northeast-2.compute.amazonaws.com/members
-// method = DELETE
-// headers = { Authorization: `Bearer ${accessToken}` }
-
-export const deleteMember = async (accessToken: string | null) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
+export const deleteMember = async () => {
   try {
-    await axios.delete(`${import.meta.env.VITE_APP_API_URL}/members`, config);
+    await tokenRequestApi.delete("/members");
   } catch (error) {
     throw new Error("회원탈퇴에 실패했습니다.");
   }
 };
 
+// =============== 유저 비밀번호 체크 ===============
+export interface MemberPasswordCheckDto {
+  password: string;
+}
 // TODO : Member의 비밀번호를 확인하는 코드
-// url = http://ec2-43-202-20-65.ap-northeast-2.compute.amazonaws.com/members/password
-// method = POST
-// headers = { Authorization: `Bearer ${accessToken}` }
-
 export const checkMemberPassword = async (
-  accessToken: string | null,
   memberPasswordCheckDto: MemberPasswordCheckDto
 ) => {
-  const config = {
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-    },
-  };
-
   try {
-    await axios.post(
-      `${import.meta.env.VITE_APP_API_URL}/members/password`,
-      memberPasswordCheckDto,
-      config
-    );
+    await tokenRequestApi.post("/members/password", memberPasswordCheckDto);
   } catch (error) {
     throw new Error("비밀번호가 일치하지 않습니다.");
   }
