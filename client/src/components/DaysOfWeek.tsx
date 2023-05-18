@@ -22,7 +22,7 @@ const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
     <DaysOfWeekContainer>
       {daysOfWeekList.map((item: string, index: number) => {
         return (
-          <CheckBox key={index}>
+          <div className="checkbox" key={index}>
             <input
               value={item}
               type="checkbox"
@@ -30,7 +30,7 @@ const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
               checked={checked.includes(item)}
             />
             <label id={item}>{item}</label>
-          </CheckBox>
+          </div>
         );
       })}
     </DaysOfWeekContainer>
@@ -38,25 +38,25 @@ const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
 };
 
 const DaysOfWeekContainer = styled.div`
-  width: 700px;
+  width: 640px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-`;
 
-const CheckBox = styled.div`
-  width: 45px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  label {
-    font-size: 15px;
-    color: #1f1f1f;
-    padding-left: 2px;
+  .checkbox {
+    width: 42px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
   }
 
-  input {
+  .checkbox > label {
+    font-size: 15px;
+    color: #1f1f1f;
+    padding-left: 4px;
+  }
+
+  .checkbox > input {
     width: 14px;
     height: 14px;
     border: none;
