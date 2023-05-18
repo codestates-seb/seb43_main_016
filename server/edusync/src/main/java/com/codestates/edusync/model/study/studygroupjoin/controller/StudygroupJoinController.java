@@ -1,7 +1,5 @@
 package com.codestates.edusync.model.study.studygroupjoin.controller;
 
-import com.codestates.edusync.model.common.utils.MemberUtils;
-import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.study.studygroupjoin.dto.StudygroupJoinDto;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
@@ -26,7 +24,6 @@ public class StudygroupJoinController {
     private static final String DEFAULT_CANDIDATE_URL = "/candidate";
     private final StudygroupJoinService studygroupJoinService;
     private final StudygroupJoinMapper studygroupJoinmapper;
-    private final MemberUtils memberUtils;
 
     /**
      * 스터디 멤버 리스트 및 가입 대기 리스트 조회
@@ -37,12 +34,10 @@ public class StudygroupJoinController {
     public ResponseEntity getStudygroupJoins(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                              @RequestParam("join") Boolean join,
                                              Authentication authentication) {
-
-        Member loginMember = memberUtils.getLoggedIn(authentication);
         List<StudygroupJoin> studygroupJoinList;
 
         if (join)   studygroupJoinList = studygroupJoinService.getAllMemberList(studygroupId); // 멤버 리스트
-        else        studygroupJoinList = studygroupJoinService.getAllCandidateList(studygroupId, loginMember); // 대기 리스트
+        else        studygroupJoinList = studygroupJoinService.getAllCandidateList(studygroupId, authentication.getPrincipal().toString()); // 대기 리스트
 
         StudygroupJoinDto.Response studygroupJoinDtos =
                 studygroupJoinmapper.studygroupJoinToStudygroupJoinDtos(studygroupJoinList);
@@ -57,9 +52,7 @@ public class StudygroupJoinController {
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_JOIN_URL)
     public ResponseEntity postStudygroupJoin(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                              Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupJoinService.createCandidate(studygroupId, loginMember);
+        studygroupJoinService.createCandidate(studygroupId, authentication.getPrincipal().toString());
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
@@ -71,9 +64,7 @@ public class StudygroupJoinController {
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_JOIN_URL)
     public ResponseEntity deleteStudygroupJoinCandidate(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                         Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupJoinService.deleteCandidateSelf(studygroupId, loginMember);
+        studygroupJoinService.deleteCandidateSelf(studygroupId, authentication.getPrincipal().toString());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -85,9 +76,7 @@ public class StudygroupJoinController {
     @DeleteMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}/member")
     public ResponseEntity deleteStudygroupJoin(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupJoinService.deleteMemberSelf(studygroupId, loginMember);
+        studygroupJoinService.deleteMemberSelf(studygroupId, authentication.getPrincipal().toString());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -101,9 +90,11 @@ public class StudygroupJoinController {
     public ResponseEntity postStudygroupJoinApprove(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                     @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto,
                                                     Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupJoinService.approveCandidateByNickName(studygroupId, studygroupJoinDto.getNickName(), loginMember);
+        studygroupJoinService.approveCandidateByNickName(
+                studygroupId,
+                studygroupJoinDto.getNickName(),
+                authentication.getPrincipal().toString()
+        );
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -117,9 +108,11 @@ public class StudygroupJoinController {
     public ResponseEntity deleteStudygroupJoinReject(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                      @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto,
                                                      Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupJoinService.rejectCandidateByNickName(studygroupId, studygroupJoinDto.getNickName(), loginMember);
+        studygroupJoinService.rejectCandidateByNickName(
+                studygroupId,
+                studygroupJoinDto.getNickName(),
+                authentication.getPrincipal().toString()
+        );
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
@@ -133,9 +126,11 @@ public class StudygroupJoinController {
     public ResponseEntity deleteStudygroupJoinKick(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                    @Valid @RequestBody StudygroupJoinDto.Dto studygroupJoinDto,
                                                    Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedIn(authentication);
-
-        studygroupJoinService.kickOutMemberByNickName(studygroupId, studygroupJoinDto.getNickName(), loginMember);
+        studygroupJoinService.kickOutMemberByNickName(
+                studygroupId,
+                studygroupJoinDto.getNickName(),
+                authentication.getPrincipal().toString()
+        );
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }

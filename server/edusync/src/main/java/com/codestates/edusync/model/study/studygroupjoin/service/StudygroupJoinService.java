@@ -2,6 +2,7 @@ package com.codestates.edusync.model.study.studygroupjoin.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
@@ -19,6 +20,7 @@ import java.util.List;
 public class StudygroupJoinService implements StudygroupJoinManager {
     private final StudygroupJoinRepository studygroupJoinRepository;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final MemberUtils memberUtils;
 
     @Override
     public StudygroupJoin getCandidateByNickName(Long studygroupId, String nickName) {
@@ -37,7 +39,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public List<StudygroupJoin> getAllCandidateList(Long studygroupId, Member loginMember) {
+    public List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
 
         if (loginMember.getId() != studygroup.getLeaderMember().getId()) {
@@ -51,7 +54,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void createCandidate(Long studygroupId, Member loginMember) {
+    public void createCandidate(Long studygroupId, String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
             throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
         } else {
@@ -63,10 +67,11 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void deleteCandidateSelf(Long studygroupId, Member loginMember) {
+    public void deleteCandidateSelf(Long studygroupId, String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         StudygroupJoin studygroupJoin = null;
 
-        for (StudygroupJoin sj : getAllCandidateList(studygroupId, loginMember)) {
+        for (StudygroupJoin sj : getAllCandidateList(studygroupId, email)) {
             if (sj.getMember().getEmail().equals(loginMember.getEmail())) {
                 studygroupJoin = sj;
                 studygroupJoinRepository.delete(sj);
@@ -77,7 +82,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void deleteMemberSelf(Long studygroupId, Member loginMember) {
+    public void deleteMemberSelf(Long studygroupId, String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         StudygroupJoin studygroupJoin = null;
 
         for (StudygroupJoin sj : getAllMemberList(studygroupId)) {
@@ -91,7 +97,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void approveCandidateByNickName(Long studygroupId, String nickName, Member loginMember) {
+    public void approveCandidateByNickName(Long studygroupId, String nickName, String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
 
         if (loginMember.getId() != studygroup.getLeaderMember().getId()) {
@@ -106,7 +113,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void rejectCandidateByNickName(Long studygroupId, String nickName, Member loginMember) {
+    public void rejectCandidateByNickName(Long studygroupId, String nickName, String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
 
         if (loginMember.getId() == studygroup.getLeaderMember().getId()) {
@@ -118,7 +126,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void kickOutMemberByNickName(Long studygroupId, String nickName, Member loginMember) {
+    public void kickOutMemberByNickName(Long studygroupId, String nickName, String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         Studygroup studygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
 
         if (loginMember.getId() == studygroup.getLeaderMember().getId()) {
