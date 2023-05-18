@@ -73,7 +73,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     @Override
     public List<TimeSchedule> getTimeSchedules(Long studygroupId) {
-        return calendarRepository.findAllByStudygroupId(studygroupId);
+        return calendarRepository.findAllByStudygroupIdAndMemberIsNull(studygroupId);
     }
 
     @Override

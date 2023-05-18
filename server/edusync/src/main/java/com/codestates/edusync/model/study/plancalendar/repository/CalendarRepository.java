@@ -8,5 +8,6 @@ import java.util.List;
 public interface CalendarRepository extends JpaRepository<TimeSchedule, Long> {
 
     List<TimeSchedule> findAllByStudygroupId(Long studygroupId);
-    List<TimeSchedule> findAllByMemberUuid(String memberUuid);
+    List<TimeSchedule> findAllByMemberEmail(String email);
+    List<TimeSchedule> findAllByStudygroupIdAndMemberIsNull(Long studygroupId);
 }

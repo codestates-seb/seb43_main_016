@@ -21,7 +21,7 @@ public interface CalendarMemberMapper {
 
     @IterableMapping(qualifiedByName = "PostDtoToEntity")
     List<TimeSchedule> timeSchedulePostDtoListToTimeScheduleList(List<CalendarDto.TimeScheduleDto.Post> timeSchedules);
-    TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarDto.Patch patchDto);
+    TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarDto.Single singleDto);
 
     List<TimeRangeDto.Response> timeScheduleListToTimeScheduleResponseDto(List<TimeSchedule> timeSchedules);
 

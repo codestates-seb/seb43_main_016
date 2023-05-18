@@ -25,15 +25,15 @@ public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
     private final CalendarStudygroupMapper mapper;
 
-    private static final String DEFAULT_STUDYGROUP_URL = "/studygroup";
+    private static final String DEFAULT_STUDYGROUP_URL = "/studygroups";
 
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
     public ResponseEntity postCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                 @Valid @RequestBody CalendarDto.Post postDto,
+                                                 @Valid @RequestBody CalendarDto.List listDto,
                                                  Authentication authentication) {
         calendarStudygroupService.createTimeSchedules(
                 studygroupId,
-                mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules()),
+                mapper.timeSchedulePostDtoListToTimeScheduleList(listDto.getTimeSchedules()),
                 authentication.getPrincipal().toString()
         );
 
@@ -43,11 +43,11 @@ public class CalendarStudygroupController {
     @PatchMapping("/{timeschedule-id}" + DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
     public ResponseEntity patchCalendarStudygroup(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                   @PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                  @Valid @RequestBody CalendarDto.Patch patchDto,
+                                                  @Valid @RequestBody CalendarDto.Single singleDto,
                                                   Authentication authentication) {
         calendarStudygroupService.updateTimeSchedule(
                 studygroupId, timeScheduleId,
-                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
+                mapper.timeSchedulePatchDtoToTimeSchedule(singleDto),
                 authentication.getPrincipal().toString()
         );
 

@@ -19,21 +19,20 @@ import java.util.List;
 
 @RequiredArgsConstructor
 @Validated
+@RequestMapping("/calendars")
 @RestController
 public class CalendarMemberController {
     private final CalendarMemberService calendarMemberService;
     private final CalendarMemberMapper mapper;
 
-    private static final String DEFAULT_MEMBER_URL = "/member";
-    private static final String DEFAULT_TIME_SCHEDULE_URL = "/timeSchedule";
+    private static final String DEFAULT_MEMBER_URL = "/members";
 
-    @PostMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL)
-    public ResponseEntity postCalendarMember(@PathVariable("member-uuid") @Positive String memberUuid,
-                                             @Valid @RequestBody CalendarDto.Post postDto,
+    @PostMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
+    public ResponseEntity postCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
+                                             @Valid @RequestBody CalendarDto.List listDto,
                                              Authentication authentication) {
-        calendarMemberService.createTimeSchedules(
-                memberUuid,
-                mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules()),
+        calendarMemberService.createTimeSchedulesExceptStudygroup(
+                mapper.timeSchedulePostDtoListToTimeScheduleList(listDto.getTimeSchedules()),
                 authentication.getPrincipal().toString()
         );
 
@@ -43,11 +42,11 @@ public class CalendarMemberController {
     @PatchMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
     public ResponseEntity patchCalendarMember(@PathVariable("member-uuid") @Positive String memberUuid,
                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
-                                                  @Valid @RequestBody CalendarDto.Patch patchDto,
+                                                  @Valid @RequestBody CalendarDto.Single singleDto,
                                                   Authentication authentication) {
         calendarMemberService.updateTimeSchedule(
                 memberUuid, timeScheduleId,
-                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
+                mapper.timeSchedulePatchDtoToTimeSchedule(singleDto),
                 authentication.getPrincipal().toString()
         );
 
@@ -81,11 +80,10 @@ public class CalendarMemberController {
     }
 
     @DeleteMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
-    public ResponseEntity deleteCalendarMember(@PathVariable("member-uuid") @Positive String memberUuid,
-                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
-                                                   Authentication authentication) {
+    public ResponseEntity deleteCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
+                                               Authentication authentication) {
         calendarMemberService.deleteTimeScheduleByTimeScheduleId(
-                memberUuid, timeScheduleId,
+                timeScheduleId,
                 authentication.getPrincipal().toString()
         );
 
