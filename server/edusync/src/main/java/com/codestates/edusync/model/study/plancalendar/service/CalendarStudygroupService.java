@@ -1,6 +1,7 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
 import com.codestates.edusync.model.common.entity.TimeRange;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupCalendarUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
@@ -22,11 +23,13 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final CalendarStudygroupRepository calendarStudygroupRepository;
     private final VerifyStudygroupCalendarUtils verifyStudygroupCalendarUtils;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final MemberUtils memberUtils;
 
     @Override
     public void createTimeSchedules(Long studygroupId,
                                     List<TimeSchedule> timeSchedules,
-                                    Member loginMember) {
+                                    String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         Studygroup findStudygroup = verifyStudygroupUtils.findVerifyStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
@@ -40,14 +43,17 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     @Override
     public void createTimeSchedulesOfAllMember(Long studygroupId,
                                                List<TimeSchedule> timeSchedules,
-                                               Member loginMember) {
+                                               String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
+
         // TODO: 2023-05-11 나중에 구현할거임 ! ADV
     }
 
     @Override
     public void updateTimeSchedule(Long studygroupId, Long timeScheduleId,
                                    TimeSchedule timeSchedule,
-                                   Member loginMember) {
+                                   String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         TimeSchedule findTimeSchedule = verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
@@ -78,21 +84,29 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     }
 
     @Override
-    public void deleteAllTimeSchedules(Long studygroupId, Member loginMember) {
+    public void deleteAllTimeSchedules(Long studygroupId,
+                                       String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         List<TimeSchedule> findTimeSchedules = calendarStudygroupRepository.findAllByStudygroupId(studygroupId);
         
         calendarStudygroupRepository.deleteAll(findTimeSchedules);
     }
 
     @Override
-    public void deleteTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId, Member loginMember) {
+    public void deleteTimeScheduleByTimeScheduleId(Long studygroupId,
+                                                   Long timeScheduleId,
+                                                   String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         TimeSchedule findTimeSchedule = verifyStudygroupCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
         
         calendarStudygroupRepository.delete(findTimeSchedule);
     }
 
     @Override
-    public void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId, Long timeScheduleId, Member loginMember) {
+    public void deleteTimeScheduleWithSameTimeOfMember(Long studygroupId,
+                                                       Long timeScheduleId,
+                                                       String email) {
+        Member loginMember = memberUtils.getLoggedIn(email);
         // TODO: 2023-05-11 ADV 에서 구현할거임 !!! 
     }
 }
