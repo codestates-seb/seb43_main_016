@@ -54,7 +54,7 @@ const StudyPost = () => {
       studyTimeEnd: "2023-05-01T20:00",
       memberCountMin,
       memberCountMax,
-      memberCountCurrent: 3,
+      memberCountCurrent: 1,
       platform,
       introduction,
       tags: {

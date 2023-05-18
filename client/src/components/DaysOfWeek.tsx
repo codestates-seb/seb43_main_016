@@ -51,12 +51,14 @@ const CheckBox = styled.div`
   align-items: center;
 
   label {
-    font-size: 16px;
+    font-size: 15px;
     color: #1f1f1f;
     padding-left: 2px;
   }
 
   input {
+    width: 14px;
+    height: 14px;
     border: none;
   }
 `;

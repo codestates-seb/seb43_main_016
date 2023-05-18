@@ -1,33 +1,34 @@
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
+// import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
 
 const StudyListBox = () => {
-  const [data, setData] = useState<any>("");
+  // const [data, setData] = useState<any>("");
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const result = await getStudyGroupInfo(2);
-        console.log(result);
-        setData(result);
-      } catch (error) {
-        console.error("Error during GET request:", error);
-      }
-    };
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const result = await getStudyGroupInfo(2);
+  //       console.log(result);
+  //       setData(result);
+  //     } catch (error) {
+  //       console.error("Error during GET request:", error);
+  //     }
+  //   };
 
-    fetchData();
-  }, []);
+  //   fetchData();
+  // }, []);
 
   return (
     <StudyListBoxContainer>
       <Link to="/studycontent">
         <StudyListImage></StudyListImage>
         <StudyListTitle>
-          {data.map((item: StudyInfoDto) => (
+          {/* {data.map((item: StudyInfoDto) => (
             <h3 key={item.id}>{item.studyName}</h3>
-          ))}
+          ))} */}
+          <h3>Dummy Title</h3>
         </StudyListTitle>
         <StudyListTag>
           <div>javascript</div>
