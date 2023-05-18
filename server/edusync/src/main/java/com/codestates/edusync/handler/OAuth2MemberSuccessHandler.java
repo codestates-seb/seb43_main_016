@@ -52,11 +52,13 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         String email;
         String nickName;
         String profileImage;
+        Member.Provider provider;
 
         if ("google".equals(providerType)) {
             email = String.valueOf(oAuth2User.getAttributes().get("email"));
             nickName = String.valueOf(oAuth2User.getAttributes().get("name"));
             profileImage = String.valueOf(oAuth2User.getAttributes().get("picture"));
+            provider = Member.Provider.GOOGLE;
         } else if ("kakao".equals(providerType)) {
             Map<String, Object> attributes = oAuth2User.getAttributes();
             Map<String, Object> kakaoAccount = (Map<String, Object>) attributes.get("kakao_account");
@@ -64,12 +66,14 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
             Map<String, Object> profile = (Map<String, Object>) kakaoAccount.get("profile");
             nickName = (String) profile.get("nickname");
             profileImage = (String) profile.get("profile_image_url");
+            provider = Member.Provider.KAKAO;
         } else if ("naver".equals(providerType)) {
             Map<String, Object> attributes = oAuth2User.getAttributes();
             Map<String, Object> response2 = (Map<String, Object>) attributes.get("response");
             email = (String) response2.get("email");
             nickName = (String) response2.get("nickname");
             profileImage = (String) response2.get("profile_image");
+            provider = Member.Provider.NAVER;
         } else {
             throw new BusinessLogicException(ExceptionCode.INVALID_PROVIDER, "Unsupported provider: " + providerType);
         }
@@ -78,7 +82,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         Member member;
         if (optionalMember.isEmpty()) { // 이메일이 저장되어 있지 않은 경우
-            member = saveMember(email, nickName, profileImage); // Resource Owner의 정보를 DB에 저장
+            member = saveMember(email, nickName, profileImage, provider); // Resource Owner의 정보를 DB에 저장
         } else {
             member = optionalMember.get();
         }
@@ -86,7 +90,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         redirect(request, response, member);  // Access Token과 Refresh Token을 생성해서 Frontend 애플리케이션에 전달하기 위해 Redirect
     }
 
-    private Member saveMember(String email, String nickname, String profileImage) {
+    private Member saveMember(String email, String nickname, String profileImage, Member.Provider provider) {
         memberRepository.findByEmail(email).ifPresent(it ->
         {throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s is duplicated 버그발생! OAuth2 핸들러 검사하시오.", email));
         });
@@ -96,6 +100,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         member.setProfileImage(profileImage);
         List<String> roles = authorityUtils.createRoles(email);
         member.setRoles(roles);
+        member.setProvider(provider);
         Member savedMember = memberRepository.save(member);
 
         return savedMember;

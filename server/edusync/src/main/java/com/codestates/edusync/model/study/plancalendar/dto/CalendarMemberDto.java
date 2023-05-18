@@ -1,23 +1,21 @@
 package com.codestates.edusync.model.study.plancalendar.dto;
 
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
-import java.sql.Timestamp;
-import java.util.List;
 
-public class CalendarDto {
+public class CalendarMemberDto {
 
     @NoArgsConstructor
     @Getter
+    @Setter
     public static class Post {
         @NotNull
-        private List<TimeScheduleDto.Post> timeSchedules;
+        private TimeScheduleDto.Post timeSchedule;
     }
 
     @NoArgsConstructor
@@ -37,7 +35,7 @@ public class CalendarDto {
             private String title;
 
             @Nullable
-            private String content;
+            private String platform;
         }
 
         @NoArgsConstructor
@@ -45,8 +43,7 @@ public class CalendarDto {
         public static class Patch extends TimeRangeDto.Patch {
             private Long id;
             private String title;
-            private String content;
+            private String platform;
         }
-
     }
 }

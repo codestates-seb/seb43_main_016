@@ -1,4 +1,4 @@
-package com.codestates.edusync.security.auth.redis;
+package com.codestates.edusync.config.redis;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

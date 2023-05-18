@@ -5,6 +5,7 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.repository.StudygroupJoinRepository;
 import lombok.RequiredArgsConstructor;
@@ -56,10 +57,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     public void createCandidate(Long studygroupId, String email) {
         Member loginMember = getLoginMember(email);
         if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
         }
         if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_EXISTS);
         }
         StudygroupJoin studygroupJoin = new StudygroupJoin();
         studygroupJoin.setMember(loginMember);
