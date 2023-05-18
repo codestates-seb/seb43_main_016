@@ -116,7 +116,5 @@ export const checkMemberPassword = async (
 };
 
 // TODO : (Advance) Member의 수정된 사진을 S3에 업로드하는 코드
-//
 
 // TODO : (Advance) S3에 업로드된 사진의 URL을 받아오는 코드
-//

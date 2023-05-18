@@ -11,16 +11,16 @@ import StudyContent from "./pages/StudyContent";
 import GNB from "./components/gnb/GNB";
 import ProfileCalendar from "./pages/ProfileCalendar";
 import Redirect from "./pages/Redirect";
-//import { worker } from "./mocks/browser";
 import useRefreshToken from "./hooks/useRefreshToken";
 import Modal from "react-modal";
+import { worker } from "./mocks/browser";
+// 개발 모드로 실행되었을 때, mocking 라이브러리가 실행되도록 명시하는 코드
+if (process.env.NODE_ENV === "development") {
+  worker.start();
+}
 
 const queryClient = new QueryClient();
 
-// 개발 모드로 실행되었을 때, mocking 라이브러리가 실행되도록 명시하는 코드
-//if (process.env.NODE_ENV === "development") {
-//  worker.start();
-//}
 Modal.setAppElement("#root");
 function App() {
   return (
@@ -33,8 +33,7 @@ function App() {
 }
 
 function AppContent() {
-  const fetched = useRefreshToken();
-
+  const fetched = useRefreshToken(); // 이 코드 때문에, 개발서버에서 렌더링이 되지 않고 있음!
   return (
     <>
       {fetched && (

@@ -179,7 +179,6 @@ export async function forceExitStudyGroup(
 
 // ====================== 스터디원 가입 신청 철회 ===========================
 // TODO : StudyGroup의 가입 신청을 철회하는 코드
-<<<<<<< HEAD
 export async function cancelStudyGroupApplication(id: number) {
   const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("Access token is not defined.");
@@ -187,17 +186,6 @@ export async function cancelStudyGroupApplication(id: number) {
   try {
     const response = await tokenRequestApi.delete(`/studygroup/${id}/join`);
     console.log("해당 그룹에 가입신청을 철회합니다", response);
-=======
-export async function cancelStudyGroupApplication(
-  id: number
-  //accessToken: string | null
-) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
-
-  try {
-    const response = await tokenRequestApi.delete(`/studygroup/${id}/join`);
-    console.log("Study group application canceled successfully:", response);
->>>>>>> 124a8b59d6a797caf9a4de9d22219adc42207387
   } catch (error) {
     console.error("가입 신청 철회에 실패했습니다", error);
   }
@@ -210,7 +198,6 @@ interface StudyGroupMemberWaitingListDto {
 }
 
 // TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회하는 코드
-<<<<<<< HEAD
 export async function getStudyGroupMemberWaitingList(id: number) {
   const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
@@ -218,21 +205,6 @@ export async function getStudyGroupMemberWaitingList(id: number) {
   try {
     const response = await tokenRequestApi.get<StudyGroupMemberWaitingListDto>(
       `/studygroup/${id}/member?join-false`
-=======
-export async function getStudyGroupMemberWaitingList(
-  id: number
-  //accessToken: string | null
-) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
-
-  try {
-    const response = await axios.get<StudyGroupMemberWaitingListDto>(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join-false`
-    );
-    console.log(
-      "Study group member waiting list retrieved successfully:",
-      response
->>>>>>> 124a8b59d6a797caf9a4de9d22219adc42207387
     );
     console.log("성공적으로 대기 리스트를 호출했습니다", response);
     return response.data;
@@ -252,18 +224,9 @@ interface StudyGroupMemberListDto {
 }
 
 // TODO : StudyGroup에 가입된 멤버 리스트
-<<<<<<< HEAD
 export async function getStudyGroupMemberList(id: number) {
   const isLoggedIn = useRecoilValue(LogInState);
-  if (!isLoggedIn) throw new Error("Access token is not defined.");
-=======
-export async function getStudyGroupMemberList(
-  id: number
-  //accessToken: string | null
-) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
->>>>>>> 124a8b59d6a797caf9a4de9d22219adc42207387
-
+  if (!isLoggedIn) throw new Error("Access token is not defined.")
   try {
     const response = await tokenRequestApi.get<StudyGroupMemberListDto>(
       `/studygroup/${id}/member`
