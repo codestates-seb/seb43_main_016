@@ -28,10 +28,9 @@ public class VerifyStudygroupUtils implements VerifyStudygroupManager {
 
     @Override
     public void studygroupLeaderCheck(String email, Long studygroupId) {
-        Member loginMember = memberUtils.getLoggedIn(email);
         Studygroup studygroup = findVerifyStudygroup(studygroupId);
 
-        if (loginMember.getId() != studygroup.getLeaderMember().getId()) {
+        if (!studygroup.getLeaderMember().getEmail().equals(email)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
         }
     }
