@@ -40,14 +40,13 @@ public class CalendarMemberController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PatchMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
-    public ResponseEntity patchCalendarMember(@PathVariable("member-uuid") @Positive String memberUuid,
-                                                  @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
-                                                  @Valid @RequestBody CalendarStudygroupDto.Patch patchDto,
-                                                  Authentication authentication) {
+    @PatchMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
+    public ResponseEntity patchCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
+                                              @Valid @RequestBody CalendarMemberDto.Patch patchDto,
+                                              Authentication authentication) {
         calendarMemberService.updateTimeSchedule(
-                memberUuid, timeScheduleId,
-                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
+                timeScheduleId,
+                mapper.memberTimeSchedulePatchDtoToTimeSchedule(patchDto),
                 authentication.getPrincipal().toString()
         );
 

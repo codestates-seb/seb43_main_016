@@ -56,7 +56,7 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
         // TODO: 2023-05-11 나중에 구현할거임 ! ADV
     }
 
-    public void updateTimeSchedule(String memberUuid, Long timeScheduleId,
+    public void updateTimeSchedule(Long timeScheduleId,
                                    TimeSchedule timeSchedule,
                                    String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
