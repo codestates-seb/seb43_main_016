@@ -37,7 +37,7 @@ public class MemberUtils implements MemberVerificationManager {
 
         Member findMember =
                 optionalMember.orElseThrow(() ->
-                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%s 회원을 찾을 수 없습니다.", memberId)));
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, "회원을 찾을 수 없습니다."));
         checkIsActive(findMember);
 
         return findMember;

@@ -1,6 +1,5 @@
 package com.codestates.edusync.model.study.plancalendar.mapper;
 
-import com.codestates.edusync.model.common.dto.DateRangeDto;
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
@@ -10,9 +9,12 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Named;
 
 import java.util.List;
+import java.util.Optional;
+
+import static com.codestates.edusync.model.study.plancalendar.mapper.CalendarStudygroupMapper.setDateAndTimeIntoTimeScheduleResponseDto;
 
 @Mapper(componentModel = "spring")
-public interface CalendarStudygroupMapper {
+public interface CalendarMemberMapper {
 
     @Named("PostDtoToEntity")
     TimeSchedule timeSchedulePostDtoToTimeSchedule(CalendarDto.TimeScheduleDto.Post timeSchedule);
@@ -26,24 +28,12 @@ public interface CalendarStudygroupMapper {
     default TimeScheduleResponseDto timeScheduleToTimeScheduleResponseDto(TimeSchedule ts) {
         TimeScheduleResponseDto result = new TimeScheduleResponseDto();
         result.setId(ts.getId());
-        result.setStudyName(ts.getStudygroup().getStudyName());
-        result.setPlatform(ts.getStudygroup().getPlatform());
+
+        Optional.ofNullable(ts.getStudygroup().getStudyName()).ifPresent(result::setStudyName);
+        Optional.ofNullable(ts.getStudygroup().getPlatform()).ifPresent(result::setPlatform);
 
         setDateAndTimeIntoTimeScheduleResponseDto(ts, result);
 
         return result;
     }
-
-    static void setDateAndTimeIntoTimeScheduleResponseDto(TimeSchedule ts, TimeScheduleResponseDto result) {
-        TimeRangeDto.Response resultTR = new TimeRangeDto.Response();
-        resultTR.setStudyTimeStart(ts.getTime().getStudyTimeStart());
-        resultTR.setStudyTimeEnd(ts.getTime().getStudyTimeEnd());
-        result.setTimeScheduleInfo(resultTR);
-
-        DateRangeDto.Response resultDR = new DateRangeDto.Response();
-        resultDR.setStudyPeriodStart(ts.getStudygroup().getDate().getStudyPeriodStart());
-        resultDR.setStudyPeriodEnd(ts.getStudygroup().getDate().getStudyPeriodEnd());
-        result.setCalendarInfo(resultDR);
-    }
-
 }

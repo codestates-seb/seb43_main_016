@@ -5,7 +5,8 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface CalendarStudygroupRepository extends JpaRepository<TimeSchedule, Long> {
+public interface CalendarRepository extends JpaRepository<TimeSchedule, Long> {
 
     List<TimeSchedule> findAllByStudygroupId(Long studygroupId);
+    List<TimeSchedule> findAllByMemberUuid(String memberUuid);
 }
