@@ -39,14 +39,13 @@ public class CalendarMemberService {
         calendarRepository.saveAll(timeSchedules);
     }
 
-public void createTimeSchedulesExceptStudygroup(List<TimeSchedule> timeSchedules,
+public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
                                                 String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
 
-        timeSchedules.forEach(ts -> {
-            ts.setMember(loginMember);
-        } );
-        calendarRepository.saveAll(timeSchedules);
+        timeSchedule.setMember(loginMember);
+
+        calendarRepository.save(timeSchedule);
     }
 
     public void createTimeSchedulesOfAllMember(String memberUuid,

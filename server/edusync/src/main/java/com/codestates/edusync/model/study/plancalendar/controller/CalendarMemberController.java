@@ -1,11 +1,12 @@
 package com.codestates.edusync.model.study.plancalendar.controller;
 
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
+import com.codestates.edusync.model.study.plancalendar.dto.CalendarMemberDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
-import com.codestates.edusync.model.study.plancalendar.mapper.CalendarMemberMapper;
+import com.codestates.edusync.model.study.plancalendar.mapper.CalendarMapper;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarMemberService;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
-import com.codestates.edusync.model.study.plancalendar.dto.CalendarDto;
+import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,16 +24,16 @@ import java.util.List;
 @RestController
 public class CalendarMemberController {
     private final CalendarMemberService calendarMemberService;
-    private final CalendarMemberMapper mapper;
+    private final CalendarMapper mapper;
 
     private static final String DEFAULT_MEMBER_URL = "/members";
 
     @PostMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
     public ResponseEntity postCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
-                                             @Valid @RequestBody CalendarDto.List listDto,
+                                             @Valid @RequestBody CalendarMemberDto.Post postDto,
                                              Authentication authentication) {
         calendarMemberService.createTimeSchedulesExceptStudygroup(
-                mapper.timeSchedulePostDtoListToTimeScheduleList(listDto.getTimeSchedules()),
+                mapper.memberTimeSchedulePostDtoToTimeSchedule(postDto.getTimeSchedule()),
                 authentication.getPrincipal().toString()
         );
 
@@ -42,11 +43,11 @@ public class CalendarMemberController {
     @PatchMapping(DEFAULT_MEMBER_URL + "/{member-uuid}" + DEFAULT_TIME_SCHEDULE_URL + "/{timeschedule-id}")
     public ResponseEntity patchCalendarMember(@PathVariable("member-uuid") @Positive String memberUuid,
                                                   @PathVariable("timeschedule-id") @Positive Long timeScheduleId,
-                                                  @Valid @RequestBody CalendarDto.Single singleDto,
+                                                  @Valid @RequestBody CalendarStudygroupDto.Patch patchDto,
                                                   Authentication authentication) {
         calendarMemberService.updateTimeSchedule(
                 memberUuid, timeScheduleId,
-                mapper.timeSchedulePatchDtoToTimeSchedule(singleDto),
+                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
                 authentication.getPrincipal().toString()
         );
 

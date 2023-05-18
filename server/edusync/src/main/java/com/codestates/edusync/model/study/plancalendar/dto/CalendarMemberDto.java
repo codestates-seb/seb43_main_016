@@ -8,19 +8,20 @@ import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
 
-public class CalendarDto {
+public class CalendarMemberDto {
 
     @NoArgsConstructor
     @Getter
-    public static class List {
+    @Setter
+    public static class Post {
         @NotNull
-        private java.util.List<TimeScheduleDto.Post> timeSchedules;
+        private TimeScheduleDto.Post timeSchedule;
     }
 
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Single {
+    public static class Patch {
         @NotNull
         private TimeScheduleDto.Patch timeSchedule;
     }
@@ -44,6 +45,5 @@ public class CalendarDto {
             private String title;
             private String content;
         }
-
     }
 }

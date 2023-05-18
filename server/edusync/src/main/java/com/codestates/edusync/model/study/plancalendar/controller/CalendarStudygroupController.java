@@ -1,11 +1,11 @@
 package com.codestates.edusync.model.study.plancalendar.controller;
 
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
+import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
-import com.codestates.edusync.model.study.plancalendar.mapper.CalendarStudygroupMapper;
+import com.codestates.edusync.model.study.plancalendar.mapper.CalendarMapper;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
-import com.codestates.edusync.model.study.plancalendar.dto.CalendarDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,17 +23,17 @@ import java.util.List;
 @RestController
 public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
-    private final CalendarStudygroupMapper mapper;
+    private final CalendarMapper mapper;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroups";
 
     @PostMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
     public ResponseEntity postCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                 @Valid @RequestBody CalendarDto.List listDto,
+                                                 @Valid @RequestBody CalendarStudygroupDto.Post postDto,
                                                  Authentication authentication) {
         calendarStudygroupService.createTimeSchedules(
                 studygroupId,
-                mapper.timeSchedulePostDtoListToTimeScheduleList(listDto.getTimeSchedules()),
+                mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules()),
                 authentication.getPrincipal().toString()
         );
 
@@ -43,11 +43,11 @@ public class CalendarStudygroupController {
     @PatchMapping("/{timeschedule-id}" + DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
     public ResponseEntity patchCalendarStudygroup(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                   @PathVariable("studygroup-id") @Positive Long studygroupId,
-                                                  @Valid @RequestBody CalendarDto.Single singleDto,
+                                                  @Valid @RequestBody CalendarStudygroupDto.Patch patchDto,
                                                   Authentication authentication) {
         calendarStudygroupService.updateTimeSchedule(
                 studygroupId, timeScheduleId,
-                mapper.timeSchedulePatchDtoToTimeSchedule(singleDto),
+                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
                 authentication.getPrincipal().toString()
         );
 
