@@ -59,12 +59,12 @@ public interface CalendarStudygroupManager {
     TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId);
 
     /**
-     * <h2>모든 스터디 맴버와 스터디 그룹의 일정을 삭제한다</h2>
+     * <h2>모든 스터디 맴버와 해당 스터디 그룹의 일정을 삭제한다</h2>
      * 해당 스터디 그룹에 속한 맴버의 일정 리스트를 <font color=white>전부 삭제</font>한다.
      * @param studygroupId studygroup 의 식별자
      * @param email        로그인 중인 맴버
      */
-    void deleteAllTimeSchedules(Long studygroupId, String email);
+    void deleteAllTimeSchedulesByStudygroupId(Long studygroupId, String email);
 
     /**
      * <h2>스터디 그룹의 해당 일정을 삭제한다</h2>
