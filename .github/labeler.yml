@@ -2,11 +2,8 @@ audit: audit/**/*
 auth: auth/**/*
 config: config/**/*
 exception: exception/**/*
-globalutils: globalutils/**/*
 member: member/**/*
-pagingdto: pagingdto/**/*
-study: study/**/*
-studyaddons: studyaddons/**/*
+model: study/**/*
 flyway: /**/*.sql
 yml: /**/*.yml
 gradle: /**/*.gradle
