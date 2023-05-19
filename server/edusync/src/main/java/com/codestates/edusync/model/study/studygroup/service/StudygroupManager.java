@@ -2,7 +2,6 @@ package com.codestates.edusync.model.study.studygroup.service;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.Authentication;
 
 public interface StudygroupManager {
 
@@ -47,4 +46,11 @@ public interface StudygroupManager {
      * @param studygroupId
      */
     void delete(String email, Long studygroupId);
+
+    /**
+     * 스터디 리더 권한 이전
+     * @param email
+     * @param studygroupId
+     */
+    void patchLeader(String email, Long studygroupId, String newLeader);
 }

@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.studygroupjoin.service;
 
+import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 
 import java.util.List;
@@ -74,4 +75,12 @@ public interface StudygroupJoinManager {
      * @param nickName
      */
     void kickOutMemberByNickName(Long studygroupId, String nickName, String email);
+
+    /**
+     * 스터디 리더 권한 위임시,
+     * 스터디 멤버 추가(기존 리더) & 스터디 멤버 삭제(리더 위임 받은 멤버)
+     * @param newLeader
+     * @param oldLeader
+     */
+    void leaderChanged(Member newLeader, Member oldLeader);
 }
