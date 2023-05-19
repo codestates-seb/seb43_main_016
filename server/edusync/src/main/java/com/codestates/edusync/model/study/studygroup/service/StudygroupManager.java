@@ -36,7 +36,7 @@ public interface StudygroupManager {
     Studygroup get(Long studygroupId);
 
     /**
-     * 스터디 리스트 조회 : 페이징
+     * 스터디 리스트 조회
      * @param page
      * @param size
      * @return
