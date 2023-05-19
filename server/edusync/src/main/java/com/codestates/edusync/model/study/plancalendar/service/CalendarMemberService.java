@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
+import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyCalendarUtils;
@@ -13,6 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
+
+import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_LINKED;
+import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_MATCHED_WITH_MEMBER;
 
 @Transactional
 @RequiredArgsConstructor
@@ -37,6 +41,19 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
                                    String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
         TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
+
+        // todo: 예외 리펙터링 필요
+        if( findTimeSchedule.getMember() == null ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_LINKED);
+        }
+
+        if( !findTimeSchedule.getMember().getId().equals(loginMember.getId()) ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED_WITH_MEMBER);
+        }
+
+        if( findTimeSchedule.getStudygroup() != null ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED_WITH_MEMBER);
+        }
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);

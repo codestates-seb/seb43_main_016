@@ -58,6 +58,8 @@ public class CalendarMemberController {
     public ResponseEntity patchCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                               @Valid @RequestBody CalendarMemberDto.Patch patchDto,
                                               Authentication authentication) {
+
+
         calendarMemberService.updateTimeSchedule(
                 timeScheduleId,
                 mapper.memberTimeSchedulePatchDtoToTimeSchedule(patchDto),
