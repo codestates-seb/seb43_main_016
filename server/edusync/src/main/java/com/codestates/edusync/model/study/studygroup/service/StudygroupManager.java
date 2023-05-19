@@ -3,6 +3,8 @@ package com.codestates.edusync.model.study.studygroup.service;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import org.springframework.data.domain.Page;
 
+import java.util.List;
+
 public interface StudygroupManager {
 
     /**
@@ -40,6 +42,13 @@ public interface StudygroupManager {
      * @return
      */
     Page<Studygroup> getWithPaging(Integer page, Integer size);
+
+    /**
+     * 본인이 스터디 리더인 그룹 리스트
+     * @param email
+     * @return
+     */
+    List<Studygroup> getLeaderStudygroupList(String email);
 
     /**
      * 스터디 삭제
