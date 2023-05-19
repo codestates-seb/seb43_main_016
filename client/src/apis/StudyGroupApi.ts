@@ -5,15 +5,15 @@ import tokenRequestApi from "./TokenRequestApi";
 
 // ====================== 마이 스터디 리스트 조회 (GET) ===========================
 
-interface StudyGroup {
+export interface StudyGroupListDto {
   id: number;
   title: string;
   tagValues: string[];
 }
 
-export const getStudyGroupList = async (): Promise<StudyGroup[]> => {
+export const getStudyGroupList = async (): Promise<StudyGroupListDto[]> => {
   try {
-    const response = await tokenRequestApi.get<StudyGroup[]>(
+    const response = await tokenRequestApi.get<StudyGroupListDto[]>(
       "/studygroup/myList?approved=false"
     );
     const data = response.data;
