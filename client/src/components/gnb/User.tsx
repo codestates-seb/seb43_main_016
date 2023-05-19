@@ -5,8 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { getRefreshToken, removeTokens } from "../../pages/utils/Auth";
 import { eduApi } from "../../apis/EduApi";
 
-const refreshToken = getRefreshToken();
-
 type GNB = {
   profileImage: string;
   isLoggedIn: boolean;
@@ -17,16 +15,23 @@ const User = ({ profileImage, isLoggedIn, setIsLoggedIn }: GNB) => {
   const navigate = useNavigate();
 
   const handleLogout = (): void => {
-    eduApi.delete("/refresh", {
-      headers: {
-        Refresh: `${refreshToken}`,
-      },
-    });
-    tokenRequestApi.setAccessToken(null);
-    removeTokens();
-    setIsLoggedIn(false);
+    const refreshToken = getRefreshToken();
 
-    navigate("/");
+    eduApi
+      .delete("/refresh", {
+        headers: {
+          Refresh: `${refreshToken}`,
+        },
+      })
+      .then(() => {
+        tokenRequestApi.setAccessToken(null);
+        removeTokens();
+        setIsLoggedIn(false);
+        navigate("/");
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (

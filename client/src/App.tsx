@@ -14,6 +14,7 @@ import Redirect from "./pages/Redirect";
 //import { worker } from "./mocks/browser";
 import useRefreshToken from "./hooks/useRefreshToken";
 import Modal from "react-modal";
+import Home from "./pages/Home";
 
 const queryClient = new QueryClient();
 
@@ -46,7 +47,7 @@ function AppContent() {
               path="/"
               element={
                 <>
-                  <span>홈</span>
+                  <Home />
                 </>
               }
             />
