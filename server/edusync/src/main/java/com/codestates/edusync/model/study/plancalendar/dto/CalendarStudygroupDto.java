@@ -51,8 +51,6 @@ public class CalendarStudygroupDto {
             private String title;
             private String platform;
             private String description;
-
-            @Nullable
             private String color;
         }
 

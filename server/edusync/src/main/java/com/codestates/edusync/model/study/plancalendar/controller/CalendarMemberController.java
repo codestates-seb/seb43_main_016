@@ -63,7 +63,7 @@ public class CalendarMemberController {
 
         calendarMemberService.updateTimeSchedule(
                 timeScheduleId,
-                mapper.memberTimeSchedulePatchDtoToTimeSchedule(patchDto),
+                mapper.memberTimeSchedulePatchDtoToTimeSchedule(patchDto.getTimeSchedule()),
                 authentication.getPrincipal().toString()
         );
 

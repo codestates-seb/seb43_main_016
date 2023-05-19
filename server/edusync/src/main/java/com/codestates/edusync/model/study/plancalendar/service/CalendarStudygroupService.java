@@ -41,6 +41,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
             ts.setStudygroup(findStudygroup);
             ts.setTitle(findStudygroup.getStudyName());
             ts.setPlatform((findStudygroup.getPlatform()));
+            ts.setDescription(findStudygroup.getIntroduction());
+            // todo: color 기본값 적용할 수 있도록
         } );
         calendarRepository.saveAll(timeSchedules);
 
@@ -70,6 +72,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                             TimeSchedule result = new TimeSchedule();
                             result.setTitle(ts.getTitle());
                             result.setPlatform(ts.getPlatform());
+                            result.setDescription(ts.getDescription());
+                            result.setColor(ts.getColor());
                             result.setTime(ts.getTime());
                             result.setMember(studygroupJoin.getMember());
                             result.setStudygroup(findStudygroup);
@@ -91,6 +95,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
+        Optional.ofNullable(timeSchedule.getDescription()).ifPresent(findTimeSchedule::setDescription);
+        Optional.ofNullable(timeSchedule.getColor()).ifPresent(findTimeSchedule::setColor);
 
         findTimeSchedule.setTime(
                 new TimeRange(
@@ -130,6 +136,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         findTimeSchedules.forEach(ts -> {
             Optional.ofNullable(timeSchedule.getTitle()).ifPresent(ts::setTitle);
             Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(ts::setPlatform);
+            Optional.ofNullable(timeSchedule.getDescription()).ifPresent(ts::setDescription);
+            Optional.ofNullable(timeSchedule.getColor()).ifPresent(ts::setColor);
 
             ts.setTime(
                     new TimeRange(

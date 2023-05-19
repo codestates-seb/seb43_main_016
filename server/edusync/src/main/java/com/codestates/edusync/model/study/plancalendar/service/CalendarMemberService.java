@@ -42,6 +42,8 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
+        Optional.ofNullable(timeSchedule.getDescription()).ifPresent(findTimeSchedule::setDescription);
+        Optional.ofNullable(timeSchedule.getColor()).ifPresent(findTimeSchedule::setColor);
 
         findTimeSchedule.setTime(
                 new TimeRange(

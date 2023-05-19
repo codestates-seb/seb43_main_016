@@ -24,9 +24,9 @@ public interface CalendarMapper {
     @IterableMapping(qualifiedByName = "PostDtoToEntity")
     List<TimeSchedule> timeSchedulePostDtoListToTimeScheduleList(List<CalendarStudygroupDto.TimeScheduleDto.Post> timeSchedules);
 
-    @Mapping(source = "timeSchedule.studyTimeStart", target = "time.studyTimeStart")
-    @Mapping(source = "timeSchedule.studyTimeEnd", target = "time.studyTimeEnd")
-    TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarStudygroupDto.Patch patchDto);
+    @Mapping(source = "studyTimeStart", target = "time.studyTimeStart")
+    @Mapping(source = "studyTimeEnd", target = "time.studyTimeEnd")
+    TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarStudygroupDto.TimeScheduleDto.Patch patchDto);
 
     @Named("EntityToResponse")
     @Mapping(source = "time.studyTimeStart", target = "studyTimeStart")
@@ -64,9 +64,9 @@ public interface CalendarMapper {
     @Mapping(source = "studyTimeEnd", target = "time.studyTimeEnd")
     TimeSchedule memberTimeSchedulePostDtoToTimeSchedule(CalendarMemberDto.TimeScheduleDto.Post postMemberDto);
 
-    @Mapping(source = "timeSchedule.studyTimeStart", target = "time.studyTimeStart")
-    @Mapping(source = "timeSchedule.studyTimeEnd", target = "time.studyTimeEnd")
-    TimeSchedule memberTimeSchedulePatchDtoToTimeSchedule(CalendarMemberDto.Patch patchDto);
+    @Mapping(source = "studyTimeStart", target = "time.studyTimeStart")
+    @Mapping(source = "studyTimeEnd", target = "time.studyTimeEnd")
+    TimeSchedule memberTimeSchedulePatchDtoToTimeSchedule(CalendarMemberDto.TimeScheduleDto.Patch patchDto);
 
     default CalendarStudygroupResponseDto timeScheduleToCalendarStudygroupResponseDto(TimeSchedule ts) {
         CalendarStudygroupResponseDto result = new CalendarStudygroupResponseDto();

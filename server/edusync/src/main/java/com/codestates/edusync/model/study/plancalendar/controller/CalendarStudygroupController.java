@@ -48,7 +48,7 @@ public class CalendarStudygroupController {
                                                   Authentication authentication) {
         calendarStudygroupService.updateTimeSchedule(
                 studygroupId, timeScheduleId,
-                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto),
+                mapper.timeSchedulePatchDtoToTimeSchedule(patchDto.getTimeSchedule()),
                 authentication.getPrincipal().toString()
         );
 
