@@ -2,6 +2,8 @@ import { ChangeEvent, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import { updateMember, MemberUpdateDto } from "../../apis/MemberApi";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../../recoil/atoms/LogInState";
 
 const customStyles = {
   content: {
@@ -20,6 +22,7 @@ interface UserInfoEditModalProps {
 }
 
 const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
+  const isLoggedIn = useRecoilValue(LogInState);
   const [modalState, setModalState] = useState({
     nickname: "",
     password: "",
@@ -42,13 +45,13 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
       alert("새로운 비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.");
       return;
     }
-
     try {
       const updateDto: MemberUpdateDto = {
         nickName: modalState.nickname,
         password: modalState.password,
       };
-      updateMember(updateDto);
+      console.log(updateDto)
+      updateMember(isLoggedIn, updateDto);
       closeModal();
     } catch (error) {
       alert("로그인이 필요합니다.");

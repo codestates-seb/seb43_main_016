@@ -37,6 +37,28 @@ interface passwordData {
 }
 
 export const handlers = [
+  // TODO refreshToken 요청 테스트
+  rest.post(`${import.meta.env.VITE_APP_API_URL}/refresh`, (req, res, ctx) => {
+    // 요청 헤더에서 refresh 토큰을 추출합니다.
+    const refreshToken = req.headers.get('refresh');
+
+    // refresh 토큰이 유효한 경우 가짜 액세스 토큰을 생성하여 응답합니다.
+    if (refreshToken === '유효한_리프레시_토큰') {
+      const fakeAccessToken = '가짜_액세스_토큰';
+      // 가짜 액세스 토큰을 응답 헤더의 authorization에 설정합니다.
+      return res(
+        ctx.set('authorization', fakeAccessToken),
+        ctx.status(200)
+      );
+    }
+
+    // refresh 토큰이 유효하지 않은 경우 401 Unauthorized 응답을 반환합니다.
+    return res(
+      ctx.status(401),
+      ctx.json({ message: 'Unauthorized' })
+    );
+  }),
+
   // TODO 로그인 기능 테스트
   rest.post<LoginRequestBody, LoginResponse>(
     `${import.meta.env.VITE_APP_API_URL}/members/login`,

@@ -1,6 +1,26 @@
 import axios from "axios";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
 import tokenRequestApi from "./TokenRequestApi";
 
+// ====================== 개인이 속한 스터디 리스트 조회 (GET) ===========================
+export interface StudyGroupListDto {
+  id: number;
+  title: string;
+  tagValue: string[];
+}
+
+export const getStudyGroupList = async () => {
+  try {
+    const response = await tokenRequestApi.get<StudyGroupListDto[]>("/studygroup/myList?approved=false"
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("스터디 그룹 리스트를 불러오는데 실패했습니다.", error);
+    throw new Error("스터디 그룹 리스트를 불러오는데 실패했습니다.");
+  }
+}
 // ====================== 스터디 그룹 정보 조회 (GET) ===========================
 // TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
 export interface StudyInfoDto {
@@ -8,7 +28,7 @@ export interface StudyInfoDto {
   studyName: string;
   studyPeriodStart: string;
   studyPeriodEnd: string;
-  daysOfWeek: string;
+  daysOfWeek: string[];
   studyTimeStart: string;
   studyTimeEnd: string;
   memberCountMin: number;
@@ -16,7 +36,7 @@ export interface StudyInfoDto {
   memberCountCurrent: number;
   platform: string;
   introduction: string;
-  requited: boolean;
+  isRecruited: boolean;
   tags: {
     [key: string]: string;
   };
@@ -54,34 +74,32 @@ export interface StudyGroupUpdateDto {
 }
 
 // TODO : StudyGroup의 정보를 수정하는 코드
-export async function updateStudyGroupInfo(
-  data: StudyGroupUpdateDto
-  //accessToken: string | null
-) {
-  // * (accessToken === null)이 안되는 이유 : null이 아닌 undefined를 검사해야 하기 때문에!
-  //if (!accessToken) throw new Error("Access token is not defined.");
+export async function updateStudyGroupInfo(data: StudyGroupUpdateDto) {
+  const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
-    const response = await tokenRequestApi.patch(`/studygroup`, data);
-    console.log("Study group information updated successfully:", response.data);
+    const response = await tokenRequestApi.patch("/studygroup", data);
+    console.log("성공적으로 스터디 정보를 업데이트 했습니다", response.data);
   } catch (error) {
-    console.error("Error updating study group information:", error);
+    console.error("스터디 정보를 업데이트 하는데 실패했습니다", error);
   }
 }
 
 // ====================== 스터디 그룹 삭제 (DELETE) ===========================
 // TODO : StudyGroup의 정보를 삭제하는 코드
-export async function deleteStudyGroupInfo(
-  id: number
-  //accessToken: string | null
-) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
+export async function deleteStudyGroupInfo(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
     const response = await tokenRequestApi.delete(`/studygroup/${id}`);
-    console.log("Study group information deleted successfully:", response);
+    console.log("스터디가 삭제되었습니다.", response);
   } catch (error) {
-    console.error("Error deleting study group information:", error);
+    console.error(
+      "스터디 정보를 삭제하는데 실패했습니다. 권한을 확인하세요",
+      error
+    );
   }
 }
 
@@ -94,23 +112,16 @@ interface StudyGroupRecruitmentStatusUpdateDto {
 // TODO : StudyGroup의 모집 상태를 수정
 export async function updateStudyGroupRecruitmentStatus(
   id: number,
-  //accessToken: string | null,
   data: StudyGroupRecruitmentStatusUpdateDto
 ) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    data,
-  };
+  const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
-    const response = await tokenRequestApi.patch(`/studygroup/${id}`, config);
-    console.log(
-      "Study group recruitment status updated successfully:",
-      response
-    );
+    const response = await tokenRequestApi.patch(`/studygroup/${id}`, data);
+    console.log("스터디 모집 상태를 최신화하는데 성공했습니다", response);
   } catch {
-    console.error("Error updating study group recruitment status:", Error);
+    console.error("스터디 모집 상태를 최신화하는데 실패했습니다", Error);
   }
 }
 
@@ -123,23 +134,19 @@ interface StudyGroupMemberApprovalDto {
 // TODO : StudyGroup으로의 가입을 승인하는 코드
 export async function approveStudyGroupApplication(
   id: number,
-  //accessToken: string | null,
   data: StudyGroupMemberApprovalDto
 ) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
-
-  const config = {
-    data,
-  };
+  const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
     const response = await tokenRequestApi.post(
       `/studygroup/${id}/candidate`,
-      config
+      data
     );
-    console.log("Study group application approved successfully:", response);
+    console.log("해당 회원의 가입을 허가합니다", response);
   } catch (error) {
-    console.error("Error approving study group application:", error);
+    console.error("허가 요청이 실패했습니다", error);
   }
 }
 
@@ -160,20 +167,17 @@ export async function rejectStudyGroupApplication(
       `/studygroup/${id}/candidate`,
       config
     );
-    console.log("Study group application rejected successfully:", response);
+    console.log("가입 거절", response);
   } catch (error) {
-    console.error("Error rejecting study group application:", error);
+    console.error("예기치 못한 오류로 요청을 처리할 수 없습니다", error);
   }
 }
 
 // TODO : StudyGroup에서 강제 퇴출시키는 코드
 export async function forceExitStudyGroup(
   id: number,
-  //accessToken: string | null,
   data: StudyGroupMemberApprovalDto
 ) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
-
   const config = {
     data,
   };
@@ -183,25 +187,23 @@ export async function forceExitStudyGroup(
       `/studygroup/${id}/kick`,
       config
     );
-    console.log("Study group member forced to exit successfully:", response);
+    console.log("강제 탈퇴에 성공했습니다", response);
   } catch (error) {
-    console.error("Error forcing study group member to exit:", error);
+    console.error("강제탈퇴에 실패했습니다. 권한을 확인하세요", error);
   }
 }
 
 // ====================== 스터디원 가입 신청 철회 ===========================
 // TODO : StudyGroup의 가입 신청을 철회하는 코드
-export async function cancelStudyGroupApplication(
-  id: number
-  //accessToken: string | null
-) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
+export async function cancelStudyGroupApplication(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
 
   try {
     const response = await tokenRequestApi.delete(`/studygroup/${id}/join`);
-    console.log("Study group application canceled successfully:", response);
+    console.log("해당 그룹에 가입신청을 철회합니다", response);
   } catch (error) {
-    console.error("Error canceling study group application:", error);
+    console.error("가입 신청 철회에 실패했습니다", error);
   }
 }
 
@@ -212,47 +214,41 @@ interface StudyGroupMemberWaitingListDto {
 }
 
 // TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회하는 코드
-export async function getStudyGroupMemberWaitingList(
-  id: number
-  //accessToken: string | null
-) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
+export async function getStudyGroupMemberWaitingList(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
 
   try {
-    const response = await axios.get<StudyGroupMemberWaitingListDto>(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join-false`
+    const response = await tokenRequestApi.get<StudyGroupMemberWaitingListDto>(
+      `/studygroup/${id}/member?join-false`
     );
-    console.log(
-      "Study group member waiting list retrieved successfully:",
-      response
-    );
+    console.log("성공적으로 대기 리스트를 호출했습니다", response);
     return response.data;
   } catch (error) {
-    console.error("Error retrieving study group member waiting list:", error);
+    console.error(
+      "예기치 못한 오류로 인해 데이터를 불러오는데 실패했습니다",
+      error
+    );
   }
 }
 
 // ====================== 회원 리스트 ===========================
-
 // TODO 스터디 그룹에 가입된 회원 리스트
 interface StudyGroupMemberListDto {
   nickName: [string];
 }
 
 // TODO : StudyGroup에 가입된 멤버 리스트
-export async function getStudyGroupMemberList(
-  id: number
-  //accessToken: string | null
-) {
-  //if (!accessToken) throw new Error("Access token is not defined.");
-
+export async function getStudyGroupMemberList(id: number) {
+  const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
   try {
     const response = await tokenRequestApi.get<StudyGroupMemberListDto>(
       `/studygroup/${id}/member`
     );
-    console.log("Study group member list retrieved successfully:", response);
+    console.log("성공적으로 멤버 목록을 불러왔습니다", response);
     return response.data;
   } catch (error) {
-    console.error("Error retrieving study group member list:", error);
+    console.error("멤버 목록을 불러오는데 실패했습니다", error);
   }
 }
