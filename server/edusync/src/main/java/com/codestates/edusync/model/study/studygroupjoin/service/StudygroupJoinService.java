@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Transactional
@@ -78,6 +79,12 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         delStudygroupJoin(studygroupId, email, true);
     }
 
+    /**
+     * 스터디 가입신청을 처회하거나 탈퇴할 때, 사용되는 메서드
+     * @param studygroupId
+     * @param email
+     * @param isMember
+     */
     public void delStudygroupJoin(Long studygroupId, String email, boolean isMember) {
         Member loginMember = getLoginMember(email);
         StudygroupJoin studygroupJoin = null;
@@ -119,6 +126,13 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         studygroupJoinRepository.delete(getStudygroupJoin(studygroupId, nickName, true));
     }
 
+    /**
+     * 스터디 리더가 가입 거부하거나, 멤버를 강퇴할 때, 사용되는 메서드
+     * @param studygroupId
+     * @param nickName
+     * @param isMember
+     * @return
+     */
     private StudygroupJoin getStudygroupJoin(Long studygroupId, String nickName, boolean isMember) {
         StudygroupJoin studygroupJoin;
         if (isMember) {
@@ -136,5 +150,23 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         StudygroupJoin studygroupJoin = studygroupJoinRepository.findByMemberId(newLeader.getId());
         studygroupJoin.setMember(oldLeader);
         studygroupJoinRepository.save(studygroupJoin);
+    }
+
+    @Override
+    public List<Studygroup> getMyStudygroupList(String email, boolean isApproved) {
+        Member loginMember = getLoginMember(email);
+        List<StudygroupJoin> studygroupJoinList;
+        if (isApproved)
+            studygroupJoinList = studygroupJoinRepository.findAllByMemberIdAndIsApprovedIsTrue(loginMember.getId());
+        else
+            studygroupJoinList = studygroupJoinRepository.findAllByMemberIdAndIsApprovedIsFalse(loginMember.getId());
+
+        return studygroupJoinList.stream().map(StudygroupJoin::getStudygroup).collect(Collectors.toList());
+    }
+
+    // TODO: 2023-05-19 스터디 멤버 수 조회 확인 필요
+    @Override
+    public int getStudygroupMemberCount(Long studygroupId) {
+        return studygroupJoinRepository.findCountByStudygroupIdAndIsApprovedIsTrue(studygroupId);
     }
 }

@@ -1,6 +1,7 @@
 package com.codestates.edusync.model.study.studygroupjoin.service;
 
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 
 import java.util.List;
@@ -83,4 +84,19 @@ public interface StudygroupJoinManager {
      * @param oldLeader
      */
     void leaderChanged(Member newLeader, Member oldLeader);
+
+    /**
+     * 사용자가 신청한 | 가입된 스터디 리스트 조회
+     * @param email
+     * @param isApproved
+     * @return
+     */
+    List<Studygroup> getMyStudygroupList(String email, boolean isApproved);
+
+    /**
+     * 스터디 멤버 수
+     * @param studygroupId
+     * @return
+     */
+    int getStudygroupMemberCount(Long studygroupId);
 }
