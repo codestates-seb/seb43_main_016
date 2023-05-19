@@ -12,7 +12,7 @@ public class StudygroupPostCommentDto {
     @Getter
     public static class Post {
         @NotNull
-        private String platform;
+        private String content;
     }
 
     @NoArgsConstructor
@@ -21,6 +21,6 @@ public class StudygroupPostCommentDto {
     public static class Patch {
         private Long id;
 
-        private String platform;
+        private String content;
     }
 }

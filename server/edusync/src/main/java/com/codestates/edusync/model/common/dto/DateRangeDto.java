@@ -43,4 +43,14 @@ public class DateRangeDto {
         @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
         private LocalDateTime studyPeriodEnd;
     }
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class OnlyPeriodResponse {
+        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        private LocalDateTime studyPeriodStart;
+
+        @JsonFormat(pattern = "yyyy-MM-dd", timezone = "Asia/Seoul")
+        private LocalDateTime studyPeriodEnd;
+    }
 }

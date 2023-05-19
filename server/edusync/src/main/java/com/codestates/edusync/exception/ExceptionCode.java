@@ -27,15 +27,20 @@ public enum ExceptionCode {
     /**
      * 스터디 그룹 모집글에 대한 댓글 관련 에러 코드
      */
-    STUDYGROUP_POST_COMMENT_NOT_MATCHED(400, "해당 댓글은 해당 스터디 모집글에 존재하지 않습니다. 댓글의 식별자와 스터디 모집글의 식별자를 확인해주세요!"),
     STUDYGROUP_POST_COMMENT_NOT_ALLOWED(403, "댓글은 본인과 스터디장만 삭제할 수 있습니다."),
     STUDYGROUP_POST_COMMENT_ALLOWED_ONLY_FOR_LEADER(403, "스터디장에게만 있는 권한입니다."),
     STUDYGROUP_POST_COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
+    STUDYGROUP_POST_COMMENT_NOT_MATCHED(409, "해당 댓글은 해당 스터디 모집글에 존재하지 않습니다. 댓글의 식별자와 스터디 모집글의 식별자를 확인해주세요!"),
 
     /**
      * 스케쥴 관련 에러 코드
      */
+    TIME_SCHEDULE_NOT_ALLOWED(403, "해당 일정은 스터디에 종속되어있습니다. 스터디 일정은 개인이 수정할 수 없습니다!"),
     TIME_SCHEDULE_NOT_FOUND(404, "일정이 존재하지 않습니다."),
+    TIME_SCHEDULE_NOT_MATCHED_WITH_MEMBER(409, "해당 일정은 본인이 생성한 것이 아닙니다. 본인이 생성한 일정만 관리할 수 있습니다!"),
+    TIME_SCHEDULE_NOT_MATCHED_WITH_STUDYGROUP(409, "해당 일정은 해당 스터디글에 존재하지 않습니다. 일정의 식별자와 스터디의 식별자를 확인해주세요!"),
+    TIME_SCHEDULE_NOT_LINKED_WITH_MEMBER(409, "해당 일정은 맴버와 연결되어있지 않습니다. 요청이 잘못된 것 같습니다. 확인해주세요!"),
+    TIME_SCHEDULE_NOT_LINKED_WITH_STUDYGROUP(409, "해당 일정은 스터디 그룹과 연결되어있지 않습니다. 요청이 잘못된 것 같습니다. 확인해주세요!"),
 
     /**
      * 스터디 그룹 신청 관련 에렄 코드

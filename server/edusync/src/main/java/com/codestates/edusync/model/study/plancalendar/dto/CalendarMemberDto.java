@@ -36,6 +36,12 @@ public class CalendarMemberDto {
 
             @Nullable
             private String platform;
+
+            @Nullable
+            private String description;
+
+            @Nullable
+            private String color;
         }
 
         @NoArgsConstructor
@@ -44,6 +50,8 @@ public class CalendarMemberDto {
             private Long id;
             private String title;
             private String platform;
+            private String description;
+            private String color;
         }
     }
 }

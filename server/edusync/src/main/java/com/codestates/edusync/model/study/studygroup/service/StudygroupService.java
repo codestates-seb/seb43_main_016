@@ -7,6 +7,7 @@ import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
@@ -30,6 +31,7 @@ public class StudygroupService implements StudygroupManager{
     private final StudygroupRepository studygroupRepository;
     private final StudygroupJoinService studygroupJoinService;
     private final SearchTagService searchTagService;
+    private final CalendarStudygroupService calendarStudygroupService;
     private final VerifyStudygroupUtils studygroupUtils;
     private final MemberUtils memberUtils;
 
@@ -117,6 +119,7 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public void delete(String email, Long studygroupId) {
         if (studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId)) {
+            calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(studygroupId, email);
             studygroupRepository.deleteById(studygroupId);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
     }
