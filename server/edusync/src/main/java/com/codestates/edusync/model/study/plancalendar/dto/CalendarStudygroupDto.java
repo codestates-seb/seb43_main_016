@@ -35,6 +35,9 @@ public class CalendarStudygroupDto {
 
             @Nullable
             private String platform;
+
+            @Nullable
+            private String color;
         }
 
         @NoArgsConstructor
@@ -43,6 +46,9 @@ public class CalendarStudygroupDto {
             private Long id;
             private String title;
             private String platform;
+
+            @Nullable
+            private String color;
         }
 
     }
