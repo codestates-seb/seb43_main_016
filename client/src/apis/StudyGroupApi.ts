@@ -238,15 +238,17 @@ export interface StudyGroupMemberListDto {
 }
 
 // TODO : StudyGroup에 가입된 멤버 리스트
+
 export async function getStudyGroupMemberList (id: number, isLoggedIn : boolean) {
   if (!isLoggedIn)
     throw new Error("Access token is not defined.");
+
   try {
     const response = await axios.get<StudyGroupMemberListDto>(
       `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join=true`
     );
     console.log("성공적으로 멤버 목록을 불러왔습니다", response);
-    return response.data as StudyGroupMemberListDto;
+    return response.data as StudyGroupMemberListDto;\
   } catch (error) {
     console.error("멤버 목록을 불러오는데 실패했습니다", error);
   }
