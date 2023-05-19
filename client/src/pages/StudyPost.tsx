@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import TextEditor from "../components/TextEditor";
 import DaysOfWeek from "../components/DaysOfWeek";
 import tokenRequestApi from "../apis/TokenRequestApi";
+import TagInput from "../components/TagInput";
 
 const StudyPost = () => {
   const [studyName, setStudyName] = useState<string>("");
@@ -18,6 +19,12 @@ const StudyPost = () => {
   const [memberCountMax, setMemberCountMax] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
   const [introduction, setIntroduction] = useState<string>("");
+  const [selectedCategory, setSelectedCategory] =
+    useState<string>("프론트엔드");
+
+  const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(e.target.value);
+  };
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStudyName(e.target.value);
@@ -93,6 +100,21 @@ const StudyPost = () => {
 
         <StudyPostMain>
           <StudyPostInfo>
+            <span>분야</span>
+            <select
+              name="category"
+              value={selectedCategory}
+              onChange={handleCategory}
+            >
+              <option value="프론트엔드">프론트엔드</option>
+              <option value="백엔드">백엔드</option>
+              <option value="알고리즘">알고리즘</option>
+              <option value="인공지능">인공지능</option>
+              <option value="기타">기타</option>
+            </select>
+          </StudyPostInfo>
+
+          <StudyPostInfo>
             <span>일정</span>
             <input
               type="date"
@@ -154,6 +176,7 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>태그</span>
+            <TagInput selectedCategory={selectedCategory} />
           </StudyPostInfo>
           <StudyPostInput>
             <TextEditor handleContentChange={setIntroduction} />
@@ -226,7 +249,7 @@ const StudyPostMain = styled.div`
   align-items: flex-start;
 `;
 
-const StudyPostInfo = styled.div`
+const StudyPostInfo = styled.form`
   width: 800px;
   margin-bottom: 20px;
   display: flex;
