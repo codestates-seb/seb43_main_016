@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codestates.edusync.exception.ExceptionCode.YOU_ARE_NOT_STUDYGROUP_LEADER;
+import static com.codestates.edusync.exception.ExceptionCode.*;
 
 @Transactional
 @RequiredArgsConstructor
@@ -31,13 +31,18 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     public void createTimeSchedules(Long studygroupId,
                                     List<TimeSchedule> timeSchedules,
                                     String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+        if( !studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId) ) {
+            throw new BusinessLogicException(YOU_ARE_NOT_STUDYGROUP_LEADER);
+        }
+
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {
             ts.setStudygroup(findStudygroup);
             ts.setTitle(findStudygroup.getStudyName());
             ts.setPlatform((findStudygroup.getPlatform()));
+            ts.setDescription(findStudygroup.getIntroduction());
+            // todo: color 기본값 적용할 수 있도록
         } );
         calendarRepository.saveAll(timeSchedules);
 
@@ -67,6 +72,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                             TimeSchedule result = new TimeSchedule();
                             result.setTitle(ts.getTitle());
                             result.setPlatform(ts.getPlatform());
+                            result.setDescription(ts.getDescription());
+                            result.setColor(ts.getColor());
                             result.setTime(ts.getTime());
                             result.setMember(studygroupJoin.getMember());
                             result.setStudygroup(findStudygroup);
@@ -88,6 +95,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
+        Optional.ofNullable(timeSchedule.getDescription()).ifPresent(findTimeSchedule::setDescription);
+        Optional.ofNullable(timeSchedule.getColor()).ifPresent(findTimeSchedule::setColor);
 
         findTimeSchedule.setTime(
                 new TimeRange(
@@ -127,6 +136,8 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         findTimeSchedules.forEach(ts -> {
             Optional.ofNullable(timeSchedule.getTitle()).ifPresent(ts::setTitle);
             Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(ts::setPlatform);
+            Optional.ofNullable(timeSchedule.getDescription()).ifPresent(ts::setDescription);
+            Optional.ofNullable(timeSchedule.getColor()).ifPresent(ts::setColor);
 
             ts.setTime(
                     new TimeRange(
@@ -149,10 +160,19 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     @Override
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
+        TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        if( findTimeSchedule.getStudygroup() == null ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_LINKED_WITH_STUDYGROUP);
+        }
 
-        return calendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        if( !findTimeSchedule.getStudygroup().getId().equals(studygroupId) ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED_WITH_STUDYGROUP);
+        }
+
+        return findTimeSchedule;
     }
 
+    // todo : 스터디 삭제 시 일정 제거용으로 이걸 호출해야함
     @Override
     public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId,
                                                      String email) {
@@ -171,6 +191,9 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                                                    String email) {
         studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId);
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        if( !findTimeSchedule.getStudygroup().getId().equals(studygroupId) ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED_WITH_STUDYGROUP);
+        }
 
         calendarRepository.delete(findTimeSchedule);
     }

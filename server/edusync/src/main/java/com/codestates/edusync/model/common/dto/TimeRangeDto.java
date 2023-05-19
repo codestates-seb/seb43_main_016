@@ -1,6 +1,5 @@
 package com.codestates.edusync.model.common.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -37,10 +36,10 @@ public class TimeRangeDto {
     @Getter
     @Setter
     public static class Response {
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime studyTimeStart;
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime studyTimeEnd;
     }
 }

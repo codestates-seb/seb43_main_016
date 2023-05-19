@@ -21,6 +21,6 @@ public interface StudygroupPostCommentMapper {
     @Named("EntityToResponse")
     @Mapping(source = "id", target = "commentId")
     @Mapping(source = "studygroup.id", target = "studygroupId")
-    @Mapping(source = "member.id", target = "memberId")
+    @Mapping(source = "member.nickName", target = "nickName")
     StudygroupPostCommentResponseDto studygroupPostCommentToStudygroupPostCommentResponseDto(StudygroupPostComment comment);
 }

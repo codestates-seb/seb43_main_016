@@ -4,6 +4,7 @@ import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyCalendarUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
+import com.codestates.edusync.model.common.utils.VerifyTimeScheduleUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.repository.CalendarRepository;
@@ -19,14 +20,13 @@ import java.util.Optional;
 @Service
 public class CalendarMemberService {
     private final CalendarRepository calendarRepository;
-    private final VerifyCalendarUtils verifyCalendarUtils;
-    private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final VerifyCalendarUtils calendarUtils;
+    private final VerifyTimeScheduleUtils timeScheduleUtils;
     private final MemberUtils memberUtils;
 
 public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
                                                 String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
-
         timeSchedule.setMember(loginMember);
 
         calendarRepository.save(timeSchedule);
@@ -35,11 +35,15 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
     public void updateTimeSchedule(Long timeScheduleId,
                                    TimeSchedule timeSchedule,
                                    String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        TimeSchedule findTimeSchedule =
+                timeScheduleUtils.findVerifyTimeScheduleWithMember(
+                        timeScheduleId, email
+                );
 
         Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
         Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
+        Optional.ofNullable(timeSchedule.getDescription()).ifPresent(findTimeSchedule::setDescription);
+        Optional.ofNullable(timeSchedule.getColor()).ifPresent(findTimeSchedule::setColor);
 
         findTimeSchedule.setTime(
                 new TimeRange(
@@ -60,13 +64,15 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
 
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long timeScheduleId) {
 
-        return verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        return calendarUtils.findVerifyTimeSchedule(timeScheduleId);
     }
 
     public void deleteTimeScheduleByTimeScheduleId(Long timeScheduleId,
                                                    String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
-        TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        TimeSchedule findTimeSchedule =
+                timeScheduleUtils.findVerifyTimeScheduleWithMember(
+                        timeScheduleId, email
+                );
 
         calendarRepository.delete(findTimeSchedule);
     }

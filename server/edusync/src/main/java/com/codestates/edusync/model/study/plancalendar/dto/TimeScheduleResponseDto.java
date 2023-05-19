@@ -20,5 +20,5 @@ public class TimeScheduleResponseDto {
     private String platform;
 
     private TimeRangeDto.Response timeScheduleInfo;
-    private DateRangeDto.Response calendarInfo;
+    private DateRangeDto.OnlyPeriodResponse calendarInfo;
 }
