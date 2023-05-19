@@ -66,7 +66,7 @@ public interface StudygroupMapper {
      * @return
      * @throws Exception
      */
-    default StudygroupResponseDto StudygroupToStudygroupResponseDto(Studygroup studygroup){
+    default StudygroupResponseDto StudygroupToStudygroupResponseDto(Studygroup studygroup, String nickName){
         HashMap<String, String> tags = new HashMap<>();
         studygroup.getSearchTags()
                 .forEach(st -> tags.put(st.getTagKey(), st.getTagValue()));
@@ -95,22 +95,9 @@ public interface StudygroupMapper {
         responseDto.setIntroduction(studygroup.getIntroduction());
         responseDto.setIsRecruited((studygroup.getIsRecruited()));
         responseDto.setTags(tags);
-        responseDto.setLeader(memberToStudyLeader(studygroup.getLeaderMember()));
+        responseDto.setLeaderNickName(studygroup.getLeaderMember().getNickName());
+        responseDto.setLeader(studygroup.getLeaderMember().getNickName().equals(nickName));
         return responseDto;
-    }
-
-    /**
-     * 스터디 조회 시, 스터디 리더 정보 매핑
-     * @param member
-     * @return
-     * @throws Exception
-     */
-    default StudygroupResponseDto.StudyLeader memberToStudyLeader(Member member){
-        if (member == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
-        StudygroupResponseDto.StudyLeader leader = new StudygroupResponseDto.StudyLeader();
-        leader.setId(member.getId());
-        leader.setNickName(member.getNickName());
-        return leader;
     }
 
     /**

@@ -22,15 +22,8 @@ public class StudygroupResponseDto extends DateRangeDto.Response {
     private String introduction;
     private Boolean isRecruited;
     private HashMap<String, String> tags;
-    private StudyLeader leader;
-
-    @NoArgsConstructor
-    @Getter
-    @Setter
-    public static class StudyLeader {
-        private Long id;
-        private String nickName;
-    }
+    private String leaderNickName;
+    private boolean isLeader;
 
     /**
      * 스터디 조회

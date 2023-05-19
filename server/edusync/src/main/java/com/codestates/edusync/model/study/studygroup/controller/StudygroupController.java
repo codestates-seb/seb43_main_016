@@ -1,7 +1,9 @@
 package com.codestates.edusync.model.study.studygroup.controller;
 
 import com.codestates.edusync.model.common.dto.MultiResponseDto;
+import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.UriCreator;
+import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
@@ -29,6 +31,7 @@ public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
     private final StudygroupMapper studygroupMapper;
     private final StudygroupService studygroupService;
+    private final MemberUtils memberUtils;
 
     /**
      * 스터디 모집 & 등록
@@ -92,10 +95,12 @@ public class StudygroupController {
      * @return
      */
     @GetMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
-    public ResponseEntity getStudygroupDetail(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+    public ResponseEntity getStudygroupDetail(Authentication authentication,
+                                              @PathVariable("studygroup-id") @Positive Long studygroupId) {
 
+        Member member = memberUtils.get(authentication.getPrincipal().toString());
         Studygroup studygroup = studygroupService.get(studygroupId);
-        StudygroupResponseDto responseDto = studygroupMapper.StudygroupToStudygroupResponseDto(studygroup);
+        StudygroupResponseDto responseDto = studygroupMapper.StudygroupToStudygroupResponseDto(studygroup, member.getNickName());
 
         return ResponseEntity.ok(responseDto);
     }

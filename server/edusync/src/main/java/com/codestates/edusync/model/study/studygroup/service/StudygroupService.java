@@ -88,11 +88,14 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public Studygroup get(Long studygroupId) {
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
+
         // todo : searchTag null 값으로 수동 셋, 확인 필요
         findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
+
         // todo : 스터디 멤버 카운트 확인 필요
         //findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
         findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size()+1);
+
         return findStudygroup;
     }
 
