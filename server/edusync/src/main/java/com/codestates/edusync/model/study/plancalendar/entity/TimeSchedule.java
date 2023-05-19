@@ -24,6 +24,9 @@ public class TimeSchedule extends BaseEntity {
     @Column(length = 200)
     private String platform;
 
+    @Column(length = 2000)
+    private String description;
+
     @Embedded
     private TimeRange time;
 

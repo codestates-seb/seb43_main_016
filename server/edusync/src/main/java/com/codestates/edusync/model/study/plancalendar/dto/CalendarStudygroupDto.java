@@ -7,6 +7,7 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Null;
 
 public class CalendarStudygroupDto {
 
@@ -37,6 +38,9 @@ public class CalendarStudygroupDto {
             private String platform;
 
             @Nullable
+            private String description;
+
+            @Nullable
             private String color;
         }
 
@@ -46,6 +50,7 @@ public class CalendarStudygroupDto {
             private Long id;
             private String title;
             private String platform;
+            private String description;
 
             @Nullable
             private String color;

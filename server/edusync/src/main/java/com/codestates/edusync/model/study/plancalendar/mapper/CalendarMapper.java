@@ -82,7 +82,7 @@ public interface CalendarMapper {
         resultCalendar.setStudyPeriodEnd(ts.getStudygroup().getDate().getStudyPeriodEnd());
         result.setCalendar(resultCalendar);
 
-        TimeRangeDto.Response resultSchedule = new CalendarResponseDto();
+        TimeRangeDto.Response resultSchedule = new TimeRangeDto.Response();
         resultSchedule.setStudyTimeStart(ts.getTime().getStudyTimeStart());
         resultSchedule.setStudyTimeEnd(ts.getTime().getStudyTimeEnd());
         result.setSchedule(resultSchedule);
@@ -104,28 +104,18 @@ public interface CalendarMapper {
         CalendarMemberResponseDto result = new CalendarMemberResponseDto();
 
         result.setCalendarId(ts.getId());
-        result.setGroupId(ts.getStudygroup().getId());
 
         result.setTitle(ts.getTitle());
         result.setAllDay(false);
 
-        DateRangeDto.OnlyPeriodResponse resultCalendar = new DateRangeDto.OnlyPeriodResponse();
-        resultCalendar.setStudyPeriodStart(ts.getStudygroup().getDate().getStudyPeriodStart());
-        resultCalendar.setStudyPeriodEnd(ts.getStudygroup().getDate().getStudyPeriodEnd());
-        result.setCalendar(resultCalendar);
-
-        TimeRangeDto.Response resultSchedule = new CalendarResponseDto();
+        TimeRangeDto.Response resultSchedule = new TimeRangeDto.Response();
         resultSchedule.setStudyTimeStart(ts.getTime().getStudyTimeStart());
         resultSchedule.setStudyTimeEnd(ts.getTime().getStudyTimeEnd());
         result.setSchedule(resultSchedule);
 
-        result.setPlatform(ts.getStudygroup().getPlatform());
-        result.setDescription(ts.getStudygroup().getIntroduction());
+        result.setPlatform(ts.getPlatform());
+        result.setDescription(ts.getDescription());
         result.setOverlap(true);
-
-        Map<String, String> resultExtendedProps = new HashMap<>();
-        resultExtendedProps.put("department", ts.getStudygroup().getStudyName());
-        result.setExtendedProps(resultExtendedProps);
 
         result.setColor(ts.getColor());
 
