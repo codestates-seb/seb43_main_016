@@ -8,7 +8,7 @@ import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactor
 import org.springframework.data.redis.core.RedisTemplate;
 
 @Configuration
-public class RedisConfig {
+public class RedisConfig { // Redis Template을 사용하기 위한 클래스 (확장성을 고려해 추가. 지금은 사실상 안쓰이는 코드)
 
     private final String redisHost;
     private final int redisPort;
