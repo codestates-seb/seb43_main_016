@@ -6,8 +6,11 @@ import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
+import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
+import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
+import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -16,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -23,6 +27,7 @@ import java.util.Optional;
 @Service
 public class StudygroupService implements StudygroupManager{
     private final StudygroupRepository studygroupRepository;
+    private final StudygroupJoinService studygroupJoinService;
     private final SearchTagService searchTagService;
     private final VerifyStudygroupUtils studygroupUtils;
     private final MemberUtils memberUtils;
@@ -93,9 +98,32 @@ public class StudygroupService implements StudygroupManager{
     }
 
     @Override
-    public void delete(String email, Long studygroupId){
+    public void delete(String email, Long studygroupId) {
         if (studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId)) {
             studygroupRepository.deleteById(studygroupId);
         } else throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+    }
+
+    @Override
+    public void patchLeader(String email, Long studygroupId, String newLeaderNickName) {
+        studygroupUtils.studygroupLeaderCheck(email, studygroupId);
+        Studygroup findStudygroup = get(studygroupId);
+        List<StudygroupJoin> studygroupJoins = findStudygroup.getStudygroupJoins();
+        Member member = null;
+
+        for (StudygroupJoin studygroupJoin : studygroupJoins) {
+            if (studygroupJoin.getMember().getNickName().equals(newLeaderNickName)) {
+                member = studygroupJoin.getMember();
+                break;
+            }
+        }
+
+        if (member == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        findStudygroup.setLeaderMember(member);
+        studygroupRepository.save(findStudygroup);
+
+        Member oldLeader = memberUtils.get(email);
+        Member newLeader = member;
+        studygroupJoinService.leaderChanged(newLeader, oldLeader);
     }
 }

@@ -19,4 +19,6 @@ public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, 
      * @return
      */
     List<StudygroupJoin> findAllByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
+
+    StudygroupJoin findByMemberId(Long memberId);
 }

@@ -5,6 +5,7 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.repository.StudygroupJoinRepository;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     private final VerifyStudygroupUtils verifyStudygroupUtils;
     private final MemberUtils memberUtils;
 
-    private Member getMember(String email) {
+    private Member getLoginMember(String email) {
         return memberUtils.getLoggedIn(email);
     }
 
@@ -54,7 +55,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void createCandidate(Long studygroupId, String email) {
-        Member loginMember = getMember(email);
+        Member loginMember = getLoginMember(email);
         if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
             throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
         }
@@ -78,7 +79,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     public void delStudygroupJoin(Long studygroupId, String email, boolean isMember) {
-        Member loginMember = getMember(email);
+        Member loginMember = getLoginMember(email);
         StudygroupJoin studygroupJoin = null;
         List<StudygroupJoin> studygroupJoins;
 
@@ -128,5 +129,12 @@ public class StudygroupJoinService implements StudygroupJoinManager {
             if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
         }
         return studygroupJoin;
+    }
+
+    @Override
+    public void leaderChanged(Member newLeader, Member oldLeader) {
+        StudygroupJoin studygroupJoin = studygroupJoinRepository.findByMemberId(newLeader.getId());
+        studygroupJoin.setMember(oldLeader);
+        studygroupJoinRepository.save(studygroupJoin);
     }
 }
