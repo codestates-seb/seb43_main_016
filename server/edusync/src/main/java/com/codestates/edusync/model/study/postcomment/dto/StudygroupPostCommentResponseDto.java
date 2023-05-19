@@ -10,6 +10,6 @@ import lombok.Setter;
 public class StudygroupPostCommentResponseDto {
     private Long commentId;
     private Long studygroupId;
-    private Long memberId;
+    private String nickName;
     private String content;
 }

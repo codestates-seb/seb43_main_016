@@ -31,7 +31,10 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     public void createTimeSchedules(Long studygroupId,
                                     List<TimeSchedule> timeSchedules,
                                     String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+        if( !studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId) ) {
+            throw new BusinessLogicException(YOU_ARE_NOT_STUDYGROUP_LEADER);
+        }
+
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
         timeSchedules.forEach(ts -> {

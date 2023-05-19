@@ -8,6 +8,7 @@ import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupDto;
 import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.Named;
 
 import java.util.List;
@@ -16,13 +17,19 @@ import java.util.List;
 public interface CalendarMapper {
 
     @Named("PostDtoToEntity")
+    @Mapping(source = "studyTimeStart", target = "time.studyTimeStart")
+    @Mapping(source = "studyTimeEnd", target = "time.studyTimeEnd")
     TimeSchedule timeSchedulePostDtoToTimeSchedule(CalendarStudygroupDto.TimeScheduleDto.Post postStudygroupDto);
 
     @IterableMapping(qualifiedByName = "PostDtoToEntity")
     List<TimeSchedule> timeSchedulePostDtoListToTimeScheduleList(List<CalendarStudygroupDto.TimeScheduleDto.Post> timeSchedules);
 
+    @Mapping(source = "timeSchedule.studyTimeStart", target = "time.studyTimeStart")
+    @Mapping(source = "timeSchedule.studyTimeEnd", target = "time.studyTimeEnd")
     TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarStudygroupDto.Patch patchDto);
 
+    @Mapping(source = "time.studyTimeStart", target = "studyTimeStart")
+    @Mapping(source = "time.studyTimeEnd", target = "studyTimeEnd")
     List<TimeRangeDto.Response> timeScheduleListToTimeScheduleResponseDto(List<TimeSchedule> timeSchedules);
 
     default TimeScheduleResponseDto timeScheduleToTimeScheduleResponseDto(TimeSchedule ts) {
@@ -49,7 +56,11 @@ public interface CalendarMapper {
     }
 
 
+    @Mapping(source = "studyTimeStart", target = "time.studyTimeStart")
+    @Mapping(source = "studyTimeEnd", target = "time.studyTimeEnd")
     TimeSchedule memberTimeSchedulePostDtoToTimeSchedule(CalendarMemberDto.TimeScheduleDto.Post postMemberDto);
-    TimeSchedule memberTimeSchedulePatchDtoToTimeSchedule(CalendarMemberDto.Patch patchDto);
 
+    @Mapping(source = "timeSchedule.studyTimeStart", target = "time.studyTimeStart")
+    @Mapping(source = "timeSchedule.studyTimeEnd", target = "time.studyTimeEnd")
+    TimeSchedule memberTimeSchedulePatchDtoToTimeSchedule(CalendarMemberDto.Patch patchDto);
 }
