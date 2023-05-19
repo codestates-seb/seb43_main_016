@@ -3,24 +3,26 @@ import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import tokenRequestApi from "./TokenRequestApi";
 
-// ====================== 개인이 속한 스터디 리스트 조회 (GET) ===========================
-export interface StudyGroupListDto {
+// ====================== 마이 스터디 리스트 조회 (GET) ===========================
+
+interface StudyGroup {
   id: number;
   title: string;
-  tagValue: string[];
+  tagValues: string[];
 }
 
-export const getStudyGroupList = async () => {
+export const getStudyGroupList = async (): Promise<StudyGroup[]> => {
   try {
-    const response = await tokenRequestApi.get<StudyGroupListDto[]>("/studygroup/myList?approved=false"
+    const response = await tokenRequestApi.get<StudyGroup[]>(
+      "/studygroup/myList?approved=false"
     );
     const data = response.data;
     return data;
   } catch (error) {
-    console.error("스터디 그룹 리스트를 불러오는데 실패했습니다.", error);
+    console.log(error);
     throw new Error("스터디 그룹 리스트를 불러오는데 실패했습니다.");
   }
-}
+};
 // ====================== 스터디 그룹 정보 조회 (GET) ===========================
 // TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
 export interface StudyInfoDto {
@@ -77,7 +79,6 @@ export interface StudyGroupUpdateDto {
 export async function updateStudyGroupInfo(data: StudyGroupUpdateDto) {
   const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
-
   try {
     const response = await tokenRequestApi.patch("/studygroup", data);
     console.log("성공적으로 스터디 정보를 업데이트 했습니다", response.data);
@@ -91,7 +92,6 @@ export async function updateStudyGroupInfo(data: StudyGroupUpdateDto) {
 export async function deleteStudyGroupInfo(id: number) {
   const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
-
   try {
     const response = await tokenRequestApi.delete(`/studygroup/${id}`);
     console.log("스터디가 삭제되었습니다.", response);
@@ -116,7 +116,6 @@ export async function updateStudyGroupRecruitmentStatus(
 ) {
   const isLoggedIn = useRecoilValue(LogInState);
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
-
   try {
     const response = await tokenRequestApi.patch(`/studygroup/${id}`, data);
     console.log("스터디 모집 상태를 최신화하는데 성공했습니다", response);
@@ -234,20 +233,22 @@ export async function getStudyGroupMemberWaitingList(id: number) {
 
 // ====================== 회원 리스트 ===========================
 // TODO 스터디 그룹에 가입된 회원 리스트
-interface StudyGroupMemberListDto {
+export interface StudyGroupMemberListDto {
   nickName: [string];
 }
 
 // TODO : StudyGroup에 가입된 멤버 리스트
-export async function getStudyGroupMemberList(id: number) {
-  const isLoggedIn = useRecoilValue(LogInState);
-  if (!isLoggedIn) throw new Error("Access token is not defined.");
+
+export async function getStudyGroupMemberList (id: number, isLoggedIn : boolean) {
+  if (!isLoggedIn)
+    throw new Error("Access token is not defined.");
+
   try {
-    const response = await tokenRequestApi.get<StudyGroupMemberListDto>(
-      `/studygroup/${id}/member`
+    const response = await axios.get<StudyGroupMemberListDto>(
+      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join=true`
     );
     console.log("성공적으로 멤버 목록을 불러왔습니다", response);
-    return response.data;
+    return response.data as StudyGroupMemberListDto;\
   } catch (error) {
     console.error("멤버 목록을 불러오는데 실패했습니다", error);
   }
