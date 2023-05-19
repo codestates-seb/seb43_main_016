@@ -57,4 +57,12 @@ public class StudygroupDto {
 
         private HashMap<String, String> tags;
     }
+
+    @NoArgsConstructor
+    @Getter
+    @Setter
+    public static class PatchLeader {
+        @NotNull
+        private String nickName;
+    }
 }
