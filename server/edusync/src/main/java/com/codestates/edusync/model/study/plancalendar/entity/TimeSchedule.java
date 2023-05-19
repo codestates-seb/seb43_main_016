@@ -35,6 +35,8 @@ public class TimeSchedule extends BaseEntity {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @Column(length = 10)
+    private String color;
 
     /**
      * <h2>양방향 매핑을 위한 메서드</h2>

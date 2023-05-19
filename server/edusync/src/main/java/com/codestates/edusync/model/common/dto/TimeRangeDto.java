@@ -1,6 +1,5 @@
 package com.codestates.edusync.model.common.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

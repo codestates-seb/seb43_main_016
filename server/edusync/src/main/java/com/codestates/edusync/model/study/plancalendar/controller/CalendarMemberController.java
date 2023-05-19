@@ -2,6 +2,7 @@ package com.codestates.edusync.model.study.plancalendar.controller;
 
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarMemberDto;
+import com.codestates.edusync.model.study.plancalendar.dto.CalendarMemberResponseDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.mapper.CalendarMapper;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarMemberService;
@@ -101,8 +102,8 @@ public class CalendarMemberController {
                         timeScheduleId
                 );
 
-        TimeScheduleResponseDto responseDto =
-                mapper.timeScheduleToTimeScheduleResponseDto(findTimeSchedule);
+        CalendarMemberResponseDto responseDto =
+                mapper.timeScheduleToCalendarMemberResponseDto(findTimeSchedule);
 
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
