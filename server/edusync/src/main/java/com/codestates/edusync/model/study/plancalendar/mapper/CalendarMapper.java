@@ -28,8 +28,12 @@ public interface CalendarMapper {
     @Mapping(source = "timeSchedule.studyTimeEnd", target = "time.studyTimeEnd")
     TimeSchedule timeSchedulePatchDtoToTimeSchedule(CalendarStudygroupDto.Patch patchDto);
 
+    @Named("EntityToResponse")
     @Mapping(source = "time.studyTimeStart", target = "studyTimeStart")
     @Mapping(source = "time.studyTimeEnd", target = "studyTimeEnd")
+    TimeRangeDto.Response timeScheduleListToTimeScheduleResponseDto(TimeSchedule timeSchedules);
+
+    @IterableMapping(qualifiedByName = "EntityToResponse")
     List<TimeRangeDto.Response> timeScheduleListToTimeScheduleResponseDto(List<TimeSchedule> timeSchedules);
 
     default TimeScheduleResponseDto timeScheduleToTimeScheduleResponseDto(TimeSchedule ts) {
@@ -49,7 +53,7 @@ public interface CalendarMapper {
         resultTR.setStudyTimeEnd(ts.getTime().getStudyTimeEnd());
         result.setTimeScheduleInfo(resultTR);
 
-        DateRangeDto.Response resultDR = new DateRangeDto.Response();
+        DateRangeDto.OnlyPeriodResponse resultDR = new DateRangeDto.OnlyPeriodResponse();
         resultDR.setStudyPeriodStart(ts.getStudygroup().getDate().getStudyPeriodStart());
         resultDR.setStudyPeriodEnd(ts.getStudygroup().getDate().getStudyPeriodEnd());
         result.setCalendarInfo(resultDR);

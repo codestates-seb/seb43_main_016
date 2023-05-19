@@ -37,10 +37,10 @@ public class TimeRangeDto {
     @Getter
     @Setter
     public static class Response {
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime studyTimeStart;
 
-        @JsonFormat(pattern = "yyyy-MM-dd HH:mm", timezone = "Asia/Seoul")
+        @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime studyTimeEnd;
     }
 }

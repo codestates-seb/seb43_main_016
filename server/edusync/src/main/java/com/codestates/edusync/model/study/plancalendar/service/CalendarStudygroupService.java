@@ -15,7 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.codestates.edusync.exception.ExceptionCode.YOU_ARE_NOT_STUDYGROUP_LEADER;
+import static com.codestates.edusync.exception.ExceptionCode.*;
 
 @Transactional
 @RequiredArgsConstructor
@@ -152,8 +152,12 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     @Override
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
+        TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        if( !findTimeSchedule.getStudygroup().getId().equals(studygroupId) ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED);
+        }
 
-        return calendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        return findTimeSchedule;
     }
 
     @Override
