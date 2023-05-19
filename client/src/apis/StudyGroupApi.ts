@@ -3,6 +3,24 @@ import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import tokenRequestApi from "./TokenRequestApi";
 
+// ====================== 개인이 속한 스터디 리스트 조회 (GET) ===========================
+export interface StudyGroupListDto {
+  id: number;
+  title: string;
+  tagValue: string[];
+}
+
+export const getStudyGroupList = async () => {
+  try {
+    const response = await tokenRequestApi.get<StudyGroupListDto[]>("/studygroup/myList?approved=false"
+    );
+    const data = response.data;
+    return data;
+  } catch (error) {
+    console.error("스터디 그룹 리스트를 불러오는데 실패했습니다.", error);
+    throw new Error("스터디 그룹 리스트를 불러오는데 실패했습니다.");
+  }
+}
 // ====================== 스터디 그룹 정보 조회 (GET) ===========================
 // TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
 export interface StudyInfoDto {
@@ -10,7 +28,7 @@ export interface StudyInfoDto {
   studyName: string;
   studyPeriodStart: string;
   studyPeriodEnd: string;
-  daysOfWeek: string;
+  daysOfWeek: string[];
   studyTimeStart: string;
   studyTimeEnd: string;
   memberCountMin: number;
@@ -18,7 +36,7 @@ export interface StudyInfoDto {
   memberCountCurrent: number;
   platform: string;
   introduction: string;
-  requited: boolean;
+  isRecruited: boolean;
   tags: {
     [key: string]: string;
   };
@@ -155,13 +173,11 @@ export async function rejectStudyGroupApplication(
   }
 }
 
-// 여기서부터
 // TODO : StudyGroup에서 강제 퇴출시키는 코드
 export async function forceExitStudyGroup(
   id: number,
   data: StudyGroupMemberApprovalDto
 ) {
-
   const config = {
     data,
   };
@@ -217,7 +233,6 @@ export async function getStudyGroupMemberWaitingList(id: number) {
 }
 
 // ====================== 회원 리스트 ===========================
-
 // TODO 스터디 그룹에 가입된 회원 리스트
 interface StudyGroupMemberListDto {
   nickName: [string];
@@ -226,7 +241,7 @@ interface StudyGroupMemberListDto {
 // TODO : StudyGroup에 가입된 멤버 리스트
 export async function getStudyGroupMemberList(id: number) {
   const isLoggedIn = useRecoilValue(LogInState);
-  if (!isLoggedIn) throw new Error("Access token is not defined.")
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
   try {
     const response = await tokenRequestApi.get<StudyGroupMemberListDto>(
       `/studygroup/${id}/member`
