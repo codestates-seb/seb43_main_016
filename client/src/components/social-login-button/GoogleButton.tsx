@@ -18,7 +18,7 @@ function GoogleButton() {
 
 const GoogleLoginButton = styled.div`
   img {
-    width: 50px;
+    width: 46px;
     border-radius: 50%;
     margin: 15px;
   }
