@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +81,10 @@ public class StudygroupService implements StudygroupManager{
     public boolean updateStatus(String email, Long studygroupId) {
         studygroupUtils.studygroupLeaderCheck(email, studygroupId);
         Studygroup findStudygroup = get(studygroupId);
-        findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
+        if (findStudygroup.getIsRecruited()) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
+        }
+        findStudygroup.setIsRecruited(true);
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
     }
