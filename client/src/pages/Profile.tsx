@@ -26,7 +26,7 @@ const Profile = () => {
       <Routes>
         <Route path="/" element={<ProfileInfo />} />
         <Route path="/manage-group" element={<ProfileStudyList />} />
-        <Route path="/:studyId" element={<ProfileStudyManage id={0} />} />
+        <Route path="/:studyId" element={<ProfileStudyManage id={1} />} />
         <Route path="/calendar" element={<ProfileCalendar />} />
       </Routes>
     </Wrapper>

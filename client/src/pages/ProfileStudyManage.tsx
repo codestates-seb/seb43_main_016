@@ -1,14 +1,10 @@
 import { useState, useEffect } from "react";
-import {
-  deleteStudyGroupInfo,
-  getStudyGroupInfo,
-  StudyInfoDto,
-} from "../apis/StudyGroupApi";
+import { deleteStudyGroupInfo, getStudyGroupInfo, StudyInfoDto } from "../apis/StudyGroupApi";
 import styled from "styled-components";
 import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
-// Props로 전달받은 id(스터디 그룹의 아이디)를 정의
+
 interface ReadStudyInfoProps {
-  id: number;
+  id: 1;
 }
 
 const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
@@ -27,7 +23,7 @@ const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
     };
 
     fetchStudyGroupInfo();
-  }, []);
+  }, [id]);
 
   // TODO : 스터디 정보를 수정하는 코드
   const handleEditClick = () => {
@@ -36,10 +32,6 @@ const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
 
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
-    //if (accessToken === undefined) {
-    //  alert("권한이 없습니다.");
-    //  return;
-    //}
     try {
       await deleteStudyGroupInfo(id);
     } catch (error) {

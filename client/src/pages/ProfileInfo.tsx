@@ -11,23 +11,27 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
 
 const ProfileInfo = () => {
+  const isLoggedIn = useRecoilValue(LogInState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoResponseDto | null>(
     null
   ); // 멤버 정보의 조회 (서버 원천 데이터)
-  const [introduceInfo, setIntroduceInfo] = useState<MemberDetailDto | null>(
-    null
-  );
+  const [introduceInfo, setIntroduceInfo] = useState<MemberDetailDto>({
+    aboutMe: memberInfo?.aboutMe || "",
+    withMe: memberInfo?.withMe || "",
+  });
+  // 멤버 정보 수정 (클라이언트에서 수정된 데이터)
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
   useEffect(() => {
     const fetchMemberInfo = async () => {
       try {
-        //const accessToken = localStorage.getItem("accessToken");
-        const info = await getMemberInfo();
+        const info = await getMemberInfo(isLoggedIn);
         setMemberInfo(info);
       } catch (error) {
         alert("로그인이 필요합니다.");
@@ -35,17 +39,14 @@ const ProfileInfo = () => {
       }
     };
     fetchMemberInfo();
-  }, []);
+  }, [isModalOpen, isLoggedIn]);
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
   const handleEditClick = async () => {
     const enteredPassword = prompt(
       "개인정보 수정 전 비밀번호를 확인해야 합니다."
-    ); // ! 해당 부분 추후 모달창으로 대체
-    //const accessToken = localStorage.getItem("accessToken");
-
+    );
     if (!enteredPassword) return; // 비밀번호 입력을 취소하면 함수 종료
-    // 비밀번호 검증
     try {
       const passwordCheckDto: MemberPasswordCheckDto = {
         password: enteredPassword,
@@ -73,7 +74,6 @@ const ProfileInfo = () => {
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
   const handleSaveClick = async () => {
-    //const accessToken = localStorage.getItem("accessToken");
     try {
       const memberDetailDto: MemberDetailDto = {
         aboutMe: introduceInfo?.aboutMe || "",
@@ -89,7 +89,6 @@ const ProfileInfo = () => {
 
   // TODO DELETE 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에서 DELETE하는 코드
   const handleDeleteClick = async () => {
-    //const accessToken = localStorage.getItem("accessToken");
     try {
       await deleteMember();
     } catch (error) {
