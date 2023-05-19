@@ -1,41 +1,48 @@
 import styled from "styled-components";
-// import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-// import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
+import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
 
-const StudyListBox = () => {
-  // const [data, setData] = useState<any>("");
+type Props = {
+  studyGroupId: number;
+};
 
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const result = await getStudyGroupInfo(2);
-  //       console.log(result);
-  //       setData(result);
-  //     } catch (error) {
-  //       console.error("Error during GET request:", error);
-  //     }
-  //   };
+const StudyListBox = (props: Props) => {
+  const { studyGroupId } = props;
+  // 중괄호 구조분해할당, 이렇게 해야 임의의 변수명을 새로 짓는 게 아니라 원래 껄 가져오는 게 됨
+  const [fetching, setFetching] = useState(true);
+  const [data, setData] = useState<StudyInfoDto>();
 
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await getStudyGroupInfo(studyGroupId);
+      if (result) setData(result);
+      setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
+    };
+    // try catch는 명시적인 exeption이 없을 때만 뜬다, if로 명시적 예외처리 했으면 안쓴다?
+    // throw를 했을 때 잡는다? 안하는 게 좋다
+    fetchData();
+  }, []);
 
   return (
-    <StudyListBoxContainer>
-      <Link to="/studycontent">
-        <StudyListImage></StudyListImage>
-        <StudyListTitle>
-          {/* {data.map((item: StudyInfoDto) => (
-            <h3 key={item.id}>{item.studyName}</h3>
-          ))} */}
-          <h3>Dummy Title</h3>
-        </StudyListTitle>
-        <StudyListTag>
-          <div>javascript</div>
-          <div>typescript</div>
-        </StudyListTag>
-      </Link>
-    </StudyListBoxContainer>
+    <>
+      {!fetching && (
+        <StudyListBoxContainer>
+          <Link to="/studycontent">
+            <StudyListImage></StudyListImage>
+            <StudyListTitle>
+              <h3 key={data?.id}>{data?.studyName}</h3>
+              {/* 요소 렌더링하는 게 하나일 땐 map을 쓸 수 없다 */}
+              {/* <h3>Dummy Title</h3> */}
+            </StudyListTitle>
+            <StudyListTag>
+              <div>javascript</div>
+              <div>typescript</div>
+            </StudyListTag>
+          </Link>
+        </StudyListBoxContainer>
+      )}
+    </>
   );
 };
 
