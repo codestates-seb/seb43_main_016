@@ -160,6 +160,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         return findTimeSchedule;
     }
 
+    // todo : 스터디 삭제 시 일정 제거용으로 이걸 호출해야함
     @Override
     public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId,
                                                      String email) {
@@ -178,6 +179,9 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                                                    String email) {
         studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId);
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        if( !findTimeSchedule.getStudygroup().getId().equals(studygroupId) ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED);
+        }
 
         calendarRepository.delete(findTimeSchedule);
     }
