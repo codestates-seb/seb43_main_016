@@ -77,7 +77,7 @@ const ProfileStudyList = () => {
           console.log(studyInfo);
           // 가져온 스터디 그룹 정보를 처리하거나 원하는 작업을 수행
         } catch (error) {
-          console.error("스터디 그룹 정보를 불러오는데 실패했습니다.", error);
+          console.log(error)
         }
       }
     };
