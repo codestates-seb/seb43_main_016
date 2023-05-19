@@ -8,7 +8,7 @@ import com.codestates.edusync.model.study.plancalendar.repository.CalendarReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_LINKED;
+import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_LINKED_WITH_MEMBER;
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_MATCHED_WITH_MEMBER;
 
 @RequiredArgsConstructor
@@ -28,7 +28,7 @@ public class VerifyTimeScheduleUtils {
         TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         if( findTimeSchedule.getMember() == null ) {
-            throw new BusinessLogicException(TIME_SCHEDULE_NOT_LINKED);
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_LINKED_WITH_MEMBER);
         }
 
         if( !findTimeSchedule.getMember().getId().equals(loginMember.getId()) ) {

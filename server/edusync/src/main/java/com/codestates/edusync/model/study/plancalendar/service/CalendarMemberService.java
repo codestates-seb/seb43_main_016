@@ -21,7 +21,6 @@ import java.util.Optional;
 public class CalendarMemberService {
     private final CalendarRepository calendarRepository;
     private final VerifyCalendarUtils calendarUtils;
-    private final VerifyStudygroupUtils studygroupUtils;
     private final VerifyTimeScheduleUtils timeScheduleUtils;
     private final MemberUtils memberUtils;
 

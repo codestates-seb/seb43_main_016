@@ -153,8 +153,12 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     @Override
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
+        if( findTimeSchedule.getStudygroup() == null ) {
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_LINKED_WITH_STUDYGROUP);
+        }
+
         if( !findTimeSchedule.getStudygroup().getId().equals(studygroupId) ) {
-            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED);
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED_WITH_STUDYGROUP);
         }
 
         return findTimeSchedule;
@@ -180,7 +184,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId);
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
         if( !findTimeSchedule.getStudygroup().getId().equals(studygroupId) ) {
-            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED);
+            throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED_WITH_STUDYGROUP);
         }
 
         calendarRepository.delete(findTimeSchedule);
