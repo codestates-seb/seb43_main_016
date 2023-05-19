@@ -2,7 +2,6 @@ package com.codestates.edusync.model.common.utils;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class VerifyStudygroupUtils implements VerifyStudygroupManager {
     private final StudygroupRepository studygroupRepository;
-    private final MemberUtils memberUtils;
 
     @Override
     public Studygroup findVerifyStudygroup(Long studygroupId) {

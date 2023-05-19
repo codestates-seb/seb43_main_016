@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,7 +81,10 @@ public class StudygroupService implements StudygroupManager{
     public boolean updateStatus(String email, Long studygroupId) {
         studygroupUtils.studygroupLeaderCheck(email, studygroupId);
         Studygroup findStudygroup = get(studygroupId);
-        findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
+        if (findStudygroup.getIsRecruited()) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
+        }
+        findStudygroup.setIsRecruited(true);
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
     }
@@ -88,13 +92,26 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public Studygroup get(Long studygroupId) {
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
+
+        // todo : searchTag null 값으로 수동 셋, 확인 필요
         findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
+
+        // todo : 스터디 멤버 카운트 확인 필요
+        //findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
+        findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size()+1);
+
         return findStudygroup;
     }
 
     @Override
     public Page<Studygroup> getWithPaging(Integer page, Integer size) {
         return studygroupRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+    }
+
+    @Override
+    public List<Studygroup> getLeaderStudygroupList(String email) {
+        Member member = memberUtils.get(email);
+        return studygroupRepository.findAllByLeaderMemberId(member.getId());
     }
 
     @Override

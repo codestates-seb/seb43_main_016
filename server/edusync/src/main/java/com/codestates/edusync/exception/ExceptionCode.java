@@ -22,6 +22,7 @@ public enum ExceptionCode {
      * 스터디 그룹에 대한 에러 코드
      */
     STUDYGROUP_NOT_FOUND(404, "스터디를 찾을 수 없습니다."),
+    STUDYGROUP_RECRUITED_NOT_MODIFIED(403, "스터디가 이미 모집 완료 되었습니다."),
 
     /**
      * 스터디 그룹 모집글에 대한 댓글 관련 에러 코드
