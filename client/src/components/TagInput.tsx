@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react";
-import { getTagInfo } from "../apis/tagApi";
 import TagDropdown from "./TagDropdown";
+import { StudyInfoDto } from "../apis/StudyGroupApi";
+import { eduApi } from "../apis/EduApi";
 
-const TagInput = () => {
+const TagInput = ({ selectedCategory }: { selectedCategory: string }) => {
   const [view, setView] = useState(false);
 
   const [tag, setTag] = useState<{ [key: string]: string }>({});
 
   useEffect(() => {
     setView(false);
-
     const fetchData = async () => {
       try {
-        const result = await getTagInfo();
+        const response = await eduApi.get<StudyInfoDto>(
+          `/search?key=${selectedCategory}`
+        );
+        const result = response.data.tags;
         setTag(result);
       } catch (error) {
         console.log(error);
@@ -21,15 +24,18 @@ const TagInput = () => {
 
     fetchData();
   }, []);
+
   return (
     <>
+      <input type="text" /*value={tag} onChange={}*/ />
+
       <ul
         onClick={() => {
           setView(!view);
         }}
       >
-        프론트엔드 {view ? "⌃" : "⌄"}
-        {view && tag && <TagDropdown tags={tag.프론트엔드} />}
+        {selectedCategory} {view ? "⌃" : "⌄"}
+        {view && tag && <TagDropdown tags={tag[selectedCategory]} />}
       </ul>
     </>
   );
