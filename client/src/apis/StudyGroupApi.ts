@@ -243,7 +243,7 @@ export async function getStudyGroupMemberList (id: number, isLoggedIn : boolean)
     throw new Error("Access token is not defined.");
   try {
     const response = await axios.get<StudyGroupMemberListDto>(
-      `/studygroup/${id}/member?join=true`
+      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join=true`
     );
     console.log("성공적으로 멤버 목록을 불러왔습니다", response);
     return response.data as StudyGroupMemberListDto;
