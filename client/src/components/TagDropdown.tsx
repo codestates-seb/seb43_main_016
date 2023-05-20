@@ -1,8 +1,37 @@
-const TagDropdown = ({ tags }: { tags: string }) => {
+import styled from "styled-components";
+
+const TagDropdown = ({
+  defaultTags,
+  tags,
+  setTags,
+}: {
+  defaultTags: string[];
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+}) => {
+  const handleTagClick = (item: string) => {
+    if (tags.includes(item)) {
+      alert("이미 존재하는 태그입니다.");
+    } else {
+      setTags([...tags, item]);
+    }
+  };
   return (
-    <>
-      <li>{tags}</li>
-    </>
+    <TagLiDiv>
+      {defaultTags.map((defaultTag) => {
+        return (
+          <li onClick={() => handleTagClick(defaultTag)} key={defaultTag}>
+            {defaultTag}
+          </li>
+        );
+      })}
+    </TagLiDiv>
   );
 };
+const TagLiDiv = styled.div`
+  list-style-type: none;
+  background-color: white;
+  border-radius: 5px;
+  padding: 5px 15px;
+`;
 export default TagDropdown;
