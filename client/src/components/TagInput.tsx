@@ -1,15 +1,22 @@
 import { useEffect, useState } from "react";
+import styled from "styled-components";
 import TagDropdown from "./TagDropdown";
 import { StudyInfoDto } from "../apis/StudyGroupApi";
 import { eduApi } from "../apis/EduApi";
-import StudyListTag from "./StudyListTag";
 
-const TagInput = ({ selectedCategory }: { selectedCategory: string }) => {
+const TagInput = ({
+  selectedCategory,
+  tags,
+  setTags,
+}: {
+  selectedCategory: string;
+  tags: string[];
+  setTags: React.Dispatch<React.SetStateAction<string[]>>;
+}) => {
   const [view, setView] = useState(false);
 
   const [defaultTag, setDefaultTag] = useState<{ [key: string]: string }>({});
   const [createdTag, setCreatedTag] = useState<string>("");
-  const [tags, setTags] = useState<string[]>([]);
 
   const handleTag = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCreatedTag(e.target.value);
@@ -25,6 +32,11 @@ const TagInput = ({ selectedCategory }: { selectedCategory: string }) => {
         setCreatedTag("");
       }
     }
+  };
+
+  const handleDelete = (tag: string) => {
+    const updatedTags = tags.filter((clickedTag) => clickedTag !== tag);
+    setTags(updatedTags);
   };
 
   useEffect(() => {
@@ -71,11 +83,24 @@ const TagInput = ({ selectedCategory }: { selectedCategory: string }) => {
       </ul>
       <div>
         {tags.map((tag) => {
-          return <StudyListTag key={tag}>{tag}</StudyListTag>;
+          return (
+            <StudyTag onClick={() => handleDelete(tag)} key={tag}>
+              {tag}
+            </StudyTag>
+          );
         })}
       </div>
     </>
   );
 };
-
+const StudyTag = styled.div`
+  height: 24px;
+  color: #39739d;
+  font-size: 0.8125rem;
+  border-radius: 4px;
+  background-color: #e1ecf4;
+  padding: 2px 6px 5px 6px;
+  margin-right: 7px;
+  cursor: pointer;
+`;
 export default TagInput;

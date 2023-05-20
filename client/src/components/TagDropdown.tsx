@@ -33,5 +33,8 @@ const TagLiDiv = styled.div`
   background-color: white;
   border-radius: 5px;
   padding: 5px 15px;
+  cursor: pointer;
+  margin-top: 5px;
+  font-size: 0.7rem;
 `;
 export default TagDropdown;
