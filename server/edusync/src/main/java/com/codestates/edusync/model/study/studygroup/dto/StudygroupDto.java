@@ -16,7 +16,7 @@ public class StudygroupDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Post extends DateRangeDto.Post {
+    public static class Post extends DateRangeDto.Post implements CommonStudygroupDto {
         @NotNull
         private String studyName;
 
@@ -40,7 +40,7 @@ public class StudygroupDto {
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Patch extends DateRangeDto.Patch {
+    public static class Patch extends DateRangeDto.Patch implements CommonStudygroupDto {
         private String studyName;
 
         private List<String> daysOfWeek;

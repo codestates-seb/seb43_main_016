@@ -2,6 +2,8 @@ package com.codestates.edusync.model.study.studygroup.mapper;
 
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
+import com.codestates.edusync.model.common.utils.TagFormatConverter;
+import com.codestates.edusync.model.study.studygroup.dto.CommonStudygroupDto;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
@@ -21,6 +23,13 @@ public interface StudygroupMapper {
      */
     default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto) {
         Studygroup studygroup = new Studygroup();
+        commonStudygroupDtoToEntitySetter(studygroupDto, studygroup);
+        studygroup.setIsRecruited(false);
+        return studygroup;
+    }
+
+    private static <T extends CommonStudygroupDto>
+    void commonStudygroupDtoToEntitySetter(T studygroupDto, Studygroup studygroup) {
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
         studygroup.setDate(
@@ -39,22 +48,13 @@ public interface StudygroupMapper {
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
         studygroup.setPlatform(studygroupDto.getPlatform());
-        studygroup.setIsRecruited(false);
 
-        List<SearchTag> resultTags = new ArrayList<>();
-        studygroupDto.getTags()
-                .forEach((key, values) -> {
-                    for( String value : values ) {
-                        SearchTag st = new SearchTag();
-                        st.setTagKey(key);
-                        st.setTagValue(value);
-                        st.setStudygroup(studygroup);
-
-                        resultTags.add(st);
-                    }
-                });
-        studygroup.setSearchTags(resultTags);
-        return studygroup;
+        studygroup.setSearchTags(
+                TagFormatConverter.mapToList(
+                        studygroupDto.getTags(),
+                        studygroup
+                )
+        );
     }
 
     /**
@@ -92,18 +92,9 @@ public interface StudygroupMapper {
         responseDto.setIntroduction(studygroup.getIntroduction());
         responseDto.setIsRecruited((studygroup.getIsRecruited()));
 
-        Map<String, Set<String>> resultTags = new HashMap<>();
-        for( SearchTag tag : studygroup.getSearchTags() ) {
-            String key = tag.getTagKey();
-            String value = tag.getTagValue();
-            Set<String> resultValues = new HashSet<>();
-            if(resultTags.get(key) != null) {
-                resultValues.addAll(resultTags.get(key));
-            }
-            resultValues.add(value);
-            resultTags.put(key, resultValues);
-        }
-        responseDto.setTags(resultTags);
+        responseDto.setTags(
+                TagFormatConverter.listToMap(studygroup.getSearchTags())
+        );
         responseDto.setLeaderNickName(studygroup.getLeaderMember().getNickName());
         responseDto.setLeader(studygroup.getLeaderMember().getNickName().equals(nickName));
         return responseDto;
@@ -118,38 +109,8 @@ public interface StudygroupMapper {
     default Studygroup StudygroupDtoPatchToStudygroup(Long studyGroupId, StudygroupDto.Patch studygroupDto){
         Studygroup studygroup = new Studygroup();
         studygroup.setId(studyGroupId);
-        studygroup.setStudyName(studygroupDto.getStudyName());
-        studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
-        studygroup.setDate(
-                new DateRange(
-                        studygroupDto.getStudyPeriodStart(),
-                        studygroupDto.getStudyPeriodEnd()
-                )
-        );
-        studygroup.setTime(
-                new TimeRange(
-                        studygroupDto.getStudyTimeStart(),
-                        studygroupDto.getStudyTimeEnd()
-                )
-        );
-        studygroup.setIntroduction(studygroupDto.getIntroduction());
-        studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
-        studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
-        studygroup.setPlatform(studygroupDto.getPlatform());
+        commonStudygroupDtoToEntitySetter(studygroupDto, studygroup);
 
-        List<SearchTag> resultTags = new ArrayList<>();
-        studygroupDto.getTags()
-                .forEach((key, values) -> {
-                    for( String value : values ) {
-                        SearchTag st = new SearchTag();
-                        st.setTagKey(key);
-                        st.setTagValue(value);
-                        st.setStudygroup(studygroup);
-
-                        resultTags.add(st);
-                    }
-                });
-        studygroup.setSearchTags(resultTags);
         return studygroup;
     }
 
