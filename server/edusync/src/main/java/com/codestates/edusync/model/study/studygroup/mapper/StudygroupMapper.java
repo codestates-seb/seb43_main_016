@@ -1,19 +1,14 @@
 package com.codestates.edusync.model.study.studygroup.mapper;
 
-import com.codestates.edusync.exception.BusinessLogicException;
-import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
-import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import org.mapstruct.Mapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -48,13 +43,15 @@ public interface StudygroupMapper {
 
         List<SearchTag> resultTags = new ArrayList<>();
         studygroupDto.getTags()
-                .forEach((key, value) -> {
+                .forEach((key, values) -> {
+                    for( String value : values ) {
                         SearchTag st = new SearchTag();
                         st.setTagKey(key);
                         st.setTagValue(value);
                         st.setStudygroup(studygroup);
 
                         resultTags.add(st);
+                    }
                 });
         studygroup.setSearchTags(resultTags);
         return studygroup;
@@ -94,7 +91,19 @@ public interface StudygroupMapper {
         responseDto.setPlatform(studygroup.getPlatform());
         responseDto.setIntroduction(studygroup.getIntroduction());
         responseDto.setIsRecruited((studygroup.getIsRecruited()));
-        responseDto.setTags(tags);
+
+        Map<String, Set<String>> resultTags = new HashMap<>();
+        for( SearchTag tag : studygroup.getSearchTags() ) {
+            String key = tag.getTagKey();
+            String value = tag.getTagValue();
+            Set<String> resultValues = new HashSet<>();
+            if(resultTags.get(key) != null) {
+                resultValues.addAll(resultTags.get(key));
+            }
+            resultValues.add(value);
+            resultTags.put(key, resultValues);
+        }
+        responseDto.setTags(resultTags);
         responseDto.setLeaderNickName(studygroup.getLeaderMember().getNickName());
         responseDto.setLeader(studygroup.getLeaderMember().getNickName().equals(nickName));
         return responseDto;
@@ -130,13 +139,15 @@ public interface StudygroupMapper {
 
         List<SearchTag> resultTags = new ArrayList<>();
         studygroupDto.getTags()
-                .forEach((key, value) -> {
-                    SearchTag st = new SearchTag();
-                    st.setTagKey(key);
-                    st.setTagValue(value);
-                    st.setStudygroup(studygroup);
+                .forEach((key, values) -> {
+                    for( String value : values ) {
+                        SearchTag st = new SearchTag();
+                        st.setTagKey(key);
+                        st.setTagValue(value);
+                        st.setStudygroup(studygroup);
 
-                    resultTags.add(st);
+                        resultTags.add(st);
+                    }
                 });
         studygroup.setSearchTags(resultTags);
         return studygroup;

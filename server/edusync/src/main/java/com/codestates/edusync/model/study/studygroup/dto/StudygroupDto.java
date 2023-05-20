@@ -7,8 +7,9 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class StudygroupDto {
 
@@ -33,7 +34,7 @@ public class StudygroupDto {
         @NotNull
         private String introduction;
 
-        private HashMap<String, String> tags;
+        private Map<String, Set<String>> tags;
     }
 
     @NoArgsConstructor
@@ -55,7 +56,7 @@ public class StudygroupDto {
 
         private String introduction;
 
-        private HashMap<String, String> tags;
+        private Map<String, Set<String>> tags;
     }
 
     @NoArgsConstructor

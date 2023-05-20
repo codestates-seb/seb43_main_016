@@ -16,7 +16,6 @@ public interface SearchTagMapper {
     default SearchTagResponseDto searchTagsToSearchTagResponseDto(List<SearchTag> tags) {
         SearchTagResponseDto result = new SearchTagResponseDto();
         Map<String, Set<String>> resultTags = new HashMap<>();
-
         for( SearchTag tag : tags ) {
             String key = tag.getTagKey();
             String value = tag.getTagValue();
@@ -38,14 +37,16 @@ public interface SearchTagMapper {
 
         List<SearchTag> result = new ArrayList<>();
         postDto.getTags()
-                .forEach((key, value) -> {
-                    SearchTag resultTag = new SearchTag();
-                    resultTag.setTagKey(key);
-                    resultTag.setTagValue(value);
-                    if( studygroup.getId() != null )
-                        resultTag.setStudygroup(studygroup);
+                .forEach((key, values) -> {
+                    for( String value : values ) {
+                        SearchTag resultTag = new SearchTag();
+                        resultTag.setTagKey(key);
+                        resultTag.setTagValue(value);
+                        if( studygroup.getId() != null )
+                            resultTag.setStudygroup(studygroup);
 
-                    result.add(resultTag);
+                        result.add(resultTag);
+                    }
                 });
 
         return result;
