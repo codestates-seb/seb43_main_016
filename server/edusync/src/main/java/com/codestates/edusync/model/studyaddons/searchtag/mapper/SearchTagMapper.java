@@ -5,19 +5,28 @@ import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.studyaddons.searchtag.dto.SearchTagDto;
 import com.codestates.edusync.model.studyaddons.searchtag.dto.SearchTagResponseDto;
 import org.mapstruct.Mapper;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Mapper(componentModel = "spring")
 public interface SearchTagMapper {
 
     default SearchTagResponseDto searchTagsToSearchTagResponseDto(List<SearchTag> tags) {
         SearchTagResponseDto result = new SearchTagResponseDto();
-        HashMap<String, String> resultTags = new HashMap<>();
+        Map<String, Set<String>> resultTags = new HashMap<>();
 
-        tags.forEach(tag -> resultTags.put(tag.getTagKey(), tag.getTagValue()));
+        for( SearchTag tag : tags ) {
+            String key = tag.getTagKey();
+            String value = tag.getTagValue();
+            Set<String> resultValues = new HashSet<>();
+            if(resultTags.get(key) != null) {
+                resultValues.addAll(resultTags.get(key));
+            }
+            resultValues.add(value);
+            resultTags.put(key, resultValues);
+        }
         result.setTags(resultTags);
 
         return result;
