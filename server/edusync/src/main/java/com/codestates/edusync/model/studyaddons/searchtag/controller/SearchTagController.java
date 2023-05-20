@@ -34,6 +34,13 @@ public class SearchTagController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    @PostMapping(DEFAULT_SEARCH_TAG_URL)
+    public ResponseEntity postSearchTagsForTest(@Valid @RequestBody SearchTagDto dto) {
+        searchTagService.createByList(mapper.searchTagDtoToSearchTags(dto));
+
+        return new ResponseEntity<>("테스트 전용입니다",HttpStatus.CREATED);
+    }
+
     @PatchMapping(DEFAULT_SEARCH_TAG_URL + DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")
     public ResponseEntity patchSearchTags(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                           @Valid @RequestBody SearchTagDto dto) {
