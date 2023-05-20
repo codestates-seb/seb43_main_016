@@ -12,7 +12,9 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Validated
@@ -38,7 +40,10 @@ public class SearchTagController {
     public ResponseEntity postSearchTagsForTest(@Valid @RequestBody SearchTagDto dto) {
         searchTagService.createByList(mapper.searchTagDtoToSearchTags(dto));
 
-        return new ResponseEntity<>("테스트 전용입니다",HttpStatus.CREATED);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "테스트 전용입니다!");
+
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @PatchMapping(DEFAULT_SEARCH_TAG_URL + DEFAULT_STUDYGROUP_URL + "/{studygroup-id}")

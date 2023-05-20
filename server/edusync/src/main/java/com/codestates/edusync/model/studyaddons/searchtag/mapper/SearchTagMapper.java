@@ -33,7 +33,8 @@ public interface SearchTagMapper {
                     SearchTag resultTag = new SearchTag();
                     resultTag.setTagKey(key);
                     resultTag.setTagValue(value);
-                    resultTag.setStudygroup(studygroup);
+                    if( studygroup.getId() != null )
+                        resultTag.setStudygroup(studygroup);
 
                     result.add(resultTag);
                 });
