@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { eduApi } from "../apis/EduApi";
 import logo from "../assets/edusync-logo.png";
 import GoogleButton from "../components/social-login-button/GoogleButton";
 import KakaoButton from "../components/social-login-button/KakaoButton";
@@ -39,20 +39,16 @@ const SignUp = () => {
       alert("닉네임과 이메일, 패스워드를 모두 입력해주세요!");
     else if (emailTest(email) === false) alert("이메일 형식이 잘못되었습니다.");
     else {
-      axios
-        .post(`${import.meta.env.VITE_APP_API_URL}/members`, {
+      eduApi
+        .post(`/members`, {
           email,
           password,
           nickName,
         })
         .then(() => navigate("/login"))
         .catch((error) => {
-          //if (error?.response?.error === "Internal Server Error") {
-          //  console.log(error.response.data.message);
-          //  alert("이미 가입된 이메일 입니다.");
-          //} else {
-          console.log(error);
-          // }
+          if (error.response.data.message === "이메일이 이미 존재")
+            alert("이미 가입된 이메일 입니다.");
         })
         .finally(() => {});
     }
