@@ -3,6 +3,7 @@ package com.codestates.edusync.exception.advice;
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ErrorResponse;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -53,6 +54,13 @@ public class GlobalException {
                                IllegalArgumentException e) {
 
         return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler
+    public ErrorResponse handleInvalidDataAccessApiUsageException(
+                               InvalidDataAccessApiUsageException e) {
+
+        return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
     }
 
     @ExceptionHandler
