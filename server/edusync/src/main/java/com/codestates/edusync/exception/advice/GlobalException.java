@@ -74,7 +74,7 @@ public class GlobalException {
     public ErrorResponse handleException(
                                Exception e) {
 
-        return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
     }
 
     @ExceptionHandler
@@ -88,7 +88,8 @@ public class GlobalException {
     public ResponseEntity handleBusinessLogicException(BusinessLogicException e) {
         final ErrorResponse response = ErrorResponse.of(e.getExceptionCode());
 
-        return new ResponseEntity<>(response, HttpStatus.valueOf(e.getExceptionCode()
-                .getStatus()));
+        return new ResponseEntity<>(
+                response,
+                HttpStatus.valueOf(e.getExceptionCode().getStatus()));
     }
 }

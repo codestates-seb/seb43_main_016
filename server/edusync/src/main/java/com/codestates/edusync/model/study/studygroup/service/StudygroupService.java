@@ -7,9 +7,11 @@ import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
+import com.codestates.edusync.model.study.studygroup.utils.ScheduleConverter;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
@@ -21,8 +23,15 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Transactional
@@ -39,10 +48,63 @@ public class StudygroupService implements StudygroupManager{
     public Studygroup create(Studygroup studygroup, String email) {
         studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
 
+        studygroup.setTimeSchedules(
+                repeatedScheduleToScheduleListConverter(studygroup)
+        );
+
         Studygroup createdStudygroup = studygroupRepository.save(studygroup);
 
         studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
         return createdStudygroup;
+    }
+
+    public List<TimeSchedule> repeatedScheduleToScheduleListConverter(Studygroup studygroup) {
+        List<TimeSchedule> timeSchedules = new ArrayList<>();
+
+        LocalDateTime periodStart = studygroup.getDate().getStudyPeriodStart();
+        LocalDateTime periodEnd = studygroup.getDate().getStudyPeriodEnd();
+
+        LocalDateTime timeStart = studygroup.getTime().getStudyTimeStart();
+        LocalDateTime timeEnd = studygroup.getTime().getStudyTimeEnd();
+        int continueToNextDayOffset = 0;
+        if( timeStart.getHour() > timeEnd.getHour() ) {
+            continueToNextDayOffset = 1;
+        }
+
+        Period totalPeriod = Period.between(periodStart.toLocalDate(), periodEnd.toLocalDate());
+
+        List<Integer> indexOfWeeks = ScheduleConverter.convertToIndex(studygroup.getDaysOfWeek());
+        for( int offset = 0; offset < totalPeriod.getDays(); offset++ ) {
+            LocalDateTime offsetDate = periodStart.plusDays(offset);
+
+            int currentIndexOfWeek = offsetDate.getDayOfWeek().getValue();
+            if( indexOfWeeks.contains(currentIndexOfWeek) ) {
+                TimeSchedule ts = new TimeSchedule();
+                TimeRange tr = TimeRange.builder()
+                        .studyTimeStart(
+                                LocalDateTime.of(
+                                        offsetDate.getYear(),
+                                        offsetDate.getMonth(),
+                                        offsetDate.getDayOfMonth(),
+                                        timeStart.getHour(),
+                                        timeStart.getMinute(),
+                                        timeStart.getSecond()
+                                ))
+                        .studyTimeEnd(
+                                LocalDateTime.of(
+                                        offsetDate.plusDays(continueToNextDayOffset).getYear(),
+                                        offsetDate.plusDays(continueToNextDayOffset).getMonth(),
+                                        offsetDate.plusDays(continueToNextDayOffset).getDayOfMonth(),
+                                        timeEnd.getHour(),
+                                        timeEnd.getMinute(),
+                                        timeEnd.getSecond()
+                                ))
+                        .build();
+                ts.setTime(tr);
+            }
+        }
+
+        return timeSchedules;
     }
 
     @Override
@@ -87,9 +149,12 @@ public class StudygroupService implements StudygroupManager{
     public boolean updateStatus(String email, Long studygroupId) {
         studygroupUtils.studygroupLeaderCheck(email, studygroupId);
         Studygroup findStudygroup = get(studygroupId);
-        if (findStudygroup.getIsRecruited()) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
-        }
+
+        // 모집 완료가 되었더라도 다시 모집할 수 있도록 바꿀 수 있게 함
+//        if (findStudygroup.getIsRecruited()) {
+//            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
+//        }
+
         findStudygroup.setIsRecruited(true);
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
@@ -104,7 +169,7 @@ public class StudygroupService implements StudygroupManager{
 
         // todo : 스터디 멤버 카운트 확인 필요
         //findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
-        findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size()+1);
+        findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size());
 
         return findStudygroup;
     }
