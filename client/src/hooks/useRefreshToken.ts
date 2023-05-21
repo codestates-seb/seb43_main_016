@@ -22,7 +22,10 @@ function useRefreshToken() {
       setFetched(true);
       navigate("/login");
     }
-    if (isLoginState && (refreshToken === null || refreshToken === "undefined")) {
+    if (
+      isLoginState &&
+      (refreshToken === null || refreshToken === "undefined")
+    ) {
       removeTokens();
       setIsLoggedIn(false);
       setFetched(true);
@@ -37,6 +40,15 @@ function useRefreshToken() {
         .then((res) => {
           tokenRequestApi.setAccessToken(res.headers.authorization);
           setFetched(true);
+        })
+        .catch((err) => {
+          if (err.response.status > 299) {
+            removeTokens();
+            setIsLoggedIn(false);
+            setFetched(true);
+            navigate("/login");
+            alert("토큰이 만료되었습니다. 재로그인을 시도해주세요!");
+          }
         });
     }
   }, []);
