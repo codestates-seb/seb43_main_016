@@ -4,25 +4,69 @@ import { LogInState } from "../recoil/atoms/LogInState";
 import tokenRequestApi from "./TokenRequestApi";
 
 // ====================== 마이 스터디 리스트 조회 (GET) ===========================
-
-export interface StudyGroupListDto {
+export interface StudyGroup {
   id: number;
   title: string;
   tagValues: string[];
 }
 
-export const getStudyGroupList = async (): Promise<StudyGroupListDto[]> => {
+export interface StudyGroupListDto {
+  leaders: StudyGroup[];
+  members: StudyGroup[];
+}
+
+export const getStudyGroupList = async (approved: boolean): Promise<StudyGroupListDto[]> => {
   try {
     const response = await tokenRequestApi.get<StudyGroupListDto[]>(
-      "/studygroup/myList?approved=false"
+      `/studygroup/myList?approved=${approved}`
     );
     const data = response.data;
     return data;
+
   } catch (error) {
     console.log(error);
     throw new Error("스터디 그룹 리스트를 불러오는데 실패했습니다.");
   }
 };
+
+// ====================== 가입 대기중인 스터디 리스트 조회 (GET) ===========================
+
+export interface WaitingStudyGroupItemDto {
+  id: number;
+  title: string;
+}
+
+export interface WaitingStudyGroupListDto {
+  beStudys: WaitingStudyGroupItemDto[];
+}
+
+export const getWaitingStudyGroupList = async (): Promise<WaitingStudyGroupItemDto[]> => {
+  try {
+    const response = await tokenRequestApi.get<WaitingStudyGroupItemDto[]>(
+      `/studygroup/myList?approved=false`
+    );
+    const data = response.data;
+    console.log(data);
+    return data;
+  } catch (error) {
+    console.log(error);
+    throw new Error("신청 대기중인 그룹 리스트를 불러오는데 실패했습니다.");
+  }
+};
+
+// ====================== 스터디원 가입 신청 철회 ===========================
+// TODO : StudyGroup의 가입 신청을 철회하는 코드
+export async function cancelStudyGroupApplication(id: number, isLoggedIn: boolean) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인하세요");
+
+  try {
+    const response = await tokenRequestApi.delete(`/studygroup/${id}/join`);
+    console.log("해당 그룹에 가입신청을 철회합니다", response);
+  } catch (error) {
+    console.error("가입 신청 철회에 실패했습니다", error);
+  }
+}
+
 // ====================== 스터디 그룹 정보 조회 (GET) ===========================
 // TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
 export interface StudyInfoDto {
@@ -49,9 +93,10 @@ export interface StudyInfoDto {
 }
 
 // TODO : StudyGroup의 정보를 조회하는 코드
-export async function getStudyGroupInfo(id: number) {
-  const response = await axios.get<StudyInfoDto>(
-    `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}`
+export async function getStudyGroupInfo(id: number, isLoggedIn: boolean) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인하세요");
+  const response = await tokenRequestApi.get<StudyInfoDto>(
+    `/studygroup/${id}`
   );
   return response.data;
 }
@@ -192,19 +237,6 @@ export async function forceExitStudyGroup(
   }
 }
 
-// ====================== 스터디원 가입 신청 철회 ===========================
-// TODO : StudyGroup의 가입 신청을 철회하는 코드
-export async function cancelStudyGroupApplication(id: number) {
-  const isLoggedIn = useRecoilValue(LogInState);
-  if (!isLoggedIn) throw new Error("Access token is not defined.");
-
-  try {
-    const response = await tokenRequestApi.delete(`/studygroup/${id}/join`);
-    console.log("해당 그룹에 가입신청을 철회합니다", response);
-  } catch (error) {
-    console.error("가입 신청 철회에 실패했습니다", error);
-  }
-}
 
 // ====================== 회원의 가입 대기 리스트 ===========================
 // TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회할 때, 서버에서 받은 양식에 대한 타입 정의
@@ -238,9 +270,8 @@ export interface StudyGroupMemberListDto {
 }
 
 // TODO : StudyGroup에 가입된 멤버 리스트
-export async function getStudyGroupMemberList (id: number, isLoggedIn : boolean) {
-  if (!isLoggedIn)
-    throw new Error("Access token is not defined.");
+export async function getStudyGroupMemberList(id: number, isLoggedIn: boolean) {
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
   try {
     const response = await axios.get<StudyGroupMemberListDto>(
       `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join=true`

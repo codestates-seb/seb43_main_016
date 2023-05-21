@@ -1,29 +1,41 @@
 import { useState, useEffect } from "react";
-import { deleteStudyGroupInfo, getStudyGroupInfo, StudyInfoDto } from "../apis/StudyGroupApi";
+import {
+  deleteStudyGroupInfo,
+  getStudyGroupInfo,
+  StudyInfoDto,
+} from "../apis/StudyGroupApi";
 import styled from "styled-components";
 import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
+import { useParams, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
 
-interface ReadStudyInfoProps {
-  id: 1;
-}
-
-const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
+const ProfileStudyManage = () => {
   const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const { id } = useParams();
+  const parsedId = Number(id);
+  const navigate = useNavigate();
+  const isLoggedIn = useRecoilValue(LogInState);
 
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
     const fetchStudyGroupInfo = async () => {
+      if (isNaN(parsedId)) {
+        alert("잘못된 접근입니다");
+        navigate("/profile");
+        return;
+      }
       try {
-        const studyInfo = await getStudyGroupInfo(id);
+        const studyInfo = await getStudyGroupInfo(parsedId, isLoggedIn);
         setStudyInfo(studyInfo);
       } catch (error) {
-        console.error("권한이 없습니다");
+        console.log(error);
       }
     };
 
     fetchStudyGroupInfo();
-  }, [id]);
+  }, [parsedId]);
 
   // TODO : 스터디 정보를 수정하는 코드
   const handleEditClick = () => {
@@ -33,7 +45,7 @@ const ProfileStudyManage = ({ id }: ReadStudyInfoProps) => {
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
     try {
-      await deleteStudyGroupInfo(id);
+      await deleteStudyGroupInfo(parsedId);
     } catch (error) {
       console.error(error);
     }

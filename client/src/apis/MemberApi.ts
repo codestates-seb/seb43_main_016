@@ -48,11 +48,11 @@ export const updateMember = async (
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
   // 입력 데이터가 없을 경우 에러 발생
   if (!data) throw new Error("입력값을 확인해주세요.");
+
   try {
     // tokenRequestApi를 사용하여 /members 엔드포인트로 PATCH 요청 전송
     console.log("전송되는 데이터:", data);
-    await tokenRequestApi.patch("/members", {data
-    : data});
+    await tokenRequestApi.patch("/members", data);
   } catch (error) {
     console.error("유저정보를 업데이트 하는데 실패했습니다.", error);
     throw new Error("유저정보를 업데이트 하는데 실패했습니다."); // 실패 시 에러 발생

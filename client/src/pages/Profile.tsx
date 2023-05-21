@@ -5,6 +5,7 @@ import ProfileStudyList from "./ProfileStudyList";
 import ProfileCalendar from "./ProfileCalendar";
 import ProfileStudyManage from "./ProfileStudyManage";
 
+
 const Profile = () => {
   const navigate = useNavigate();
   return (
@@ -26,7 +27,7 @@ const Profile = () => {
       <Routes>
         <Route path="/" element={<ProfileInfo />} />
         <Route path="/manage-group" element={<ProfileStudyList />} />
-        <Route path="/:studyId" element={<ProfileStudyManage id={1} />} />
+        <Route path="/:id" element={<ProfileStudyManage />} />
         <Route path="/calendar" element={<ProfileCalendar />} />
       </Routes>
     </Wrapper>

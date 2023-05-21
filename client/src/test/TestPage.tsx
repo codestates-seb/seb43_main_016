@@ -4,7 +4,7 @@ const TestPage = () => {
     return (
         <div>
             <h1>Test Page</h1>
-            <GroupMemberManage id={3} />
+            <GroupMemberManage id={1} />
         </div>
     )
 }
