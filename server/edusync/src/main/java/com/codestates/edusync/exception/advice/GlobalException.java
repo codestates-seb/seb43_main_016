@@ -35,7 +35,6 @@ public class GlobalException {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ErrorResponse handleHttpRequestMethodNotSupportedException(
                                HttpRequestMethodNotSupportedException e) {
 
@@ -43,7 +42,6 @@ public class GlobalException {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleHttpMessageNotReadableException(
                                HttpMessageNotReadableException e) {
 
@@ -51,7 +49,13 @@ public class GlobalException {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleIllegalArgumentException(
+                               IllegalArgumentException e) {
+
+        return ErrorResponse.of(HttpStatus.BAD_REQUEST, e.getMessage());
+    }
+
+    @ExceptionHandler
     public ErrorResponse handleMissingServletRequestParameterException(
                                MissingServletRequestParameterException e) {
 
