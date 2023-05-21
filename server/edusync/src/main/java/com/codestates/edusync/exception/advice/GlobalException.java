@@ -36,6 +36,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.METHOD_NOT_ALLOWED)
     public ErrorResponse handleHttpRequestMethodNotSupportedException(
                                HttpRequestMethodNotSupportedException e) {
 
@@ -43,6 +44,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleHttpMessageNotReadableException(
                                HttpMessageNotReadableException e) {
 
@@ -50,6 +52,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleIllegalArgumentException(
                                IllegalArgumentException e) {
 
@@ -57,6 +60,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleInvalidDataAccessApiUsageException(
                                InvalidDataAccessApiUsageException e) {
 
@@ -64,6 +68,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     public ErrorResponse handleNullPointerException(
                                NullPointerException e) {
 
@@ -71,6 +76,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleException(
                                Exception e) {
 
@@ -78,6 +84,7 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleMissingServletRequestParameterException(
                                MissingServletRequestParameterException e) {
 
