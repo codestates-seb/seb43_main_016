@@ -38,7 +38,11 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public Studygroup create(Studygroup studygroup, String email) {
         studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
-        return studygroupRepository.save(studygroup);
+
+        Studygroup createdStudygroup = studygroupRepository.save(studygroup);
+
+        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
+        return createdStudygroup;
     }
 
     @Override
