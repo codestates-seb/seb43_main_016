@@ -56,6 +56,20 @@ public class GlobalException {
     }
 
     @ExceptionHandler
+    public ErrorResponse handleNullPointerException(
+                               NullPointerException e) {
+
+        return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler
+    public ErrorResponse handleException(
+                               Exception e) {
+
+        return ErrorResponse.of(HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage());
+    }
+
+    @ExceptionHandler
     public ErrorResponse handleMissingServletRequestParameterException(
                                MissingServletRequestParameterException e) {
 
