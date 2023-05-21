@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -21,7 +23,7 @@ public class StudygroupResponseDto extends DateRangeDto.Response {
     private String platform;
     private String introduction;
     private Boolean isRecruited;
-    private HashMap<String, String> tags;
+    private Map<String, Set<String>> tags;
     private String leaderNickName;
     private boolean isLeader;
 
