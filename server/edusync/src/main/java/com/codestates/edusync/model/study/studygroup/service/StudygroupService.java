@@ -49,62 +49,13 @@ public class StudygroupService implements StudygroupManager{
         studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
 
         studygroup.setTimeSchedules(
-                repeatedScheduleToScheduleListConverter(studygroup)
+                ScheduleConverter.repeatedScheduleToScheduleListConverter(studygroup)
         );
 
         Studygroup createdStudygroup = studygroupRepository.save(studygroup);
 
         studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
         return createdStudygroup;
-    }
-
-    public List<TimeSchedule> repeatedScheduleToScheduleListConverter(Studygroup studygroup) {
-        List<TimeSchedule> timeSchedules = new ArrayList<>();
-
-        LocalDateTime periodStart = studygroup.getDate().getStudyPeriodStart();
-        LocalDateTime periodEnd = studygroup.getDate().getStudyPeriodEnd();
-
-        LocalDateTime timeStart = studygroup.getTime().getStudyTimeStart();
-        LocalDateTime timeEnd = studygroup.getTime().getStudyTimeEnd();
-        int continueToNextDayOffset = 0;
-        if( timeStart.getHour() > timeEnd.getHour() ) {
-            continueToNextDayOffset = 1;
-        }
-
-        Period totalPeriod = Period.between(periodStart.toLocalDate(), periodEnd.toLocalDate());
-
-        List<Integer> indexOfWeeks = ScheduleConverter.convertToIndex(studygroup.getDaysOfWeek());
-        for( int offset = 0; offset < totalPeriod.getDays(); offset++ ) {
-            LocalDateTime offsetDate = periodStart.plusDays(offset);
-
-            int currentIndexOfWeek = offsetDate.getDayOfWeek().getValue();
-            if( indexOfWeeks.contains(currentIndexOfWeek) ) {
-                TimeSchedule ts = new TimeSchedule();
-                TimeRange tr = TimeRange.builder()
-                        .studyTimeStart(
-                                LocalDateTime.of(
-                                        offsetDate.getYear(),
-                                        offsetDate.getMonth(),
-                                        offsetDate.getDayOfMonth(),
-                                        timeStart.getHour(),
-                                        timeStart.getMinute(),
-                                        timeStart.getSecond()
-                                ))
-                        .studyTimeEnd(
-                                LocalDateTime.of(
-                                        offsetDate.plusDays(continueToNextDayOffset).getYear(),
-                                        offsetDate.plusDays(continueToNextDayOffset).getMonth(),
-                                        offsetDate.plusDays(continueToNextDayOffset).getDayOfMonth(),
-                                        timeEnd.getHour(),
-                                        timeEnd.getMinute(),
-                                        timeEnd.getSecond()
-                                ))
-                        .build();
-                ts.setTime(tr);
-            }
-        }
-
-        return timeSchedules;
     }
 
     @Override
@@ -141,6 +92,11 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getMemberCountCurrent()).ifPresent(findStudygroup::setMemberCountCurrent);
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
+
+        calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
+        findStudygroup.setTimeSchedules(
+                ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
+        );
 
         return studygroupRepository.save(findStudygroup);
     }
