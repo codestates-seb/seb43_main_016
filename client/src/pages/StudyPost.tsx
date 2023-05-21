@@ -18,6 +18,7 @@ const StudyPost = () => {
   const [memberCountMin, setMemberCountMin] = useState<number>(1);
   const [memberCountMax, setMemberCountMax] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
+  const [tags, setTags] = useState<string[]>([]);
   const [introduction, setIntroduction] = useState<string>("");
   const [selectedCategory, setSelectedCategory] =
     useState<string>("프론트엔드");
@@ -64,8 +65,7 @@ const StudyPost = () => {
       platform,
       introduction,
       tags: {
-        백엔드: "javascript",
-        프론트엔드: "javascript",
+        [selectedCategory]: tags,
       },
     };
 
@@ -176,7 +176,11 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>태그</span>
-            <TagInput selectedCategory={selectedCategory} />
+            <TagInput
+              selectedCategory={selectedCategory}
+              tags={tags}
+              setTags={setTags}
+            />
           </StudyPostInfo>
           <StudyPostInput>
             <TextEditor handleContentChange={setIntroduction} />
@@ -272,6 +276,14 @@ const StudyPostInfo = styled.form`
   }
   p {
     padding: 0 10px;
+  }
+  ul {
+    margin: 0 20px;
+    padding: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e9e9e9;
+    font-size: 0.8rem;
   }
 `;
 
