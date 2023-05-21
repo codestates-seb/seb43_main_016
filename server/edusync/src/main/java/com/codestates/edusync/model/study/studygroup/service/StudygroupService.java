@@ -53,13 +53,15 @@ public class StudygroupService implements StudygroupManager{
         );
 
         Studygroup createdStudygroup = studygroupRepository.save(studygroup);
+
+        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
+
         calendarStudygroupService.createTimeSchedulesOfAllMember(
                 studygroup.getId(),
                 studygroup.getTimeSchedules(),
                 email
         );
 
-        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
         return createdStudygroup;
     }
 
@@ -98,6 +100,7 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
+        // FIXME: 2023-05-22 프론트로부터 스케쥴 변경 내용이 없을 때, status 하나 받아서 아래 로직을 처리하지 않도록 변경 해야함
         calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
         findStudygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)

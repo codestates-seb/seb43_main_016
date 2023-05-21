@@ -5,6 +5,7 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.repository.StudygroupJoinRepository;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class StudygroupJoinService implements StudygroupJoinManager {
     private final StudygroupJoinRepository studygroupJoinRepository;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final CalendarStudygroupService calendarStudygroupService;
     private final MemberUtils memberUtils;
 
     private Member getLoginMember(String email) {
@@ -103,6 +105,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         StudygroupJoin studygroupJoin = getStudygroupJoin(studygroupId, nickName, false);
         studygroupJoin.setIsApproved(true);
         studygroupJoinRepository.save(studygroupJoin);
+
+        calendarStudygroupService.createTimeSchedulesOfSingleMemberFromJoin(studygroupJoin);
     }
 
     @Override
