@@ -1,28 +1,32 @@
 import styled from "styled-components";
+//import { useParams } from "react-router-dom";
 import { useState } from "react";
 // import { Link } from "react-router-dom";
-import axios from "axios";
 import { validateEmptyInput } from "../pages/utils/loginUtils";
+import { postContent } from "../apis/CommentApi";
 
 const StudyComment = () => {
+  //let { id } = useParams();
+
   const [comment, setComment] = useState("");
 
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
+    //console.log(id);
   };
 
-  const handleCommentButton = () => {
+  const handleCommentButton = async () => {
     if (validateEmptyInput(comment)) {
       alert("댓글 내용을 입력해주세요");
     } else {
-      axios
-        .post(`${import.meta.env.VITE_APP_API_URL}/comment`, {
-          comment,
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("댓글 내용을 입력해주세요");
-        });
+      console.log(comment);
+      try {
+        await postContent(comment);
+        console.log("댓글이 성공적으로 등록되었습니다.");
+      } catch (error) {
+        console.log(error);
+        console.log("댓글 등록에 실패했습니다.");
+      }
     }
   };
 

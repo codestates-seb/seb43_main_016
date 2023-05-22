@@ -5,6 +5,9 @@ import { getRefreshToken } from "../pages/utils/Auth";
 let accessToken: string | null = null;
 const tokenRequestApi: AxiosInstance = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}`,
+  headers: {
+    "Content-Type": "application/json", // 요청 헤더(content type) 설정
+  },
 });
 
 tokenRequestApi.interceptors.request.use(
