@@ -4,11 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
 public class SearchTagResponseDto {
-    private HashMap<String, String> tags;
+    private Map<String, Set<String>> tags;
 }

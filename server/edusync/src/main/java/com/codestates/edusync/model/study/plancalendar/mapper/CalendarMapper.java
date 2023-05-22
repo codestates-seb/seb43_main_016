@@ -31,10 +31,10 @@ public interface CalendarMapper {
     @Named("EntityToResponse")
     @Mapping(source = "time.studyTimeStart", target = "studyTimeStart")
     @Mapping(source = "time.studyTimeEnd", target = "studyTimeEnd")
-    TimeRangeDto.Response timeScheduleListToTimeScheduleResponseDto(TimeSchedule timeSchedules);
+    TimeScheduleSingleResponseDto timeScheduleListToTimeScheduleResponseDto(TimeSchedule timeSchedules);
 
     @IterableMapping(qualifiedByName = "EntityToResponse")
-    List<TimeRangeDto.Response> timeScheduleListToTimeScheduleResponseDto(List<TimeSchedule> timeSchedules);
+    List<TimeScheduleSingleResponseDto> timeScheduleListToTimeScheduleResponseDto(List<TimeSchedule> timeSchedules);
 
     default TimeScheduleResponseDto timeScheduleToTimeScheduleResponseDto(TimeSchedule ts) {
         TimeScheduleResponseDto result = new TimeScheduleResponseDto();

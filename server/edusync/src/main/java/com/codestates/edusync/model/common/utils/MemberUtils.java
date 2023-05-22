@@ -61,14 +61,14 @@ public class MemberUtils implements MemberVerificationManager {
     public void checkEmailExists(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
-            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s는 이미 가입한 이메일입니다.", email));
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS_EMAIL, String.format("%s는 이미 가입한 이메일입니다.", email));
     }
 
     @Override
     public void checkNicknameExists(String nickName) {
         Optional<Member> member = memberRepository.findByNickName(nickName);
         if (member.isPresent())
-            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS, String.format("%s는 이미 사용중인 닉네임입니다.", nickName));
+            throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS_NICKNAME, String.format("%s는 이미 사용중인 닉네임입니다.", nickName));
     }
 
     public Member getLoggedIn(String email) {

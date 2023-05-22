@@ -7,15 +7,16 @@ import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public class StudygroupDto {
 
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Post extends DateRangeDto.Post {
+    public static class Post extends DateRangeDto.Post implements CommonStudygroupDto {
         @NotNull
         private String studyName;
 
@@ -33,13 +34,13 @@ public class StudygroupDto {
         @NotNull
         private String introduction;
 
-        private HashMap<String, String> tags;
+        private Map<String, Set<String>> tags;
     }
 
     @NoArgsConstructor
     @Getter
     @Setter
-    public static class Patch extends DateRangeDto.Patch {
+    public static class Patch extends DateRangeDto.Patch implements CommonStudygroupDto {
         private String studyName;
 
         private List<String> daysOfWeek;
@@ -55,7 +56,7 @@ public class StudygroupDto {
 
         private String introduction;
 
-        private HashMap<String, String> tags;
+        private Map<String, Set<String>> tags;
     }
 
     @NoArgsConstructor

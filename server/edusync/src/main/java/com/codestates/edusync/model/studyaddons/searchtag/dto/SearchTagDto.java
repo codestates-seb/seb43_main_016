@@ -5,7 +5,8 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.validation.constraints.NotNull;
-import java.util.HashMap;
+import java.util.Map;
+import java.util.Set;
 
 @NoArgsConstructor
 @Getter
@@ -13,5 +14,5 @@ import java.util.HashMap;
 public class SearchTagDto {
     private Long studygroupId;
     @NotNull
-    private HashMap<String, String> tags;
+    private Map<String, Set<String>> tags;
 }

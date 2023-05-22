@@ -6,6 +6,8 @@ import com.codestates.edusync.model.study.plancalendar.repository.CalendarReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_FOUND;
 
 @RequiredArgsConstructor

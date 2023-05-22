@@ -4,6 +4,7 @@ import com.codestates.edusync.model.common.dto.TimeRangeDto;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupDto;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupResponseDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
+import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleSingleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.mapper.CalendarMapper;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
@@ -61,7 +62,7 @@ public class CalendarStudygroupController {
         List<TimeSchedule> findTimeSchedules =
                 calendarStudygroupService.getTimeSchedules(studygroupId);
 
-        List<TimeRangeDto.Response> responseDtos =
+        List<TimeScheduleSingleResponseDto> responseDtos =
                 mapper.timeScheduleListToTimeScheduleResponseDto(findTimeSchedules);
 
         return new ResponseEntity<>(responseDtos, HttpStatus.OK);
