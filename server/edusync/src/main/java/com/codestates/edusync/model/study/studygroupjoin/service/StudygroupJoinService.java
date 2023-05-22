@@ -119,6 +119,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     public void kickOutMemberByNickName(Long studygroupId, String nickName, String email) {
         verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
         studygroupJoinRepository.delete(getStudygroupJoin(studygroupId, nickName, true));
+
+        calendarStudygroupService.deleteTimeScheduleByMember(studygroupId, nickName);
     }
 
     /**
