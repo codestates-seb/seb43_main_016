@@ -70,6 +70,9 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     @Override
     public void deleteMemberSelf(Long studygroupId, String email) {
         delStudygroupJoin(studygroupId, email, true);
+
+        Member loginMember = memberUtils.getLoggedIn(email);
+        calendarStudygroupService.deleteTimeScheduleByMember(studygroupId, loginMember.getNickName());
     }
 
     /**

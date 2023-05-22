@@ -249,6 +249,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
     public void deleteTimeScheduleByMember(Long studygroupId,
                                            String nickName) {
+
         calendarRepository.deleteAllByStudygroupIdAndMemberNickName(studygroupId, nickName);
     }
 }
