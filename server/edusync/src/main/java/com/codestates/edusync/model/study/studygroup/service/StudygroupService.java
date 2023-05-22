@@ -7,9 +7,11 @@ import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
+import com.codestates.edusync.model.study.studygroup.utils.ScheduleConverter;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
@@ -21,8 +23,15 @@ import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Transactional
@@ -38,7 +47,22 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public Studygroup create(Studygroup studygroup, String email) {
         studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
-        return studygroupRepository.save(studygroup);
+
+        studygroup.setTimeSchedules(
+                ScheduleConverter.repeatedScheduleToScheduleListConverter(studygroup)
+        );
+
+        Studygroup createdStudygroup = studygroupRepository.save(studygroup);
+
+        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
+
+        calendarStudygroupService.createTimeSchedulesOfAllMember(
+                studygroup.getId(),
+                studygroup.getTimeSchedules(),
+                email
+        );
+
+        return createdStudygroup;
     }
 
     @Override
@@ -76,6 +100,17 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
+        // FIXME: 2023-05-22 프론트로부터 스케쥴 변경 내용이 없을 때, status 하나 받아서 아래 로직을 처리하지 않도록 변경 해야함
+        calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
+        findStudygroup.setTimeSchedules(
+                ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
+        );
+        calendarStudygroupService.createTimeSchedulesOfAllMember(
+                studygroup.getId(),
+                studygroup.getTimeSchedules(),
+                email
+        );
+
         return studygroupRepository.save(findStudygroup);
     }
 
@@ -83,9 +118,12 @@ public class StudygroupService implements StudygroupManager{
     public boolean updateStatus(String email, Long studygroupId) {
         studygroupUtils.studygroupLeaderCheck(email, studygroupId);
         Studygroup findStudygroup = get(studygroupId);
-        if (findStudygroup.getIsRecruited()) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
-        }
+
+        // 모집 완료가 되었더라도 다시 모집할 수 있도록 바꿀 수 있게 함
+//        if (findStudygroup.getIsRecruited()) {
+//            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
+//        }
+
         findStudygroup.setIsRecruited(true);
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
@@ -100,7 +138,7 @@ public class StudygroupService implements StudygroupManager{
 
         // todo : 스터디 멤버 카운트 확인 필요
         //findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
-        findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size()+1);
+        findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size());
 
         return findStudygroup;
     }

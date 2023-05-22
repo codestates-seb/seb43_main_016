@@ -5,6 +5,7 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.repository.StudygroupJoinRepository;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class StudygroupJoinService implements StudygroupJoinManager {
     private final StudygroupJoinRepository studygroupJoinRepository;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final CalendarStudygroupService calendarStudygroupService;
     private final MemberUtils memberUtils;
 
     private Member getLoginMember(String email) {
@@ -56,16 +58,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void createCandidate(Long studygroupId, String email) {
-        Member loginMember = getLoginMember(email);
-        if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
-        }
-        if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_EXISTS);
-        }
-        StudygroupJoin studygroupJoin = new StudygroupJoin();
-        studygroupJoin.setMember(loginMember);
-        studygroupJoin.setStudygroup(verifyStudygroupUtils.findVerifyStudygroup(studygroupId));
+        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, email);
         studygroupJoinRepository.save(studygroupJoin);
     }
 
@@ -77,6 +70,9 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     @Override
     public void deleteMemberSelf(Long studygroupId, String email) {
         delStudygroupJoin(studygroupId, email, true);
+
+        Member loginMember = memberUtils.getLoggedIn(email);
+        calendarStudygroupService.deleteTimeScheduleByMember(studygroupId, loginMember.getNickName());
     }
 
     /**
@@ -112,6 +108,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         StudygroupJoin studygroupJoin = getStudygroupJoin(studygroupId, nickName, false);
         studygroupJoin.setIsApproved(true);
         studygroupJoinRepository.save(studygroupJoin);
+
+        calendarStudygroupService.createTimeSchedulesOfSingleMemberFromJoin(studygroupJoin);
     }
 
     @Override
@@ -124,6 +122,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     public void kickOutMemberByNickName(Long studygroupId, String nickName, String email) {
         verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
         studygroupJoinRepository.delete(getStudygroupJoin(studygroupId, nickName, true));
+
+        calendarStudygroupService.deleteTimeScheduleByMember(studygroupId, nickName);
     }
 
     /**
@@ -168,5 +168,25 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     @Override
     public int getStudygroupMemberCount(Long studygroupId) {
         return studygroupJoinRepository.findCountByStudygroupIdAndIsApprovedIsTrue(studygroupId);
+    }
+
+    public void createJoinAsLeader(Long studygroupId, String email) {
+        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, email);
+        studygroupJoin.setIsApproved(true);
+        studygroupJoinRepository.save(studygroupJoin);
+    }
+
+    private StudygroupJoin createStudygroupJoinWithVerifyMember(Long studygroupId, String email) {
+        Member loginMember = getLoginMember(email);
+        if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
+        }
+        if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_EXISTS);
+        }
+        StudygroupJoin studygroupJoin = new StudygroupJoin();
+        studygroupJoin.setMember(loginMember);
+        studygroupJoin.setStudygroup(verifyStudygroupUtils.findVerifyStudygroup(studygroupId));
+        return studygroupJoin;
     }
 }
