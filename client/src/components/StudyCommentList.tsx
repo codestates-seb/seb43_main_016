@@ -1,39 +1,63 @@
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
-import { CommentDto, getComments, patchComment } from "../apis/CommentApi";
+import {
+  CommentDto,
+  deleteComment,
+  getComments,
+  patchComment,
+} from "../apis/CommentApi";
 import { validateEmptyInput } from "../pages/utils/loginUtils";
+import { useNavigate } from "react-router-dom";
 
 const StudyCommentList = ({}) => {
+  const isLoggedIn = useRecoilValue(LogInState);
+  const navigate = useNavigate();
+
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [comment, setComment] = useState("");
   const [patchId, setPatchId] = useState<number | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
-  const handleUpdate = (id: number | null, content: string) => {
+  const handleUpdate = (id: number, content: string) => {
+    if (!isLoggedIn) navigate("/login");
     setIsUpdateMode(!isUpdateMode);
     setPatchId(id);
     setComment(content);
   };
+
+  const handleDelete = async (patchId: number) => {
+    if (!isLoggedIn) navigate("/login");
+    try {
+      const studyGroupId = 31;
+      await deleteComment(studyGroupId, patchId);
+    } catch (error) {
+      console.log("댓글 삭제 실패", error);
+    }
+  };
+
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
     //console.log(id);
   };
 
   const handleUpdateButton = async () => {
+    if (!isLoggedIn) navigate("/login");
+
     if (validateEmptyInput(comment)) {
-      alert("댓글 내용을 입력해주세요");
+      alert("댓글 내용을 입력해주세요.");
     } else {
       try {
         const studyGroupId = 31;
-        if (patchId !== null) {
+        if (patchId) {
           await patchComment(studyGroupId, patchId, comment);
           setIsUpdateMode(false);
+          setPatchId(null);
+          setComment("");
         }
-
-        console.log("댓글이 성공적으로 등록되었습니다.");
       } catch (error) {
-        console.log(error);
-        console.log("댓글 등록에 실패했습니다.");
+        console.log("댓글 등록 실패", error);
       }
     }
   };
@@ -55,7 +79,7 @@ const StudyCommentList = ({}) => {
         {comments.map((comment) => {
           return (
             <CommentItemDiv key={comment.commentId}>
-              <div>
+              <ContentItem>
                 <p>{comment.nickName}</p>
                 <>
                   {isUpdateMode && patchId === comment.commentId ? (
@@ -70,7 +94,7 @@ const StudyCommentList = ({}) => {
                     <span>{comment.content}</span>
                   )}
                 </>
-              </div>
+              </ContentItem>
               <ButtonDiv>
                 <button
                   onClick={() =>
@@ -79,7 +103,9 @@ const StudyCommentList = ({}) => {
                 >
                   수정
                 </button>
-                <button>삭제</button>
+                <button onClick={() => handleDelete(comment.commentId)}>
+                  삭제
+                </button>
               </ButtonDiv>
             </CommentItemDiv>
           );
@@ -97,8 +123,15 @@ const CommentItemDiv = styled.div`
   display: flex;
   justify-content: space-between;
   border-bottom: solid #e9e9e9;
-  div {
-    text-align: left;
+`;
+const ContentItem = styled.div`
+  text-align: left;
+  button {
+    margin-left: 10px;
+    background-color: #858da8;
+    font-size: 13px;
+    padding: 3px;
+    color: #ffffff;
   }
   p {
     font-size: 16px;
@@ -109,6 +142,7 @@ const CommentItemDiv = styled.div`
     font-size: 12px;
   }
 `;
+
 const ButtonDiv = styled.div`
   height: 100%;
   display: flex;

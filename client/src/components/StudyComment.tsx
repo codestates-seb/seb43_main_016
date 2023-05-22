@@ -1,12 +1,17 @@
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
 //import { useParams } from "react-router-dom";
 import { useState } from "react";
 // import { Link } from "react-router-dom";
 import { validateEmptyInput } from "../pages/utils/loginUtils";
 import { postComment } from "../apis/CommentApi";
+import { useNavigate } from "react-router-dom";
 
 const StudyComment = () => {
   //let { id } = useParams();
+  const isLoggedIn = useRecoilValue(LogInState);
+  const navigate = useNavigate();
 
   const [comment, setComment] = useState("");
 
@@ -16,7 +21,8 @@ const StudyComment = () => {
   };
 
   const handleCommentButton = async () => {
-    if (validateEmptyInput(comment)) {
+    if (!isLoggedIn) navigate("/login");
+    else if (validateEmptyInput(comment)) {
       alert("댓글 내용을 입력해주세요");
     } else {
       try {
