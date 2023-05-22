@@ -17,16 +17,12 @@ const ProfileStudyList = () => {
 
   useEffect(() => {
     const fetchStudyList = async () => {
-      try {
-        const data = await getStudyGroupList(true);
-        if (data === null) {
-          return <>텅..</>;
-        }
+      const { data, status } = await getStudyGroupList();
+      if (status < 299) {
         setStudyList(data);
-      } catch (error) {
-        console.error("스터디 그룹 리스트를 불러오는데 실패했습니다.", error);
       }
     };
+    // response.data도 항상 있음.
     fetchStudyList();
   }, []);
 
@@ -75,15 +71,12 @@ export default ProfileStudyList;
 const CardWrapper = styled.div`
   // 카드 스타일 지정
 `;
-
 const Title = styled.div`
   // 제목 스타일 지정
 `;
-
 const Image = styled.div`
   // 이미지 스타일 지정
 `;
-
 const Tag = styled.div`
   // 태그 스타일 지정
 `;

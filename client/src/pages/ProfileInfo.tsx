@@ -13,6 +13,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
+import { useNavigate } from "react-router-dom";
 
 const ProfileInfo = () => {
   const isLoggedIn = useRecoilValue(LogInState);
@@ -26,6 +27,7 @@ const ProfileInfo = () => {
   });
   // 멤버 정보 수정 (클라이언트에서 수정된 데이터)
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
   useEffect(() => {
@@ -91,6 +93,9 @@ const ProfileInfo = () => {
   const handleDeleteClick = async () => {
     try {
       await deleteMember();
+      alert("회원탈퇴가 완료되었습니다.");
+      localStorage.clear();
+      navigate("/");
     } catch (error) {
       console.error(error);
     }

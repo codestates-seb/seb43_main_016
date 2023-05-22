@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import {
   deleteStudyGroupInfo,
+  exitStudyGroup,
   getStudyGroupInfo,
   StudyInfoDto,
 } from "../apis/StudyGroupApi";
@@ -9,6 +10,8 @@ import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
+import MemberManage from "../components/studyManage/MemberManage";
+import CandidateManage from "../components/studyManage/CandidateManage";
 
 const ProfileStudyManage = () => {
   const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
@@ -17,6 +20,8 @@ const ProfileStudyManage = () => {
   const parsedId = Number(id);
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
+
+  console.log(studyInfo);
 
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
@@ -44,27 +49,47 @@ const ProfileStudyManage = () => {
 
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
-    try {
-      await deleteStudyGroupInfo(parsedId);
-    } catch (error) {
-      console.error(error);
-    }
+    await deleteStudyGroupInfo(parsedId, isLoggedIn);
+  };
+
+  // TODO : 스터디에서 탈퇴하는 코드
+  const handleExitClick = async () => {
+    await exitStudyGroup(parsedId, isLoggedIn);
   };
 
   return (
     <Wrapper>
       <div>스터디 명: {studyInfo?.studyName}</div>
       <div>스터디 인원: {studyInfo?.memberCountCurrent}</div>
+      <div>스터디장: {studyInfo?.leaderNickName}</div>
       <div>스터디 플랫폼: {studyInfo?.platform}</div>
       <div>
         스터디 기간: {studyInfo?.studyPeriodStart} ~ {studyInfo?.studyPeriodEnd}
       </div>
-      <div>태그: </div>
+      <div>
+        태그:
+        {studyInfo?.tags && (
+          <>
+            {Object.entries(studyInfo.tags).map(([category, tags]) => (
+              <div key={category}>
+                {category}:
+                {tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+      <div>
+        만남의 날 : 매 주 {studyInfo?.daysOfWeek} {studyInfo?.studyTimeStart} ~{" "}
+        {studyInfo?.studyTimeEnd}
+      </div>
       <button type="button" onClick={handleEditClick}>
         스터디 정보 수정
       </button>
+      <div>스터디 소개</div>
       <div>{studyInfo?.introduction}</div>
-
       {/* StudyInfoEditModal */}
       {isModalOpen && (
         <StudyInfoEditModal
@@ -73,8 +98,13 @@ const ProfileStudyManage = () => {
           studyInfo={studyInfo}
         />
       )}
+      <MemberManage />
+      <CandidateManage />
       <button type="button" onClick={handleDeleteClick}>
         스터디 삭제
+      </button>
+      <button type="button" onClick={handleExitClick}>
+        스터디 탈퇴
       </button>
     </Wrapper>
   );

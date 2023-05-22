@@ -13,7 +13,6 @@ import ProfileCalendar from "./pages/ProfileCalendar";
 import Redirect from "./pages/Redirect";
 import useRefreshToken from "./hooks/useRefreshToken";
 import Modal from "react-modal";
-import TestPage from "./test/TestPage";
 import Home from "./pages/Home";
 
 // import { worker } from "./mocks/browser";
@@ -60,7 +59,6 @@ function AppContent() {
             <Route path="/studycontent" element={<StudyContent />} />
             <Route path="/studypost" element={<StudyPost />} />
             <Route path="/calendar" element={<ProfileCalendar />} />
-            <Route path="/test" element={<TestPage />} />
             <Route />
           </Routes>
         </>
