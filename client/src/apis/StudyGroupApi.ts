@@ -274,3 +274,26 @@ export async function exitStudyGroup(id: number, isLoggedIn: boolean) {
   const response = await tokenRequestApi.delete(`/studygroup/${id}/member`);
   console.log("스터디에서 탈퇴했습니다", response);
 }
+
+// ====================== 스터디 그룹 모집상태 변경 ===========================
+// TODO : 스터디의 모집 상태를 변경하는 코드
+interface StudyGroupRecruitmentStatusUpdateDto {
+  state: boolean;
+}
+
+export async function changeStudyGroupRecruitmentStatus(
+  id: number,
+  isLoggedIn: boolean,
+) {
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
+
+  const config = {
+    status : false,
+  };
+
+  const response = await tokenRequestApi.patch(
+    `/studygroup/${id}/status`,
+    config
+  );
+  console.log("스터디 모집 상태를 변경했습니다", response);
+}

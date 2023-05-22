@@ -44,8 +44,6 @@ const MemberManage = () => {
 
   // TODO : 스터디 그룹장의 권한을 위임하는 함수
   const handlePrivileges = async (nickname: string) => {
-    console.log(nickname);
-
     const data: StudyGroupMemberApprovalDto = {
       nickName: nickname,
     };

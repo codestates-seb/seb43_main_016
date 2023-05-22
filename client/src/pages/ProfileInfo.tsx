@@ -44,6 +44,7 @@ const ProfileInfo = () => {
   }, [isModalOpen, isLoggedIn]);
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
+  // 현재 Modal 구현은 완료했으나 비동기 처리로 인해 계속된 오류 발생. 추가적인 최적화 작업 요함
   const handleEditClick = async () => {
     const enteredPassword = prompt(
       "개인정보 수정 전 비밀번호를 확인해야 합니다."

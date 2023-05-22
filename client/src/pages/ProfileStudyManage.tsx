@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import {
+  changeStudyGroupRecruitmentStatus,
   deleteStudyGroupInfo,
   exitStudyGroup,
   getStudyGroupInfo,
@@ -20,6 +21,7 @@ const ProfileStudyManage = () => {
   const parsedId = Number(id);
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
+  const isRecruiting = studyInfo?.isRecruited;
 
   console.log(studyInfo);
 
@@ -57,8 +59,20 @@ const ProfileStudyManage = () => {
     await exitStudyGroup(parsedId, isLoggedIn);
   };
 
+  // TODO : 스터디 모집 상태를 수정하는 코드
+  const handleRecuitCloseClick = async () => {
+    await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
+  };
+
   return (
     <Wrapper>
+      {!isRecruiting ? (
+        <button type="button" onClick={handleRecuitCloseClick}>
+          스터디 모집 중
+        </button>
+      ) : (
+        <div>스터디 모집 완료</div>
+      )}
       <div>스터디 명: {studyInfo?.studyName}</div>
       <div>스터디 인원: {studyInfo?.memberCountCurrent}</div>
       <div>스터디장: {studyInfo?.leaderNickName}</div>

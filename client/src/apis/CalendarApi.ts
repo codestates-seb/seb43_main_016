@@ -25,43 +25,66 @@ export interface Event {
 export const generateStudyEvents = async (
   isLoggedIn: boolean
 ): Promise<Event[]> => {
-    // 1. 개인이 속한 스터디 조회
-    const myStudyGroups = await getStudyGroupList();
-    console.log(myStudyGroups);
+  // 1. 개인이 속한 스터디 조회
+  const myStudyGroups = await getStudyGroupList();
+  console.log(myStudyGroups);
 
-    // 2. 조회 데이터의 id 추출
-    const studyGroupIds: number[] = [];
-    // members 배열에서 스터디 그룹의 ID 추출
-    for (const member of myStudyGroups.data.members) {
-      studyGroupIds.push(member.id);
-    }
-
-    // 3. id를 인자로 전달하여 각 스터디의 상세정보를 추출하고, 변수에 담기
-    const studyGroupInfos: StudyInfoDto[] = [];
-    for (const id of studyGroupIds) {
-      const studyGroupInfo = await getStudyGroupInfo(id, isLoggedIn);
-      studyGroupInfos.push(studyGroupInfo);
-    }
-
-    // 4. 변수에 담은 스터디 정보를 fullCalendar 라이브러리에 맞게 맵핑
-    const events: Event[] = studyGroupInfos.map(
-      (studyGroupInfo: StudyInfoDto) => {
-        const event: Event = {
-          id: studyGroupInfo.id.toString(),
-          title: studyGroupInfo.studyName,
-          // daysOfWeek?: studyGroupInfo.studyDays,
-          startTime: `${studyGroupInfo.studyTimeStart}:00`,
-          endTime: `${studyGroupInfo.studyTimeEnd}:00`,
-          startRecur: studyGroupInfo.studyPeriodStart,
-          endRecur: studyGroupInfo.studyPeriodEnd,
-          description: studyGroupInfo.introduction,
-          overlap: true,
-        };
-        console.log(event);
-        return event;
-      }
-    );
-
-    // 5. fullCalendar 이벤트 배열 반환
-    return events;
+  // 2. 조회 데이터의 id 추출
+  const studyGroupIds: number[] = [];
+  // members 배열에서 스터디 그룹의 ID 추출
+  for (const member of myStudyGroups.data.members) {
+    studyGroupIds.push(member.id);
   }
+
+  // 3. id를 인자로 전달하여 각 스터디의 상세정보를 추출하고, 변수에 담기
+  const studyGroupInfos: StudyInfoDto[] = [];
+  for (const id of studyGroupIds) {
+    const studyGroupInfo = await getStudyGroupInfo(id, isLoggedIn);
+    studyGroupInfos.push(studyGroupInfo);
+  }
+
+  // 4. 변수에 담은 스터디 정보를 fullCalendar 라이브러리에 맞게 맵핑
+  const events: Event[] = studyGroupInfos.map(
+    (studyGroupInfo: StudyInfoDto) => {
+      const mappedDaysOfWeek: string[] = studyGroupInfo.daysOfWeek.map(
+        (day: string) => {
+          switch (day) {
+            case "월":
+              return "1"; // "월" -> 1
+            case "화":
+              return "2"; // "화" -> 2
+            case "수":
+              return "3"; // "수" -> 3
+            case "목":
+              return "4"; // "목" -> 4
+            case "금":
+              return "5"; // "금" -> 5
+            case "토":
+              return "6"; // "토" -> 6
+            case "일":
+              return "0"; // "일" -> 0
+            default:
+              return ""; // handle any other cases if necessary
+          }
+        }
+      );
+
+      const event: Event = {
+        id: studyGroupInfo.id.toString(),
+        title: studyGroupInfo.studyName,
+        daysOfWeek: mappedDaysOfWeek,
+        startTime: `${studyGroupInfo.studyTimeStart}:00`,
+        endTime: `${studyGroupInfo.studyTimeEnd}:00`,
+        startRecur: studyGroupInfo.studyPeriodStart,
+        endRecur: studyGroupInfo.studyPeriodEnd,
+        description: studyGroupInfo.introduction,
+        overlap: true,
+      };
+      console.log(event);
+      return event;
+    }
+  );
+
+  // 5. fullCalendar 이벤트 배열 반환
+  return events;
+};

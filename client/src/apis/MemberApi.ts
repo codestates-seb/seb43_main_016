@@ -80,10 +80,10 @@ export interface MemberPasswordCheckDto {
   password: string;
 }
 // TODO : Member의 비밀번호를 확인하는 코드
-export const checkMemberPassword = async (
+export const checkMemberPassword = (
   memberPasswordCheckDto: MemberPasswordCheckDto
 ) => {
-    await tokenRequestApi.post("/members/password", memberPasswordCheckDto);
+    tokenRequestApi.post("/members/password", memberPasswordCheckDto);
 };
 
 // TODO : (Advance) Member의 수정된 사진을 S3에 업로드하는 코드

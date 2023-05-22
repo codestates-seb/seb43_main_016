@@ -65,7 +65,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
         isOpen={isOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel="UserInfoEditModal"
       >
         <form>
           <ModalExplain>변경할 Nickname</ModalExplain>
