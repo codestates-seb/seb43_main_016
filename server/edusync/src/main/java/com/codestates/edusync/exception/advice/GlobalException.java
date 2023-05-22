@@ -7,6 +7,7 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
+import org.springframework.security.authentication.InternalAuthenticationServiceException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.MissingServletRequestParameterException;
@@ -25,6 +26,14 @@ public class GlobalException {
                                MethodArgumentNotValidException e) {
 
         return ErrorResponse.of(e.getBindingResult());
+    }
+
+    @ExceptionHandler
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ErrorResponse handleInternalAuthenticationServiceException(
+                               InternalAuthenticationServiceException e) {
+
+        return ErrorResponse.of(HttpStatus.NOT_FOUND, e.getMessage());
     }
 
     @ExceptionHandler
