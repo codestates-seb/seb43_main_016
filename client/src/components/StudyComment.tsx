@@ -3,7 +3,7 @@ import styled from "styled-components";
 import { useState } from "react";
 // import { Link } from "react-router-dom";
 import { validateEmptyInput } from "../pages/utils/loginUtils";
-import { postContent } from "../apis/CommentApi";
+import { postComment } from "../apis/CommentApi";
 
 const StudyComment = () => {
   //let { id } = useParams();
@@ -19,9 +19,10 @@ const StudyComment = () => {
     if (validateEmptyInput(comment)) {
       alert("댓글 내용을 입력해주세요");
     } else {
-      console.log(comment);
       try {
-        await postContent(comment);
+        await postComment(comment);
+        setComment("");
+
         console.log("댓글이 성공적으로 등록되었습니다.");
       } catch (error) {
         console.log(error);
@@ -34,6 +35,7 @@ const StudyComment = () => {
     <StudyCommentContainer>
       <CommentInput>
         <input
+          value={comment}
           onChange={handleComment}
           type="text"
           placeholder="댓글을 입력하세요."
