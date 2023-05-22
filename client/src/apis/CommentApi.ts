@@ -25,12 +25,31 @@ export const postComment = async (data: string) => {
   }
 };
 // ====================== 댓글 수정 (patch) ===========================
+export const patchComment = async (
+  studyGroupId: number,
+  patchId: number,
+  data: string
+) => {
+  try {
+    const jsonData = JSON.stringify({ content: data }); // 데이터를 JSON 문자열로 직렬화
+    await tokenRequestApi.patch(
+      `/studygroup/${studyGroupId}/comment/${patchId}`,
+      jsonData
+    ); //31 -> 변수로 나중에 바꿔야 함
+  } catch (error) {
+    console.log(error);
+    throw new Error("댓글 수정 실패");
+  }
+};
 
 // ====================== 댓글 전부 조회 (get) ===========================
-export const getComments = async (): Promise<CommentDto[]> => {
+export const getComments = async (
+  studyGroupId: number
+): Promise<CommentDto[]> => {
   try {
-    const response = await eduApi.get<CommentDto[]>("/studygroup/31/comments"); //31 -> 변수로 나중에 바꿔야 함
-    console.log(response.data);
+    const response = await eduApi.get<CommentDto[]>(
+      `/studygroup/${studyGroupId}/comments`
+    ); //31 -> 변수로 나중에 바꿔야 함
     return response.data;
   } catch (error) {
     console.log(error);
