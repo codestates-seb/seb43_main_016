@@ -1,23 +1,39 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { StudyInfoDto, getStudyGroupInfo } from "../apis/StudyGroupApi";
+import axios from "axios";
 
-type Props = {
-  studyGroupId: number;
-};
+const StudyListBox = () => {
+  interface StudyListDto {
+    id: number;
+    title: string;
+    tagValues: {
+      [key: string]: string;
+    };
+  }
+  const initialState = [
+    {
+      id: 0,
+      title: "",
+      tagValues: { [""]: "" },
+    },
+  ];
 
-const StudyListBox = (props: Props) => {
-  const { studyGroupId } = props;
-  // 중괄호 구조분해할당, 이렇게 해야 임의의 변수명을 새로 짓는 게 아니라 원래 껄 가져오는 게 됨
   const [fetching, setFetching] = useState(true);
-  const [data, setData] = useState<StudyInfoDto>();
+  const [list, setList] = useState<StudyListDto[]>(initialState);
 
   useEffect(() => {
     const fetchData = async () => {
-      const result = await getStudyGroupInfo(studyGroupId);
-      if (result) setData(result);
-      setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_URL}/studygroups?page=1&size=6`
+        );
+        if (response) setList(response.data);
+        setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
+        console.log(list);
+      } catch (error) {
+        console.log(error);
+      }
     };
     // try catch는 명시적인 exeption이 없을 때만 뜬다, if로 명시적 예외처리 했으면 안쓴다?
     // throw를 했을 때 잡는다? 안하는 게 좋다
@@ -30,15 +46,24 @@ const StudyListBox = (props: Props) => {
         <StudyListBoxContainer>
           <Link to="/studycontent">
             <StudyListImage></StudyListImage>
-            <StudyListTitle>
-              <h3 key={data?.id}>{data?.studyName}</h3>
-              {/* 요소 렌더링하는 게 하나일 땐 map을 쓸 수 없다 */}
-              {/* <h3>Dummy Title</h3> */}
-            </StudyListTitle>
-            <StudyListTag>
+            {/* <StudyListTitle> */}
+            <StudyListBody>
+              {list.map((item: StudyListDto) => (
+                <>
+                  <div className="studylist-title">
+                    <h3 key={item?.id}>{item?.title}</h3>
+                  </div>
+                  <div className="studylist-tag">
+                    <div></div>
+                  </div>
+                </>
+              ))}
+            </StudyListBody>
+            {/* </StudyListTitle> */}
+            {/* <StudyListTag>
               <div>javascript</div>
               <div>typescript</div>
-            </StudyListTag>
+            </StudyListTag> */}
           </Link>
         </StudyListBoxContainer>
       )}
@@ -66,28 +91,27 @@ const StudyListImage = styled.div`
   background-color: aliceblue;
 `;
 
-const StudyListTitle = styled.div`
-  width: 260px;
-  padding: 15px 0;
-  color: #1f1f1f;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-
-  h3 {
+const StudyListBody = styled.div`
+  .studylist-title {
+    width: 260px;
+    padding: 15px 0;
+    color: #1f1f1f;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .studylist-title > h3 {
     font-size: 1.125rem;
     font-weight: 700;
   }
-`;
-
-const StudyListTag = styled.div`
-  width: 260px;
-  padding-top: 10px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-
-  div {
+  .studylist-tag {
+    width: 260px;
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .studylist-tag > div {
     height: 24px;
     color: #39739d;
     font-size: 0.8125rem;

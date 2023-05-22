@@ -16,9 +16,9 @@ const StudyList = () => {
           </Link>
         </StudyListTop>
         <StudyListMain>
-          <StudyListBox studyGroupId={7} />
-          <StudyListBox studyGroupId={7} />
-          <StudyListBox studyGroupId={7} />
+          <StudyListBox />
+          <StudyListBox />
+          <StudyListBox />
         </StudyListMain>
       </StudyListBody>
     </StudyListContainer>
