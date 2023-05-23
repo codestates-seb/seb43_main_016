@@ -81,7 +81,7 @@ const GNBDiv = styled.div`
 `;
 
 const GNBBlock = styled.div`
-  width: 150px;
+  width: 200px;
   display: flex;
 `;
 const GNBMenuBlock = styled(GNBBlock)`
