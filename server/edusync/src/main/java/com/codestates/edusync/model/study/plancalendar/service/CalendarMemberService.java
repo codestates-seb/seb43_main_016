@@ -24,8 +24,8 @@ public class CalendarMemberService {
     private final VerifyTimeScheduleUtils timeScheduleUtils;
     private final MemberUtils memberUtils;
 
-public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
-                                                String email) {
+    public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
+                                                    String email) {
         Member loginMember = memberUtils.getLoggedIn(email);
         timeSchedule.setMember(loginMember);
 
@@ -46,6 +46,7 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
     }
 
     public List<TimeSchedule> getTimeSchedules(String email) {
+
         return calendarRepository.findAllByMemberEmail(email);
     }
 
