@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-<<<<<<< HEAD
 import WaitingList from "../components/WaitingList";
 import {
   getStudyGroupList,
@@ -63,8 +62,8 @@ const ProfileStudyList = () => {
           tagValues={member.tagValues}
         />
       ))}
-=======
 // import styled from "styled-components";
+import WaitingList from "../components/WaitingList";// import styled from "styled-components";
 import WaitingList from "../components/WaitingList";
 import { getStudyGroupList, StudyGroupListDto } from "../apis/StudyGroupApi";
 
@@ -92,27 +91,12 @@ const ProfileStudyList = () => {
   return (
     <>
       <WaitingList />
->>>>>>> 264d02e71507dc6e59e67c70e1d0436e9b1a2d8d
     </>
   );
 };
 
 export default ProfileStudyList;
 
-<<<<<<< HEAD
-const CardWrapper = styled.div`
-  // 카드 스타일 지정
-`;
-const Title = styled.div`
-  // 제목 스타일 지정
-`;
-const Image = styled.div`
-  // 이미지 스타일 지정
-`;
-const Tag = styled.div`
-  // 태그 스타일 지정
-`;
-=======
 // const Box = styled.div`
 //   box-sizing: border-box;
 //   position: relative;
@@ -167,4 +151,4 @@ const Tag = styled.div`
 //     height: 100%;
 //     object-fit: cover;
 //   }
->>>>>>> 264d02e71507dc6e59e67c70e1d0436e9b1a2d8d
+

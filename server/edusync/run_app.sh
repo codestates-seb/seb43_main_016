@@ -1,7 +1,0 @@
-#!/bin/bash
-
-# Build the project
-./gradlew bootJar -x test
-
-# Run the app.jar file in the /build/libs directory
-java -jar build/libs/app.jar --spring.profiles.active=server
