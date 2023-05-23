@@ -8,14 +8,16 @@ const TagInput = ({
   selectedCategory,
   tags,
   setTags,
+  viewTag,
+  setViewTag,
 }: {
   selectedCategory: string;
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  viewTag: boolean;
+  setViewTag: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-  const [view, setView] = useState(false);
-
-  const [defaultTag, setDefaultTag] = useState<{ [key: string]: string }>({});
+  const [defaultTag, setDefaultTag] = useState<{ [key: string]: string[] }>({});
   const [createdTag, setCreatedTag] = useState<string>("");
 
   const handleTag = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -40,7 +42,6 @@ const TagInput = ({
   };
 
   useEffect(() => {
-    setView(false);
     setTags([]);
     setCreatedTag("");
     const fetchData = async () => {
@@ -69,13 +70,13 @@ const TagInput = ({
 
       <ul
         onClick={() => {
-          setView(!view);
+          setViewTag(true);
         }}
       >
-        {selectedCategory} {view ? "⌃" : "⌄"}
-        {view && defaultTag && (
+        {selectedCategory} {viewTag ? "⌃" : "⌄"}
+        {viewTag && defaultTag && (
           <TagDropdown
-            defaultTags={[defaultTag[selectedCategory]]}
+            defaultTags={defaultTag[selectedCategory]}
             setTags={setTags}
             tags={tags}
           />

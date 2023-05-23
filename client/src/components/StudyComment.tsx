@@ -1,28 +1,39 @@
 import styled from "styled-components";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
+//import { useParams } from "react-router-dom";
 import { useState } from "react";
 // import { Link } from "react-router-dom";
-import axios from "axios";
 import { validateEmptyInput } from "../pages/utils/loginUtils";
+import { postComment } from "../apis/CommentApi";
+import { useNavigate } from "react-router-dom";
 
 const StudyComment = () => {
+  //let { id } = useParams();
+  const isLoggedIn = useRecoilValue(LogInState);
+  const navigate = useNavigate();
+
   const [comment, setComment] = useState("");
 
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
+    //console.log(id);
   };
 
-  const handleCommentButton = () => {
-    if (validateEmptyInput(comment)) {
+  const handleCommentButton = async () => {
+    if (!isLoggedIn) navigate("/login");
+    else if (validateEmptyInput(comment)) {
       alert("댓글 내용을 입력해주세요");
     } else {
-      axios
-        .post(`${import.meta.env.VITE_APP_API_URL}/comment`, {
-          comment,
-        })
-        .catch((error) => {
-          console.log(error);
-          alert("댓글 내용을 입력해주세요");
-        });
+      try {
+        await postComment(comment);
+        setComment("");
+
+        console.log("댓글이 성공적으로 등록되었습니다.");
+      } catch (error) {
+        console.log(error);
+        console.log("댓글 등록에 실패했습니다.");
+      }
     }
   };
 
@@ -30,6 +41,7 @@ const StudyComment = () => {
     <StudyCommentContainer>
       <CommentInput>
         <input
+          value={comment}
           onChange={handleComment}
           type="text"
           placeholder="댓글을 입력하세요."
