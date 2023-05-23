@@ -221,12 +221,9 @@ export async function delegateStudyGroupLeader(
   id: number,
   data: StudyGroupMemberApprovalDto
 ) {
-  const config = {
-    data,
-  };
   const response = await tokenRequestApi.patch(
     `/studygroup/${id}/privileges`,
-    config
+    data
   );
   console.log("스터디장 권한 위임에 성공했습니다", response);
 }
