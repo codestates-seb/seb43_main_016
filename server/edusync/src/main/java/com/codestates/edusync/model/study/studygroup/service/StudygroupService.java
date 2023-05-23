@@ -99,11 +99,6 @@ public class StudygroupService implements StudygroupManager{
         findStudygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
         );
-        calendarStudygroupService.createTimeSchedulesOfAllMember(
-                studygroup.getId(),
-                studygroup.getTimeSchedules(),
-                email
-        );
 
         return studygroupRepository.save(findStudygroup);
     }
