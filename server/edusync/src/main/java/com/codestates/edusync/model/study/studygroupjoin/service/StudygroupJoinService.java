@@ -5,6 +5,7 @@ import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.repository.StudygroupJoinRepository;
@@ -21,6 +22,7 @@ import java.util.stream.Collectors;
 public class StudygroupJoinService implements StudygroupJoinManager {
     private final StudygroupJoinRepository studygroupJoinRepository;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
+    private final CalendarStudygroupService calendarStudygroupService;
     private final MemberUtils memberUtils;
 
     private Member getLoginMember(String email) {
@@ -29,7 +31,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public StudygroupJoin getCandidateByNickName(Long studygroupId, String nickName) {
-        for (StudygroupJoin sj : studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId)) {
+        List<StudygroupJoin> sjs =
+                studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
+
+        for (StudygroupJoin sj : sjs) {
             if (sj.getMember().getNickName().equals(nickName)) return sj;
         }
         return null;
@@ -37,7 +42,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public StudygroupJoin getMemberByNickName(Long studygroupId, String nickName) {
-        for (StudygroupJoin sj : studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsTrue(studygroupId)) {
+        List<StudygroupJoin> sjs =
+                studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsTrue(studygroupId);
+
+        for (StudygroupJoin sj : sjs) {
             if (sj.getMember().getNickName().equals(nickName)) return sj;
         }
         return null;
@@ -56,16 +64,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void createCandidate(Long studygroupId, String email) {
-        Member loginMember = getLoginMember(email);
-        if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
-        }
-        if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_EXISTS);
-        }
-        StudygroupJoin studygroupJoin = new StudygroupJoin();
-        studygroupJoin.setMember(loginMember);
-        studygroupJoin.setStudygroup(verifyStudygroupUtils.findVerifyStudygroup(studygroupId));
+        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, email);
         studygroupJoinRepository.save(studygroupJoin);
     }
 
@@ -76,6 +75,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void deleteMemberSelf(Long studygroupId, String email) {
+        if (verifyStudygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId)) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_YOU_ARE_STUDYGROUP_LEADER);
+        }
+
         delStudygroupJoin(studygroupId, email, true);
     }
 
@@ -124,6 +127,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     public void kickOutMemberByNickName(Long studygroupId, String nickName, String email) {
         verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
         studygroupJoinRepository.delete(getStudygroupJoin(studygroupId, nickName, true));
+
+        calendarStudygroupService.deleteTimeScheduleByMember(studygroupId, nickName);
     }
 
     /**
@@ -146,13 +151,6 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void leaderChanged(Member newLeader, Member oldLeader) {
-        StudygroupJoin studygroupJoin = studygroupJoinRepository.findByMemberId(newLeader.getId());
-        studygroupJoin.setMember(oldLeader);
-        studygroupJoinRepository.save(studygroupJoin);
-    }
-
-    @Override
     public List<Studygroup> getMyStudygroupList(String email, boolean isApproved) {
         Member loginMember = getLoginMember(email);
         List<StudygroupJoin> studygroupJoinList;
@@ -164,9 +162,28 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return studygroupJoinList.stream().map(StudygroupJoin::getStudygroup).collect(Collectors.toList());
     }
 
-    // TODO: 2023-05-19 스터디 멤버 수 조회 확인 필요
     @Override
     public int getStudygroupMemberCount(Long studygroupId) {
-        return studygroupJoinRepository.findCountByStudygroupIdAndIsApprovedIsTrue(studygroupId);
+        return studygroupJoinRepository.countByStudygroupIdAndIsApprovedIsTrue(studygroupId);
+    }
+
+    public void createJoinAsLeader(Long studygroupId, String email) {
+        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, email);
+        studygroupJoin.setIsApproved(true);
+        studygroupJoinRepository.save(studygroupJoin);
+    }
+
+    private StudygroupJoin createStudygroupJoinWithVerifyMember(Long studygroupId, String email) {
+        Member loginMember = getLoginMember(email);
+        if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_EXISTS);
+        }
+        if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_EXISTS);
+        }
+        StudygroupJoin studygroupJoin = new StudygroupJoin();
+        studygroupJoin.setMember(loginMember);
+        studygroupJoin.setStudygroup(verifyStudygroupUtils.findVerifyStudygroup(studygroupId));
+        return studygroupJoin;
     }
 }

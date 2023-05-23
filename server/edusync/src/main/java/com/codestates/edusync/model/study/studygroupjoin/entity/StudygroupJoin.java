@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+import static javax.persistence.CascadeType.MERGE;
+import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.*;
 
 @NoArgsConstructor
@@ -20,11 +22,11 @@ public class StudygroupJoin extends Auditable {
     @Column(name = "is_approved")
     private Boolean isApproved = false;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = EAGER, cascade = {MERGE})
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = EAGER)
+    @ManyToOne(fetch = EAGER, cascade = {MERGE})
     @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 

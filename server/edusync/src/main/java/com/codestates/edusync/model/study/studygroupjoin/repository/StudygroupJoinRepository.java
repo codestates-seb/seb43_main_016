@@ -1,6 +1,7 @@
 package com.codestates.edusync.model.study.studygroupjoin.repository;
 
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, 
      * @param memberId
      * @return
      */
+    @EntityGraph(attributePaths = "studygroup.searchTags")
     List<StudygroupJoin> findAllByMemberIdAndIsApprovedIsFalse(Long memberId);
 
     /**
@@ -19,6 +21,7 @@ public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, 
      * @param memberId
      * @return
      */
+    @EntityGraph(attributePaths = "studygroup.searchTags")
     List<StudygroupJoin> findAllByMemberIdAndIsApprovedIsTrue(Long memberId);
 
     /**
@@ -35,13 +38,12 @@ public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, 
      */
     List<StudygroupJoin> findAllByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
 
-    // TODO: 2023-05-19 스터디 멤버 수 조회 확인 필요
     /**
      * 스터디에 가입된 멤버 수
      * @param studygroupId
      * @return
      */
-    Integer findCountByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
+    Integer countByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
 
     StudygroupJoin findByMemberId(Long memberId);
 }
