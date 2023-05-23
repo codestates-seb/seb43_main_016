@@ -78,14 +78,6 @@ public interface StudygroupJoinManager {
     void kickOutMemberByNickName(Long studygroupId, String nickName, String email);
 
     /**
-     * 스터디 리더 권한 위임시,
-     * 스터디 멤버 추가(기존 리더) & 스터디 멤버 삭제(리더 위임 받은 멤버)
-     * @param newLeader
-     * @param oldLeader
-     */
-    void leaderChanged(Member newLeader, Member oldLeader);
-
-    /**
      * 사용자가 신청한 | 가입된 스터디 리스트 조회
      * @param email
      * @param isApproved
