@@ -2,18 +2,12 @@ import axios from "axios";
 import tokenRequestApi from "./TokenRequestApi";
 
 // ====================== 마이 스터디 리스트 조회 (GET) ===========================
-<<<<<<< HEAD
 export interface StudyGroup {
-=======
-
-export interface StudyGroupListDto {
->>>>>>> 264d02e71507dc6e59e67c70e1d0436e9b1a2d8d
   id: number;
   title: string;
   tagValues: string[];
 }
 
-<<<<<<< HEAD
 export interface StudyGroupListDto {
   leaders: StudyGroup[];
   members: StudyGroup[];
@@ -24,19 +18,6 @@ export const getStudyGroupList = async () => {
     `/studygroup/myList?approved=true`
   );
   return response;
-=======
-export const getStudyGroupList = async (): Promise<StudyGroupListDto[]> => {
-  try {
-    const response = await tokenRequestApi.get<StudyGroupListDto[]>(
-      "/studygroup/myList?approved=false"
-    );
-    const data = response.data;
-    return data;
-  } catch (error) {
-    console.log(error);
-    throw new Error("스터디 그룹 리스트를 불러오는데 실패했습니다.");
-  }
->>>>>>> 264d02e71507dc6e59e67c70e1d0436e9b1a2d8d
 };
 
 // ====================== 가입 대기중인 스터디 리스트 조회 (GET) ===========================
@@ -240,12 +221,9 @@ export async function delegateStudyGroupLeader(
   id: number,
   data: StudyGroupMemberApprovalDto
 ) {
-  const config = {
-    data,
-  };
   const response = await tokenRequestApi.patch(
     `/studygroup/${id}/privileges`,
-    config
+    data
   );
   console.log("스터디장 권한 위임에 성공했습니다", response);
 }
@@ -277,7 +255,6 @@ export interface StudyGroupMemberListDto {
 }
 
 // TODO : StudyGroup에 가입된 멤버 리스트
-<<<<<<< HEAD
 export async function getStudyGroupMemberList(id: number, isLoggedIn: boolean) {
   if (!isLoggedIn) throw new Error("Access token is not defined.");
   const response = await axios.get<StudyGroupMemberListDto>(
@@ -316,18 +293,4 @@ export async function changeStudyGroupRecruitmentStatus(
     config
   );
   console.log("스터디 모집 상태를 변경했습니다", response);
-=======
-export async function getStudyGroupMemberList (id: number, isLoggedIn : boolean) {
-  if (!isLoggedIn)
-    throw new Error("Access token is not defined.");
-  try {
-    const response = await axios.get<StudyGroupMemberListDto>(
-      `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join=true`
-    );
-    console.log("성공적으로 멤버 목록을 불러왔습니다", response);
-    return response.data as StudyGroupMemberListDto;
-  } catch (error) {
-    console.error("멤버 목록을 불러오는데 실패했습니다", error);
-  }
->>>>>>> 264d02e71507dc6e59e67c70e1d0436e9b1a2d8d
 }
