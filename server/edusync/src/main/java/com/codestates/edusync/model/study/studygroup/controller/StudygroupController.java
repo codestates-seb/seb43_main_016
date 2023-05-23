@@ -117,12 +117,8 @@ public class StudygroupController {
 
         Page<Studygroup> studygroupPage = studygroupService.getWithPaging(page-1, size);
 
-        // TODO: 2023-05-19 searchTat lazy 관련 에러 확인 필요
-        List<Studygroup> studygroupList = // Stream 내부에서 Service 다량 쿼리 발생, 로직 수정 필요
-                studygroupPage.getContent().stream().map(e -> studygroupService.get(e.getId())).collect(Collectors.toList());
-
         List<StudygroupResponseDto.DtoList> responseDtoList =
-                studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
+                studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupPage.getContent());
 
         return ResponseEntity.ok(new MultiResponseDto<>(responseDtoList,studygroupPage));
     }

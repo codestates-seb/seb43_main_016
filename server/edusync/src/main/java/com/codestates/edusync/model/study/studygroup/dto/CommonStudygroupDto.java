@@ -13,6 +13,7 @@ public interface CommonStudygroupDto {
     String getPlatform();
     String getIntroduction();
     Map<String, Set<String>> getTags();
+    String getColor();
 
     LocalDateTime getStudyPeriodStart();
     LocalDateTime getStudyPeriodEnd();

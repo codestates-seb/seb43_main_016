@@ -1,9 +1,13 @@
 package com.codestates.edusync.model.study.studygroup.repository;
 
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface StudygroupRepository extends JpaRepository<Studygroup, Long> {
 
@@ -13,4 +17,10 @@ public interface StudygroupRepository extends JpaRepository<Studygroup, Long> {
      * @return
      */
     List<Studygroup> findAllByLeaderMemberId(Long memberId);
+
+    @EntityGraph(attributePaths = {"searchTags", "leaderMember"})
+    Optional<Studygroup> findById(Long studygroupId);
+
+    @EntityGraph(attributePaths = "searchTags")
+    Page<Studygroup> findAll(Pageable pageable);
 }

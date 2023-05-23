@@ -31,7 +31,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public StudygroupJoin getCandidateByNickName(Long studygroupId, String nickName) {
-        for (StudygroupJoin sj : studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId)) {
+        List<StudygroupJoin> sjs =
+                studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
+
+        for (StudygroupJoin sj : sjs) {
             if (sj.getMember().getNickName().equals(nickName)) return sj;
         }
         return null;
@@ -39,7 +42,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public StudygroupJoin getMemberByNickName(Long studygroupId, String nickName) {
-        for (StudygroupJoin sj : studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsTrue(studygroupId)) {
+        List<StudygroupJoin> sjs =
+                studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsTrue(studygroupId);
+
+        for (StudygroupJoin sj : sjs) {
             if (sj.getMember().getNickName().equals(nickName)) return sj;
         }
         return null;
@@ -69,10 +75,11 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void deleteMemberSelf(Long studygroupId, String email) {
-        delStudygroupJoin(studygroupId, email, true);
+        if (verifyStudygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId)) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_YOU_ARE_STUDYGROUP_LEADER);
+        }
 
-        Member loginMember = memberUtils.getLoggedIn(email);
-        calendarStudygroupService.deleteTimeScheduleByMember(studygroupId, loginMember.getNickName());
+        delStudygroupJoin(studygroupId, email, true);
     }
 
     /**
