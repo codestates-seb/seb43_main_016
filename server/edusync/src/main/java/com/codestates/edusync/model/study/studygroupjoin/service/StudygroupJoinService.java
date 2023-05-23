@@ -171,10 +171,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     private StudygroupJoin createStudygroupJoinWithVerifyMember(Long studygroupId, String email) {
         Member loginMember = getLoginMember(email);
         if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_CANDIDATE_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_EXISTS);
         }
         if (getMemberByNickName(studygroupId, loginMember.getNickName())!= null) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGOURP_JOIN_EXISTS);
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_EXISTS);
         }
         StudygroupJoin studygroupJoin = new StudygroupJoin();
         studygroupJoin.setMember(loginMember);
