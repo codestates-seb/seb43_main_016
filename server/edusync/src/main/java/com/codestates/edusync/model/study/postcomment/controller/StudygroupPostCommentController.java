@@ -1,5 +1,7 @@
 package com.codestates.edusync.model.study.postcomment.controller;
 
+import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.mapper.StudygroupPostCommentMapper;
 import com.codestates.edusync.model.study.postcomment.service.StudygroupPostCommentService;
@@ -79,11 +81,16 @@ public class StudygroupPostCommentController {
      * @return
      */
     @GetMapping(DEFAULT_STUDYGROUP_URL + "/{studygroup-id}" + DEFAULT_STUDYGROUP_POST_COMMENT_URL + "s")
-    public ResponseEntity getStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId) {
+    public ResponseEntity getStudygroupPostComment(@PathVariable("studygroup-id") @Positive Long studygroupId,
+                                                   Authentication authentication) {
+        if( authentication == null ) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_POST_COMMENT_AUTHENTICATION_NOT_NULL);
+        }
+
         List<StudygroupPostComment> findComments = studygroupPostCommentService.getAll(studygroupId);
 
         return new ResponseEntity<>(
-                mapper.studygroupPostCommentToStudygroupPostCommentResponseDtos(findComments),
+                mapper.studygroupPostCommentToStudygroupPostCommentResponseDtos(findComments, authentication.getPrincipal().toString()),
                 HttpStatus.OK
         );
     }

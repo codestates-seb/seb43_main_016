@@ -12,4 +12,5 @@ public class StudygroupPostCommentResponseDto {
     private Long studygroupId;
     private String nickName;
     private String content;
+    private Boolean isMyComment;
 }

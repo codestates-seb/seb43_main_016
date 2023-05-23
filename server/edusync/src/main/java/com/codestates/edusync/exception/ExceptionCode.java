@@ -28,6 +28,7 @@ public enum ExceptionCode {
     /**
      * 스터디 그룹 모집글에 대한 댓글 관련 에러 코드
      */
+    STUDYGROUP_POST_COMMENT_AUTHENTICATION_NOT_NULL(400, "로그인 된 회원 정보를 찾을 수 없습니다. 토큰 정보를 포함해야합니다!"),
     STUDYGROUP_POST_COMMENT_NOT_ALLOWED(403, "댓글은 본인과 스터디장만 삭제할 수 있습니다."),
     STUDYGROUP_POST_COMMENT_ALLOWED_ONLY_FOR_LEADER(403, "스터디장에게만 있는 권한입니다."),
     STUDYGROUP_POST_COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
@@ -47,9 +48,9 @@ public enum ExceptionCode {
      * 스터디 그룹 신청 관련 에렄 코드
       */
     STUDYGROUP_JOIN_NOT_FOUND(404, "가입된 스터디를 찾을 수 없습니다."),
-    STUDYGOURP_JOIN_EXISTS(409, "이미 가입한 스터디 입니다."),
+    STUDYGROUP_JOIN_EXISTS(409, "이미 가입한 스터디 입니다."),
     STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND(404, "해당 스터디에 신청한 내역이 없습니다."),
-    STUDYGOURP_JOIN_CANDIDATE_EXISTS(409, "이미 신청한 스터디 입니다."),
+    STUDYGROUP_JOIN_CANDIDATE_EXISTS(409, "이미 신청한 스터디 입니다."),
 
     /**
      * 기타 에러 코드
