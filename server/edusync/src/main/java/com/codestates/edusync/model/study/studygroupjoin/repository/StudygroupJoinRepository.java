@@ -35,13 +35,12 @@ public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, 
      */
     List<StudygroupJoin> findAllByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
 
-    // TODO: 2023-05-19 스터디 멤버 수 조회 확인 필요
     /**
      * 스터디에 가입된 멤버 수
      * @param studygroupId
      * @return
      */
-    Integer findCountByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
+    Integer countByStudygroupIdAndIsApprovedIsTrue(Long studygroupId);
 
     StudygroupJoin findByMemberId(Long memberId);
 }

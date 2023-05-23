@@ -96,7 +96,6 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getIntroduction()).ifPresent(findStudygroup::setIntroduction);
         Optional.ofNullable(studygroup.getMemberCountMin()).ifPresent(findStudygroup::setMemberCountMin);
         Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
-        Optional.ofNullable(studygroup.getMemberCountCurrent()).ifPresent(findStudygroup::setMemberCountCurrent);
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
@@ -124,7 +123,7 @@ public class StudygroupService implements StudygroupManager{
 //            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
 //        }
 
-        findStudygroup.setIsRecruited(true);
+        findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
     }
@@ -133,12 +132,8 @@ public class StudygroupService implements StudygroupManager{
     public Studygroup get(Long studygroupId) {
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
-        // todo : searchTag null 값으로 수동 셋, 확인 필요
         findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
-
-        // todo : 스터디 멤버 카운트 확인 필요
-        //findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
-        findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size());
+        findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
 
         return findStudygroup;
     }
@@ -179,9 +174,5 @@ public class StudygroupService implements StudygroupManager{
         if (member == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
         findStudygroup.setLeaderMember(member);
         studygroupRepository.save(findStudygroup);
-
-        Member oldLeader = memberUtils.get(email);
-        Member newLeader = member;
-        studygroupJoinService.leaderChanged(newLeader, oldLeader);
     }
 }

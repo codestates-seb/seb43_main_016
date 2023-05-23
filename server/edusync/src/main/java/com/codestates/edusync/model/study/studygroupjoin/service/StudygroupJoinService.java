@@ -146,13 +146,6 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     }
 
     @Override
-    public void leaderChanged(Member newLeader, Member oldLeader) {
-        StudygroupJoin studygroupJoin = studygroupJoinRepository.findByMemberId(newLeader.getId());
-        studygroupJoin.setMember(oldLeader);
-        studygroupJoinRepository.save(studygroupJoin);
-    }
-
-    @Override
     public List<Studygroup> getMyStudygroupList(String email, boolean isApproved) {
         Member loginMember = getLoginMember(email);
         List<StudygroupJoin> studygroupJoinList;
@@ -164,10 +157,9 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return studygroupJoinList.stream().map(StudygroupJoin::getStudygroup).collect(Collectors.toList());
     }
 
-    // TODO: 2023-05-19 스터디 멤버 수 조회 확인 필요
     @Override
     public int getStudygroupMemberCount(Long studygroupId) {
-        return studygroupJoinRepository.findCountByStudygroupIdAndIsApprovedIsTrue(studygroupId);
+        return studygroupJoinRepository.countByStudygroupIdAndIsApprovedIsTrue(studygroupId);
     }
 
     public void createJoinAsLeader(Long studygroupId, String email) {
