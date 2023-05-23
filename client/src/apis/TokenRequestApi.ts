@@ -14,6 +14,7 @@ tokenRequestApi.interceptors.request.use(
   (config) => {
     config.headers = config.headers || {};
     if (accessToken) {
+      console.log(accessToken)
       config.headers.authorization = `${accessToken}`;
     }
     return config;
@@ -22,6 +23,7 @@ tokenRequestApi.interceptors.request.use(
     return Promise.reject(error);
   }
 );
+
 
 const extendAccessToken = async () => {
   const expirationTime = 4 * 60 * 1000;
@@ -42,11 +44,14 @@ const extendAccessToken = async () => {
       const { authorization: newAccessToken } = response.headers;
       tokenRequestApi.setAccessToken(newAccessToken);
       console.log("accessToken 갱신됨");
+
     } catch (error) {
       console.error("accessToken 갱신 실패:", error);
     }
   }, timeToExpire);
 };
+
+
 
 tokenRequestApi.setAccessToken = (token): void => {
   if (token) {

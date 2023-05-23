@@ -7,3 +7,4 @@ export const eduApi: AxiosInstance = axios.create({
 export const socialLoginApi = `${
   import.meta.env.VITE_APP_API_URL
 }/oauth2/authorization`;
+

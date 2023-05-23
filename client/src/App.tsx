@@ -13,7 +13,6 @@ import ProfileCalendar from "./pages/ProfileCalendar";
 import Redirect from "./pages/Redirect";
 import useRefreshToken from "./hooks/useRefreshToken";
 import Modal from "react-modal";
-import TestPage from "./test/TestPage";
 import Home from "./pages/Home";
 import HTestPage from "./pages/HTestPage";
 

@@ -29,36 +29,32 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
     passwordCheck: "",
   });
 
-  // TODO : form에 입력된 유저의 닉네임, 비밀번호를 상태에 저장하는 코드s
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setModalState((prevState: any) => ({
+    setModalState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  // TODO : Save 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 서버에 PATCH하는 코드
-  const handleSaveClick = () => {
-    // TODO : 새로운 비밀번호와 비밀번호 확인이 일치하는지 확인하는 코드, 일치하지 않으면 에러메시지를 띄워주는 코드
+  const handleSaveClick = async () => {
     if (modalState.password !== modalState.passwordCheck) {
       alert("새로운 비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.");
       return;
     }
+
     try {
       const updateDto: MemberUpdateDto = {
         nickName: modalState.nickname,
         password: modalState.password,
       };
-      console.log(updateDto)
-      updateMember(isLoggedIn, updateDto);
+      await updateMember(isLoggedIn, updateDto); // Await the updateMember function call
       closeModal();
     } catch (error) {
       alert("로그인이 필요합니다.");
     }
   };
 
-  // TODO : Cancel 버튼을 클릭 시, 모달을 닫는 코드
   const handleCancelClick = () => {
     closeModal();
   };
@@ -69,7 +65,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
         isOpen={isOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel="UserInfoEditModal"
       >
         <form>
           <ModalExplain>변경할 Nickname</ModalExplain>
