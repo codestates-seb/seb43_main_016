@@ -2,6 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 // import axios from "axios";
+import dayjs from "dayjs";
 
 import TextEditor from "../components/TextEditor";
 import DaysOfWeek from "../components/DaysOfWeek";
@@ -18,12 +19,15 @@ const StudyPost = () => {
   const [memberCountMin, setMemberCountMin] = useState<number>(1);
   const [memberCountMax, setMemberCountMax] = useState<number>(1);
   const [platform, setPlatform] = useState<string>("");
+  const [tags, setTags] = useState<string[]>([]);
+  const [viewTag, setViewTag] = useState(false);
   const [introduction, setIntroduction] = useState<string>("");
   const [selectedCategory, setSelectedCategory] =
     useState<string>("프론트엔드");
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
+    setViewTag(false);
   };
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,6 +56,12 @@ const StudyPost = () => {
   };
 
   const handlePostButton = async () => {
+    let now = dayjs();
+    now.format();
+    let date = dayjs("2023-05-21");
+    date.format("YYYY-MM-DD");
+    console.log(date);
+
     const StudyPostDto = {
       studyName,
       studyPeriodStart: "2023-05-01T18:00",
@@ -63,9 +73,12 @@ const StudyPost = () => {
       memberCountMax,
       platform,
       introduction,
+      // tags: {
+      //   [selectedCategory]: tags,
+      // },
       tags: {
-        백엔드: "javascript",
-        프론트엔드: "javascript",
+        프론트엔드: ["javascript", "react"],
+        백엔드: ["javascript", "java"],
       },
     };
 
@@ -176,7 +189,13 @@ const StudyPost = () => {
           </StudyPostInfo>
           <StudyPostInfo>
             <span>태그</span>
-            <TagInput selectedCategory={selectedCategory} />
+            <TagInput
+              selectedCategory={selectedCategory}
+              tags={tags}
+              setTags={setTags}
+              viewTag={viewTag}
+              setViewTag={setViewTag}
+            />
           </StudyPostInfo>
           <StudyPostInput>
             <TextEditor handleContentChange={setIntroduction} />
@@ -191,6 +210,11 @@ const StudyPost = () => {
     </StudyPostContainer>
   );
 };
+
+// 최대인원이 최소인원보다 적으면 안 됨
+// 끝나는 날짜가 시작하는 날짜보다 먼저면 안 됨
+// 로그아웃해도 토큰 정보 남아있다?
+// 로그아웃 돼 있으면 아예 페이지 못 들어가게?
 
 const StudyPostContainer = styled.div`
   width: 100%;
@@ -272,6 +296,14 @@ const StudyPostInfo = styled.form`
   }
   p {
     padding: 0 10px;
+  }
+  ul {
+    margin: 0 20px;
+    padding: 7px;
+    border-radius: 5px;
+    cursor: pointer;
+    background-color: #e9e9e9;
+    font-size: 0.8rem;
   }
 `;
 
