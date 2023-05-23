@@ -56,12 +56,6 @@ public class StudygroupService implements StudygroupManager{
 
         studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
 
-        calendarStudygroupService.createTimeSchedulesOfAllMember(
-                studygroup.getId(),
-                studygroup.getTimeSchedules(),
-                email
-        );
-
         return createdStudygroup;
     }
 
@@ -103,11 +97,6 @@ public class StudygroupService implements StudygroupManager{
         calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
         findStudygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
-        );
-        calendarStudygroupService.createTimeSchedulesOfAllMember(
-                studygroup.getId(),
-                studygroup.getTimeSchedules(),
-                email
         );
 
         return studygroupRepository.save(findStudygroup);
