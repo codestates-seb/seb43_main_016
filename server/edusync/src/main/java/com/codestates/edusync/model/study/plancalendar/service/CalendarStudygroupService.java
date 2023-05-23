@@ -43,7 +43,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
             ts.setTitle(findStudygroup.getStudyName());
             ts.setPlatform((findStudygroup.getPlatform()));
             ts.setDescription(findStudygroup.getIntroduction());
-            // todo: color 기본값 적용할 수 있도록
+            ts.setColor(findStudygroup.getColor());
         } );
         calendarRepository.saveAll(timeSchedules);
 

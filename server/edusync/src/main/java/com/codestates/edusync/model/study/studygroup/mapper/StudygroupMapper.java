@@ -48,6 +48,7 @@ public interface StudygroupMapper {
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
         studygroup.setPlatform(studygroupDto.getPlatform());
+        studygroup.setColor(studygroupDto.getColor());
 
         studygroup.setSearchTags(
                 TagFormatConverter.mapToList(

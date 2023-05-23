@@ -64,6 +64,9 @@ public class Studygroup extends Auditable {
     @Column(name = "is_recruited")
     private Boolean isRecruited;
 
+    @Column(name = "color")
+    private String color;
+
     @ManyToOne(cascade = {PERSIST, MERGE}, fetch = EAGER)
     @JoinColumn(name = "leader_member_id")
     private Member leaderMember;
