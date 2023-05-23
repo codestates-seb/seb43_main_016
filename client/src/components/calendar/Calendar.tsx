@@ -12,10 +12,9 @@ const Calendar = () => {
         const generatedEvents = await generateStudyEvents(true);
         setEvents(generatedEvents);
       } catch (error) {
-        console.error(error);
+        alert("스터디 일정을 불러오는 데 실패했습니다")
       }
     };
-
     fetchEvents();
   }, []);
 
@@ -35,6 +34,7 @@ const Calendar = () => {
         eventClick={handleEventClick}
         slotMinTime={"09:00"} // 시작 시간을 09:00으로 설정
         slotMaxTime={"33:00"} // 종료 시간을 24:00으로 설정
+        slotEventOverlap={true} // 이벤트가 겹치지 않도록 설정
         height={"100%"}
       />
     </>

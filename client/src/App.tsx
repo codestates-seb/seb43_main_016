@@ -61,7 +61,6 @@ function AppContent() {
             <Route path="/studycontent" element={<StudyContent />} />
             <Route path="/studypost" element={<StudyPost />} />
             <Route path="/calendar" element={<ProfileCalendar />} />
-            <Route path="/test" element={<TestPage />} />
             <Route path="/haeun" element={<HTestPage />} />
             <Route />
           </Routes>

@@ -6,14 +6,16 @@ import {
   updateMemberDetail,
   MemberDetailDto,
   deleteMember,
-  MemberPasswordCheckDto,
+  checkOauth2Member,
   checkMemberPassword,
+  MemberPasswordCheckDto,
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import { useNavigate } from "react-router-dom";
+import CheckPasswordModal from "../components/modal/CheckPasswordModal";
 
 const ProfileInfo = () => {
   const isLoggedIn = useRecoilValue(LogInState);
@@ -27,7 +29,12 @@ const ProfileInfo = () => {
   });
   // 멤버 정보 수정 (클라이언트에서 수정된 데이터)
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
+  const [passowrdCheckModalOpen, setPasswordCheckModalOpen] =
+    useState<boolean>(false);
+  const [passwordCheckResult, setPasswordCheckResult] =
+    useState<MemberPasswordCheckDto>({ password: "" });
   const navigate = useNavigate();
+  console.log(passwordCheckResult)
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
   useEffect(() => {
@@ -45,20 +52,21 @@ const ProfileInfo = () => {
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
   // 현재 Modal 구현은 완료했으나 비동기 처리로 인해 계속된 오류 발생. 추가적인 최적화 작업 요함
+  // Jest로 테스트할 필요! : why? 소셜 로그인은 자동으로 배포 서버로 리다이렉션 함!
   const handleEditClick = async () => {
-    const enteredPassword = prompt(
-      "개인정보 수정 전 비밀번호를 확인해야 합니다."
-    );
-    if (!enteredPassword) return; // 비밀번호 입력을 취소하면 함수 종료
     try {
-      const passwordCheckDto: MemberPasswordCheckDto = {
-        password: enteredPassword,
-      };
-      await checkMemberPassword(passwordCheckDto);
-      setIsModalOpen(true); // 비밀번호 검증이 성공하면 모달 열기
+      const data = await checkOauth2Member(isLoggedIn);
+      if (data.provider !== "LOCAL") {
+        alert("소셜 로그인 유저는 개인정보를 수정할 수 없습니다.");
+      }
+      if (data.provider === "LOCAL") {
+        setPasswordCheckModalOpen(true);
+      }
+      checkMemberPassword(passwordCheckResult);
     } catch (error) {
       alert("비밀번호가 일치하지 않습니다.");
     }
+    setIsModalOpen(true);
   };
 
   // TODO Edit 버튼을 클릭 시, 유저의 자기소개, 원하는 동료상을 수정할 수 있도록 상태를 변경하는 코드
@@ -115,7 +123,6 @@ const ProfileInfo = () => {
           <EditButton onClick={handleEditClick}>Edit</EditButton>
         </ProfileBaseInfo>
       </ProfileBaseWrapper>
-
       {/* 유저의 자기소개와 원하는 유형의 팀원을 정리하는 자리 */}
       <IntroduceAndDesired>
         {!isIntroduceEdit ? (
@@ -147,6 +154,11 @@ const ProfileInfo = () => {
       <UserInfoEditModal
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
+      />
+      <CheckPasswordModal
+        isOpen={passowrdCheckModalOpen}
+        closeModal={() => setPasswordCheckModalOpen(false)}
+        setPasswordCheckResult={setPasswordCheckResult}
       />
     </Wrapper>
   );
