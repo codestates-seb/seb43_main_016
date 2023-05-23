@@ -40,20 +40,7 @@ public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
                         timeScheduleId, email
                 );
 
-        Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
-        Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
-        Optional.ofNullable(timeSchedule.getDescription()).ifPresent(findTimeSchedule::setDescription);
-        Optional.ofNullable(timeSchedule.getColor()).ifPresent(findTimeSchedule::setColor);
-
-        findTimeSchedule.setTime(
-                new TimeRange(
-                        (timeSchedule.getTime().getStudyTimeStart() == null ?
-                                findTimeSchedule.getTime().getStudyTimeStart()
-                                : timeSchedule.getTime().getStudyTimeStart() ),
-                        (timeSchedule.getTime().getStudyTimeEnd() == null ?
-                                findTimeSchedule.getTime().getStudyTimeEnd()
-                                : timeSchedule.getTime().getStudyTimeEnd() ) )
-        );
+        CommonCalendarFeature.setTimeScheduleInformation(timeSchedule, findTimeSchedule);
 
         calendarRepository.save(findTimeSchedule);
     }
