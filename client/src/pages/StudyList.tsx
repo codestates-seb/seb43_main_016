@@ -1,11 +1,43 @@
 import styled from "styled-components";
-// import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
-// import axios from "axios";
-
-import StudyListBox from "../components/StudyListBox";
+import axios from "axios";
 
 const StudyList = () => {
+  interface StudyListDto {
+    id: number;
+    title: string;
+    tagValues: {
+      [key: string]: string;
+    };
+  }
+  const initialState = [
+    {
+      id: 0,
+      title: "",
+      tagValues: { [""]: "" },
+    },
+  ];
+
+  const [fetching, setFetching] = useState(true);
+  const [list, setList] = useState<StudyListDto[]>(initialState);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await axios.get(
+          `${import.meta.env.VITE_APP_API_URL}/studygroups?page=1&size=18`
+        );
+        setList(response.data?.data);
+        setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
+        console.log(response.data?.data);
+      } catch (error) {
+        console.log(error);
+        throw new Error("스터디 리스트 로딩에 실패했습니다.");
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <StudyListContainer>
       <StudyListBody>
@@ -16,9 +48,25 @@ const StudyList = () => {
           </Link>
         </StudyListTop>
         <StudyListMain>
-          <StudyListBox />
-          <StudyListBox />
-          <StudyListBox />
+          {!fetching && (
+            <StudyBoxContainer>
+              {list?.map((item: StudyListDto) => (
+                <Link to={`/studycontent/${item?.id}`}>
+                  <StudyBox key={item?.id}>
+                    <StudyListImage></StudyListImage>
+                    <div>
+                      <div className="studylist-title">
+                        <h3>{item?.title}</h3>
+                      </div>
+                      <div className="studylist-tag">
+                        <div>{item?.tagValues.key}</div>
+                      </div>
+                    </div>
+                  </StudyBox>
+                </Link>
+              ))}
+            </StudyBoxContainer>
+          )}
         </StudyListMain>
       </StudyListBody>
     </StudyListContainer>
@@ -84,6 +132,65 @@ const StudyListMain = styled.div`
   flex-flow: row wrap;
   justify-content: flex-start;
   align-items: center;
+`;
+
+const StudyBoxContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+`;
+
+const StudyListImage = styled.div`
+  width: 260px;
+  height: 180px;
+  background-color: aliceblue;
+`;
+
+const StudyBox = styled.div`
+  flex-basis: 280px;
+  height: 320px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  margin: 10px 20px;
+  padding: 5px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+
+  .studylist-title {
+    width: 260px;
+    padding: 10px 0;
+    color: #1f1f1f;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+  }
+  .studylist-title > h3 {
+    font-size: 16px;
+    height: 32px;
+    text-align: left;
+    font-weight: 700;
+  }
+  .studylist-tag {
+    width: 260px;
+    padding-top: 10px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  .studylist-tag > div {
+    height: 24px;
+    color: #39739d;
+    font-size: 0.8125rem;
+    border-radius: 4px;
+    background-color: #e1ecf4;
+    padding: 4.8px 6px;
+    margin-left: 7px;
+    cursor: pointer;
+  }
 `;
 
 export default StudyList;
