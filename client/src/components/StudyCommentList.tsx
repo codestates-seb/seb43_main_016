@@ -57,21 +57,21 @@ const StudyCommentList = ({}) => {
     try {
       const studyGroupId = 31;
       await deleteComment(studyGroupId, patchId);
+      fetchData();
     } catch (error) {
       console.log("댓글 삭제 실패", error);
     }
   };
-
+  const fetchData = async () => {
+    try {
+      const studyGroupId = 31;
+      const newComment = await getComments(studyGroupId);
+      setComments(newComment);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const studyGroupId = 31;
-        const newComment = await getComments(studyGroupId);
-        setComments(newComment);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchData();
   }, [!isUpdateMode]); // post시 바로 변경될 수 있도록 의존성 배열 추가 예정
   return (
