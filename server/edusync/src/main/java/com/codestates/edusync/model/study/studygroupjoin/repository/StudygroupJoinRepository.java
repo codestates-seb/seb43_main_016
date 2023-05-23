@@ -1,6 +1,7 @@
 package com.codestates.edusync.model.study.studygroupjoin.repository;
 
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, 
      * @param memberId
      * @return
      */
+    @EntityGraph(attributePaths = "studygroup.searchTags")
     List<StudygroupJoin> findAllByMemberIdAndIsApprovedIsFalse(Long memberId);
 
     /**
@@ -19,6 +21,7 @@ public interface StudygroupJoinRepository extends JpaRepository<StudygroupJoin, 
      * @param memberId
      * @return
      */
+    @EntityGraph(attributePaths = "studygroup.searchTags")
     List<StudygroupJoin> findAllByMemberIdAndIsApprovedIsTrue(Long memberId);
 
     /**
