@@ -108,8 +108,6 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         StudygroupJoin studygroupJoin = getStudygroupJoin(studygroupId, nickName, false);
         studygroupJoin.setIsApproved(true);
         studygroupJoinRepository.save(studygroupJoin);
-
-        calendarStudygroupService.createTimeSchedulesOfSingleMemberFromJoin(studygroupJoin);
     }
 
     @Override

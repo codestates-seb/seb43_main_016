@@ -22,11 +22,11 @@ public class StudygroupJoin extends Auditable {
     @Column(name = "is_approved")
     private Boolean isApproved = false;
 
-    @ManyToOne(fetch = EAGER, cascade = {PERSIST, MERGE})
+    @ManyToOne(fetch = EAGER, cascade = {MERGE})
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = EAGER, cascade = {PERSIST, MERGE})
+    @ManyToOne(fetch = EAGER, cascade = {MERGE})
     @JoinColumn(name = "studygroup_id")
     private Studygroup studygroup;
 
