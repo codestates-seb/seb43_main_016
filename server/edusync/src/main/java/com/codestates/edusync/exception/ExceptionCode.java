@@ -48,6 +48,7 @@ public enum ExceptionCode {
     /**
      * 스터디 그룹 신청 관련 에렄 코드
       */
+    STUDYGROUP_JOIN_YOU_ARE_STUDYGROUP_LEADER(403, "스터디 리더는 탈퇴가 불가능합니다. 리더를 다른 맴버에게 권한을 이전 한 후에 시도해주세요."),
     STUDYGROUP_JOIN_NOT_FOUND(404, "가입된 스터디를 찾을 수 없습니다."),
     STUDYGROUP_JOIN_EXISTS(409, "이미 가입한 스터디 입니다."),
     STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND(404, "해당 스터디에 신청한 내역이 없습니다."),

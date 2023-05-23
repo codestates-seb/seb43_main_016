@@ -75,6 +75,10 @@ public class StudygroupJoinService implements StudygroupJoinManager {
 
     @Override
     public void deleteMemberSelf(Long studygroupId, String email) {
+        if (verifyStudygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId)) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_YOU_ARE_STUDYGROUP_LEADER);
+        }
+
         delStudygroupJoin(studygroupId, email, true);
     }
 
