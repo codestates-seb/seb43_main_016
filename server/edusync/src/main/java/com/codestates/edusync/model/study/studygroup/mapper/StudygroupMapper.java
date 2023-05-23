@@ -48,6 +48,7 @@ public interface StudygroupMapper {
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
         studygroup.setPlatform(studygroupDto.getPlatform());
+        studygroup.setColor(studygroupDto.getColor());
 
         studygroup.setSearchTags(
                 TagFormatConverter.mapToList(
@@ -134,7 +135,12 @@ public interface StudygroupMapper {
         StudygroupResponseDto.DtoList dtoList = new StudygroupResponseDto.DtoList();
         dtoList.setId(studygroup.getId());
         dtoList.setTitle(studygroup.getStudyName());
-        dtoList.setTagValues(studygroup.getSearchTags().stream().map(SearchTag::getTagValue).collect(Collectors.toList()));
+        dtoList.setTagValues(
+                studygroup.getSearchTags()
+                        .stream()
+                        .map(SearchTag::getTagValue)
+                        .collect(Collectors.toList())
+        );
         return dtoList;
     }
 
@@ -144,6 +150,9 @@ public interface StudygroupMapper {
      * @return
      */
     default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups){
-        return studygroups.stream().map(this::StudygroupsToStudygroupResponseDtoList).collect(Collectors.toList());
+        return studygroups.stream()
+                    .map(this::StudygroupsToStudygroupResponseDtoList)
+                    .collect(Collectors.toList()
+                );
     }
 }

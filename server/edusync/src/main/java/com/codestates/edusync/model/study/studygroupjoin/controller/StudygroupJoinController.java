@@ -156,9 +156,6 @@ public class StudygroupJoinController {
         List<Studygroup> studygroupList =
                 studygroupJoinService.getMyStudygroupList(authentication.getPrincipal().toString(), approved);
         
-        // Stream 내부에서 Service 다량 쿼리 발생, 로직 수정 필요
-        studygroupList = studygroupList.stream().map(e -> studygroupService.get(e.getId())).collect(Collectors.toList());
-
         List<StudygroupResponseDto.DtoList> myStudygroupList =
                 studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
 

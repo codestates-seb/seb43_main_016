@@ -35,6 +35,7 @@ public class StudygroupDto {
         private String introduction;
 
         private Map<String, Set<String>> tags;
+        private String color;
     }
 
     @NoArgsConstructor
@@ -42,7 +43,6 @@ public class StudygroupDto {
     @Setter
     public static class Patch extends DateRangeDto.Patch implements CommonStudygroupDto {
         private String studyName;
-
         private List<String> daysOfWeek;
 
         @Positive
@@ -51,12 +51,10 @@ public class StudygroupDto {
         @Positive
         private Integer memberCountMax;
 
-
         private String platform;
-
         private String introduction;
-
         private Map<String, Set<String>> tags;
+        private String color;
     }
 
     @NoArgsConstructor
