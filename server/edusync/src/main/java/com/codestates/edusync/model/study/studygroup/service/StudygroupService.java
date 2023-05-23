@@ -160,7 +160,7 @@ public class StudygroupService implements StudygroupManager{
             }
         }
 
-        if (member == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        if (member == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_PRIVILEGES_MEMBER_NOT_FOUND);
         findStudygroup.setLeaderMember(member);
         studygroupRepository.save(findStudygroup);
     }
