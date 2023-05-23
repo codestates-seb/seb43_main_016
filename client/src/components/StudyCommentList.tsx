@@ -20,26 +20,16 @@ const StudyCommentList = ({}) => {
   const [patchId, setPatchId] = useState<number | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
 
+  const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setComment(e.target.value);
+    //console.log(id);
+  };
+
   const handleUpdate = (id: number, content: string) => {
     if (!isLoggedIn) navigate("/login");
     setIsUpdateMode(!isUpdateMode);
     setPatchId(id);
     setComment(content);
-  };
-
-  const handleDelete = async (patchId: number) => {
-    if (!isLoggedIn) navigate("/login");
-    try {
-      const studyGroupId = 31;
-      await deleteComment(studyGroupId, patchId);
-    } catch (error) {
-      console.log("댓글 삭제 실패", error);
-    }
-  };
-
-  const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setComment(e.target.value);
-    //console.log(id);
   };
 
   const handleUpdateButton = async () => {
@@ -61,6 +51,17 @@ const StudyCommentList = ({}) => {
       }
     }
   };
+
+  const handleDelete = async (patchId: number) => {
+    if (!isLoggedIn) navigate("/login");
+    try {
+      const studyGroupId = 31;
+      await deleteComment(studyGroupId, patchId);
+    } catch (error) {
+      console.log("댓글 삭제 실패", error);
+    }
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -96,16 +97,20 @@ const StudyCommentList = ({}) => {
                 </>
               </ContentItem>
               <ButtonDiv>
-                <button
-                  onClick={() =>
-                    handleUpdate(comment.commentId, comment.content)
-                  }
-                >
-                  수정
-                </button>
-                <button onClick={() => handleDelete(comment.commentId)}>
-                  삭제
-                </button>
+                {comment.isMyComment && (
+                  <>
+                    <button
+                      onClick={() =>
+                        handleUpdate(comment.commentId, comment.content)
+                      }
+                    >
+                      수정
+                    </button>
+                    <button onClick={() => handleDelete(comment.commentId)}>
+                      삭제
+                    </button>
+                  </>
+                )}
               </ButtonDiv>
             </CommentItemDiv>
           );

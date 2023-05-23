@@ -3,12 +3,19 @@ import { eduApi } from "./EduApi";
 import { getRefreshToken } from "../pages/utils/Auth";
 
 let accessToken: string | null = null;
-const tokenRequestApi: AxiosInstance = axios.create({
+let tokenRequestApi = axios.create({
   baseURL: `${import.meta.env.VITE_APP_API_URL}`,
   headers: {
     "Content-Type": "application/json", // 요청 헤더(content type) 설정
   },
-});
+}) as AxiosInstance & { setAccessToken: (token: string) => void };
+
+tokenRequestApi.setAccessToken = (token: string): void => {
+  if (token) {
+    accessToken = token;
+    extendAccessToken();
+  }
+};
 
 tokenRequestApi.interceptors.request.use(
   (config) => {
@@ -46,13 +53,6 @@ const extendAccessToken = async () => {
       console.error("accessToken 갱신 실패:", error);
     }
   }, timeToExpire);
-};
-
-tokenRequestApi.setAccessToken = (token): void => {
-  if (token) {
-    accessToken = token;
-    extendAccessToken();
-  }
 };
 
 export default tokenRequestApi;

@@ -8,17 +8,17 @@ export interface CommentDto {
   studygroupId: number;
   commentId: number;
   nickName: string;
+  isMyComment: boolean;
 }
-
 export const postComment = async (data: string) => {
   try {
-    const jsonData = JSON.stringify({ content: data }); // 데이터를 JSON 문자열로 직렬화
-    await tokenRequestApi.post("/studygroup/31/comment", jsonData);
+    await tokenRequestApi.post("/studygroup/31/comment", { content: data });
   } catch (error) {
     console.log(error);
     throw new Error("댓글 등록 실패");
-  } //31 -> 변수로 나중에 바꿔야 함
+  }
 };
+
 // ====================== 댓글 수정 (patch) ===========================
 export const patchComment = async (
   studyGroupId: number,
@@ -26,10 +26,9 @@ export const patchComment = async (
   data: string
 ) => {
   try {
-    const jsonData = JSON.stringify({ content: data }); // 데이터를 JSON 문자열로 직렬화
     await tokenRequestApi.patch(
       `/studygroup/${studyGroupId}/comment/${patchId}`,
-      jsonData
+      { content: data }
     );
   } catch (error) {
     console.log(error);
@@ -42,7 +41,7 @@ export const getComments = async (
   studyGroupId: number
 ): Promise<CommentDto[]> => {
   try {
-    const response = await eduApi.get<CommentDto[]>(
+    const response = await tokenRequestApi.get<CommentDto[]>(
       `/studygroup/${studyGroupId}/comments`
     ); //31 -> 변수로 나중에 바꿔야 함
     return response.data;
