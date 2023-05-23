@@ -56,12 +56,6 @@ public class StudygroupService implements StudygroupManager{
 
         studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
 
-        calendarStudygroupService.createTimeSchedulesOfAllMember(
-                studygroup.getId(),
-                studygroup.getTimeSchedules(),
-                email
-        );
-
         return createdStudygroup;
     }
 
