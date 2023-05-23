@@ -68,7 +68,7 @@ public class Studygroup extends Auditable {
     @JoinColumn(name = "leader_member_id")
     private Member leaderMember;
 
-    @OneToMany(mappedBy = "studygroup", fetch = LAZY)
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE}, fetch = LAZY)
     private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
     @OneToMany(mappedBy = "studygroup", cascade = {REMOVE}, fetch = LAZY)
