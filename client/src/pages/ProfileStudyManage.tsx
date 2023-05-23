@@ -13,6 +13,7 @@ import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import MemberManage from "../components/studyManage/MemberManage";
 import CandidateManage from "../components/studyManage/CandidateManage";
+import { getMemberInfo } from "../apis/MemberApi";
 
 const ProfileStudyManage = () => {
   const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
@@ -22,8 +23,6 @@ const ProfileStudyManage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = studyInfo?.isRecruited;
-
-  console.log(studyInfo);
 
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
@@ -56,6 +55,13 @@ const ProfileStudyManage = () => {
 
   // TODO : 스터디에서 탈퇴하는 코드
   const handleExitClick = async () => {
+    getMemberInfo(isLoggedIn).then((data) => {
+      if (data.nickName === studyInfo?.leaderNickName) {
+        alert("스터디장은 스터디를 탈퇴할 수 없습니다.");
+        return;
+      }
+    });
+    if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
     await exitStudyGroup(parsedId, isLoggedIn);
   };
 
