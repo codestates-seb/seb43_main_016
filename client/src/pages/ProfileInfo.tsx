@@ -104,17 +104,18 @@ const ProfileInfo = () => {
 
   return (
     <Wrapper>
-      {/* 유저의 프로필 사진이 입력되는 자리 ===> 별도의 컴포넌트로 관리 중! components/ProfileImg */}
-      <ProfileImage>
-        <ProfileImg profileImage={memberInfo?.profileImage} />
-      </ProfileImage>
-      {/* 유저의 기본정보가 입력되는 자리 */}
-      <ProfileBaseInfo>
-        <ProfileInput disabled value={memberInfo?.nickName} />
-        <ProfileInput disabled value={memberInfo?.email} />
-        <ProfileInput disabled value={memberInfo?.roles} />
-        <EditButton onClick={handleEditClick}>Edit</EditButton>
-      </ProfileBaseInfo>
+      <ProfileBaseWrapper>
+        <ProfileImage>
+          <ProfileImg profileImage={memberInfo?.profileImage} />
+        </ProfileImage>
+        <ProfileBaseInfo>
+          <ProfileInput disabled value={memberInfo?.nickName} />
+          <ProfileInput disabled value={memberInfo?.email} />
+          <ProfileInput disabled value={memberInfo?.roles} />
+          <EditButton onClick={handleEditClick}>Edit</EditButton>
+        </ProfileBaseInfo>
+      </ProfileBaseWrapper>
+
       {/* 유저의 자기소개와 원하는 유형의 팀원을 정리하는 자리 */}
       <IntroduceAndDesired>
         {!isIntroduceEdit ? (
@@ -154,6 +155,7 @@ const ProfileInfo = () => {
 export default ProfileInfo;
 
 const Wrapper = styled.div``;
+const ProfileBaseWrapper = styled.div``;
 const ProfileImage = styled.div``;
 const ProfileBaseInfo = styled.div``;
 const IntroduceAndDesired = styled.div``;

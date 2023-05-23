@@ -19,7 +19,7 @@ const Calendar = () => {
     fetchEvents();
   }, []);
 
-  const handleEventClick = (info: { event: any; }) => {
+  const handleEventClick = (info: { event: any }) => {
     alert("clicked");
     console.log(info.event);
   };
@@ -33,6 +33,9 @@ const Calendar = () => {
         weekends={true}
         events={events}
         eventClick={handleEventClick}
+        slotMinTime={"09:00"} // 시작 시간을 09:00으로 설정
+        slotMaxTime={"33:00"} // 종료 시간을 24:00으로 설정
+        height={"100%"}
       />
     </>
   );
