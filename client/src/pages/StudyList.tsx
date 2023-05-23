@@ -26,7 +26,7 @@ const StudyList = () => {
     const fetchData = async () => {
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_APP_API_URL}/studygroups?page=1&size=18`
+          `${import.meta.env.VITE_APP_API_URL}/studygroups?page=1&size=1000`
         );
         setList(response.data?.data);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
