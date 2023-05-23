@@ -155,7 +155,7 @@ public class StudygroupJoinController {
                                               @RequestParam("approved") Boolean approved) {
         List<Studygroup> studygroupList =
                 studygroupJoinService.getMyStudygroupList(authentication.getPrincipal().toString(), approved);
-        
+
         List<StudygroupResponseDto.DtoList> myStudygroupList =
                 studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupList);
 
