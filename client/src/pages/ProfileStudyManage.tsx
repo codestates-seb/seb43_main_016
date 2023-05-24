@@ -13,6 +13,7 @@ import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import MemberManage from "../components/studyManage/MemberManage";
 import CandidateManage from "../components/studyManage/CandidateManage";
+import { getMemberInfo } from "../apis/MemberApi";
 
 const ProfileStudyManage = () => {
   const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
@@ -22,8 +23,6 @@ const ProfileStudyManage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = studyInfo?.isRecruited;
-
-  console.log(studyInfo);
 
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
@@ -56,11 +55,25 @@ const ProfileStudyManage = () => {
 
   // TODO : 스터디에서 탈퇴하는 코드
   const handleExitClick = async () => {
-    await exitStudyGroup(parsedId, isLoggedIn);
+    getMemberInfo(isLoggedIn).then((data) => {
+      if (data.nickName === studyInfo?.leaderNickName) {
+        alert("스터디장은 권한을 멤버에게 위임한 뒤에 탈퇴할 수 있습니다");
+        return;
+      } else {
+        if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
+        exitStudyGroup(parsedId, isLoggedIn);
+      }
+    });
   };
 
   // TODO : 스터디 모집 상태를 수정하는 코드
   const handleRecuitCloseClick = async () => {
+    getMemberInfo(isLoggedIn).then((data) => {
+      if (data.nickName !== studyInfo?.leaderNickName) {
+        alert("스터디장만 스터디의 모집 상태를 수정할 수 있습니다");
+        return;
+      }
+    });
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
   };
 

@@ -4,10 +4,12 @@ const TagDropdown = ({
   defaultTags,
   tags,
   setTags,
+  setIsInput,
 }: {
   defaultTags: string[];
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
+  setIsInput: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const handleTagClick = (item: string) => {
     if (tags.includes(item)) {
@@ -25,6 +27,7 @@ const TagDropdown = ({
           </li>
         );
       })}
+      <button onClick={() => setIsInput(true)}>직접 입력하기</button>
     </TagLiDiv>
   );
 };
@@ -36,5 +39,11 @@ const TagLiDiv = styled.div`
   cursor: pointer;
   margin-top: 5px;
   font-size: 0.7rem;
+  button {
+    margin-top: 5px;
+    background-color: #858da8;
+    color: #ffffff;
+    font-size: 10px;
+  }
 `;
 export default TagDropdown;

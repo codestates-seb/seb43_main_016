@@ -20,7 +20,7 @@ const WaitingList = () => {
         if (data === null) {
           return;
         }
-        setWaitingList(data.beStudys); // ! 에러 해결 필요
+        setWaitingList(data.beStudys);
       } catch (error) {
         console.error("스터디 그룹 리스트를 불러오는데 실패했습니다.", error);
       }
@@ -64,8 +64,39 @@ const WaitingList = () => {
 
 export default WaitingList;
 
-const WaitingListWrapper = styled.div``;
-const WaitingListTitle = styled.div``;
-const ItemWrapper = styled.div``;
-const ItemTitle = styled.div``;
-const CancelButton = styled.button``;
+const WaitingListWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+`;
+
+const WaitingListTitle = styled.div`
+  margin-bottom: 10px;
+  font-weight: bold;
+  color: #416bac;
+`;
+
+const ItemWrapper = styled.div`
+  border: 1px solid #416bac;
+  border-radius: 4px;
+  padding: 10px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+`;
+
+const ItemTitle = styled.div`
+  border-bottom: 1px solid #416bac;
+  padding-bottom: 5px;
+  margin-bottom: 5px;
+  color: #416bac;
+`;
+
+const CancelButton = styled.button`
+  background-color: #416bac;
+  color: #ffffff;
+  border: none;
+  border-radius: 4px;
+  padding: 5px;
+  cursor: pointer;
+`;
+
