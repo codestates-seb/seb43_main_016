@@ -33,6 +33,17 @@ public class MemberService {
     private final MemberUtils memberUtils;
 
     public Member createMember(Member member) {
+        Optional<Member> optionalMember =
+                memberRepository.findByEmail(member.getEmail());
+        if(optionalMember.isPresent()){
+            Member findMember = optionalMember.get();
+            if(memberUtils.isActive(findMember)){
+                throw new BusinessLogicException(ExceptionCode.MEMBER_EXISTS_EMAIL);
+            }else if(!memberUtils.isActive(findMember)){
+                throw new BusinessLogicException(ExceptionCode.INACTIVE_MEMBER);
+            }
+        }
+
         memberUtils.checkEmailExists(member.getEmail());
         memberUtils.checkNicknameExists(member.getNickName());
 

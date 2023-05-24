@@ -58,6 +58,15 @@ public class MemberUtils implements MemberVerificationManager {
     }
 
     @Override
+    public boolean isActive(Member member) {
+        if (member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)) {
+            return true;
+        }else {
+            return false;
+        }
+    }
+
+    @Override
     public void checkEmailExists(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
