@@ -20,13 +20,14 @@ const TagDropdown = ({
   };
   return (
     <TagLiDiv>
-      {defaultTags.map((defaultTag) => {
-        return (
-          <li onClick={() => handleTagClick(defaultTag)} key={defaultTag}>
-            {defaultTag}
-          </li>
-        );
-      })}
+      {defaultTags &&
+        defaultTags.map((defaultTag) => {
+          return (
+            <li onClick={() => handleTagClick(defaultTag)} key={defaultTag}>
+              {defaultTag}
+            </li>
+          );
+        })}
       <button onClick={() => setIsInput(true)}>직접 입력하기</button>
     </TagLiDiv>
   );

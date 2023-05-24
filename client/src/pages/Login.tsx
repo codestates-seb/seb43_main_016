@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/edusync-logo.png";
 import tokenRequestApi from "../apis/TokenRequestApi";
+import { AxiosResponse, AxiosError } from "axios";
 import { validateEmptyInput } from "./utils/loginUtils";
 import { useSetRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
@@ -27,7 +28,7 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const loginMutation = useMutation(
+  const loginMutation = useMutation<AxiosResponse, AxiosError>(
     () =>
       tokenRequestApi.post("/members/login", {
         email,
@@ -43,8 +44,11 @@ const Login = () => {
         navigate("/");
       },
       onError: (error) => {
-        console.error(error);
-        alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!!");
+        if (error.message === "Request failed with status code 403") {
+          alert("탈퇴 처리된 회원입니다.");
+        } else {
+          alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!!");
+        }
       },
     }
   );
