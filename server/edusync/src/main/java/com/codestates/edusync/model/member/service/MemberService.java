@@ -1,13 +1,17 @@
 package com.codestates.edusync.model.member.service;
 
+import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.repository.MemberRepository;
+import com.codestates.edusync.security.auth.utils.ErrorResponder;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -115,5 +119,25 @@ public class MemberService {
         response.put("provider", provider);
 
         return response;
+    }
+
+    public Member reactive(String email, String password){
+        Optional<Member> optionalMember =
+                memberRepository.findByEmail(email);
+
+        Member member =
+                optionalMember.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%s 회원을 찾을 수 없습니다.", email)));
+
+
+        if(passwordEncoder.matches(password, member.getPassword()) && !member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
+            member.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
+        }else if(member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_ALREADY_ACTIVE);
+        }else if(!passwordEncoder.matches(password, member.getPassword())){
+            throw new BusinessLogicException(ExceptionCode.PASSWORD_ERROR);
+        }
+
+        return member;
     }
 }

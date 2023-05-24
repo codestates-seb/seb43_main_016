@@ -56,7 +56,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
             Member member = (Member) authResult.getPrincipal();
 
             if(!member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
-                throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_ACTIVE);
+                throw new BusinessLogicException(ExceptionCode.INACTIVE_MEMBER);
             }
 
             String accessToken = tokenService.delegateAccessToken(member);

@@ -18,7 +18,7 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
                                         AuthenticationException exception) throws IOException {
         log.error("# Authentication failed: {}", exception.getMessage());
 
-        if(exception.getMessage().equals("Member is not active")){
+        if(exception.getMessage().equals("탈퇴한 회원입니다.")){
             ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN, "Member is not active");
         }else {
             log.error("# Authentication failed: Please check your email and password again.");
