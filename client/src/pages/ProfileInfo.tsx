@@ -13,6 +13,7 @@ import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
+import { useNavigate } from "react-router-dom";
 
 const ProfileInfo = () => {
   const isLoggedIn = useRecoilValue(LogInState);
@@ -26,6 +27,7 @@ const ProfileInfo = () => {
   });
   // 멤버 정보 수정 (클라이언트에서 수정된 데이터)
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
+  const navigate = useNavigate();
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
   useEffect(() => {
@@ -42,6 +44,7 @@ const ProfileInfo = () => {
   }, [isModalOpen, isLoggedIn]);
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
+  // 현재 Modal 구현은 완료했으나 비동기 처리로 인해 계속된 오류 발생. 추가적인 최적화 작업 요함
   const handleEditClick = async () => {
     const enteredPassword = prompt(
       "개인정보 수정 전 비밀번호를 확인해야 합니다."
@@ -91,6 +94,9 @@ const ProfileInfo = () => {
   const handleDeleteClick = async () => {
     try {
       await deleteMember();
+      alert("회원탈퇴가 완료되었습니다.");
+      localStorage.clear();
+      navigate("/");
     } catch (error) {
       console.error(error);
     }
@@ -98,17 +104,18 @@ const ProfileInfo = () => {
 
   return (
     <Wrapper>
-      {/* 유저의 프로필 사진이 입력되는 자리 ===> 별도의 컴포넌트로 관리 중! components/ProfileImg */}
-      <ProfileImage>
-        <ProfileImg profileImage={memberInfo?.profileImage} />
-      </ProfileImage>
-      {/* 유저의 기본정보가 입력되는 자리 */}
-      <ProfileBaseInfo>
-        <ProfileInput disabled value={memberInfo?.nickName} />
-        <ProfileInput disabled value={memberInfo?.email} />
-        <ProfileInput disabled value={memberInfo?.roles} />
-        <EditButton onClick={handleEditClick}>Edit</EditButton>
-      </ProfileBaseInfo>
+      <ProfileBaseWrapper>
+        <ProfileImage>
+          <ProfileImg profileImage={memberInfo?.profileImage} />
+        </ProfileImage>
+        <ProfileBaseInfo>
+          <ProfileInput disabled value={memberInfo?.nickName} />
+          <ProfileInput disabled value={memberInfo?.email} />
+          <ProfileInput disabled value={memberInfo?.roles} />
+          <EditButton onClick={handleEditClick}>Edit</EditButton>
+        </ProfileBaseInfo>
+      </ProfileBaseWrapper>
+
       {/* 유저의 자기소개와 원하는 유형의 팀원을 정리하는 자리 */}
       <IntroduceAndDesired>
         {!isIntroduceEdit ? (
@@ -148,6 +155,7 @@ const ProfileInfo = () => {
 export default ProfileInfo;
 
 const Wrapper = styled.div``;
+const ProfileBaseWrapper = styled.div``;
 const ProfileImage = styled.div``;
 const ProfileBaseInfo = styled.div``;
 const IntroduceAndDesired = styled.div``;

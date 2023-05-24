@@ -2,10 +2,13 @@ import { useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import {
+  StudyInfoDto,
   updateStudyGroupInfo,
   StudyGroupUpdateDto,
-  StudyInfoDto,
 } from "../../apis/StudyGroupApi";
+import { LogInState } from "../../recoil/atoms/LogInState";
+import { useRecoilValue } from "recoil";
+import { useParams } from "react-router-dom";
 
 const customStyles = {
   content: {
@@ -24,21 +27,47 @@ interface UserInfoEditModalProps {
   studyInfo: StudyInfoDto | null;
 }
 
-const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
+const StudyInfoEditModal = ({
+  isOpen,
+  closeModal,
+  studyInfo,
+}: UserInfoEditModalProps) => {
   const [modalState, setModalState] = useState<StudyGroupUpdateDto>({
-    id: 123, // Replace with the actual study group ID
-    studyName: "",
-    studyPeriodStart: "",
-    studyPeriodEnd: "",
-    daysOfWeek: [],
-    studyTimeStart: "",
-    studyTimeEnd: "",
-    memberCountMin: 1, // Replace with the actual member count minimum value
-    memberCountMax: 5, // Replace with the actual member count maximum value
-    platform: "",
-    introduction: "", // Replace with the actual introduction value
-    tags: {}, // Replace with the actual tags object
+    id: studyInfo?.id || 0,
+    studyName: studyInfo?.studyName || "",
+    studyPeriodStart: studyInfo?.studyPeriodStart || "",
+    studyPeriodEnd: studyInfo?.studyPeriodEnd || "",
+    daysOfWeek: studyInfo?.daysOfWeek || [],
+    studyTimeStart: studyInfo?.studyTimeStart || "",
+    studyTimeEnd: studyInfo?.studyTimeEnd || "",
+    memberCountMin: studyInfo?.memberCountMin || 0,
+    memberCountMax: studyInfo?.memberCountMax || 0,
+    platform: studyInfo?.platform || "",
+    introduction: studyInfo?.introduction || "",
+    tags: studyInfo?.tags || {},
   });
+
+  const isLoggedIn = useRecoilValue(LogInState);
+  const { id } = useParams();
+  const parsedId = Number(id);
+
+  console.log(modalState);
+
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { value, checked } = event.target;
+    let updatedDaysOfWeek = [...modalState.daysOfWeek];
+
+    if (checked) {
+      updatedDaysOfWeek.push(value);
+    } else {
+      updatedDaysOfWeek = updatedDaysOfWeek.filter((day) => day !== value);
+    }
+
+    setModalState((prevState) => ({
+      ...prevState,
+      daysOfWeek: updatedDaysOfWeek,
+    }));
+  };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -49,13 +78,8 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
   };
 
   const handleSaveClick = async () => {
-    // if (accessToken === undefined) {
-    //   alert("권한이 없습니다.");
-    //   return;
-    // }
-
     try {
-      await updateStudyGroupInfo(modalState);
+      await updateStudyGroupInfo(modalState, isLoggedIn, parsedId);
       closeModal();
     } catch (error) {
       alert("스터디 그룹 정보를 업데이트하는 중에 오류가 발생했습니다.");
@@ -69,12 +93,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
 
   return (
     <>
-      <Modal
-        isOpen={isOpen}
-        onRequestClose={closeModal}
-        style={customStyles}
-        contentLabel="Example Modal"
-      >
+      <Modal isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
         <form>
           <ModalExplain>스터디명</ModalExplain>
           <UserInfoEditInput
@@ -99,24 +118,74 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
           <ModalExplain>스터디 요일 선택</ModalExplain>
           <div>
             <label>
-              월
+              <input
+                type="checkbox"
+                name="daysOfWeek"
+                value="일"
+                checked={modalState.daysOfWeek.includes("일")}
+                onChange={handleCheckboxChange}
+              />
+              일
+            </label>
+            <label>
               <input
                 type="checkbox"
                 name="daysOfWeek"
                 value="월"
-                checked={modalState.daysOfWeek.includes(1)}
-                onChange={handleInputChange}
+                checked={modalState.daysOfWeek.includes("월")}
+                onChange={handleCheckboxChange}
               />
+              월
             </label>
             <label>
-              화
               <input
                 type="checkbox"
                 name="daysOfWeek"
                 value="화"
-                checked={modalState.daysOfWeek.includes(2)}
-                onChange={handleInputChange}
+                checked={modalState.daysOfWeek.includes("화")}
+                onChange={handleCheckboxChange}
               />
+              화
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="daysOfWeek"
+                value="수"
+                checked={modalState.daysOfWeek.includes("수")}
+                onChange={handleCheckboxChange}
+              />
+              수
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="daysOfWeek"
+                value="목"
+                checked={modalState.daysOfWeek.includes("목")}
+                onChange={handleCheckboxChange}
+              />
+              목
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="daysOfWeek"
+                value="금"
+                checked={modalState.daysOfWeek.includes("금")}
+                onChange={handleCheckboxChange}
+              />
+              금
+            </label>
+            <label>
+              <input
+                type="checkbox"
+                name="daysOfWeek"
+                value="토"
+                checked={modalState.daysOfWeek.includes("토")}
+                onChange={handleCheckboxChange}
+              />
+              토
             </label>
           </div>
           <ModalExplain>스터디 시작 시간</ModalExplain>
@@ -140,6 +209,13 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
             value={modalState.platform}
             onChange={handleInputChange}
           />
+          <ModalExplain>Introduction</ModalExplain>
+          <UserInfoEditInput
+            name="introduction"
+            type="text"
+            value={modalState.introduction}
+            onChange={handleInputChange}
+          />
           <ModalButton type="button" onClick={handleSaveClick}>
             저장
           </ModalButton>
@@ -152,7 +228,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
   );
 };
 
-export default UserInfoEditModal;
+export default StudyInfoEditModal;
 
 const ModalExplain = styled.div``;
 const UserInfoEditInput = styled.input``;
