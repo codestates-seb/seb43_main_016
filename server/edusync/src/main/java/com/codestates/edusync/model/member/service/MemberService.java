@@ -136,7 +136,7 @@ public class MemberService {
         }else if(member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
             throw new BusinessLogicException(ExceptionCode.MEMBER_ALREADY_ACTIVE);
         }else if(!passwordEncoder.matches(password, member.getPassword())){
-            throw new BusinessLogicException(ExceptionCode.PASSWORD_ERROR);
+            throw new BusinessLogicException(ExceptionCode.MEMBER_PASSWORD_ERROR);
         }
 
         return member;
