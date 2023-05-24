@@ -47,8 +47,15 @@ const SignUp = () => {
         })
         .then(() => navigate("/login"))
         .catch((error) => {
-          if (error.response.data.message === "이메일이 이미 존재")
+          if (error.response.data.message === "이메일이 이미 존재") {
+            console.log(error.response.data.message);
             alert("이미 가입된 이메일 입니다.");
+          }
+          console.log(error.response.data.message);
+
+          if (error.response.data.message === "탈퇴한 회원입니다.") {
+            alert("탈퇴 처리된 회원입니다.");
+          }
         })
         .finally(() => {});
     }
