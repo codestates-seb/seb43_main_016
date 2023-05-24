@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-// import axios from "axios";
-import dayjs from "dayjs";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
+// import dayjs from "dayjs";
 
 import TextEditor from "../components/TextEditor";
 import DaysOfWeek from "../components/DaysOfWeek";
@@ -25,6 +26,7 @@ const StudyPost = () => {
   const [introduction, setIntroduction] = useState<string>("");
   const [selectedCategory, setSelectedCategory] =
     useState<string>("프론트엔드");
+  const isLoggedIn = useRecoilValue(LogInState);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -58,12 +60,6 @@ const StudyPost = () => {
   };
 
   const handlePostButton = async () => {
-    let now = dayjs();
-    now.format();
-    let date = dayjs("2023-05-21");
-    date.format("YYYY-MM-DD");
-    console.log(date);
-
     const StudyPostDto = {
       studyName,
       studyPeriodStart: "2023-05-01T18:00",
@@ -75,17 +71,24 @@ const StudyPost = () => {
       memberCountMax,
       platform,
       introduction,
-      // tags: {
-      //   [selectedCategory]: tags,
-      // },
       tags: {
-        프론트엔드: ["javascript", "react"],
-        백엔드: ["javascript", "java"],
+        [selectedCategory]: tags,
       },
     };
-
     console.log(StudyPostDto);
 
+    if (studyName === "") {
+      alert("제목을 입력해주세요!");
+      return;
+    }
+    if (!isLoggedIn) {
+      alert("로그인한 사람만 스터디 등록이 가능합니다!");
+      return;
+    }
+    if (memberCountMin > memberCountMax) {
+      alert("최대 인원이 최소 인원보다 적습니다!");
+      return;
+    }
     try {
       const res = await tokenRequestApi.post("/studygroup", StudyPostDto);
       console.table(res.data);
@@ -130,7 +133,7 @@ const StudyPost = () => {
           </StudyPostInfo>
 
           <StudyPostInfo>
-            <span>일정</span>
+            <span>날짜</span>
             <input
               type="date"
               value={studyPeriodStart}
@@ -152,7 +155,7 @@ const StudyPost = () => {
             </div>
           </StudyPostInfo>
           <StudyPostInfo>
-            <span>시각</span>
+            <span>시간</span>
             <input
               type="time"
               value={studyTimeStart}
@@ -217,8 +220,6 @@ const StudyPost = () => {
 
 // 최대인원이 최소인원보다 적으면 안 됨
 // 끝나는 날짜가 시작하는 날짜보다 먼저면 안 됨
-// 로그아웃해도 토큰 정보 남아있다?
-// 로그아웃 돼 있으면 아예 페이지 못 들어가게?
 
 const StudyPostContainer = styled.div`
   width: 100%;

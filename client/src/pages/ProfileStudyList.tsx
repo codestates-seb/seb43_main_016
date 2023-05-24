@@ -62,16 +62,14 @@ const ProfileStudyList = () => {
           tagValues={member.tagValues}
         />
       ))}
-
     </Wrapper>
-    </>
   );
 };
 
 export default ProfileStudyList;
 
 const Wrapper = styled.div`
-flex-direction: column;
+  flex-direction: column;
 `;
 const CardWrapper = styled.div``;
 const Title = styled.div``;
