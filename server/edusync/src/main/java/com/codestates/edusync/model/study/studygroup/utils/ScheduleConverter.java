@@ -5,7 +5,7 @@ import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 
 import java.time.LocalDateTime;
-import java.time.Period;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -46,10 +46,10 @@ public class ScheduleConverter {
             continueToNextDayOffset = 1;
         }
 
-        Period totalPeriod = Period.between(periodStart.toLocalDate(), periodEnd.toLocalDate());
+        long totalDays = ChronoUnit.DAYS.between(periodStart.toLocalDate(), periodEnd.toLocalDate());
 
         List<Integer> indexOfWeeks = ScheduleConverter.convertToIndex(studygroup.getDaysOfWeek());
-        for( int offset = 0; offset <= totalPeriod.getDays(); offset++ ) {
+        for( int offset = 0; offset <= totalDays; offset++ ) {
             LocalDateTime offsetDate = periodStart.plusDays(offset);
 
             int currentIndexOfWeek = offsetDate.getDayOfWeek().getValue();
@@ -85,5 +85,4 @@ public class ScheduleConverter {
 
         return timeSchedules;
     }
-
 }
