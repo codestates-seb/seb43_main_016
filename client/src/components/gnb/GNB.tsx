@@ -47,16 +47,13 @@ const GNB = () => {
           </GNBBlock>
           <GNBMenuBlock>
             <Link to="/studylist">
-              <span>스터디리스트</span>
-            </Link>
-            <Link to="/studycontent">
-              <span>스터디컨텐츠</span>
+              <span>스터디 목록</span>
             </Link>
             <Link to="/studypost">
-              <span>포스트</span>
+              <span>스터디 등록</span>
             </Link>
             <Link to="/calendar">
-              <span>캘린더</span>
+              <span>나의 캘린더</span>
             </Link>
           </GNBMenuBlock>
           <User
