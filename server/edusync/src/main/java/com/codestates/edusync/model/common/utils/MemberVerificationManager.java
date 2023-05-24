@@ -42,6 +42,15 @@ public interface MemberVerificationManager {
     void checkIsActive(Member member);
 
     /**
+     * <h2> 현재 활동 가능한 회원인지 확인하는 메서드</h2>
+     * 회원정보(Member)를 입력받아 현재 활동중인지 확인
+     * 삭제, 휴먼 계정이면 false를 리턴
+     * @param member
+     * @return boolean
+     */
+    boolean isActive(Member member);
+
+    /**
      * <h2>이미 존재하는 이메일인지에 대한 검증</h2>
      * 중복 불가 unique, update 불가 속성인 email을 이용하여, 이미 존재하는 이메일인지를 검증<br>
      * <font color=white>409 Conflict </font>
