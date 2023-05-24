@@ -3,8 +3,13 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
-import { getStudyGroupInfo, StudyInfoDto } from "../apis/StudyGroupApi";
+import {
+  getStudyGroupInfo,
+  deleteStudyGroupInfo,
+  StudyInfoDto,
+} from "../apis/StudyGroupApi";
 import StudyComment from "../components/StudyComment";
+import tokenRequestApi from "../apis/TokenRequestApi";
 
 const StudyContent = () => {
   const initialTag = { [""]: [""] };
@@ -29,7 +34,7 @@ const StudyContent = () => {
 
   const [fetching, setFetching] = useState(true);
   const [content, setContent] = useState<StudyInfoDto | null>(initialState);
-  const { id } = useParams();
+  const { id } = useParams(); // App.tsx의 Route url에 :id로 명시하면 그걸 가져옴
   const parsedId = Number(id);
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
@@ -55,6 +60,31 @@ const StudyContent = () => {
     fetchData();
   }, [parsedId]);
 
+  const handleDeleteClick = async () => {
+    try {
+      if (!window.confirm("스터디를 삭제하시겠습니까?")) return;
+      await deleteStudyGroupInfo(parsedId, isLoggedIn);
+      alert("스터디가 삭제되었습니다!");
+      navigate("/studylist");
+    } catch (error) {
+      alert("스터디 삭제가 실패했습니다!");
+      // 당신의 스터디가 아닙니다?
+      console.error("Error during POST request:", error);
+    }
+  };
+
+  const handleJoinButton = async () => {
+    try {
+      const res = await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
+      console.log(res);
+      alert("스터디 신청이 완료되었습니다!");
+    } catch (error) {
+      alert("스터디 신청이 실패했습니다!");
+      console.error("Error during POST request:", error);
+    }
+    // 이미 등록한 스터디입니다 어떻게?
+  };
+
   return (
     <StudyContentContainer>
       <StudyContentBody>
@@ -66,7 +96,9 @@ const StudyContent = () => {
                 <h2>{content?.studyName}</h2>
                 <StudyContentEdit>
                   <div>수정</div>
-                  <div>삭제</div>
+                  <button type="button" onClick={handleDeleteClick}>
+                    삭제
+                  </button>
                 </StudyContentEdit>
               </StudyContentTitle>
             </StudyContentTop>
@@ -90,7 +122,7 @@ const StudyContent = () => {
               <StudyContentText>{`${content?.introduction}`}</StudyContentText>
               <StudyContentProfileWrapper>
                 <StudyContentProfile>
-                  <div className="profile-name">lain-alice</div>
+                  <div className="profile-name">{`${content?.leaderNickName}`}</div>
                   <div>일반회원</div>
                 </StudyContentProfile>
               </StudyContentProfileWrapper>
@@ -109,7 +141,9 @@ const StudyContent = () => {
                 )}
               </StudyContentTag>
               <StudyJoinButtonWrapper>
-                <StudyJoinButton>스터디 신청!</StudyJoinButton>
+                <StudyJoinButton type="button" onClick={handleJoinButton}>
+                  스터디 신청!
+                </StudyJoinButton>
               </StudyJoinButtonWrapper>
             </StudyContentMain>
             <StudyComment />
