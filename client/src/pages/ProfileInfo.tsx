@@ -112,7 +112,11 @@ const ProfileInfo = () => {
           <ProfileImg profileImage={memberInfo?.profileImage} />
         </ProfileImage>
         <ProfileBaseInfo>
-          <ProfileInput disabled value={memberInfo?.nickName} />
+          <ProfileInput
+            className="nickname-input"
+            disabled
+            value={memberInfo?.nickName}
+          />
           <ProfileInput disabled value={memberInfo?.email} />
           <ProfileInput disabled value={memberInfo?.roles} />
           <EditButton onClick={handleEditClick}>Edit</EditButton>
@@ -121,20 +125,20 @@ const ProfileInfo = () => {
       <IntroduceAndDesired>
         {!isIntroduceEdit ? (
           <>
-            <p>자기소개</p>
+            <h4>자기소개</h4>
             <IntroduceAndDesiredInput value={memberInfo?.aboutMe} disabled />
-            <p>함께하고 싶은 동료</p>
+            <h4>함께하고 싶은 동료</h4>
             <IntroduceAndDesiredInput value={memberInfo?.withMe} disabled />
           </>
         ) : (
           <>
-            <p>자기소개</p>
+            <h4>자기소개</h4>
             <IntroduceAndDesiredInput
               type="text"
               placeholder={memberInfo?.aboutMe}
               onChange={handleIntroduceChange}
             />
-            <p>함께하고 싶은 동료</p>
+            <h4>함께하고 싶은 동료</h4>
             <IntroduceAndDesiredInput
               type="text"
               placeholder={memberInfo?.withMe}
@@ -192,13 +196,25 @@ const ProfileImage = styled.div`
 const ProfileInput = styled.input`
   margin-bottom: 10px;
   padding: 8px;
-  width: 100%;
+  width: 90%;
+  height: 36px;
 `;
 
 const ProfileBaseInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
   width: 100%;
+
+  .nickname-input {
+    border: solid 0px #ccc;
+    background-color: transparent;
+    color: #2759a2;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 0 0 15px;
+  }
 `;
 
 const IntroduceAndDesired = styled.div`
@@ -207,6 +223,13 @@ const IntroduceAndDesired = styled.div`
   align-items: flex-start;
   margin-top: 20px;
   width: 100%;
+
+  h4 {
+    color: #2759a2;
+    font-size: 21px;
+    font-weight: 700;
+    margin: 12px 0;
+  }
 `;
 
 const IntroduceAndDesiredInput = styled.input`
@@ -223,6 +246,8 @@ const ButtonWrapper = styled.div`
 `;
 
 const EditButton = styled.button`
+  width: 100px;
+  height: 40px;
   margin-bottom: 10px;
   padding: 8px 16px;
   background-color: #4d74b1;

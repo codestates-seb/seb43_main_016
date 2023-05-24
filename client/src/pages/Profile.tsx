@@ -5,7 +5,6 @@ import ProfileStudyList from "./ProfileStudyList";
 import ProfileCalendar from "./ProfileCalendar";
 import ProfileStudyManage from "./ProfileStudyManage";
 
-
 const Profile = () => {
   const navigate = useNavigate();
   return (
@@ -20,7 +19,12 @@ const Profile = () => {
             <Lnb to="./manage-group">Manage Group</Lnb>
           </li>
           <li>
-            <div onClick={() => navigate("/calendar")}>Schedule</div>
+            <div
+              className="schedule-link"
+              onClick={() => navigate("/calendar")}
+            >
+              Schedule
+            </div>
           </li>
         </ul>
       </LnbWrapper>
@@ -47,19 +51,51 @@ const Wrapper = styled.div`
 
 const LnbWrapper = styled.div`
   background-color: white;
-  width: 150px;
-  height: 200px;
+  width: 200px;
+  height: 270px;
+  border-radius: 4px;
   margin-right: 20px;
-  li {
-    margin-top: 10px;
+  padding: 30px 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+
+  ul {
+    width: 130px;
+    list-style: none;
   }
 
+  li {
+    text-align: left;
+    color: #1f1f1f;
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 10px;
+    padding: 10px 8px 0;
+  }
+  .schedule-link {
+    color: #1f1f1f;
+    cursor: pointer;
+  }
+  .schedule-link:hover {
+    color: #2759a2;
+  }
 `;
-const Title = styled.div``;
+const Title = styled.h2`
+  width: 130px;
+  margin: 0 10px;
+  padding: 5px;
+  text-align: left;
+  border-bottom: 1px solid #ccc;
+  color: #2759a2;
+  font-size: 22px;
+`;
+
 const Lnb = styled(Link)`
+  color: #1f1f1f;
 
   &:hover {
-    cursor: pointer;
-    text-decoration: underline;
+    color: #2759a2;
   }
 `;
