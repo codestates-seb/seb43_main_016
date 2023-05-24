@@ -60,7 +60,7 @@ const StudyContent = () => {
     fetchData();
   }, [parsedId]);
 
-  const handleDeleteClick = async () => {
+  const handleDeleteButton = async () => {
     try {
       if (!window.confirm("스터디를 삭제하시겠습니까?")) return;
       await deleteStudyGroupInfo(parsedId, isLoggedIn);
@@ -68,6 +68,15 @@ const StudyContent = () => {
       navigate("/studylist");
     } catch (error) {
       alert("스터디 삭제가 실패했습니다!");
+      // 당신의 스터디가 아닙니다?
+      console.error("Error during POST request:", error);
+    }
+  };
+
+  const handleEditButton = async () => {
+    try {
+    } catch (error) {
+      alert("스터디 수정이 실패했습니다!");
       // 당신의 스터디가 아닙니다?
       console.error("Error during POST request:", error);
     }
@@ -95,8 +104,10 @@ const StudyContent = () => {
               <StudyContentTitle>
                 <h2>{content?.studyName}</h2>
                 <StudyContentEdit>
-                  <div>수정</div>
-                  <button type="button" onClick={handleDeleteClick}>
+                  <button type="button" onClick={handleEditButton}>
+                    수정
+                  </button>
+                  <button type="button" onClick={handleDeleteButton}>
                     삭제
                   </button>
                 </StudyContentEdit>
