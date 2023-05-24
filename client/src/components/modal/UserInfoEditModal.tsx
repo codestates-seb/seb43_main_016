@@ -2,8 +2,8 @@ import { ChangeEvent, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import { updateMember, MemberUpdateDto } from "../../apis/MemberApi";
-import { useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
+import { useRecoilValue } from "recoil";
 
 const customStyles = {
   content: {
@@ -19,10 +19,15 @@ const customStyles = {
 interface UserInfoEditModalProps {
   isOpen: boolean;
   closeModal: () => void;
+  userNickname: string | undefined;
 }
 
-const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
+const UserInfoEditModal = ({ isOpen, closeModal, userNickname }: UserInfoEditModalProps) => {
   const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) {
+    alert("로그인이 필요합니다.");
+    closeModal();
+  }
   const [modalState, setModalState] = useState({
     nickname: "",
     password: "",
@@ -38,20 +43,28 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
   };
 
   const handleSaveClick = async () => {
-    if (modalState.password !== modalState.passwordCheck) {
-      alert("새로운 비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.");
-      return;
-    }
+    if (
+      modalState.nickname === "" ||
+      modalState.password === "" ||
+      modalState.passwordCheck === ""
+    ) {
+      alert("입력되지 않은 정보가 있습니다.");
+    } else {
+      if (modalState.password !== modalState.passwordCheck) {
+        alert("새로운 비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.");
+        return;
+      }
 
-    try {
-      const updateDto: MemberUpdateDto = {
-        nickName: modalState.nickname,
-        password: modalState.password,
-      };
-      await updateMember(isLoggedIn, updateDto); // Await the updateMember function call
-      closeModal();
-    } catch (error) {
-      alert("로그인이 필요합니다.");
+      try {
+        const updateDto: MemberUpdateDto = {
+          nickName: modalState.nickname,
+          password: modalState.password,
+        };
+        await updateMember(isLoggedIn, updateDto); // Await the updateMember function call
+        closeModal();
+      } catch (error) {
+        alert("로그인이 필요합니다.");
+      }
     }
   };
 
@@ -73,6 +86,8 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
             name="nickname"
             value={modalState.nickname}
             onChange={handleInputChange}
+            placeholder={userNickname}
+            required
           />
           <ModalExplain>변경할 비밀번호</ModalExplain>
           <UserInfoEditInput
@@ -80,6 +95,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
             type="password"
             value={modalState.password}
             onChange={handleInputChange}
+            required
           />
           <ModalExplain>변경할 비밀번호 확인</ModalExplain>
           <UserInfoEditInput
@@ -87,6 +103,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
             type="password"
             value={modalState.passwordCheck}
             onChange={handleInputChange}
+            required
           />
           <ModalButton type="button" onClick={handleSaveClick}>
             저장

@@ -209,7 +209,7 @@ export async function forceExitStudyGroup(
     `/studygroup/${id}/kick`,
     config
   );
-  console.log("강제 탈퇴에 성공했습니다", response);
+  return response
 }
 
 // TODO : StudyGroup에서 특정 회원에게 스터디장의 권한을 위임하는 코드
@@ -221,7 +221,7 @@ export async function delegateStudyGroupLeader(
     `/studygroup/${id}/privileges`,
     data
   );
-  console.log("스터디장 권한 위임에 성공했습니다", response);
+  return response;
 }
 
 // ====================== 회원의 가입 대기 리스트 ===========================

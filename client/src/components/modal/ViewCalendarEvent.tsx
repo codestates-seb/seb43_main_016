@@ -8,19 +8,22 @@ import { useNavigate } from "react-router-dom";
 const customStyles = {
   overlay: {
     zIndex: 9999,
-    backgroundColor: "rgba(0, 0, 0, 0.5)", // Add a semi-transparent overlay background
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
   },
   content: {
     top: "50%",
     left: "50%",
-    right: "auto",
-    bottom: "auto",
-    marginRight: "-50%",
     transform: "translate(-50%, -50%)",
+    maxWidth: "400px",
+    width: "90%",
+    maxHeight: "350px",
     backgroundColor: "white",
-    borderRadius: "10px", // Add rounded corners
-    border: `2px solid #4D74B1`, // Set border color to #4D74B1
-    padding: "20px", // Add padding for spacing
+    borderRadius: "10px",
+    border: `2px solid #4D74B1`,
+    padding: "20px",
   },
 };
 
@@ -63,14 +66,21 @@ const ViewCalendarEvent = ({
       >
         {studyInfo ? (
           <>
-            <h2>{studyInfo.studyName}</h2>
-            <p>스터디 기간: {studyInfo.studyPeriodStart} - {studyInfo.studyPeriodEnd}</p>
-            <p>스터디 시간: {studyInfo.studyTimeStart} - {studyInfo.studyTimeEnd}</p>
-            <p>현재 멤버 수: {studyInfo.memberCountCurrent}</p>
-            <p>Platform: {studyInfo.platform}</p>
-            <p>모집상태 : {studyInfo.isRecruited ? "모집완료" : "모집중"}</p>
-            <p>리더 명: {studyInfo.leaderNickName}</p>
-            <p onClick={goToGroupPage} style={{ cursor: "pointer", color: "#4D74B1" }}>
+            <h2 style={{ marginBottom: "10px", color: "#4D74B1" }}>{studyInfo.studyName}</h2>
+            <p style={{marginBottom: "2px"}}>스터디 기간: {studyInfo.studyPeriodStart} - {studyInfo.studyPeriodEnd}</p>
+            <p style={{marginBottom: "2px"}}>스터디 시간: {studyInfo.studyTimeStart} - {studyInfo.studyTimeEnd}</p>
+            <p style={{marginBottom: "2px"}}>현재 멤버 수: {studyInfo.memberCountCurrent}</p>
+            <p style={{marginBottom: "2px"}}>Platform: {studyInfo.platform}</p>
+            <p style={{marginBottom: "2px"}}>모집상태 : {studyInfo.isRecruited ? "모집완료" : "모집중"}</p>
+            <p style={{marginBottom: "2px"}}>리더 명: {studyInfo.leaderNickName}</p>
+            <p
+              onClick={goToGroupPage}
+              style={{
+                cursor: "pointer",
+                color: "#4D74B1",
+                marginTop: "20px",
+              }}
+            >
               그룹 페이지로 가기
             </p>
           </>
@@ -81,6 +91,5 @@ const ViewCalendarEvent = ({
     </>
   );
 };
-
 
 export default ViewCalendarEvent;

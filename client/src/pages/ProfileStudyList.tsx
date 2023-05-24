@@ -7,15 +7,24 @@ import {
 } from "../apis/StudyGroupApi";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
+
 
 const ProfileStudyList = () => {
+  const isLoggedIn = useRecoilValue(LogInState);
   const [studyList, setStudyList] = useState<StudyGroupListDto>({
     leaders: [],
     members: [],
   });
   const navigate = useNavigate();
 
+
   useEffect(() => {
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다");
+      navigate("/login");
+    }
     const fetchStudyList = async () => {
       const { data, status } = await getStudyGroupList();
       if (status < 299) {
@@ -69,7 +78,7 @@ const ProfileStudyList = () => {
 export default ProfileStudyList;
 
 const Wrapper = styled.div`
-flex-direction: column;
+  flex-direction: column;
 `;
 const CardWrapper = styled.div``;
 const Title = styled.div``;

@@ -27,12 +27,16 @@ const ProfileInfo = () => {
   });
   // 멤버 정보 수정 (클라이언트에서 수정된 데이터)
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
+  console.log(isIntroduceEdit)
   const [passowrdCheckModalOpen, setPasswordCheckModalOpen] =
     useState<boolean>(false);
   const navigate = useNavigate();
 
   // TODO 최초 페이지 진입 시 유저의 정보를 조회하는 코드
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
     const fetchMemberInfo = async () => {
       try {
         const info = await getMemberInfo(isLoggedIn);
@@ -118,16 +122,20 @@ const ProfileInfo = () => {
       <IntroduceAndDesired>
         {!isIntroduceEdit ? (
           <>
+            <p>자기소개</p>
             <IntroduceAndDesiredInput value={memberInfo?.aboutMe} disabled />
+            <p>함께하고 싶은 동료</p>
             <IntroduceAndDesiredInput value={memberInfo?.withMe} disabled />
           </>
         ) : (
           <>
+            <p>자기소개</p>
             <IntroduceAndDesiredInput
               type="text"
               placeholder={memberInfo?.aboutMe}
               onChange={handleIntroduceChange}
             />
+            <p>함께하고 싶은 동료</p>
             <IntroduceAndDesiredInput
               type="text"
               placeholder={memberInfo?.withMe}
@@ -147,6 +155,7 @@ const ProfileInfo = () => {
       <UserInfoEditModal
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
+        userNickname={memberInfo?.nickName}
       />
       <CheckPasswordModal
         isOpen={passowrdCheckModalOpen}

@@ -10,13 +10,16 @@ import {
 import { useParams } from "react-router-dom";
 import { BsCheckCircle, BsFillXCircleFill } from "react-icons/bs";
 
-const CandidateManage = () => {
+interface CandidateManageProps {
+  studyLeader: string | undefined;
+}
+
+const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
   const [waitingList, setWaitingList] =
     useState<StudyGroupMemberWaitingListDto | null>(null);
   const { id } = useParams<{ id: string }>();
   const isLoggedIn = useRecoilValue(LogInState);
-
-  console.log(waitingList);
+  console.log(studyLeader)
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -35,10 +38,12 @@ const CandidateManage = () => {
 
   const handleApproveCandidate = async (nickname: string) => {
     approveStudyGroupApplication(Number(id), nickname, isLoggedIn);
+    location.reload();
   };
 
   const handleDenyCandidate = async (nickname: string) => {
     rejectStudyGroupApplication(Number(id), nickname);
+    location.reload();
   };
 
   return (

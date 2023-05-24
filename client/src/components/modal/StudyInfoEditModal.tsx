@@ -6,9 +6,9 @@ import {
   updateStudyGroupInfo,
   StudyGroupUpdateDto,
 } from "../../apis/StudyGroupApi";
-import { LogInState } from "../../recoil/atoms/LogInState";
-import { useRecoilValue } from "recoil";
 import { useParams } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../../recoil/atoms/LogInState";
 
 const customStyles = {
   content: {
@@ -32,6 +32,7 @@ const StudyInfoEditModal = ({
   closeModal,
   studyInfo,
 }: UserInfoEditModalProps) => {
+  const isLoggedIn = useRecoilValue(LogInState);
   const [modalState, setModalState] = useState<StudyGroupUpdateDto>({
     id: studyInfo?.id || 0,
     studyName: studyInfo?.studyName || "",
@@ -47,7 +48,6 @@ const StudyInfoEditModal = ({
     tags: studyInfo?.tags || {},
   });
 
-  const isLoggedIn = useRecoilValue(LogInState);
   const { id } = useParams();
   const parsedId = Number(id);
 
