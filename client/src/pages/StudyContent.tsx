@@ -37,12 +37,12 @@ const StudyContent = () => {
   const [fetching, setFetching] = useState(true);
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [content, setContent] = useState<StudyInfoDto | null>(initialState);
-  const [renderedIntroduction, setRenderedIntroduction] = useState<string | null>(null);
   const { id } = useParams(); // App.tsx의 Route url에 :id로 명시하면 그걸 가져옴
   const parsedId = Number(id);
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = content?.isRecruited;
+  const convertIntroduction = `${content?.introduction}`;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -63,16 +63,6 @@ const StudyContent = () => {
     };
     fetchData();
   }, [parsedId]);
-
-  const handleIntroduction = (introduction: string) => {
-    const createMarkup = () => {
-      return { __html: introduction };
-    };
-
-    setRenderedIntroduction(introduction);
-  };
-
-
 
   const handleDeleteButton = async () => {
     try {
@@ -108,6 +98,9 @@ const StudyContent = () => {
     // 이미 등록한 스터디입니다 어떻게?
   };
 
+  const markUp = (convertIntroduction: string) => {
+    return { __html: convertIntroduction };
+  };
   useEffect(() => {
     window.scrollTo(0, document.body.scrollHeight);
   }, [comments]);
@@ -148,7 +141,9 @@ const StudyContent = () => {
                 <div>플랫폼</div>
                 <span>{content?.platform}</span>
               </StudyContentInfo>
-              <StudyContentText>{`${content?.introduction}`}</StudyContentText>
+              <StudyContentText
+                dangerouslySetInnerHTML={markUp(convertIntroduction)}
+              ></StudyContentText>
               <StudyContentProfileWrapper>
                 <StudyContentProfile>
                   <div className="profile-name">{`${content?.leaderNickName}`}</div>
