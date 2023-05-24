@@ -133,7 +133,7 @@ const StudyPost = () => {
           </StudyPostInfo>
 
           <StudyPostInfo>
-            <span>일정</span>
+            <span>날짜</span>
             <input
               type="date"
               value={studyPeriodStart}
@@ -155,7 +155,7 @@ const StudyPost = () => {
             </div>
           </StudyPostInfo>
           <StudyPostInfo>
-            <span>시각</span>
+            <span>시간</span>
             <input
               type="time"
               value={studyTimeStart}

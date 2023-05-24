@@ -104,11 +104,11 @@ const StudyContent = () => {
             </StudyContentTop>
             <StudyContentMain>
               <StudyContentInfo>
-                <div>일정</div>
+                <div>날짜</div>
                 <span>{`${content?.studyPeriodStart} ~ ${content?.studyPeriodEnd}`}</span>
               </StudyContentInfo>
               <StudyContentInfo>
-                <div>시각</div>
+                <div>요일, 시간</div>
                 <span>{`${content?.daysOfWeek} ${content?.studyTimeStart} ~ ${content?.studyTimeEnd}`}</span>
               </StudyContentInfo>
               <StudyContentInfo>
