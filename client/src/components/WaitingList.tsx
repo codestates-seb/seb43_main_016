@@ -51,13 +51,15 @@ const WaitingList = () => {
   return (
     <WaitingListWrapper>
       <WaitingListTitle>신청중인 스터디</WaitingListTitle>
-      {waitingList.map((study) => (
-        <WaitingStudyGroupItem
-          key={study.id}
-          id={study.id}
-          title={study.title}
-        />
-      ))}
+      <ItemList>
+        {waitingList.map((study) => (
+          <WaitingStudyGroupItem
+            key={study.id}
+            id={study.id}
+            title={study.title}
+          />
+        ))}
+      </ItemList>
     </WaitingListWrapper>
   );
 };
@@ -65,9 +67,6 @@ const WaitingList = () => {
 export default WaitingList;
 
 const WaitingListWrapper = styled.div`
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
 `;
 
 const WaitingListTitle = styled.div`
@@ -76,17 +75,18 @@ const WaitingListTitle = styled.div`
   color: #416bac;
 `;
 
+const ItemList = styled.div`
+  display: flex;
+`;
+
 const ItemWrapper = styled.div`
   border: 1px solid #416bac;
   border-radius: 4px;
   padding: 10px;
-  margin-right: 10px;
   margin-bottom: 10px;
 `;
 
 const ItemTitle = styled.div`
-  border-bottom: 1px solid #416bac;
-  padding-bottom: 5px;
   margin-bottom: 5px;
   color: #416bac;
 `;
@@ -99,4 +99,3 @@ const CancelButton = styled.button`
   padding: 5px;
   cursor: pointer;
 `;
-

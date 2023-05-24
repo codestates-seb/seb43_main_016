@@ -68,6 +68,12 @@ const ProfileStudyManage = () => {
 
   // TODO : 스터디 모집 상태를 수정하는 코드
   const handleRecuitCloseClick = async () => {
+    getMemberInfo(isLoggedIn).then((data) => {
+      if (data.nickName !== studyInfo?.leaderNickName) {
+        alert("스터디장만 스터디의 모집 상태를 수정할 수 있습니다");
+        return;
+      }
+    });
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
   };
 
