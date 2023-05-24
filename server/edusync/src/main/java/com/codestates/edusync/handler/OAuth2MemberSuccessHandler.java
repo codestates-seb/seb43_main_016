@@ -117,6 +117,7 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
 
         log.info("# Authenticated successfully!");
 
+        // response 헤더 정보 로그 출력
         for (String headerName : response.getHeaderNames()) {
             log.info(headerName + ": " + response.getHeader(headerName));
         }
