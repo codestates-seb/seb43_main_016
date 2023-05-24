@@ -78,6 +78,12 @@ const ProfileStudyManage = () => {
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
   };
 
+  // TODO : HTML 태그로 이뤄진 문자열을 일반 문자열로 변경하는 함수
+  const removeHtmlTag = (str: string | undefined) => {
+    if (str === undefined) return str;
+    return str.replace(/(<([^>]+)>)/gi, "");
+  };
+
   return (
     <Wrapper>
       {!isRecruiting ? (
@@ -117,7 +123,7 @@ const ProfileStudyManage = () => {
         스터디 정보 수정
       </button>
       <div>스터디 소개</div>
-      <div>{studyInfo?.introduction}</div>
+      <div>{removeHtmlTag(studyInfo?.introduction)}</div>
       {isModalOpen && (
         <StudyInfoEditModal
           isOpen={isModalOpen}
@@ -125,8 +131,8 @@ const ProfileStudyManage = () => {
           studyInfo={studyInfo}
         />
       )}
-      <MemberManage studyLeader={studyInfo?.leaderNickName}/>
-      <CandidateManage studyLeader={studyInfo?.leaderNickName}/>
+      <MemberManage studyLeader={studyInfo?.leaderNickName} />
+      <CandidateManage studyLeader={studyInfo?.leaderNickName} />
       <button type="button" onClick={handleDeleteClick}>
         스터디 삭제
       </button>

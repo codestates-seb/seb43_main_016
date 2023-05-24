@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import StudyListTag from "../components/StudyListTag";
+import studyImage from "../assets/studyImage.webp";
 
 const StudyList = () => {
   interface StudyListDto {
@@ -55,7 +56,7 @@ const StudyList = () => {
                   key={item?.id}
                   onClick={() => navigate(`/studycontent/${item?.id}`)}
                 >
-                  <StudyListImage></StudyListImage>
+                  <StudyListImage ></StudyListImage>
                   <div>
                     <div className="studylist-title">
                       <h3>{item?.title}</h3>
@@ -145,6 +146,8 @@ const StudyBoxContainer = styled.div`
 const StudyListImage = styled.div`
   width: 260px;
   height: 180px;
+  background-image: url(${studyImage});
+  background-size: cover;
   background-color: aliceblue;
 `;
 
