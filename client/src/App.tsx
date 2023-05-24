@@ -57,7 +57,7 @@ function AppContent() {
             <Route path="/signup" element={<SignUp />} />
             <Route path="/oauth/redirect" element={<Redirect />} />
             <Route path="/studylist" element={<StudyList />} />
-            <Route path="/studycontent" element={<StudyContent />} />
+            <Route path="/studycontent/*" element={<StudyContent />} />
             <Route path="/studypost" element={<StudyPost />} />
             <Route path="/calendar" element={<ProfileCalendar />} />
             <Route path="/haeun" element={<HTestPage />} />
