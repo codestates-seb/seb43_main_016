@@ -1,5 +1,5 @@
 import tokenRequestApi from "./TokenRequestApi";
-import { eduApi } from "./EduApi";
+// import { eduApi } from "./EduApi";
 
 // ====================== 댓글 등록 (post) ===========================
 

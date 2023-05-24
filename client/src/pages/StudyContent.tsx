@@ -1,92 +1,165 @@
 import styled from "styled-components";
-// import { useState } from "react";
-// import { Link } from "react-router-dom";
-// import axios from "axios";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
+import {
+  getStudyGroupInfo,
+  deleteStudyGroupInfo,
+  StudyInfoDto,
+} from "../apis/StudyGroupApi";
 import StudyComment from "../components/StudyComment";
+import tokenRequestApi from "../apis/TokenRequestApi";
 
 const StudyContent = () => {
+  const initialTag = { [""]: [""] };
+  const initialState = {
+    id: 1,
+    studyName: "",
+    studyPeriodStart: "",
+    studyPeriodEnd: "",
+    daysOfWeek: [""],
+    studyTimeStart: "",
+    studyTimeEnd: "",
+    memberCountMin: 1,
+    memberCountMax: 1,
+    memberCountCurrent: 1,
+    platform: "",
+    introduction: "",
+    isRecruited: false,
+    tags: initialTag,
+    leaderNickName: "",
+    leader: false,
+  };
+
+  const [fetching, setFetching] = useState(true);
+  const [content, setContent] = useState<StudyInfoDto | null>(initialState);
+  const { id } = useParams(); // App.tsx의 Route url에 :id로 명시하면 그걸 가져옴
+  const parsedId = Number(id);
+  const navigate = useNavigate();
+  const isLoggedIn = useRecoilValue(LogInState);
+  const isRecruiting = content?.isRecruited;
+
+  useEffect(() => {
+    const fetchData = async () => {
+      if (isNaN(parsedId)) {
+        alert("잘못된 접근입니다");
+        navigate("/studylist");
+        return;
+      }
+      try {
+        const content = await getStudyGroupInfo(parsedId, isLoggedIn);
+        setContent(content);
+        setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
+        console.log(content);
+      } catch (error) {
+        console.log(error);
+        throw new Error("스터디 내용 로딩에 실패했습니다.");
+      }
+    };
+    fetchData();
+  }, [parsedId]);
+
+  const handleDeleteButton = async () => {
+    try {
+      if (!window.confirm("스터디를 삭제하시겠습니까?")) return;
+      await deleteStudyGroupInfo(parsedId, isLoggedIn);
+      alert("스터디가 삭제되었습니다!");
+      navigate("/studylist");
+    } catch (error) {
+      alert("스터디 삭제가 실패했습니다!");
+      // 당신의 스터디가 아닙니다?
+      console.error("Error during POST request:", error);
+    }
+  };
+
+  const handleEditButton = async () => {
+    try {
+    } catch (error) {
+      alert("스터디 수정이 실패했습니다!");
+      // 당신의 스터디가 아닙니다?
+      console.error("Error during POST request:", error);
+    }
+  };
+
+  const handleJoinButton = async () => {
+    try {
+      const res = await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
+      console.log(res);
+      alert("스터디 신청이 완료되었습니다!");
+    } catch (error) {
+      alert("스터디 신청이 실패했습니다!");
+      console.error("Error during POST request:", error);
+    }
+    // 이미 등록한 스터디입니다 어떻게?
+  };
+
   return (
     <StudyContentContainer>
       <StudyContentBody>
-        <StudyContentTop>
-          <span>모집중</span>
-          <StudyContentTitle>
-            <h2>타입스크립트 스터디 모집</h2>
-            <StudyContentEdit>
-              <div>수정</div>
-              <div>삭제</div>
-            </StudyContentEdit>
-          </StudyContentTitle>
-        </StudyContentTop>
-        <StudyContentMain>
-          <StudyContentInfo>
-            <div>일정</div>
-            <span>2023. 05. 01 ~ 2023. 07. 01</span>
-          </StudyContentInfo>
-          <StudyContentInfo>
-            <div>시각</div>
-            <span>월, 수, 금 20:30 ~ 22:30</span>
-          </StudyContentInfo>
-          <StudyContentInfo>
-            <div>최대 인원</div>
-            <span>6명</span>
-          </StudyContentInfo>
-          <StudyContentInfo>
-            <div>플랫폼</div>
-            <span>https://notion.so</span>
-          </StudyContentInfo>
-          <StudyContentText>
-            TypeScript를 즐겁게 학습하실 스터디원 모집합니다!
-            <br /> Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam
-            in libero luctus, varius eros in, ullamcorper neque. Morbi libero
-            elit, facilisis aliquam lacinia quis, placerat quis orci. Phasellus
-            iaculis ornare congue. Donec eu risus nisi. Mauris felis odio,
-            rutrum quis mauris vitae, tempus ornare felis. Pellentesque habitant
-            morbi tristique senectus et netus et malesuada fames ac turpis
-            egestas. Duis in ante posuere, dignissim libero feugiat, aliquam
-            metus. Donec non nisl massa. Sed luctus elit volutpat sapien
-            placerat fermentum. Interdum et malesuada fames ac ante ipsum primis
-            in faucibus. Donec ut pulvinar urna. Quisque ac felis efficitur,
-            dignissim felis at, ultricies odio. Praesent vel metus at eros
-            pretium suscipit et eget nisl. Sed dignissim augue nisl, ultrices
-            varius sapien elementum at. Etiam gravida vulputate quam,
-            scelerisque pellentesque turpis pulvinar eu. Sed arcu arcu,
-            malesuada vel facilisis in, accumsan quis felis. Vivamus mattis
-            tortor ante, id efficitur arcu convallis nec. Cras quis lacus a quam
-            convallis tempor. Nunc eget sodales arcu. Aliquam porta, augue vitae
-            blandit maximus, massa neque ultricies enim, vitae imperdiet lectus
-            enim sed lorem. Nullam sagittis tortor turpis, pretium commodo dui
-            dictum eget. Cras turpis lectus, euismod id elementum et, porta a
-            nunc. Etiam quis nulla eu urna iaculis maximus. Donec erat arcu,
-            pellentesque non nunc sit amet, tristique aliquet tellus.
-            Suspendisse est tellus, lobortis vitae turpis ut, porttitor tempor
-            ante. Mauris consequat sollicitudin neque, non bibendum velit
-            malesuada sed. Aliquam blandit a lacus ac pharetra. Sed vel eros
-            massa. Integer magna ligula, euismod at dignissim in, hendrerit ut
-            elit. Nam fringilla eros sit amet massa vestibulum pellentesque.
-            Nullam in iaculis sem. Vivamus viverra facilisis ultrices. Etiam
-            luctus velit orci, a commodo arcu pharetra ut. Nam non cursus lorem.
-            Fusce lacinia dictum vestibulum. Vivamus sit amet blandit metus.
-            Integer quis semper erat, faucibus tincidunt lectus. Duis accumsan
-            porta odio eu pulvinar. Maecenas id erat eget augue iaculis
-            fringilla. Duis molestie nec lacus in tincidunt. Phasellus lectus
-            ante, pharetra eu elit non,
-          </StudyContentText>
-          <StudyContentProfileWrapper>
-            <StudyContentProfile>
-              <div className="profile-name">lain-alice</div>
-              <div>일반회원</div>
-            </StudyContentProfile>
-          </StudyContentProfileWrapper>
-          <StudyContentTag>
-            <div>javascript</div>
-            <div>typescript</div>
-          </StudyContentTag>
-          <StudyJoinButtonWrapper>
-            <StudyJoinButton>스터디 신청!</StudyJoinButton>
-          </StudyJoinButtonWrapper>
-        </StudyContentMain>
-        <StudyComment />
+        {!fetching && (
+          <div key={content?.id}>
+            <StudyContentTop>
+              {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
+              <StudyContentTitle>
+                <h2>{content?.studyName}</h2>
+                <StudyContentEdit>
+                  <button type="button" onClick={handleEditButton}>
+                    수정
+                  </button>
+                  <button type="button" onClick={handleDeleteButton}>
+                    삭제
+                  </button>
+                </StudyContentEdit>
+              </StudyContentTitle>
+            </StudyContentTop>
+            <StudyContentMain>
+              <StudyContentInfo>
+                <div>날짜</div>
+                <span>{`${content?.studyPeriodStart} ~ ${content?.studyPeriodEnd}`}</span>
+              </StudyContentInfo>
+              <StudyContentInfo>
+                <div>요일, 시간</div>
+                <span>{`${content?.daysOfWeek} ${content?.studyTimeStart} ~ ${content?.studyTimeEnd}`}</span>
+              </StudyContentInfo>
+              <StudyContentInfo>
+                <div>인원</div>
+                <span>{`${content?.memberCountMin} ~ ${content?.memberCountMax}`}</span>
+              </StudyContentInfo>
+              <StudyContentInfo>
+                <div>플랫폼</div>
+                <span>{content?.platform}</span>
+              </StudyContentInfo>
+              <StudyContentText>{`${content?.introduction}`}</StudyContentText>
+              <StudyContentProfileWrapper>
+                <StudyContentProfile>
+                  <div className="profile-name">{`${content?.leaderNickName}`}</div>
+                  <div>일반회원</div>
+                </StudyContentProfile>
+              </StudyContentProfileWrapper>
+              <StudyContentTag>
+                {content?.tags && (
+                  <>
+                    {Object.entries(content.tags).map(([category, tags]) => (
+                      <div key={category}>
+                        {category}:
+                        {tags.map((tag) => (
+                          <span key={tag}>{tag}</span>
+                        ))}
+                      </div>
+                    ))}
+                  </>
+                )}
+              </StudyContentTag>
+              <StudyJoinButtonWrapper>
+                <StudyJoinButton type="button" onClick={handleJoinButton}>
+                  스터디 신청!
+                </StudyJoinButton>
+              </StudyJoinButtonWrapper>
+            </StudyContentMain>
+            <StudyComment />
+          </div>
+        )}
       </StudyContentBody>
     </StudyContentContainer>
   );
