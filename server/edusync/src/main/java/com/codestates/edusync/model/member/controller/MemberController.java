@@ -7,11 +7,9 @@ import com.codestates.edusync.model.member.dto.MemberDto;
 import com.codestates.edusync.model.member.dto.MemberJoinResponseDto;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.mapper.MemberMapper;
-import com.codestates.edusync.model.common.utils.UriCreator;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -20,8 +18,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
-import java.net.URI;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -42,11 +38,7 @@ public class MemberController {
         Member createMember = memberService.createMember(member);
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(createMember);
 
-        URI location = UriCreator.createUri("/members", createMember.getId());
-        HttpHeaders headers = new HttpHeaders();
-        headers.setLocation(location);
-
-        return new ResponseEntity(responseDto, headers, HttpStatus.CREATED);
+        return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
 
     @PatchMapping

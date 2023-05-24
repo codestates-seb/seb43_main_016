@@ -10,7 +10,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 import static javax.persistence.CascadeType.MERGE;
-import static javax.persistence.CascadeType.PERSIST;
 import static javax.persistence.FetchType.*;
 
 @NoArgsConstructor
