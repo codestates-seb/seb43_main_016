@@ -13,7 +13,7 @@ import java.util.stream.Collectors;
 
 @Component
 public class CustomAuthorityUtils { // 사용자 권한 부여, 확인을 위한 클래스
-    @Value("${mail.address.admin}") // yml에 정의해 둔 관리자 이메일 가져오는거
+    @Value("${mail.address.admin}")
     private String adminMailAddress;
 
     private final List<GrantedAuthority> ADMIN_ROLES = AuthorityUtils.createAuthorityList("ROLE_ADMIN", "ROLE_USER");

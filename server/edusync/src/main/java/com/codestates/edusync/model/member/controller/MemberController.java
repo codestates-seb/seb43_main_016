@@ -29,7 +29,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 @RestController
 @RequestMapping("/members")
-@Validated // 유효성 검사용
+@Validated
 @Slf4j
 public class MemberController {
     private final MemberService memberService;
