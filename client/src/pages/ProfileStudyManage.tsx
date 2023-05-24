@@ -23,9 +23,11 @@ const ProfileStudyManage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = studyInfo?.isRecruited;
-
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
     const fetchStudyGroupInfo = async () => {
       if (isNaN(parsedId)) {
         alert("잘못된 접근입니다");
@@ -58,7 +60,6 @@ const ProfileStudyManage = () => {
     getMemberInfo(isLoggedIn).then((data) => {
       if (data.nickName === studyInfo?.leaderNickName) {
         alert("스터디장은 권한을 멤버에게 위임한 뒤에 탈퇴할 수 있습니다");
-        return;
       } else {
         if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
         exitStudyGroup(parsedId, isLoggedIn);
@@ -117,7 +118,6 @@ const ProfileStudyManage = () => {
       </button>
       <div>스터디 소개</div>
       <div>{studyInfo?.introduction}</div>
-      {/* StudyInfoEditModal */}
       {isModalOpen && (
         <StudyInfoEditModal
           isOpen={isModalOpen}
@@ -125,8 +125,8 @@ const ProfileStudyManage = () => {
           studyInfo={studyInfo}
         />
       )}
-      <MemberManage />
-      <CandidateManage />
+      <MemberManage studyLeader={studyInfo?.leaderNickName}/>
+      <CandidateManage studyLeader={studyInfo?.leaderNickName}/>
       <button type="button" onClick={handleDeleteClick}>
         스터디 삭제
       </button>

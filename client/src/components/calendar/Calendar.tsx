@@ -1,24 +1,34 @@
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { generateStudyEvents, Event } from "../../apis/CalendarApi";
 import ViewCalendarEvent from "../modal/ViewCalendarEvent";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../../recoil/atoms/LogInState";
 
 const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const isLoggedIn = useRecoilValue(LogInState);
+  const naviate = useNavigate();
 
   useEffect(() => {
-    const fetchEvents = async () => {
-      try {
-        const generatedEvents = await generateStudyEvents(true);
-        setEvents(generatedEvents);
-      } catch (error) {
-        alert("스터디 일정을 불러오는 데 실패했습니다")
-      }
-    };
-    fetchEvents();
+    if (!isLoggedIn) {
+      naviate("/");
+      alert("로그인이 필요합니다");
+    } else {
+      const fetchEvents = async () => {
+        try {
+          const generatedEvents = await generateStudyEvents(true);
+          setEvents(generatedEvents);
+        } catch (error) {
+          alert("스터디 일정을 불러오는 데 실패했습니다");
+        }
+      };
+      fetchEvents();
+    }
   }, []);
 
   const handleEventClick = (info: { event: any }) => {
