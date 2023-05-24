@@ -17,8 +17,12 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
                                         HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
         log.error("# Authentication failed: {}", exception.getMessage());
-        log.error("# Authentication failed: Please check your email and password again.");
 
-        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "Please check your email and password again.");
+        if(exception.getMessage().equals("탈퇴한 회원입니다.")){
+            ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN, "Member is not active");
+        }else {
+            log.error("# Authentication failed: Please check your email and password again.");
+            ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "Please check your email and password again.");
+        }
     }
 }

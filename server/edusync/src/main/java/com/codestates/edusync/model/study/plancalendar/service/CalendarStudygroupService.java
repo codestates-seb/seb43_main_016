@@ -70,7 +70,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
 
         List<TimeSchedule> timeSchedulesOfStudygroup = new ArrayList<>();
         timeSchedules.forEach(ts -> {
-            if( ts.getMember() == null ) {
+            if( ts.getMember() == null ) {      // 순수한 studygroup 의 스케쥴만으로 모든 맴버에 적용하기 위함
                 timeSchedulesOfStudygroup.add(ts);
             }
         });
@@ -142,20 +142,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         Member loginMember = memberUtils.getLoggedIn(email);
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
-        Optional.ofNullable(timeSchedule.getTitle()).ifPresent(findTimeSchedule::setTitle);
-        Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(findTimeSchedule::setPlatform);
-        Optional.ofNullable(timeSchedule.getDescription()).ifPresent(findTimeSchedule::setDescription);
-        Optional.ofNullable(timeSchedule.getColor()).ifPresent(findTimeSchedule::setColor);
-
-        findTimeSchedule.setTime(
-                new TimeRange(
-                        (timeSchedule.getTime().getStudyTimeStart() == null ?
-                                findTimeSchedule.getTime().getStudyTimeStart()
-                                : timeSchedule.getTime().getStudyTimeStart() ),
-                        (timeSchedule.getTime().getStudyTimeEnd() == null ?
-                                findTimeSchedule.getTime().getStudyTimeEnd()
-                                : timeSchedule.getTime().getStudyTimeEnd() ) )
-        );
+        CommonCalendarFeature.setTimeScheduleInformation(timeSchedule, findTimeSchedule);
 
         calendarRepository.save(findTimeSchedule);
 
@@ -183,20 +170,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                 );
 
         findTimeSchedules.forEach(ts -> {
-            Optional.ofNullable(timeSchedule.getTitle()).ifPresent(ts::setTitle);
-            Optional.ofNullable(timeSchedule.getPlatform()).ifPresent(ts::setPlatform);
-            Optional.ofNullable(timeSchedule.getDescription()).ifPresent(ts::setDescription);
-            Optional.ofNullable(timeSchedule.getColor()).ifPresent(ts::setColor);
-
-            ts.setTime(
-                    new TimeRange(
-                            (timeSchedule.getTime().getStudyTimeStart() == null ?
-                                    ts.getTime().getStudyTimeStart()
-                                    : timeSchedule.getTime().getStudyTimeStart() ),
-                            (timeSchedule.getTime().getStudyTimeEnd() == null ?
-                                    ts.getTime().getStudyTimeEnd()
-                                    : timeSchedule.getTime().getStudyTimeEnd() ) )
-            );
+            CommonCalendarFeature.setTimeScheduleInformation(timeSchedule, ts);
         });
 
         calendarRepository.saveAll(findTimeSchedules);
@@ -221,7 +195,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         return findTimeSchedule;
     }
 
-    // todo : 스터디 삭제 시 일정 제거용으로 이걸 호출해야함
+    // 스터디 삭제 시 일정 제거용으로 이걸 호출해야함
     @Override
     public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId,
                                                      String email) {

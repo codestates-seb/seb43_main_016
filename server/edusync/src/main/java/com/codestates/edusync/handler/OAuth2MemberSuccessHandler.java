@@ -81,13 +81,12 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
 
         Member member;
-        if (optionalMember.isEmpty()) { // 이메일이 저장되어 있지 않은 경우
-            member = saveMember(email, nickName, profileImage, provider); // Resource Owner의 정보를 DB에 저장
+        if (optionalMember.isEmpty()) {
+            member = saveMember(email, nickName, profileImage, provider);
         } else {
             member = optionalMember.get();
         }
-
-        redirect(request, response, member);  // Access Token과 Refresh Token을 생성해서 Frontend 애플리케이션에 전달하기 위해 Redirect
+        redirect(request, response, member);
     }
 
     private Member saveMember(String email, String nickname, String profileImage, Member.Provider provider) {
@@ -107,14 +106,14 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
     }
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, Member member) throws IOException {
-        String accessToken = tokenService.delegateAccessToken(member);  // JWT Access Token 생성
-        String refreshToken = tokenService.delegateRefreshToken(member);  // Refresh Token 생성
+        String accessToken = tokenService.delegateAccessToken(member);
+        String refreshToken = tokenService.delegateRefreshToken(member);
 
-        response.setHeader("Authorization", accessToken);  // 클리이언트한테 Access Token 보내주기 (이후에 클라이언트 측에서 백엔드 애플리케이션 측에 요청을 보낼 때마다 request header에 추가해서 클라이언트 측의 자격을 증명하는데 사용)
-        response.setHeader("Refresh", refreshToken);                   // 클리이언트한테 Refresh Token 보내주기
+        response.setHeader("Authorization", accessToken);
+        response.setHeader("Refresh", refreshToken);
 
-        String uri = createURI(accessToken, refreshToken).toString();   // Access Token과 Refresh Token을 포함한 URL을 생성
-        getRedirectStrategy().sendRedirect(request, response, uri);   // Frontend 애플리케이션 쪽으로 리다이렉트
+        String uri = createURI(accessToken, refreshToken).toString();
+        getRedirectStrategy().sendRedirect(request, response, uri);
 
         log.info("# Authenticated successfully!");
 

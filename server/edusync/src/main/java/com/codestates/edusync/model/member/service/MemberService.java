@@ -1,13 +1,17 @@
 package com.codestates.edusync.model.member.service;
 
+import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.repository.MemberRepository;
+import com.codestates.edusync.security.auth.utils.ErrorResponder;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
@@ -37,7 +41,7 @@ public class MemberService {
 
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
-        member.setAboutMe(""); // FE 요청으로 추가 (null -> 빈문자열)
+        member.setAboutMe("");
         member.setWithMe("");
 
         if (member.getProfileImage() == null || member.getProfileImage().isEmpty()) {
@@ -56,7 +60,11 @@ public class MemberService {
         memberUtils.checkNicknameExists(member.getNickName());
 
         Optional.ofNullable(member.getNickName())
-                .ifPresent(name -> findMember.setNickName(name));
+                .ifPresent(name -> {
+                    if (!name.isEmpty()) {
+                        findMember.setNickName(name);
+                    }
+                });
         Optional.ofNullable(member.getPassword())
                 .ifPresent(password -> {
                     if (!password.isEmpty()) {
@@ -79,10 +87,8 @@ public class MemberService {
 
     public void deleteMember(String email) {
         Member findMember = memberUtils.get(email);
-        String newEmail = "del_" + findMember.getId() + "_" + findMember.getEmail();
 
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
-        findMember.setEmail(newEmail);
 
         memberRepository.save(findMember);
     }
@@ -113,5 +119,26 @@ public class MemberService {
         response.put("provider", provider);
 
         return response;
+    }
+
+    public Member reactive(String email, String password){
+        Optional<Member> optionalMember =
+                memberRepository.findByEmail(email);
+
+        Member member =
+                optionalMember.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND, String.format("%s 회원을 찾을 수 없습니다.", email)));
+
+
+        if(passwordEncoder.matches(password, member.getPassword()) && !member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
+            member.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
+            memberRepository.save(member); // 이게 없어도 JPA Dirty Checking 기능으로 인해 변경사항이 db에 자동으로 저장된다.
+        }else if(member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_ALREADY_ACTIVE);
+        }else if(!passwordEncoder.matches(password, member.getPassword())){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_PASSWORD_ERROR);
+        }
+
+        return member;
     }
 }
