@@ -26,6 +26,10 @@ const StudyPost = () => {
   const [introduction, setIntroduction] = useState<string>("");
   const [selectedCategory, setSelectedCategory] =
     useState<string>("프론트엔드");
+  const [selectedPeriodStart, setSelectedPeriodStart] = useState<string>("");
+  const [selectedPeriodEnd, setSelectedPeriodEnd] = useState<string>("");
+  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("00:00");
+  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("00:00");
   const isLoggedIn = useRecoilValue(LogInState);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -37,17 +41,43 @@ const StudyPost = () => {
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
     setStudyName(e.target.value);
   };
+
   const handleStudyPeriodStart = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStudyPeriodStart(e.target.value);
+    const startDateValue = e.target.value;
+    const timeValue = "00:00";
+
+    const formattedDate = `${startDateValue}T${timeValue}:00`;
+    setSelectedPeriodStart(startDateValue);
+    setStudyPeriodStart(formattedDate);
   };
+
   const handleStudyPeriodEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStudyPeriodEnd(e.target.value);
+    const endDateValue = e.target.value;
+    const timeValue = "00:00";
+
+    const formattedDate = `${endDateValue}T${timeValue}:00`;
+    setSelectedPeriodEnd(endDateValue);
+    setStudyPeriodEnd(formattedDate);
   };
   const handleStudyTimeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStudyTimeStart(e.target.value);
+    const startTimeValue = e.target.value;
+    const dateValue = "2023-05-04"; // 이 코드에서는 의미가 없기 때문에 임의로 지정
+    let formattedDate = `${dateValue}T${startTimeValue}:00`;
+    if(formattedDate === "2023-05-04T00:00:00"){
+      formattedDate = "2023-05-04T00:01:00";
+    }
+    setSelectedTimeStart(startTimeValue);
+    setStudyTimeStart(formattedDate);
   };
   const handleStudyTimeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setStudyTimeEnd(e.target.value);
+    const endTimeValue = e.target.value;
+    const dateValue = "2023-05-04"; // 이 코드에서는 의미가 없기 때문에 임의로 지정
+    let formattedDate = `${dateValue}T${endTimeValue}:00`;
+    if(formattedDate === "2023-05-04T00:00:00"){
+      formattedDate = "2023-05-04T00:00:00";
+    }
+    setSelectedTimeEnd(endTimeValue);
+    setStudyTimeEnd(formattedDate);
   };
   const handleMemberCountMin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberCountMin(+e.target.value);
@@ -62,11 +92,11 @@ const StudyPost = () => {
   const handlePostButton = async () => {
     const StudyPostDto = {
       studyName,
-      studyPeriodStart: "2023-05-01T18:00",
-      studyPeriodEnd: "2023-05-10T20:00",
+      studyPeriodStart,
+      studyPeriodEnd,
       daysOfWeek: checked,
-      studyTimeStart: "2023-05-01T18:00",
-      studyTimeEnd: "2023-05-01T20:00",
+      studyTimeStart,
+      studyTimeEnd,
       memberCountMin,
       memberCountMax,
       platform,
@@ -75,7 +105,8 @@ const StudyPost = () => {
         [selectedCategory]: tags,
       },
     };
-    console.log(StudyPostDto);
+
+    console.log(StudyPostDto)
 
     if (studyName === "") {
       alert("제목을 입력해주세요!");
@@ -89,9 +120,20 @@ const StudyPost = () => {
       alert("최대 인원이 최소 인원보다 적습니다!");
       return;
     }
+
+    if (studyPeriodStart > studyPeriodEnd) {
+      alert("스터디 시작일이 종료일보다 늦습니다!");
+      return;
+    }
+
+    if (checked.length === 0) {
+      alert("요일을 선택해주세요!");
+      return;
+    }
+
     try {
       const res = await tokenRequestApi.post("/studygroup", StudyPostDto);
-      console.table(res.data);
+      console.log(res.data);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
@@ -136,14 +178,14 @@ const StudyPost = () => {
             <span>날짜</span>
             <input
               type="date"
-              value={studyPeriodStart}
+              value={selectedPeriodStart}
               onChange={handleStudyPeriodStart}
               required
             />
             <p>~</p>
             <input
               type="date"
-              value={studyPeriodEnd}
+              value={selectedPeriodEnd}
               onChange={handleStudyPeriodEnd}
               required
             />
@@ -158,14 +200,14 @@ const StudyPost = () => {
             <span>시간</span>
             <input
               type="time"
-              value={studyTimeStart}
+              value={selectedTimeStart}
               onChange={handleStudyTimeStart}
               required
             />
             <p>~</p>
             <input
               type="time"
-              value={studyTimeEnd}
+              value={selectedTimeEnd}
               onChange={handleStudyTimeEnd}
               required
             />
