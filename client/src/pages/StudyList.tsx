@@ -38,6 +38,7 @@ const StudyList = () => {
     };
     fetchData();
   }, []);
+
   return (
     <StudyListContainer>
       <StudyListBody>
