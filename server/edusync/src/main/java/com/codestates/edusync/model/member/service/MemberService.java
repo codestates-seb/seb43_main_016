@@ -132,6 +132,7 @@ public class MemberService {
 
         if(passwordEncoder.matches(password, member.getPassword()) && !member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
             member.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
+            memberRepository.save(member); // 이게 없어도 JPA Dirty Checking 기능으로 인해 변경사항이 db에 자동으로 저장된다.
         }else if(member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
             throw new BusinessLogicException(ExceptionCode.MEMBER_ALREADY_ACTIVE);
         }else if(!passwordEncoder.matches(password, member.getPassword())){

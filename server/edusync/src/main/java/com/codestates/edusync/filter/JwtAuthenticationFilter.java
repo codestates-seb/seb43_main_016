@@ -52,22 +52,18 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws ServletException, IOException {
-        try{
-            Member member = (Member) authResult.getPrincipal();
+        Member member = (Member) authResult.getPrincipal();
 
-            if(!member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
-                throw new BusinessLogicException(ExceptionCode.INACTIVE_MEMBER);
-            }
-
-            String accessToken = tokenService.delegateAccessToken(member);
-            String refreshToken = tokenService.delegateRefreshToken(member);
-
-            response.setHeader("Authorization", accessToken);
-            response.setHeader("Refresh", refreshToken);
-
-            this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
-        }catch (BusinessLogicException e) {
-            ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN, "Member is not active");
+        if(!member.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
+            member.setMemberStatus(Member.MemberStatus.MEMBER_ACTIVE);
         }
+
+        String accessToken = tokenService.delegateAccessToken(member);
+        String refreshToken = tokenService.delegateRefreshToken(member);
+
+        response.setHeader("Authorization", accessToken);
+        response.setHeader("Refresh", refreshToken);
+
+        this.getSuccessHandler().onAuthenticationSuccess(request, response, authResult);
     }
 }
