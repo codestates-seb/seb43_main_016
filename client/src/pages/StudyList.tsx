@@ -30,7 +30,6 @@ const StudyList = () => {
         );
         setList(response.data?.data);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
-        console.log("list", response.data?.data);
       } catch (error) {
         console.log(error);
         throw new Error("스터디 리스트 로딩에 실패했습니다.");

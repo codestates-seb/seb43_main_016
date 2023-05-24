@@ -8,8 +8,10 @@ import {
   deleteStudyGroupInfo,
   StudyInfoDto,
 } from "../apis/StudyGroupApi";
+import { CommentDto } from "../apis/CommentApi";
 import StudyComment from "../components/StudyComment";
 import tokenRequestApi from "../apis/TokenRequestApi";
+import StudyCommentList from "../components/StudyCommentList";
 
 const StudyContent = () => {
   const initialTag = { [""]: [""] };
@@ -33,6 +35,7 @@ const StudyContent = () => {
   };
 
   const [fetching, setFetching] = useState(true);
+  const [comments, setComments] = useState<CommentDto[]>([]);
   const [content, setContent] = useState<StudyInfoDto | null>(initialState);
   const { id } = useParams(); // App.tsx의 Route url에 :id로 명시하면 그걸 가져옴
   const parsedId = Number(id);
@@ -93,6 +96,10 @@ const StudyContent = () => {
     }
     // 이미 등록한 스터디입니다 어떻게?
   };
+
+  useEffect(() => {
+    window.scrollTo(0, document.body.scrollHeight);
+  }, [comments]);
 
   return (
     <StudyContentContainer>
@@ -157,7 +164,12 @@ const StudyContent = () => {
                 </StudyJoinButton>
               </StudyJoinButtonWrapper>
             </StudyContentMain>
-            <StudyComment />
+            <StudyComment studyGroupId={Number(id)} setComments={setComments} />
+            <StudyCommentList
+              studyGroupId={Number(id)}
+              comments={comments}
+              setComments={setComments}
+            />
           </div>
         )}
       </StudyContentBody>

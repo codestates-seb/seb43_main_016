@@ -10,9 +10,11 @@ export interface CommentDto {
   nickName: string;
   isMyComment: boolean;
 }
-export const postComment = async (data: string) => {
+export const postComment = async (studyGroupId: number, data: string) => {
   try {
-    await tokenRequestApi.post("/studygroup/31/comment", { content: data });
+    await tokenRequestApi.post(`/studygroup/${studyGroupId}/comment`, {
+      content: data,
+    });
   } catch (error) {
     console.log(error);
     throw new Error("댓글 등록 실패");

@@ -11,11 +11,18 @@ import {
 import { validateEmptyInput } from "../pages/utils/loginUtils";
 import { useNavigate } from "react-router-dom";
 
-const StudyCommentList = ({}) => {
+const StudyCommentList = ({
+  studyGroupId,
+  comments,
+  setComments,
+}: {
+  studyGroupId: number;
+  comments: CommentDto[];
+  setComments: React.Dispatch<React.SetStateAction<CommentDto[]>>;
+}) => {
   const isLoggedIn = useRecoilValue(LogInState);
   const navigate = useNavigate();
 
-  const [comments, setComments] = useState<CommentDto[]>([]);
   const [comment, setComment] = useState("");
   const [patchId, setPatchId] = useState<number | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
@@ -39,7 +46,6 @@ const StudyCommentList = ({}) => {
       alert("댓글 내용을 입력해주세요.");
     } else {
       try {
-        const studyGroupId = 31;
         if (patchId) {
           await patchComment(studyGroupId, patchId, comment);
           setIsUpdateMode(false);
@@ -55,7 +61,6 @@ const StudyCommentList = ({}) => {
   const handleDelete = async (patchId: number) => {
     if (!isLoggedIn) navigate("/login");
     try {
-      const studyGroupId = 31;
       await deleteComment(studyGroupId, patchId);
       fetchData();
     } catch (error) {
@@ -64,7 +69,6 @@ const StudyCommentList = ({}) => {
   };
   const fetchData = async () => {
     try {
-      const studyGroupId = 31;
       const newComment = await getComments(studyGroupId);
       setComments(newComment);
     } catch (error) {
