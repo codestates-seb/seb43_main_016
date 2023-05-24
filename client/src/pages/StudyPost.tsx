@@ -77,6 +77,10 @@ const StudyPost = () => {
     };
     console.log(StudyPostDto);
 
+    if (studyName === "") {
+      alert("제목을 입력해주세요!");
+      return;
+    }
     if (!isLoggedIn) {
       alert("로그인한 사람만 스터디 등록이 가능합니다!");
       return;
