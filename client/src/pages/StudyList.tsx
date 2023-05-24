@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 
 const StudyList = () => {
@@ -21,6 +21,7 @@ const StudyList = () => {
 
   const [fetching, setFetching] = useState(true);
   const [list, setList] = useState<StudyListDto[]>(initialState);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -52,19 +53,20 @@ const StudyList = () => {
           {!fetching && (
             <StudyBoxContainer>
               {list?.map((item: StudyListDto) => (
-                <Link to={`/studycontent/${item?.id}`}>
-                  <StudyBox key={item?.id}>
-                    <StudyListImage></StudyListImage>
-                    <div>
-                      <div className="studylist-title">
-                        <h3>{item?.title}</h3>
-                      </div>
-                      <div className="studylist-tag">
-                        <div>{item?.tagValues.key}</div>
-                      </div>
+                <StudyBox
+                  key={item?.id}
+                  onClick={() => navigate(`/studycontent/${item?.id}`)}
+                >
+                  <StudyListImage></StudyListImage>
+                  <div>
+                    <div className="studylist-title">
+                      <h3>{item?.title}</h3>
                     </div>
-                  </StudyBox>
-                </Link>
+                    <div className="studylist-tag">
+                      <div>{item?.tagValues.key}</div>
+                    </div>
+                  </div>
+                </StudyBox>
               ))}
             </StudyBoxContainer>
           )}
@@ -160,6 +162,7 @@ const StudyBox = styled.div`
   flex-flow: column wrap;
   justify-content: center;
   align-items: center;
+  cursor: pointer;
 
   .studylist-title {
     width: 260px;
