@@ -21,6 +21,7 @@ const StudyPost = () => {
   const [platform, setPlatform] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [viewTag, setViewTag] = useState(false);
+  const [isInput, setIsInput] = useState(false);
   const [introduction, setIntroduction] = useState<string>("");
   const [selectedCategory, setSelectedCategory] =
     useState<string>("프론트엔드");
@@ -28,6 +29,7 @@ const StudyPost = () => {
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
     setViewTag(false);
+    setIsInput(false);
   };
 
   const handleTitle = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,6 +197,8 @@ const StudyPost = () => {
               setTags={setTags}
               viewTag={viewTag}
               setViewTag={setViewTag}
+              isInput={isInput}
+              setIsInput={setIsInput}
             />
           </StudyPostInfo>
           <StudyPostInput>

@@ -62,7 +62,9 @@ const ProfileStudyList = () => {
           tagValues={member.tagValues}
         />
       ))}
+
     </Wrapper>
+    </>
   );
 };
 
