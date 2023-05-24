@@ -11,6 +11,8 @@ public enum ExceptionCode {
     DUPLICATED_EMAIL(409, "이메일을 찾을수 없습니다."),
     MEMBER_EXISTS_EMAIL(409, "이메일이 이미 존재"),
     MEMBER_EXISTS_NICKNAME(409, "닉네임이 이미 존재"),
+    MEMBER_PASSWORD_ERROR(400, "잘못된 비밀번호"),
+    MEMBER_ALREADY_ACTIVE(409, "회원이 이미 active 상태입니다."),
 
     /**
      * 인증 관련 에러 코드
