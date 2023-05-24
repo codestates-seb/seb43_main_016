@@ -57,8 +57,13 @@ const StudyContent = () => {
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
         console.log(content);
       } catch (error) {
-        console.log(error);
-        throw new Error("스터디 내용 로딩에 실패했습니다.");
+        if (!isLoggedIn) navigate("/login");
+        else {
+          alert("잘못된 접근입니다");
+          navigate("/studylist");
+
+          throw new Error("스터디 내용 로딩에 실패했습니다.");
+        }
       }
     };
     fetchData();
@@ -78,12 +83,7 @@ const StudyContent = () => {
   };
 
   const handleEditButton = async () => {
-    try {
-    } catch (error) {
-      alert("스터디 수정이 실패했습니다!");
-      // 당신의 스터디가 아닙니다?
-      console.error("Error during POST request:", error);
-    }
+    navigate(`/studycontent/${id}/edit`);
   };
 
   const handleJoinButton = async () => {
