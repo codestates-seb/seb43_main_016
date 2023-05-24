@@ -30,12 +30,8 @@ export interface WaitingStudyGroupListDto {
   beStudys: WaitingStudyGroupItemDto[];
 }
 
-export const getWaitingStudyGroupList = async (): Promise<
-  WaitingStudyGroupItemDto[]
-> => {
-  const response = await tokenRequestApi.get<WaitingStudyGroupItemDto[]>(
-    `/studygroup/myList?approved=false`
-  );
+export const getWaitingStudyGroupList = async (): Promise<WaitingStudyGroupListDto> => {
+  const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(`/studygroup/myList?approved=false`);
   const data = response.data;
   return data;
 };

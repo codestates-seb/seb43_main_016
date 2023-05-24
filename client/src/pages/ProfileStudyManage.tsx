@@ -57,16 +57,23 @@ const ProfileStudyManage = () => {
   const handleExitClick = async () => {
     getMemberInfo(isLoggedIn).then((data) => {
       if (data.nickName === studyInfo?.leaderNickName) {
-        alert("스터디장은 스터디를 탈퇴할 수 없습니다.");
+        alert("스터디장은 권한을 멤버에게 위임한 뒤에 탈퇴할 수 있습니다");
         return;
+      } else {
+        if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
+        exitStudyGroup(parsedId, isLoggedIn);
       }
     });
-    if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
-    await exitStudyGroup(parsedId, isLoggedIn);
   };
 
   // TODO : 스터디 모집 상태를 수정하는 코드
   const handleRecuitCloseClick = async () => {
+    getMemberInfo(isLoggedIn).then((data) => {
+      if (data.nickName !== studyInfo?.leaderNickName) {
+        alert("스터디장만 스터디의 모집 상태를 수정할 수 있습니다");
+        return;
+      }
+    });
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
   };
 

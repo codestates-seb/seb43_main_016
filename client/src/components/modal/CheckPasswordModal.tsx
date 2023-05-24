@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import Modal from "react-modal";
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, FormEvent, useState } from "react";
+import { checkMemberPassword, MemberPasswordCheckDto } from "../../apis/MemberApi";
 
 const customStyles = {
   content: {
@@ -16,30 +17,32 @@ const customStyles = {
 interface CheckPasswordModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  onPasswordEntered: (enteredPassword: string) => void;
+  setIsModalOpen: (isOpen: boolean) => void;
 }
 
 const CheckPasswordModal = ({
   isOpen,
   closeModal,
-  onPasswordEntered,
+  setIsModalOpen,
 }: CheckPasswordModalProps) => {
-  const [modalState, setModalState] = useState("");
+  const [passwordState, setPasswordState] = useState("");
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    event.preventDefault();
     const { value } = event.target;
-    setModalState(value);
+    setPasswordState(value);
   };
 
-  const handleSubmitClick = () => {
-    closeModal();
-    onPasswordEntered(modalState);
-  };
-
-  const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    handleSubmitClick();
+    const passwordCheckResult: MemberPasswordCheckDto = { password: passwordState };
+    const result = checkMemberPassword(passwordCheckResult);
+    if (await result === true) {
+      closeModal();
+      setIsModalOpen(true);
+    } else {
+      alert("비밀번호가 일치하지 않습니다.");
+      closeModal();
+    }
   };
 
   return (
@@ -50,11 +53,11 @@ const CheckPasswordModal = ({
         style={customStyles}
         contentLabel="CheckPasswordModal"
       >
-        <ModalExplain>개인정보 수정 전, 비밀번호를 재확인합니다</ModalExplain>
+        <ModalExplain>개인정보 수정 전, 비밀번호를 재확인합니다.</ModalExplain>
         <form onSubmit={handleFormSubmit}>
           <ModalInput
             type="password"
-            placeholder="비밀번호를 입력하세요"
+            placeholder="비밀번호를 입력하세요."
             onChange={handleInputChange}
             autoComplete="new-password"
           />

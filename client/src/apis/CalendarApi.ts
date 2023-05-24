@@ -28,10 +28,9 @@ export const generateStudyEvents = async (
   // 1. 개인이 속한 스터디 조회
   const myStudyGroups = await getStudyGroupList();
   console.log(myStudyGroups);
-
   // 2. 조회 데이터의 id 추출
   const studyGroupIds: number[] = [];
-  // members 배열에서 스터디 그룹의 ID 추출
+
   for (const member of myStudyGroups.data.members) {
     studyGroupIds.push(member.id);
   }
@@ -64,7 +63,7 @@ export const generateStudyEvents = async (
             case "일":
               return "0"; // "일" -> 0
             default:
-              return ""; // handle any other cases if necessary
+              return "";
           }
         }
       );

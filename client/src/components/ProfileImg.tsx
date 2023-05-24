@@ -10,18 +10,11 @@ const ProfileImg = ({ profileImage }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState<string>(profileImage || "");
   const [isEditing, setIsEditing] = useState<boolean>(false);
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
-  const checkImg = (): void => {
-    if (fileInputRef.current) {
-      fileInputRef.current.click();
-    }
-  };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file: File | undefined = e.target.files?.[0];
     if (file) {
-      setSelectedFile(file);
       const reader: FileReader = new FileReader();
       reader.readAsDataURL(file);
       reader.onloadend = () => {
@@ -33,7 +26,6 @@ const ProfileImg = ({ profileImage }: Props) => {
   };
 
   const cancelUpload = (): void => {
-    setSelectedFile(null);
     setIsEditing(false);
     setImageUrl(profileImage || "");
   };
@@ -74,9 +66,6 @@ const ProfileImg = ({ profileImage }: Props) => {
           </ButtonGroup>
         </>
       )}
-      {!isEditing && (
-        <UploadButton onClick={checkImg}>Change Profile Image</UploadButton>
-      )}
     </ProfileImgWrapper>
   );
 };
@@ -86,23 +75,86 @@ export default ProfileImg;
 const ProfileImgWrapper = styled.div``;
 
 const ProfileImgSection = styled.div`
-  width: 150px;
-  height: 150px;
+  width: 200px;
+  height: 200px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  `
+  border-radius: 50%;
+  border: 2px solid #ccc;
+  margin-bottom: 10px;
+  position: relative;
+
+  &:hover {
+    background-color: #ccc;
+
+    &::after {
+      content: "프로필 수정";
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: rgba(0, 0, 0, 0.5);
+      color: #fff;
+      padding: 8px 16px;
+      border-radius: 4px;
+      font-size: 14px;
+    }
+  }
+
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+`;
 
 const ButtonGroup = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 10px;
-
 `;
 
-const UploadButton = styled.button``;
+// const UploadButton = styled.button`
+//   background-color: #337ab7;
+//   color: #fff;
+//   padding: 8px 16px;
+//   border: none;
+//   border-radius: 4px;
+//   font-size: 14px;
+//   cursor: pointer;
 
-const CancelButton = styled.button``;
+//   &:hover {
+//     background-color: #23527c;
+//   }
+// `;
 
-const ConfirmButton = styled.button``;
+const CancelButton = styled.button`
+  background-color: #ccc;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  margin-right: 8px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #999;
+  }
+`;
+
+const ConfirmButton = styled.button`
+  background-color: #337ab7;
+  color: #fff;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #23527c;
+  }
+`;
