@@ -37,7 +37,7 @@ public class MemberService {
 
         List<String> roles = authorityUtils.createRoles(member.getEmail());
         member.setRoles(roles);
-        member.setAboutMe(""); // FE 요청으로 추가 (null -> 빈문자열)
+        member.setAboutMe("");
         member.setWithMe("");
 
         if (member.getProfileImage() == null || member.getProfileImage().isEmpty()) {
@@ -56,7 +56,11 @@ public class MemberService {
         memberUtils.checkNicknameExists(member.getNickName());
 
         Optional.ofNullable(member.getNickName())
-                .ifPresent(name -> findMember.setNickName(name));
+                .ifPresent(name -> {
+                    if (!name.isEmpty()) {
+                        findMember.setNickName(name);
+                    }
+                });
         Optional.ofNullable(member.getPassword())
                 .ifPresent(password -> {
                     if (!password.isEmpty()) {
@@ -79,10 +83,8 @@ public class MemberService {
 
     public void deleteMember(String email) {
         Member findMember = memberUtils.get(email);
-        String newEmail = "del_" + findMember.getId() + "_" + findMember.getEmail();
 
         findMember.setMemberStatus(Member.MemberStatus.MEMBER_QUIT);
-        findMember.setEmail(newEmail);
 
         memberRepository.save(findMember);
     }

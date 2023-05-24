@@ -5,6 +5,8 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.member.repository.MemberRepository;
+import com.codestates.edusync.security.auth.utils.ErrorResponder;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -31,6 +33,9 @@ public class MemberDetailsService implements UserDetailsService {
         Optional<Member> optionalMember = memberRepository.findByEmail(email);
         Member findMember = optionalMember.orElseThrow(() -> new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
 
+        if(!findMember.getMemberStatus().equals(Member.MemberStatus.MEMBER_ACTIVE)){
+            throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_ACTIVE);
+        }
         return new MemberDetails(findMember);
     }
 

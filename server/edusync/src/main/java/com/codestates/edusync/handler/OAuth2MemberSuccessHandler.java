@@ -86,7 +86,6 @@ public class OAuth2MemberSuccessHandler extends SimpleUrlAuthenticationSuccessHa
         } else {
             member = optionalMember.get();
         }
-
         redirect(request, response, member);
     }
 
