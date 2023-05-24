@@ -52,6 +52,9 @@ const SignUp = () => {
           if (error.response.data.message === "이메일이 이미 존재") {
             alert("이미 가입된 이메일 입니다.");
           }
+          if (error.response.data.message === "닉네임이 이미 존재") {
+            alert("사용할 수 없는 닉네임입니다.");
+          }
 
           if (error.response.data.message === "탈퇴한 회원입니다.") {
             setMemberRestoreModalOpen(true);
