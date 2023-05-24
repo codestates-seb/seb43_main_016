@@ -28,15 +28,20 @@ const StudyContent = () => {
   };
 
   const [fetching, setFetching] = useState(true);
-  const [content, setContent] = useState<StudyInfoDto>(initialState);
+  const [content, setContent] = useState<StudyInfoDto | null>(initialState);
   const { id } = useParams();
   const parsedId = Number(id);
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = content?.isRecruited;
 
   useEffect(() => {
     const fetchData = async () => {
+      if (isNaN(parsedId)) {
+        alert("잘못된 접근입니다");
+        navigate("/studylist");
+        return;
+      }
       try {
         const content = await getStudyGroupInfo(parsedId, isLoggedIn);
         setContent(content);
@@ -54,11 +59,11 @@ const StudyContent = () => {
     <StudyContentContainer>
       <StudyContentBody>
         {!fetching && (
-          <>
+          <div key={content?.id}>
             <StudyContentTop>
-              <span>{!isRecruiting ? "모집중" : "모집 완료"}</span>
+              {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
               <StudyContentTitle>
-                <h2>타입스크립트 스터디 모집</h2>
+                <h2>{content?.studyName}</h2>
                 <StudyContentEdit>
                   <div>수정</div>
                   <div>삭제</div>
@@ -68,59 +73,21 @@ const StudyContent = () => {
             <StudyContentMain>
               <StudyContentInfo>
                 <div>일정</div>
-                <span>2023. 05. 01 ~ 2023. 07. 01</span>
+                <span>{`${content?.studyPeriodStart} ~ ${content?.studyPeriodEnd}`}</span>
               </StudyContentInfo>
               <StudyContentInfo>
                 <div>시각</div>
-                <span>월, 수, 금 20:30 ~ 22:30</span>
+                <span>{`${content?.daysOfWeek} ${content?.studyTimeStart} ~ ${content?.studyTimeEnd}`}</span>
               </StudyContentInfo>
               <StudyContentInfo>
-                <div>최대 인원</div>
-                <span>6명</span>
+                <div>인원</div>
+                <span>{`${content?.memberCountMin} ~ ${content?.memberCountMax}`}</span>
               </StudyContentInfo>
               <StudyContentInfo>
                 <div>플랫폼</div>
-                <span>https://notion.so</span>
+                <span>{content?.platform}</span>
               </StudyContentInfo>
-              <StudyContentText>
-                TypeScript를 즐겁게 학습하실 스터디원 모집합니다!
-                <br /> Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-                Nam in libero luctus, varius eros in, ullamcorper neque. Morbi
-                libero elit, facilisis aliquam lacinia quis, placerat quis orci.
-                Phasellus iaculis ornare congue. Donec eu risus nisi. Mauris
-                felis odio, rutrum quis mauris vitae, tempus ornare felis.
-                Pellentesque habitant morbi tristique senectus et netus et
-                malesuada fames ac turpis egestas. Duis in ante posuere,
-                dignissim libero feugiat, aliquam metus. Donec non nisl massa.
-                Sed luctus elit volutpat sapien placerat fermentum. Interdum et
-                malesuada fames ac ante ipsum primis in faucibus. Donec ut
-                pulvinar urna. Quisque ac felis efficitur, dignissim felis at,
-                ultricies odio. Praesent vel metus at eros pretium suscipit et
-                eget nisl. Sed dignissim augue nisl, ultrices varius sapien
-                elementum at. Etiam gravida vulputate quam, scelerisque
-                pellentesque turpis pulvinar eu. Sed arcu arcu, malesuada vel
-                facilisis in, accumsan quis felis. Vivamus mattis tortor ante,
-                id efficitur arcu convallis nec. Cras quis lacus a quam
-                convallis tempor. Nunc eget sodales arcu. Aliquam porta, augue
-                vitae blandit maximus, massa neque ultricies enim, vitae
-                imperdiet lectus enim sed lorem. Nullam sagittis tortor turpis,
-                pretium commodo dui dictum eget. Cras turpis lectus, euismod id
-                elementum et, porta a nunc. Etiam quis nulla eu urna iaculis
-                maximus. Donec erat arcu, pellentesque non nunc sit amet,
-                tristique aliquet tellus. Suspendisse est tellus, lobortis vitae
-                turpis ut, porttitor tempor ante. Mauris consequat sollicitudin
-                neque, non bibendum velit malesuada sed. Aliquam blandit a lacus
-                ac pharetra. Sed vel eros massa. Integer magna ligula, euismod
-                at dignissim in, hendrerit ut elit. Nam fringilla eros sit amet
-                massa vestibulum pellentesque. Nullam in iaculis sem. Vivamus
-                viverra facilisis ultrices. Etiam luctus velit orci, a commodo
-                arcu pharetra ut. Nam non cursus lorem. Fusce lacinia dictum
-                vestibulum. Vivamus sit amet blandit metus. Integer quis semper
-                erat, faucibus tincidunt lectus. Duis accumsan porta odio eu
-                pulvinar. Maecenas id erat eget augue iaculis fringilla. Duis
-                molestie nec lacus in tincidunt. Phasellus lectus ante, pharetra
-                eu elit non,
-              </StudyContentText>
+              <StudyContentText>{`${content?.introduction}`}</StudyContentText>
               <StudyContentProfileWrapper>
                 <StudyContentProfile>
                   <div className="profile-name">lain-alice</div>
@@ -128,15 +95,25 @@ const StudyContent = () => {
                 </StudyContentProfile>
               </StudyContentProfileWrapper>
               <StudyContentTag>
-                <div>javascript</div>
-                <div>typescript</div>
+                {content?.tags && (
+                  <>
+                    {Object.entries(content.tags).map(([category, tags]) => (
+                      <div key={category}>
+                        {category}:
+                        {tags.map((tag) => (
+                          <span key={tag}>{tag}</span>
+                        ))}
+                      </div>
+                    ))}
+                  </>
+                )}
               </StudyContentTag>
               <StudyJoinButtonWrapper>
                 <StudyJoinButton>스터디 신청!</StudyJoinButton>
               </StudyJoinButtonWrapper>
             </StudyContentMain>
             <StudyComment />
-          </>
+          </div>
         )}
       </StudyContentBody>
     </StudyContentContainer>
