@@ -43,11 +43,6 @@ public class TokenService {
 
         String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
 
-        /*
-        redis 설치가 귀찮으시다면 아래 두줄 주석처리하시면 됩니다.
-        but 리프래쉬 토큰은 사용하실 수 없습니다. (엑세스 토큰은 사용 가능)
-         */
-
         RefreshToken rtk = new RefreshToken(refreshToken, member.getId());
         refreshTokenRepository.save(rtk);
 

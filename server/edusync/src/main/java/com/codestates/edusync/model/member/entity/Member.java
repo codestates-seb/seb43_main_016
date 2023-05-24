@@ -24,28 +24,28 @@ import static javax.persistence.FetchType.*;
 @Table(name = "member")
 public class Member extends Auditable {
     @Id // 식별자 등록
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // 식별자를 자동으로 생성
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String uuid = UUID.randomUUID().toString();
     @Column(nullable = false, updatable = true, unique = true)
     private String nickName;
     @Column(nullable = false, updatable = true, unique = true)
     private String email;
-    @Column(length = 2147483647)    // fixme : 길이 제한 걸릴 경우 length = -1 이나 columnDefinition = "TEXT" 타입 고려
+    @Column(length = -1)
     private String profileImage;
     private String password;
     @Column(length = 50)
     private String grade;
 
-    public Member(Long id, String nickName, String email, String profileImage) { // 테스트코드 작성용 생성자
+    public Member(Long id, String nickName, String email, String profileImage) {
         this.id = id;
         this.nickName = nickName;
         this.email = email;
         this.profileImage = profileImage;
     }
 
-    @ElementCollection(fetch = FetchType.EAGER) // 별도의 테이블로 생성해서 저장 // 권한 여러개 설정할거면 나중에 바꾸기 (String roles 지우고 관련 메서드 체크!)
-    private List<String> roles = new ArrayList<>(); // 권한 테이블
+    @ElementCollection(fetch = FetchType.EAGER)
+    private List<String> roles = new ArrayList<>();
     private String withMe;
     private String aboutMe;
     @Enumerated(value = EnumType.STRING)
