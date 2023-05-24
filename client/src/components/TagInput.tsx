@@ -10,15 +10,19 @@ const TagInput = ({
   setTags,
   viewTag,
   setViewTag,
+  isInput,
+  setIsInput,
 }: {
   selectedCategory: string;
   tags: string[];
   setTags: React.Dispatch<React.SetStateAction<string[]>>;
   viewTag: boolean;
   setViewTag: React.Dispatch<React.SetStateAction<boolean>>;
+  isInput: boolean;
+  setIsInput: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
   const [defaultTag, setDefaultTag] = useState<{ [key: string]: string[] }>({});
-  const [createdTag, setCreatedTag] = useState<string>("");
+  const [createdTag, setCreatedTag] = useState("");
 
   const handleTag = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCreatedTag(e.target.value);
@@ -31,8 +35,9 @@ const TagInput = ({
         alert("이미 존재하는 태그입니다.");
       } else if (createdTag) {
         setTags([...tags, createdTag]);
-        setCreatedTag("");
+        console.log([...tags, createdTag]);
       }
+      setCreatedTag("");
     }
   };
 
@@ -61,16 +66,9 @@ const TagInput = ({
 
   return (
     <>
-      <input
-        type="text"
-        value={createdTag}
-        onChange={handleTag}
-        onKeyDown={handleTagPost}
-      />
-
       <ul
         onClick={() => {
-          setViewTag(true);
+          setViewTag(!viewTag);
         }}
       >
         {selectedCategory} {viewTag ? "⌃" : "⌄"}
@@ -79,14 +77,23 @@ const TagInput = ({
             defaultTags={defaultTag[selectedCategory]}
             setTags={setTags}
             tags={tags}
+            setIsInput={setIsInput}
           />
         )}
       </ul>
+      {isInput && (
+        <TagWriteInput
+          type="text"
+          value={createdTag}
+          onChange={handleTag}
+          onKeyDown={handleTagPost}
+        />
+      )}
       <div>
         {tags.map((tag) => {
           return (
             <StudyTag onClick={() => handleDelete(tag)} key={tag}>
-              {tag}
+              {tag} x
             </StudyTag>
           );
         })}
@@ -104,4 +111,8 @@ const StudyTag = styled.div`
   margin-right: 7px;
   cursor: pointer;
 `;
+const TagWriteInput = styled.input`
+  width: 150px;
+`;
+
 export default TagInput;

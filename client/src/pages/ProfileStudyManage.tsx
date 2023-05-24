@@ -23,9 +23,6 @@ const ProfileStudyManage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = studyInfo?.isRecruited;
-
-  console.log(id);
-
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
     if (!isLoggedIn) {

@@ -27,7 +27,6 @@ const ProfileInfo = () => {
   });
   // 멤버 정보 수정 (클라이언트에서 수정된 데이터)
   const [isIntroduceEdit, setIsIntroduceEdit] = useState<boolean>(false);
-  console.log(isIntroduceEdit)
   const [passowrdCheckModalOpen, setPasswordCheckModalOpen] =
     useState<boolean>(false);
   const navigate = useNavigate();
@@ -156,6 +155,11 @@ const ProfileInfo = () => {
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
         userNickname={memberInfo?.nickName}
+      />
+      <CheckPasswordModal
+        isOpen={passowrdCheckModalOpen}
+        closeModal={() => setPasswordCheckModalOpen(false)}
+        setIsModalOpen={setIsModalOpen}
       />
       <CheckPasswordModal
         isOpen={passowrdCheckModalOpen}
