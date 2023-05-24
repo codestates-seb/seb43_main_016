@@ -84,11 +84,15 @@ const GNBBlock = styled.div`
 const GNBMenuBlock = styled(GNBBlock)`
   width: 370px;
   justify-content: space-between;
+
   span:hover {
     opacity: 80%;
   }
   span:active {
     opacity: 100%;
+  }
+  a {
+    color: #2759a2;
   }
 `;
 
