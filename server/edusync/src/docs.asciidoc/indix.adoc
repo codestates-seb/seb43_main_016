@@ -1,0 +1,68 @@
+= 스택오버플로우 애플리케이션
+:sectnums:
+:toc: left
+:toclevels: 4
+:toc-title: Table of Contents
+:source-highlighter: prettify
+
+We Won Jong <wiwee9@google.com>
+
+v1.0.0, 2023.04.19
+
+***
+== MemberController
+=== 회원 등록
+.curl-request
+include::{snippets}/post-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/post-member/http-request.adoc[]
+
+.request-fields
+include::{snippets}/post-member/request-fields.adoc[]
+
+.http-https://xxx[response]
+include::{snippets}/post-member/http-response.adoc[]
+
+.response-body
+include::{snippets}/post-member/response-fields.adoc[]
+
+
+=== 회원 정보 수정
+.curl-request
+include::{snippets}/patch-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/patch-member/http-request.adoc[]
+
+.request-fields
+include::{snippets}/patch-member/request-fields.adoc[]
+
+.http-response
+include::{snippets}/patch-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/patch-member/response-fields.adoc[]
+
+=== 회원 정보 조회
+.curl-request
+include::{snippets}/get-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/get-member/http-request.adoc[]
+
+.http-response
+include::{snippets}/get-member/http-response.adoc[]
+
+.response-fields
+include::{snippets}/get-member/response-fields.adoc[]
+
+=== 회원 삭제
+.curl-request
+include::{snippets}/delete-member/curl-request.adoc[]
+
+.http-request
+include::{snippets}/delete-member/http-request.adoc[]
+
+.http-response
+include::{snippets}/delete-member/http-response.adoc[]
