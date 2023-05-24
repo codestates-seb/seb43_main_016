@@ -41,7 +41,7 @@ const ProfileStudyList = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       <WaitingList />
       <h2>Leaders</h2>
       {studyList.leaders.map((leader) => (
@@ -62,12 +62,15 @@ const ProfileStudyList = () => {
           tagValues={member.tagValues}
         />
       ))}
-    </>
+    </Wrapper>
   );
 };
 
 export default ProfileStudyList;
 
+const Wrapper = styled.div`
+flex-direction: column;
+`;
 const CardWrapper = styled.div``;
 const Title = styled.div``;
 const Image = styled.div``;

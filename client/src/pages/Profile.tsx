@@ -40,14 +40,24 @@ const Wrapper = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 50px;
+  max-width: 960px;
+  margin-left: auto;
+  margin-right: auto;
 `;
 
 const LnbWrapper = styled.div`
   background-color: white;
+  width: 150px;
+  height: 200px;
   margin-right: 20px;
+  li {
+    margin-top: 10px;
+  }
+
 `;
 const Title = styled.div``;
 const Lnb = styled(Link)`
+
   &:hover {
     cursor: pointer;
     text-decoration: underline;

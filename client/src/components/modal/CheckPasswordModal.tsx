@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import Modal from "react-modal";
 import { ChangeEvent, FormEvent, useState } from "react";
-import { MemberPasswordCheckDto } from "../../apis/MemberApi";
+import { checkMemberPassword, MemberPasswordCheckDto } from "../../apis/MemberApi";
 
 const customStyles = {
   content: {
@@ -17,15 +17,13 @@ const customStyles = {
 interface CheckPasswordModalProps {
   isOpen: boolean;
   closeModal: () => void;
-  setPasswordCheckResult: React.Dispatch<
-    React.SetStateAction<MemberPasswordCheckDto>
-  >;
+  setIsModalOpen: (isOpen: boolean) => void;
 }
 
 const CheckPasswordModal = ({
   isOpen,
   closeModal,
-  setPasswordCheckResult,
+  setIsModalOpen,
 }: CheckPasswordModalProps) => {
   const [passwordState, setPasswordState] = useState("");
 
@@ -36,8 +34,15 @@ const CheckPasswordModal = ({
 
   const handleFormSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setPasswordCheckResult({ password: passwordState });
-    closeModal();
+    const passwordCheckResult: MemberPasswordCheckDto = { password: passwordState };
+    const result = checkMemberPassword(passwordCheckResult);
+    if (await result === true) {
+      closeModal();
+      setIsModalOpen(true);
+    } else {
+      alert("비밀번호가 일치하지 않습니다.");
+      closeModal();
+    }
   };
 
   return (

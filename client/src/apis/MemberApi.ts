@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import tokenRequestApi from "./TokenRequestApi";
 // * recoil에서 전역 LogInState를 가져와서 isLogin 변수에 할당
 // =============== 유저정보 요청(GET) ===============
@@ -78,10 +79,19 @@ export interface MemberPasswordCheckDto {
   password: string;
 }
 // TODO : Member의 비밀번호를 확인하는 코드
-export const checkMemberPassword = (
+export const checkMemberPassword = async (
   memberPasswordCheckDto: MemberPasswordCheckDto
 ) => {
-  tokenRequestApi.post("/members/password", memberPasswordCheckDto);
+  try {
+    const response: AxiosResponse = await tokenRequestApi.post(
+      "/members/password",
+      memberPasswordCheckDto
+    );
+    if (response.status <= 299) return true;
+    else return false;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 // TODO : Oauth2.0 로그인 이용자 검증
@@ -91,9 +101,11 @@ export interface Oauth2MemberCheckDto {
 
 export const checkOauth2Member = async (isLoggedIn: boolean) => {
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
-  const response = await tokenRequestApi.get<Oauth2MemberCheckDto>("/members/provider");
+  const response = await tokenRequestApi.get<Oauth2MemberCheckDto>(
+    "/members/provider"
+  );
   const data = response.data;
-  return data
+  return data;
 };
 
 // TODO : (Advance) S3에 업로드된 사진의 URL을 받아오는 코드

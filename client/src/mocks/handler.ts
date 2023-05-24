@@ -1,6 +1,10 @@
 import { RestRequest, rest } from "msw";
 import { MemberPasswordCheckDto } from "../apis/MemberApi";
 import { getStudyGroupInfo } from "../apis/StudyGroupApi";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
+
+const isLoggedIn = useRecoilValue(LogInState)
 
 interface LoginRequestBody {
   email: string;
@@ -224,7 +228,7 @@ export const handlers = [
   rest.get(`${import.meta.env.VITE_APP_API_URL}/studygroups/:id`, async (req, res, ctx) => {
     try {
       const studyGroupId = Number(req.params.id);
-      const studyInfo = await getStudyGroupInfo(studyGroupId);
+      const studyInfo = await getStudyGroupInfo(studyGroupId, isLoggedIn);
       console.log(studyInfo);
       return res(ctx.json(studyInfo));
     } catch (error) {
