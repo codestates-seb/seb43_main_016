@@ -14,10 +14,8 @@ function TextEditor({ onFocus, onBlur, handleContentChange }: Props) {
 
   const handleOnChange = (_event: any, editor: ClassicEditor) => {
     const data = editor.getData();
-    const plainText = data.replace(/(<([^>]+)>)/gi, "");
     setText(data);
-    // console.log("TextEditor handleChange:", data);
-    handleContentChange(plainText);
+    handleContentChange(data);
   };
 
   return (

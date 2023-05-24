@@ -21,7 +21,6 @@ tokenRequestApi.interceptors.request.use(
   (config) => {
     config.headers = config.headers || {};
     if (accessToken) {
-      console.log(accessToken)
       config.headers.authorization = `${accessToken}`;
     }
     return config;

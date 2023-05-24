@@ -34,6 +34,7 @@ const StudyContent = () => {
 
   const [fetching, setFetching] = useState(true);
   const [content, setContent] = useState<StudyInfoDto | null>(initialState);
+  const [renderedIntroduction, setRenderedIntroduction] = useState<string | null>(null);
   const { id } = useParams(); // App.tsx의 Route url에 :id로 명시하면 그걸 가져옴
   const parsedId = Number(id);
   const navigate = useNavigate();
@@ -59,6 +60,16 @@ const StudyContent = () => {
     };
     fetchData();
   }, [parsedId]);
+
+  const handleIntroduction = (introduction: string) => {
+    const createMarkup = () => {
+      return { __html: introduction };
+    };
+
+    setRenderedIntroduction(introduction);
+  };
+
+
 
   const handleDeleteButton = async () => {
     try {
