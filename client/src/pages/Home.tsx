@@ -35,36 +35,32 @@ const Home = () => {
         </TitleButton>
       </TitlePage>
       <IntroPage>
-        <h2>소개 제목</h2>
+        <h2>동료와 함께하는 계획적인 스터디</h2>
         <IntroMain>
           <IntroBox>
             <TbUsers size="160" color="#fff" />
             <h3>스터디 동료 모집</h3>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo c
+              함께 학습할 동료를 모아보세요.
+              <br />
+              스터디 모집글을 작성하여 팀원을 모으고, 원하는 스터디를 찾아 가입
+              신청할 수 있습니다.
             </p>
           </IntroBox>
           <IntroBox>
             <TbNotebook size="160" color="#fff" />
             <h3>스터디 관리</h3>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo c
+              스터디장이 되어 스터디원 목록을 관리할 수 있고, 스터디에 관련된
+              정보를 팀원들끼리 확인할 수 있습니다.
             </p>
           </IntroBox>
           <IntroBox>
             <TbCalendar size="160" color="#fff" />
             <h3>일정 캘린더</h3>
             <p>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-              enim ad minim veniam, quis nostrud exercitation ullamco laboris
-              nisi ut aliquip ex ea commodo c
+              가입한 스터디의 날짜, 요일, 시간이 자동으로 표시되어 효율적인
+              스터디 일정 관리가 가능합니다.
             </p>
           </IntroBox>
         </IntroMain>
@@ -108,6 +104,7 @@ const TitlePage = styled.div`
     color: #fff;
     font-size: 18px;
     font-weight: 500;
+    animation: fadein 5s;
   }
 
   @keyframes fadein {
@@ -134,6 +131,7 @@ const TitleButton = styled.div`
     color: #fff;
     font-size: 20px;
     font-weight: 700;
+    animation: fadein 5s;
   }
   > button:hover {
     color: #0093e9;
@@ -166,7 +164,7 @@ const IntroMain = styled.div`
 
 const IntroBox = styled.div`
   width: 300px;
-  height: 600px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -178,7 +176,8 @@ const IntroBox = styled.div`
     margin: 24px 0 20px;
   }
   p {
-    width: 280px;
+    width: 240px;
+    height: 200px;
     font-size: 16px;
     color: #fff;
   }
