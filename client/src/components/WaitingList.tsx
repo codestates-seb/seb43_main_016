@@ -5,7 +5,7 @@ import {
   getWaitingStudyGroupList,
   cancelStudyGroupApplication,
 } from "../apis/StudyGroupApi";
-import { TbCircleMinus } from "react-icons/tb";
+import { FiDelete } from "react-icons/fi";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 
@@ -44,7 +44,7 @@ const WaitingList = () => {
       <ItemWrapper key={id}>
         <ItemTitle>{title}</ItemTitle>
         <CancelButton onClick={() => handleCancelButton(id)}>
-          <TbCircleMinus />
+          <FiDelete size="21" />
         </CancelButton>
       </ItemWrapper>
     );
@@ -89,7 +89,7 @@ const ItemList = styled.div`
 
 const ItemWrapper = styled.div`
   width: 700px;
-  height: 70px;
+  height: 60px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -103,7 +103,7 @@ const ItemWrapper = styled.div`
 const ItemTitle = styled.div`
   margin-bottom: 5px;
   color: #1f1f1f;
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 700;
   text-align: left;
 `;
@@ -111,7 +111,7 @@ const ItemTitle = styled.div`
 const CancelButton = styled.button`
   width: 27px;
   height: 27px;
-  background-color: #ccc;
+  background-color: #999;
   color: #ffffff;
   border: none;
   border-radius: 4px;

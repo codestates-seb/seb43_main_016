@@ -40,18 +40,18 @@ const ProfileStudyList = () => {
     };
 
     return (
-      <CardWrapper onClick={handleClick}>
+      <CardProfileStudyListContainer onClick={handleClick}>
         <Image>{/* 이미지 표시 로직 추가 */}</Image>
         <Title>
           <h3>{title}</h3>
         </Title>
         <Tag>{tagValues.join(", ")}</Tag>
-      </CardWrapper>
+      </CardProfileStudyListContainer>
     );
   };
 
   return (
-    <Wrapper>
+    <MyStudyListContainer>
       <WaitingList />
       <ListTitle>운영중인 스터디</ListTitle>
       <StudyCardContainer>
@@ -76,15 +76,16 @@ const ProfileStudyList = () => {
           />
         ))}
       </StudyCardContainer>
-    </Wrapper>
+    </MyStudyListContainer>
   );
 };
 
 export default ProfileStudyList;
 
-const Wrapper = styled.div`
+const MyStudyListContainer = styled.div`
   width: 960px;
   height: 100%;
+  padding: 80px 0 100px;
   background-color: #fff;
   border-radius: 4px;
   display: flex;
@@ -110,7 +111,7 @@ const ListTitle = styled.h2`
   color: #2759a2;
 `;
 
-const CardWrapper = styled.div`
+const CardProfileStudyListContainer = styled.div`
   flex-basis: 260px;
   height: 320px;
   background-color: #fff;

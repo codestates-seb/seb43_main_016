@@ -265,9 +265,13 @@ const EditButton = styled.button`
 const ExitEditButton = styled.button`
   margin-bottom: 10px;
   padding: 8px 16px;
-  background-color: #7e1717;
+  background-color: #666;
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+
+  &:hover {
+    background-color: #5a0202;
+  }
 `;
