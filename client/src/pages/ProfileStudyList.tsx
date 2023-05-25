@@ -10,7 +10,6 @@ import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 
-
 const ProfileStudyList = () => {
   const isLoggedIn = useRecoilValue(LogInState);
   const [studyList, setStudyList] = useState<StudyGroupListDto>({
@@ -18,7 +17,6 @@ const ProfileStudyList = () => {
     members: [],
   });
   const navigate = useNavigate();
-
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -78,7 +76,13 @@ const ProfileStudyList = () => {
 export default ProfileStudyList;
 
 const Wrapper = styled.div`
+  width: 960px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 const CardWrapper = styled.div``;
 const Title = styled.div``;

@@ -1,6 +1,8 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { TbUsers } from "react-icons/tb";
 import { TbNotebook } from "react-icons/tb";
+import { TbCalendar } from "react-icons/tb";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -26,8 +28,8 @@ const Home = () => {
         <h2>소개 제목</h2>
         <IntroMain>
           <IntroBox>
-            <TbNotebook size="160" color="#fff" />
-            <h3>기능 소개</h3>
+            <TbUsers size="160" color="#fff" />
+            <h3>스터디 동료 모집</h3>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -37,7 +39,7 @@ const Home = () => {
           </IntroBox>
           <IntroBox>
             <TbNotebook size="160" color="#fff" />
-            <h3>기능 소개</h3>
+            <h3>스터디 관리</h3>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
@@ -46,8 +48,8 @@ const Home = () => {
             </p>
           </IntroBox>
           <IntroBox>
-            <TbNotebook size="160" color="#fff" />
-            <h3>기능 소개</h3>
+            <TbCalendar size="160" color="#fff" />
+            <h3>일정 캘린더</h3>
             <p>
               Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
               eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut

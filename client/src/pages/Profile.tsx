@@ -51,7 +51,7 @@ const Wrapper = styled.div`
 
 const LnbWrapper = styled.div`
   background-color: white;
-  width: 200px;
+  width: 160px;
   height: 270px;
   border-radius: 4px;
   margin-right: 20px;
@@ -84,12 +84,11 @@ const LnbWrapper = styled.div`
 `;
 const Title = styled.h2`
   width: 130px;
-  margin: 0 10px;
-  padding: 5px;
+  padding: 10px 5px;
   text-align: left;
   border-bottom: 1px solid #ccc;
   color: #2759a2;
-  font-size: 22px;
+  font-size: 21px;
 `;
 
 const Lnb = styled(Link)`
