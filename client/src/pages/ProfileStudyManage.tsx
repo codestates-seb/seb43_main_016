@@ -114,10 +114,11 @@ const ProfileStudyManage = () => {
       </ManageInfo>
 
       <ManageInfo>
-        <ManageSpan>현재 인원</ManageSpan> {studyInfo?.memberCountCurrent}
+        <ManageSpan>스터디장</ManageSpan>{" "}
+        <strong>{studyInfo?.leaderNickName}</strong>
       </ManageInfo>
       <ManageInfo>
-        <ManageSpan>스터디장</ManageSpan> {studyInfo?.leaderNickName}
+        <ManageSpan>현재 인원</ManageSpan> {studyInfo?.memberCountCurrent}
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>플랫폼</ManageSpan> {studyInfo?.platform}
@@ -215,6 +216,10 @@ const ManageInfo = styled.div`
   justify-content: flex-start;
   align-items: center;
 
+  strong {
+    color: #1f1f1f;
+  }
+
   .recruit-close-button {
     width: 100px;
     height: 30px;
@@ -255,13 +260,13 @@ const ManageTag = styled.div`
   align-items: center;
 
   div {
-    height: 24px;
+    height: 22px;
     color: #39739d;
-    font-size: 0.8125rem;
+    font-size: 13px;
     border-radius: 4px;
     background-color: #e1ecf4;
     padding: 4.8px 6px;
-    margin: 0 7px 4px 0;
+    margin: 0 4px 4px 0;
     cursor: pointer;
   }
 `;

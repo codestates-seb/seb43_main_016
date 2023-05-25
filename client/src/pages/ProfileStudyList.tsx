@@ -106,7 +106,8 @@ const StudyCardContainer = styled.div`
 `;
 
 const ListTitle = styled.h2`
-  width: 700px;
+  width: 900px;
+  padding-left: 20px;
   margin: 24px 0 20px;
   font-size: 20px;
   font-weight: 700;
