@@ -295,13 +295,10 @@ const StudyUpdate = () => {
   );
 };
 
-// 최대인원이 최소인원보다 적으면 안 됨
-// 끝나는 날짜가 시작하는 날짜보다 먼저면 안 됨
-
 const StudyPostContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e0e0e0;
+  background-color: #e9e9e9;
   display: flex;
   justify-content: center;
   align-items: center;

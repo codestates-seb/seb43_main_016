@@ -191,7 +191,7 @@ const StudyContent = () => {
 const StudyContentContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e0e0e0;
+  background-color: #e9e9e9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -199,7 +199,7 @@ const StudyContentContainer = styled.div`
 
 const StudyContentBody = styled.div`
   width: 960px;
-  padding-top: 120px;
+  padding: 120px 0 100px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
