@@ -88,7 +88,7 @@ const GNBBlock = styled.div`
   display: flex;
 `;
 const GNBMenuBlock = styled(GNBBlock)`
-  width: 370px;
+  width: 500px;
   justify-content: space-between;
 
   span {
