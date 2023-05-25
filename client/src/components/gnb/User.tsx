@@ -64,6 +64,8 @@ const UserDiv = styled.div`
   width: 200px;
   button {
     margin-left: 7px;
+    font-size: 15px;
+    font-weight: 500;
     color: #2759a2;
   }
 `;
