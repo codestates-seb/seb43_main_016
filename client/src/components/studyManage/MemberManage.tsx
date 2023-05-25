@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { useNavigate } from "react-router-dom";
@@ -27,7 +28,7 @@ const MemberManage = ({ studyLeader }: MemberManageProps) => {
   const [memberList, setMemberList] = useState<StudyGroupMemberListDto | null>(
     null
   );
-  console.log(studyLeader)
+  console.log(studyLeader);
 
   // 스터디 그룹 멤버 리스트를 불러오는 함수
   const fetchMemberList = async () => {
@@ -76,8 +77,10 @@ const MemberManage = ({ studyLeader }: MemberManageProps) => {
   };
 
   return (
-    <>
-      <div>회원 목록</div>
+    <MemberManageContainer>
+      <MemberManageTitle>
+        <h3>회원 목록</h3>
+      </MemberManageTitle>
       <>
         {memberList &&
           memberList.nickName.map((nickname, index) => (
@@ -92,8 +95,32 @@ const MemberManage = ({ studyLeader }: MemberManageProps) => {
             </div>
           ))}
       </>
-    </>
+    </MemberManageContainer>
   );
 };
 
 export default MemberManage;
+
+export const MemberManageContainer = styled.div`
+  width: 800px;
+  margin: 0 0 30px 50px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+`;
+
+export const MemberManageTitle = styled.div`
+  width: 800px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  h3 {
+    width: 700px;
+    text-align: left;
+    font-size: 18px;
+    font-weight: 700;
+    color: #2759a2;
+  }
+`;

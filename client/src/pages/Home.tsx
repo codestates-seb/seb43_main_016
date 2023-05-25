@@ -25,7 +25,7 @@ const Home = () => {
         <TitleButton>
           {isLoggedIn ? (
             <button onClick={() => navigate("/studylist")}>
-              모두의 스토리 보러가기
+              모두의 스터디 보러가기
             </button>
           ) : (
             <button onClick={() => navigate("/login")}>
@@ -131,12 +131,12 @@ const TitleButton = styled.div`
     color: #fff;
     font-size: 20px;
     font-weight: 700;
-    animation: fadein 5s;
+    animation: fadein 2.4s;
   }
   > button:hover {
     color: #0093e9;
     background-color: #fff;
-    transition: all ease-in 0.3s;
+    transition: all ease-in 0.5s;
   }
 `;
 
@@ -151,7 +151,7 @@ const IntroPage = styled.div`
   h2 {
     font-size: 40px;
     color: #fff;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
   }
 `;
 

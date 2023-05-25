@@ -84,7 +84,7 @@ const StudyList = () => {
 const StudyListContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e0e0e0;
+  background-color: #e9e9e9;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -94,7 +94,7 @@ const StudyListContainer = styled.div`
 const StudyListBody = styled.div`
   width: 960px;
   height: 100%;
-  padding-top: 90px;
+  padding: 100px 0;
   background-color: #fff;
   display: flex;
   flex-direction: column;

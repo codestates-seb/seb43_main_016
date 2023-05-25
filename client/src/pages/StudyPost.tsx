@@ -62,7 +62,7 @@ const StudyPost = () => {
     const startTimeValue = e.target.value;
     const dateValue = "2023-05-04"; // 이 코드에서는 의미가 없기 때문에 임의로 지정
     let formattedDate = `${dateValue}T${startTimeValue}:00`;
-    if(formattedDate === "2023-05-04T00:00:00"){
+    if (formattedDate === "2023-05-04T00:00:00") {
       formattedDate = "2023-05-04T00:01:00";
     }
     setSelectedTimeStart(startTimeValue);
@@ -72,7 +72,7 @@ const StudyPost = () => {
     const endTimeValue = e.target.value;
     const dateValue = "2023-05-04"; // 이 코드에서는 의미가 없기 때문에 임의로 지정
     let formattedDate = `${dateValue}T${endTimeValue}:00`;
-    if(formattedDate === "2023-05-04T00:00:00"){
+    if (formattedDate === "2023-05-04T00:00:00") {
       formattedDate = "2023-05-04T00:00:00";
     }
     setSelectedTimeEnd(endTimeValue);
@@ -105,7 +105,7 @@ const StudyPost = () => {
       },
     };
 
-    console.log(StudyPostDto)
+    console.log(StudyPostDto);
 
     if (studyName === "") {
       alert("제목을 입력해주세요!");
@@ -259,13 +259,10 @@ const StudyPost = () => {
   );
 };
 
-// 최대인원이 최소인원보다 적으면 안 됨
-// 끝나는 날짜가 시작하는 날짜보다 먼저면 안 됨
-
 const StudyPostContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e0e0e0;
+  background-color: #e9e9e9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -273,7 +270,7 @@ const StudyPostContainer = styled.div`
 
 const StudyPostBody = styled.div`
   width: 960px;
-  padding-top: 120px;
+  padding: 120px 0 100px;
   background-color: #fff;
   display: flex;
   flex-direction: column;

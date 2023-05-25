@@ -89,23 +89,37 @@ const ProfileStudyManage = () => {
   };
 
   return (
-    <Wrapper>
-      {!isRecruiting ? (
-        <button type="button" onClick={handleRecuitCloseClick}>
-          스터디 모집 중
-        </button>
-      ) : (
-        <div>스터디 모집 완료</div>
-      )}
-      <div>스터디 명: {studyInfo?.studyName}</div>
-      <div>스터디 인원: {studyInfo?.memberCountCurrent}</div>
-      <div>스터디장: {studyInfo?.leaderNickName}</div>
-      <div>스터디 플랫폼: {studyInfo?.platform}</div>
-      <div>
-        스터디 기간: {studyInfo?.studyPeriodStart} ~ {studyInfo?.studyPeriodEnd}
-      </div>
-      <div>
-        태그:
+    <StoryManageContainer>
+      <ManageTitle>
+        <h2>{studyInfo?.studyName}</h2>
+      </ManageTitle>
+      <ManageInfo>
+        {" "}
+        <ManageSpan>모집 상태</ManageSpan>
+        {!isRecruiting ? (
+          <button type="button" onClick={handleRecuitCloseClick}>
+            모집 중
+          </button>
+        ) : (
+          <div>모집 완료</div>
+        )}
+      </ManageInfo>
+
+      <ManageInfo>
+        <ManageSpan>현재 인원</ManageSpan> {studyInfo?.memberCountCurrent}
+      </ManageInfo>
+      <ManageInfo>
+        <ManageSpan>스터디장</ManageSpan> {studyInfo?.leaderNickName}
+      </ManageInfo>
+      <ManageInfo>
+        <ManageSpan>플랫폼</ManageSpan> {studyInfo?.platform}
+      </ManageInfo>
+      <ManageInfo>
+        <ManageSpan>기간</ManageSpan> {studyInfo?.studyPeriodStart} ~{" "}
+        {studyInfo?.studyPeriodEnd}
+      </ManageInfo>
+      <ManageInfo>
+        <ManageSpan>태그</ManageSpan>
         {studyInfo?.tags && (
           <>
             {Object.entries(studyInfo.tags).map(([category, tags]) => (
@@ -118,16 +132,17 @@ const ProfileStudyManage = () => {
             ))}
           </>
         )}
-      </div>
-      <div>
-        만남의 날 : 매 주 {studyInfo?.daysOfWeek} {studyInfo?.studyTimeStart} ~{" "}
-        {studyInfo?.studyTimeEnd}
-      </div>
-      <button type="button" onClick={handleEditClick}>
-        스터디 정보 수정
-      </button>
-      <div>스터디 소개</div>
-      <div>{removeHtmlTag(studyInfo?.introduction)}</div>
+      </ManageInfo>
+      <ManageInfo>
+        <ManageSpan>일정</ManageSpan> 매주 {studyInfo?.daysOfWeek}{" "}
+        {studyInfo?.studyTimeStart} ~ {studyInfo?.studyTimeEnd}
+      </ManageInfo>
+      <ManageIntro>{removeHtmlTag(studyInfo?.introduction)}</ManageIntro>
+      <ManageButtonContainer>
+        <button type="button" onClick={handleEditClick}>
+          스터디 정보 수정
+        </button>
+      </ManageButtonContainer>
       {isModalOpen && (
         <StudyInfoEditModal
           isOpen={isModalOpen}
@@ -137,16 +152,119 @@ const ProfileStudyManage = () => {
       )}
       <MemberManage studyLeader={studyInfo?.leaderNickName} />
       <CandidateManage studyLeader={studyInfo?.leaderNickName} />
-      <button type="button" onClick={handleDeleteClick}>
-        스터디 삭제
-      </button>
-      <button type="button" onClick={handleExitClick}>
-        스터디 탈퇴
-      </button>
-    </Wrapper>
+      <ManageButtonContainer>
+        <button
+          type="button"
+          className="delete-exit-button"
+          onClick={handleDeleteClick}
+        >
+          스터디 삭제
+        </button>
+        <button
+          type="button"
+          className="delete-exit-button"
+          onClick={handleExitClick}
+        >
+          스터디 탈퇴
+        </button>
+      </ManageButtonContainer>
+    </StoryManageContainer>
   );
 };
 
 export default ProfileStudyManage;
 
-const Wrapper = styled.div``;
+const StoryManageContainer = styled.div`
+  width: 960px;
+  height: 100%;
+  padding: 80px 0 100px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ManageTitle = styled.div`
+  width: 800px;
+  margin: 0 0 30px 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  h2 {
+    width: 700px;
+    text-align: left;
+    font-size: 24px;
+    font-weight: 700;
+    color: #1f1f1f;
+  }
+`;
+
+const ManageInfo = styled.div`
+  width: 800px;
+  margin: 0 0 20px 50px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  div {
+    text-align: left;
+    font-size: 16px;
+    font-weight: 300;
+    color: #666;
+  }
+`;
+
+const ManageSpan = styled.span`
+  width: 100px;
+  text-align: left;
+  font-size: 18px;
+  font-weight: 700;
+  color: #2759a2;
+  margin-right: 20px;
+`;
+
+const ManageIntro = styled.p`
+  width: 750px;
+  margin: 20px 40px;
+  text-align: left;
+  font-size: 15px;
+  font-weight: 300;
+  color: #1f1f1f;
+`;
+
+const ManageButtonContainer = styled.div`
+  width: 750px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+
+  button {
+    width: 170px;
+    height: 42px;
+    margin: 30px 10px 0;
+    font-size: 18px;
+    color: #ffffff;
+    background-color: #4994da;
+
+    &:hover {
+      opacity: 85%;
+    }
+    &:active {
+      opacity: 100%;
+    }
+  }
+
+  .delete-exit-button {
+    width: 120px;
+    font-size: 16px;
+    background-color: #666;
+    margin-right: 10px;
+
+    &:hover {
+      background-color: #5a0202;
+    }
+  }
+`;
