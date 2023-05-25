@@ -49,7 +49,7 @@ const ViewCalendarEvent = ({
     } else {
       getStudyGroupInfo(id, isLoggedIn)
         .then((studyInfo) => setStudyInfo(studyInfo))
-        .catch((error) => alert(error.message));
+        // .catch((error) => alert(error.message));
     }
   }, [id, isLoggedIn]);
 

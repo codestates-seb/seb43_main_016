@@ -16,9 +16,10 @@ interface EventInfo {
 interface AddEventProps {
   isOpen: boolean;
   closeModal: () => void;
+  onNewEvent?: () => void;
 }
 
-const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
+const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
   const isLoggedIn = useRecoilValue(LogInState);
   const [eventInfo, setEventInfo] = useState<EventInfo>({
     title: "",
@@ -49,12 +50,9 @@ const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    // eventInfo 상태 업데이트 후에 generateCustomEvents 호출
-    await setEventInfo((prevState) => ({
-      ...prevState,
-    }));
     await generateCustomEvents(isLoggedIn, eventInfo);
     closeModal();
+    onNewEvent && onNewEvent();
   };
 
   const customModalStyles = {
@@ -70,8 +68,10 @@ const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
       borderRadius: "8px",
       maxWidth: "400px",
       padding: "24px",
-      // display: "flex", // remove this
-      // flexDirection: "column", // remove this
+      display: "flex",
+      flexDirection: undefined,
+      alignItems: "center",
+      justifyContent: "space-between",
     },
     overlay: {
       zIndex: 9999,
@@ -98,7 +98,8 @@ const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
                 name="title"
                 value={eventInfo.title}
                 onChange={handleInputChangeText}
-                placeholder="스터디 이름"
+                placeholder="일정명"
+                required
               />
             </label>
           </div>
@@ -109,6 +110,7 @@ const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
                 name="studyTimeStart"
                 value={eventInfo.studyTimeStart}
                 onChange={handleInputChangeText}
+                required
               />
             </label>
           </div>
@@ -119,6 +121,7 @@ const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
                 name="studyTimeEnd"
                 value={eventInfo.studyTimeEnd}
                 onChange={handleInputChangeText}
+                required
               />
             </label>
           </div>
@@ -142,6 +145,7 @@ const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
                 value={eventInfo.color}
                 onChange={handleInputChangeText}
                 style={{ marginTop: "8px" }}
+                required
               />
             </label>
           </div>
