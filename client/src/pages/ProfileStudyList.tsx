@@ -85,7 +85,8 @@ export default ProfileStudyList;
 const MyStudyListContainer = styled.div`
   width: 960px;
   height: 100%;
-  padding: 80px 0 100px;
+  margin-top: 100px;
+  padding: 40px 0 200px;
   background-color: #fff;
   border-radius: 4px;
   display: flex;

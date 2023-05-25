@@ -114,7 +114,7 @@ const ProfileInfo = () => {
     }
   };
   return (
-    <Wrapper>
+    <ProfileInfoContainer>
       <ProfileBaseWrapper>
         <ProfileImage>
           <ProfileImg profileImage={memberInfo?.profileImage} />
@@ -175,19 +175,20 @@ const ProfileInfo = () => {
         closeModal={() => setPasswordCheckModalOpen(false)}
         setIsModalOpen={setIsModalOpen}
       />
-    </Wrapper>
+    </ProfileInfoContainer>
   );
 };
 
 export default ProfileInfo;
 
-const Wrapper = styled.div`
+const ProfileInfoContainer = styled.div`
   width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
+  height: 100%;
+  padding-top: 100px;
 `;
 
 const ProfileBaseWrapper = styled.div`
+  width: 900px;
   display: flex;
   align-items: center;
   justify-content: space-between;

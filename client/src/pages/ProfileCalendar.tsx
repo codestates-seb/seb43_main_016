@@ -25,7 +25,7 @@ const CalendarWrapper = styled.div`
   width: 960px;
   height: 90vh;
   background-color: #ffffff;
-  margin-top: 3px;
+  margin-top: 100px;
   padding: 10px;
   // z-index 조정 필요 : 헤더보다 아래에 위치할 수 있도록
 `;

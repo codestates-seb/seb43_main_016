@@ -177,7 +177,8 @@ export default ProfileStudyManage;
 const StoryManageContainer = styled.div`
   width: 960px;
   height: 100%;
-  padding: 80px 0 100px;
+  margin-top: 100px;
+  padding: 40px 0 200px;
   background-color: #fff;
   border-radius: 4px;
   display: flex;
@@ -187,7 +188,7 @@ const StoryManageContainer = styled.div`
 `;
 
 const ManageTitle = styled.div`
-  width: 800px;
+  width: 850px;
   margin: 0 0 30px 50px;
   display: flex;
   justify-content: flex-start;
@@ -203,7 +204,7 @@ const ManageTitle = styled.div`
 `;
 
 const ManageInfo = styled.div`
-  width: 800px;
+  width: 850px;
   margin: 0 0 20px 50px;
   display: flex;
   justify-content: flex-start;

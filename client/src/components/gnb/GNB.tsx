@@ -72,6 +72,7 @@ const GNB = () => {
     </>
   );
 };
+
 const GNBDiv = styled.div`
   background-color: #ffffff;
   font-size: 13px;
@@ -81,6 +82,9 @@ const GNBDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  top: 0%;
+  left: 0%;
+  position: fixed;
 `;
 
 const GNBBlock = styled.div`
