@@ -1,11 +1,15 @@
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
+
 import { TbUsers } from "react-icons/tb";
 import { TbNotebook } from "react-icons/tb";
 import { TbCalendar } from "react-icons/tb";
 
 const Home = () => {
   const navigate = useNavigate();
+  const isLoggedIn = useRecoilValue(LogInState);
 
   return (
     <HomeContainer>
@@ -19,9 +23,15 @@ const Home = () => {
           일정을 효과적으로 관리할 수 있도록 도와드립니다.
         </p>
         <TitleButton>
-          <button onClick={() => navigate("/login")}>
-            로그인 화면으로 이동
-          </button>
+          {isLoggedIn ? (
+            <button onClick={() => navigate("/studylist")}>
+              모두의 스토리 보러가기
+            </button>
+          ) : (
+            <button onClick={() => navigate("/login")}>
+              로그인 화면으로 이동
+            </button>
+          )}
         </TitleButton>
       </TitlePage>
       <IntroPage>
