@@ -10,15 +10,17 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import { useNavigate } from "react-router-dom";
 import CheckPasswordModal from "../components/modal/CheckPasswordModal";
 import tokenRequestApi from "../apis/TokenRequestApi";
 import { removeTokens } from "./utils/Auth";
+import { RenderingState } from "../recoil/atoms/renderingState";
 
 const ProfileInfo = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
+  const isRendering = useRecoilValue(RenderingState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoResponseDto | null>(
     null
@@ -49,7 +51,7 @@ const ProfileInfo = () => {
       }
     };
     fetchMemberInfo();
-  }, [isModalOpen]);
+  }, [isModalOpen, isRendering]);
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
   // 현재 Modal 구현은 완료했으나 비동기 처리로 인해 계속된 오류 발생. 추가적인 최적화 작업 요함

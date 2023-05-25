@@ -4,12 +4,14 @@ import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
 import tokenRequestApi from "../../apis/TokenRequestApi";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
+import { RenderingState } from "../../recoil/atoms/renderingState";
 
 const GNB = () => {
   const [profileImage, setProfileImage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
+  const isRendering = useRecoilValue(RenderingState);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
@@ -26,7 +28,7 @@ const GNB = () => {
         });
     }
     setIsLoading(false);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isRendering]);
   return (
     <>
       {isLoading ? (
