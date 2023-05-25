@@ -25,7 +25,7 @@ const Home = () => {
         <TitleButton>
           {isLoggedIn ? (
             <button onClick={() => navigate("/studylist")}>
-              모두의 스토리 보러가기
+              모두의 스터디 보러가기
             </button>
           ) : (
             <button onClick={() => navigate("/login")}>

@@ -5,7 +5,7 @@ import {
   getWaitingStudyGroupList,
   cancelStudyGroupApplication,
 } from "../apis/StudyGroupApi";
-import { GiCancel } from "react-icons/gi";
+import { TbCircleMinus } from "react-icons/tb";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 
@@ -44,7 +44,7 @@ const WaitingList = () => {
       <ItemWrapper key={id}>
         <ItemTitle>{title}</ItemTitle>
         <CancelButton onClick={() => handleCancelButton(id)}>
-          <GiCancel />
+          <TbCircleMinus />
         </CancelButton>
       </ItemWrapper>
     );
@@ -52,7 +52,7 @@ const WaitingList = () => {
 
   return (
     <WaitingListWrapper>
-      <WaitingListTitle>신청중인 스터디</WaitingListTitle>
+      <WaitingListTitle>스터디 가입 신청</WaitingListTitle>
       <ItemList>
         {waitingList.map((study) => (
           <WaitingStudyGroupItem
@@ -70,14 +70,17 @@ export default WaitingList;
 
 const WaitingListWrapper = styled.div``;
 
-const WaitingListTitle = styled.div`
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #416bac;
+const WaitingListTitle = styled.h2`
+  width: 700px;
+  margin: 24px 0 20px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: left;
+  color: #2759a2;
 `;
 
 const ItemList = styled.div`
-  width: 600px;
+  width: 700px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -85,27 +88,36 @@ const ItemList = styled.div`
 `;
 
 const ItemWrapper = styled.div`
-  width: 600px;
+  width: 700px;
+  height: 70px;
   background-color: #fff;
   border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 10px;
+  padding: 20px 30px;
   margin-bottom: 10px;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
 `;
 
 const ItemTitle = styled.div`
   margin-bottom: 5px;
-  color: #416bac;
+  color: #1f1f1f;
+  font-size: 21px;
+  font-weight: 700;
+  text-align: left;
 `;
 
 const CancelButton = styled.button`
-  background-color: #416bac;
+  width: 27px;
+  height: 27px;
+  background-color: #ccc;
   color: #ffffff;
   border: none;
   border-radius: 4px;
   padding: 5px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
