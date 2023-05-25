@@ -42,6 +42,7 @@ const ProfileInfo = () => {
       try {
         const info = await getMemberInfo(isLoggedIn);
         setMemberInfo(info);
+        setIntroduceInfo({ aboutMe: info.aboutMe, withMe: info.withMe });
       } catch (error) {
         //alert("로그인이 필요합니다.");
         console.error(error);
@@ -72,7 +73,7 @@ const ProfileInfo = () => {
       ...prevIntroduceInfo,
       [name]: value,
     }));
-    console.log(introduceInfo);
+    console.log("?", introduceInfo);
   };
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
