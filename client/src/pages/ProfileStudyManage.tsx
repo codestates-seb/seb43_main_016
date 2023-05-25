@@ -18,13 +18,20 @@ import { getMemberInfo } from "../apis/MemberApi";
 const ProfileStudyManage = () => {
   const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [LoggedInUser, setLoggedInUser] = useState<string | null>(null);
   const { id } = useParams();
   const parsedId = Number(id);
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = studyInfo?.isRecruited;
 
-  if (!isLoggedIn) navigate("/");
+  // TODO : 로그인 상태가 변경되면, 홈 화면으로 이동하는 코드
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
+
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
     if (!isLoggedIn) {
@@ -43,31 +50,46 @@ const ProfileStudyManage = () => {
         console.log(error);
       }
     };
-
+    getMemberInfo(isLoggedIn).then((data) => {
+      if (data) {
+        setLoggedInUser(data.nickName);
+      } else {
+        setLoggedInUser(null);
+      }
+    });
     fetchStudyGroupInfo();
   }, [parsedId]);
 
   // TODO : 스터디 정보를 수정하는 코드
   const handleEditClick = () => {
+    if (LoggedInUser !== studyInfo?.leaderNickName) {
+      alert("스터디장만 스터디를 수정할 수 있습니다");
+      return;
+    }
     setModalOpen(true);
   };
 
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
+    if (LoggedInUser !== studyInfo?.leaderNickName) {
+      alert("스터디장만 스터디를 삭제할 수 있습니다");
+      return;
+    }
+    if (!window.confirm("정말로 스터디를 삭제하시겠습니까?")) return;
     await deleteStudyGroupInfo(parsedId, isLoggedIn);
     navigate("/profile/manage-group");
   };
 
   // TODO : 스터디에서 탈퇴하는 코드
   const handleExitClick = async () => {
-    getMemberInfo(isLoggedIn).then((data) => {
-      if (data.nickName === studyInfo?.leaderNickName) {
-        alert("스터디장은 권한을 멤버에게 위임한 뒤에 탈퇴할 수 있습니다");
-      } else {
-        if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
-        exitStudyGroup(parsedId, isLoggedIn);
-      }
-    });
+    if (LoggedInUser === studyInfo?.leaderNickName) {
+      alert("스터디장은 스터디에서 탈퇴할 수 없습니다");
+      return;
+    }
+    if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
+    exitStudyGroup(parsedId, isLoggedIn);
+    navigate("/profile/manage-group")
+    window.location.reload(); // 페이지를 새로고침
   };
 
   // TODO : 스터디 모집 상태를 수정하는 코드
