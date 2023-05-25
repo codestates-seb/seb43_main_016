@@ -106,80 +106,85 @@ const StudyContent = () => {
   }, [comments]);
 
   return (
-    <StudyContentContainer>
-      <StudyContentBody>
-        {!fetching && (
-          <div key={content?.id}>
-            <StudyContentTop>
-              {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
-              <StudyContentTitle>
-                <h2>{content?.studyName}</h2>
-                <StudyContentEdit>
-                  <button type="button" onClick={handleEditButton}>
-                    수정
-                  </button>
-                  <button type="button" onClick={handleDeleteButton}>
-                    삭제
-                  </button>
-                </StudyContentEdit>
-              </StudyContentTitle>
-            </StudyContentTop>
-            <StudyContentMain>
-              <StudyContentInfo>
-                <div>날짜</div>
-                <span>{`${content?.studyPeriodStart} ~ ${content?.studyPeriodEnd}`}</span>
-              </StudyContentInfo>
-              <StudyContentInfo>
-                <div>요일, 시간</div>
-                <span>{`${content?.daysOfWeek} ${content?.studyTimeStart} ~ ${content?.studyTimeEnd}`}</span>
-              </StudyContentInfo>
-              <StudyContentInfo>
-                <div>인원</div>
-                <span>{`${content?.memberCountMin} ~ ${content?.memberCountMax}`}</span>
-              </StudyContentInfo>
-              <StudyContentInfo>
-                <div>플랫폼</div>
-                <span>{content?.platform}</span>
-              </StudyContentInfo>
-              <StudyContentText
-                dangerouslySetInnerHTML={markUp(convertIntroduction)}
-              ></StudyContentText>
-              <StudyContentProfileWrapper>
-                <StudyContentProfile>
-                  <div className="profile-name">{`${content?.leaderNickName}`}</div>
-                  <div>일반회원</div>
-                </StudyContentProfile>
-              </StudyContentProfileWrapper>
-              <StudyContentTag>
-                {content?.tags && (
-                  <>
-                    {Object.entries(content.tags).map(([category, tags]) => (
-                      <div key={category}>
-                        {category}:
-                        {tags.map((tag) => (
-                          <span key={tag}>{tag}</span>
-                        ))}
-                      </div>
-                    ))}
-                  </>
-                )}
-              </StudyContentTag>
-              <StudyJoinButtonWrapper>
-                <StudyJoinButton type="button" onClick={handleJoinButton}>
-                  스터디 신청!
-                </StudyJoinButton>
-              </StudyJoinButtonWrapper>
-            </StudyContentMain>
-            <StudyComment studyGroupId={Number(id)} setComments={setComments} />
-            <StudyCommentList
-              studyGroupId={Number(id)}
-              comments={comments}
-              setComments={setComments}
-            />
-          </div>
-        )}
-      </StudyContentBody>
-    </StudyContentContainer>
+    <>
+      <StudyContentContainer>
+        <StudyContentBody>
+          {!fetching && (
+            <div key={content?.id}>
+              <StudyContentTop>
+                {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
+                <StudyContentTitle>
+                  <h2>{content?.studyName}</h2>
+                  <StudyContentEdit>
+                    <button type="button" onClick={handleEditButton}>
+                      수정
+                    </button>
+                    <button type="button" onClick={handleDeleteButton}>
+                      삭제
+                    </button>
+                  </StudyContentEdit>
+                </StudyContentTitle>
+              </StudyContentTop>
+              <StudyContentMain>
+                <StudyContentInfo>
+                  <div>날짜</div>
+                  <span>{`${content?.studyPeriodStart} ~ ${content?.studyPeriodEnd}`}</span>
+                </StudyContentInfo>
+                <StudyContentInfo>
+                  <div>요일, 시간</div>
+                  <span>{`${content?.daysOfWeek} ${content?.studyTimeStart} ~ ${content?.studyTimeEnd}`}</span>
+                </StudyContentInfo>
+                <StudyContentInfo>
+                  <div>인원</div>
+                  <span>{`${content?.memberCountMin} ~ ${content?.memberCountMax}`}</span>
+                </StudyContentInfo>
+                <StudyContentInfo>
+                  <div>플랫폼</div>
+                  <span>{content?.platform}</span>
+                </StudyContentInfo>
+                <StudyContentText
+                  dangerouslySetInnerHTML={markUp(convertIntroduction)}
+                ></StudyContentText>
+                <StudyContentProfileWrapper>
+                  <StudyContentProfile>
+                    <div className="profile-name">{`${content?.leaderNickName}`}</div>
+                    <div>일반회원</div>
+                  </StudyContentProfile>
+                </StudyContentProfileWrapper>
+                <StudyContentTag>
+                  {content?.tags && (
+                    <>
+                      {Object.entries(content.tags).map(([category, tags]) => (
+                        <div key={category}>
+                          {category}:
+                          {tags.map((tag) => (
+                            <span key={tag}>{tag}</span>
+                          ))}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </StudyContentTag>
+                <StudyJoinButtonWrapper>
+                  <StudyJoinButton type="button" onClick={handleJoinButton}>
+                    스터디 신청!
+                  </StudyJoinButton>
+                </StudyJoinButtonWrapper>
+              </StudyContentMain>
+              <StudyComment
+                studyGroupId={Number(id)}
+                setComments={setComments}
+              />
+              <StudyCommentList
+                studyGroupId={Number(id)}
+                comments={comments}
+                setComments={setComments}
+              />
+            </div>
+          )}
+        </StudyContentBody>
+      </StudyContentContainer>
+    </>
   );
 };
 

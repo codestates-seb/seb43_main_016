@@ -19,7 +19,7 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
     useState<StudyGroupMemberWaitingListDto | null>(null);
   const { id } = useParams<{ id: string }>();
   const isLoggedIn = useRecoilValue(LogInState);
-  console.log(studyLeader)
+  console.log(studyLeader);
 
   useEffect(() => {
     if (!isLoggedIn) {
@@ -37,12 +37,12 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
   }, [id, isLoggedIn]);
 
   const handleApproveCandidate = async (nickname: string) => {
-    approveStudyGroupApplication(Number(id), nickname, isLoggedIn);
+    await approveStudyGroupApplication(Number(id), nickname, isLoggedIn);
     location.reload();
   };
 
   const handleDenyCandidate = async (nickname: string) => {
-    rejectStudyGroupApplication(Number(id), nickname);
+    await rejectStudyGroupApplication(Number(id), nickname);
     location.reload();
   };
 

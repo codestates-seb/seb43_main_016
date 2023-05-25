@@ -1,20 +1,22 @@
 import styled from "styled-components";
-import { StudyGroupUpdateDto } from "../apis/StudyGroupApi";
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import TextEditor from "../components/TextEditor";
 import DaysOfWeek from "../components/DaysOfWeek";
-import { updateStudyGroupInfo } from "../apis/StudyGroupApi";
 import TagInput from "../components/TagInput";
-import { getStudyGroupInfo } from "../apis/StudyGroupApi";
+import {
+  StudyGroupUpdateDto,
+  getStudyGroupInfo,
+  updateStudyGroupInfo,
+} from "../apis/StudyGroupApi";
 /*try {
     } catch (error) {
       alert("스터디 수정이 실패했습니다!");
       // 당신의 스터디가 아닙니다?
       console.error("Error during POST request:", error);
-    } 
+    }
 */
 
 const StudyUpdate = () => {
@@ -23,7 +25,6 @@ const StudyUpdate = () => {
   useEffect(() => {
     getStudyGroupInfo(studyGroupId, isLoggedIn).then((data) => {
       const key = Object.keys(data.tags)[0];
-      console.log("data", data);
       setStudyName(data.studyName);
       setStudyPeriodStart(data.studyPeriodStart);
       setStudyPeriodEnd(data.studyPeriodEnd);
@@ -74,45 +75,47 @@ const StudyUpdate = () => {
     const startDateValue = e.target.value;
     const timeValue = "00:00";
 
-    const formattedDate = `${startDateValue}T${timeValue}:00`;
+    const formattedPeriodStart = `${startDateValue}T${timeValue}:00`;
     setSelectedPeriodStart(startDateValue);
-    setStudyPeriodStart(formattedDate);
+    setStudyPeriodStart(formattedPeriodStart);
   };
 
   const handleStudyPeriodEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const endDateValue = e.target.value;
+    console.log(endDateValue);
     const timeValue = "00:00";
 
-    const formattedDate = `${endDateValue}T${timeValue}:00`;
+    const formattedPeriodEnd = `${endDateValue}T${timeValue}:00`;
     setSelectedPeriodEnd(endDateValue);
-    setStudyPeriodEnd(formattedDate);
+    setStudyPeriodEnd(formattedPeriodEnd);
   };
+
   const handleStudyTimeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
     const startTimeValue = e.target.value;
-    const dateValue = "2023-05-04"; // 이 코드에서는 의미가 없기 때문에 임의로 지정
-    let formattedDate = `${dateValue}T${startTimeValue}:00`;
-    if (formattedDate === "2023-05-04T00:00:00") {
-      formattedDate = "2023-05-04T00:01:00";
-    }
+    const dateValue = "2023-05-04"; // This code seems unnecessary
+
+    const formattedTimeStart = `${dateValue}T${startTimeValue}:00`;
     setSelectedTimeStart(startTimeValue);
-    setStudyTimeStart(formattedDate);
+    setStudyTimeStart(formattedTimeStart);
   };
+
   const handleStudyTimeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const endTimeValue = e.target.value;
-    const dateValue = "2023-05-04"; // 이 코드에서는 의미가 없기 때문에 임의로 지정
-    let formattedDate = `${dateValue}T${endTimeValue}:00`;
-    if (formattedDate === "2023-05-04T00:00:00") {
-      formattedDate = "2023-05-04T00:00:00";
-    }
+    const dateValue = "2023-05-04"; // This code seems unnecessary
+
+    const formattedTimeEnd = `${dateValue}T${endTimeValue}:00`;
     setSelectedTimeEnd(endTimeValue);
-    setStudyTimeEnd(formattedDate);
+    setStudyTimeEnd(formattedTimeEnd);
   };
+
   const handleMemberCountMin = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberCountMin(+e.target.value);
   };
+
   const handleMemberCountMax = (e: React.ChangeEvent<HTMLInputElement>) => {
     setMemberCountMax(+e.target.value);
   };
+
   const handlePlatform = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPlatform(e.target.value);
   };
@@ -120,11 +123,11 @@ const StudyUpdate = () => {
   const handlePostButton = async () => {
     const StudyPostDto: StudyGroupUpdateDto = {
       studyName,
-      studyPeriodStart,
-      studyPeriodEnd,
+      studyPeriodStart: studyPeriodStart,
+      studyPeriodEnd: studyPeriodEnd,
       daysOfWeek: checked,
-      studyTimeStart,
-      studyTimeEnd,
+      studyTimeStart: studyTimeStart,
+      studyTimeEnd: studyTimeEnd,
       memberCountMin,
       memberCountMax,
       platform,

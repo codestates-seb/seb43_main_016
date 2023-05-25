@@ -90,13 +90,15 @@ const TagInput = ({
         />
       )}
       <div>
-        {tags.map((tag) => {
-          return (
-            <StudyTag onClick={() => handleDelete(tag)} key={tag}>
-              {tag} x
-            </StudyTag>
-          );
-        })}
+        {tags &&
+          tags.map((tag) => {
+            if (tag === "") return [];
+            return (
+              <StudyTag onClick={() => handleDelete(tag)} key={tag}>
+                {tag} x
+              </StudyTag>
+            );
+          })}
       </div>
     </>
   );
