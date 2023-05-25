@@ -24,6 +24,7 @@ const customStyles = {
     borderRadius: "10px",
     border: `2px solid #4D74B1`,
     padding: "20px",
+    boxShadow: "0px 4px 10px rgba(0, 0, 0, 0.2)", // 수정된 부분
   },
 };
 

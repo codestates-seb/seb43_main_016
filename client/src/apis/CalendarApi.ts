@@ -29,7 +29,6 @@ export const generateStudyEvents = async (
 ): Promise<Event[]> => {
   // 1. 개인이 속한 스터디 조회
   const myStudyGroups = await getStudyGroupList();
-  console.log(myStudyGroups);
   // 2. 조회 데이터의 id 추출
   const studyGroupIds: number[] = [];
 
@@ -81,7 +80,6 @@ export const generateStudyEvents = async (
         description: studyGroupInfo.introduction,
         overlap: true,
       };
-      console.log(event);
       return event;
     }
   );

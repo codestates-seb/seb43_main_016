@@ -5,13 +5,16 @@ import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateStudyEvents, Event } from "../../apis/CalendarApi";
 import AddEventModal from "../modal/AddEvent";
+import ViewCalendarModal from "../modal/ViewCalendarEvent";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
 
 const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [addEventModalOpen, setAddEventModalOpen] = useState<boolean>(false);
   const [selectedDate, setSelectedDate] = useState<string | null>(null);
+  const [viewCalendarEventModalOpen, setViewCalendarEventModalOpen] = useState<boolean>(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
   const isLoggedIn = useRecoilValue(LogInState);
   const navigate = useNavigate();
 
@@ -32,14 +35,23 @@ const Calendar = () => {
     }
   }, []);
 
+  console.log(events);
+
   const handleDateClick = (info: { dateStr: string }) => {
-    setIsModalOpen(true);
+    setAddEventModalOpen(true);
     setSelectedDate(info.dateStr);
   };
 
+  const handleEventClick = (event : any) => {
+    setSelectedEvent(event.event._def.publicId);
+    setViewCalendarEventModalOpen(true);
+  };
+
   const closeModal = () => {
-    setIsModalOpen(false);
+    setAddEventModalOpen(false);
     setSelectedDate(null);
+    setViewCalendarEventModalOpen(false);
+    setSelectedEvent(null);
   };
 
   return (
@@ -51,15 +63,20 @@ const Calendar = () => {
         weekends={true}
         events={events}
         dateClick={handleDateClick}
+        eventClick={handleEventClick}
         slotMinTime={"09:00"}
         slotMaxTime={"33:00"}
         slotEventOverlap={true}
         height={"100%"}
       />
       {selectedDate && (
-        <AddEventModal
-          isOpen={isModalOpen}
+        <AddEventModal isOpen={addEventModalOpen} closeModal={closeModal} />
+      )}
+      {selectedEvent && (
+        <ViewCalendarModal
+          isOpen={viewCalendarEventModalOpen}
           closeModal={closeModal}
+          id={Number(selectedEvent)}
         />
       )}
     </>
