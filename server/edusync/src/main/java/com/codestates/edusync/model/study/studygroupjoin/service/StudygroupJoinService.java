@@ -147,6 +147,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
             studygroupJoin = getCandidateByNickName(studygroupId, nickName);
             if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
         }
+        verifyStudygroupUtils.studygroupLeaderNickName(studygroupId, nickName);
         return studygroupJoin;
     }
 

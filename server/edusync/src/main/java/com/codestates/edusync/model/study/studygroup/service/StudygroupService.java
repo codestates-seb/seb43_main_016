@@ -157,6 +157,7 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public void patchLeader(String email, Long studygroupId, String newLeaderNickName) {
         studygroupUtils.studygroupLeaderCheck(email, studygroupId);
+        studygroupUtils.studygroupLeaderNickName(studygroupId, newLeaderNickName);
         Studygroup findStudygroup = get(studygroupId);
         List<StudygroupJoin> studygroupJoins = findStudygroup.getStudygroupJoins();
         Member member = null;
