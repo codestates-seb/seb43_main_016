@@ -113,7 +113,11 @@ const StudyContent = () => {
           {!fetching && (
             <div key={content?.id}>
               <StudyContentTop>
-                {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
+                {!isRecruiting ? (
+                  <span>모집중</span>
+                ) : (
+                  <span className="recruited">모집 완료</span>
+                )}
                 <StudyContentTitle>
                   <h2>{content?.studyName}</h2>
                   <StudyContentEdit>
@@ -212,9 +216,14 @@ const StudyContentTop = styled.div`
   align-items: flex-start;
 
   span {
-    font-size: 1.5rem;
+    font-size: 20px;
     font-weight: 700;
     color: #2759a2;
+  }
+  .recruited {
+    font-size: 20px;
+    font-weight: 700;
+    color: #666;
   }
 `;
 
@@ -228,6 +237,7 @@ const StudyContentTitle = styled.div`
     font-size: 2rem;
     font-weight: 700;
     color: #1f1f1f;
+    text-align: left;
   }
 `;
 
