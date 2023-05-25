@@ -17,8 +17,7 @@ const Calendar = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      navigate("/");
-      alert("로그인이 필요합니다");
+      navigate("/login");
     } else {
       const fetchEvents = async () => {
         try {
@@ -57,10 +56,7 @@ const Calendar = () => {
         height={"100%"}
       />
       {selectedDate && (
-        <AddEventModal
-          isOpen={isModalOpen}
-          closeModal={closeModal}
-        />
+        <AddEventModal isOpen={isModalOpen} closeModal={closeModal} />
       )}
     </>
   );

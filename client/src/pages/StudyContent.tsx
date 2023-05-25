@@ -56,7 +56,6 @@ const StudyContent = () => {
         const content = await getStudyGroupInfo(parsedId, isLoggedIn);
         setContent(content);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
-        console.log(content);
       } catch (error) {
         if (!isLoggedIn) navigate("/login");
         else {
@@ -89,8 +88,7 @@ const StudyContent = () => {
 
   const handleJoinButton = async () => {
     try {
-      const res = await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
-      console.log(res);
+      await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
       alert("스터디 신청이 완료되었습니다!");
     } catch (error) {
       alert("스터디 신청이 실패했습니다!");
@@ -175,11 +173,14 @@ const StudyContent = () => {
                 studyGroupId={Number(id)}
                 setComments={setComments}
               />
-              <StudyCommentList
-                studyGroupId={Number(id)}
-                comments={comments}
-                setComments={setComments}
-              />
+              {content && (
+                <StudyCommentList
+                  isLeader={content.leader}
+                  studyGroupId={Number(id)}
+                  comments={comments}
+                  setComments={setComments}
+                />
+              )}
             </div>
           )}
         </StudyContentBody>

@@ -12,10 +12,12 @@ import { validateEmptyInput } from "../pages/utils/loginUtils";
 import { useNavigate } from "react-router-dom";
 
 const StudyCommentList = ({
+  isLeader,
   studyGroupId,
   comments,
   setComments,
 }: {
+  isLeader: boolean;
   studyGroupId: number;
   comments: CommentDto[];
   setComments: React.Dispatch<React.SetStateAction<CommentDto[]>>;
@@ -26,10 +28,23 @@ const StudyCommentList = ({
   const [comment, setComment] = useState("");
   const [patchId, setPatchId] = useState<number | null>(null);
   const [isUpdateMode, setIsUpdateMode] = useState(false);
+  const [isEnterPressed, setIsEnterPressed] = useState(false);
 
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
     //console.log(id);
+  };
+
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !isEnterPressed) {
+      setIsEnterPressed(true);
+
+      handleUpdateButton();
+
+      setTimeout(() => {
+        setIsEnterPressed(false);
+      }, 1000); // enter로 입력시 발생하는 이중 입력 방지
+    }
   };
 
   const handleUpdate = (id: number, content: string) => {
@@ -62,12 +77,13 @@ const StudyCommentList = ({
     if (!isLoggedIn) navigate("/login");
     try {
       await deleteComment(studyGroupId, patchId);
-      fetchData();
+      fetchCommentsData();
     } catch (error) {
       console.log("댓글 삭제 실패", error);
     }
   };
-  const fetchData = async () => {
+
+  const fetchCommentsData = async () => {
     try {
       const newComment = await getComments(studyGroupId);
       setComments(newComment);
@@ -76,8 +92,8 @@ const StudyCommentList = ({
     }
   };
   useEffect(() => {
-    fetchData();
-  }, [!isUpdateMode]); // post시 바로 변경될 수 있도록 의존성 배열 추가 예정
+    fetchCommentsData();
+  }, [!isUpdateMode]);
   return (
     <>
       <ul>
@@ -90,6 +106,7 @@ const StudyCommentList = ({
                   {isUpdateMode && patchId === comment.commentId ? (
                     <>
                       <input
+                        onKeyDown={handleEnter}
                         defaultValue={comment.content}
                         onChange={handleComment}
                       ></input>
@@ -110,10 +127,13 @@ const StudyCommentList = ({
                     >
                       수정
                     </button>
-                    <button onClick={() => handleDelete(comment.commentId)}>
-                      삭제
-                    </button>
                   </>
+                )}
+
+                {(isLeader || comment.isMyComment) && (
+                  <button onClick={() => handleDelete(comment.commentId)}>
+                    삭제
+                  </button>
                 )}
               </ButtonDiv>
             </CommentItemDiv>

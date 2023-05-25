@@ -20,7 +20,6 @@ const GNB = () => {
         .then((res) => {
           setProfileImage(res.data.profileImage);
           setIsLoading(false);
-          console.log(res.data);
         })
         .catch((err) => {
           console.log(err);

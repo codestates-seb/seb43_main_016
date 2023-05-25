@@ -4,7 +4,6 @@ import { LogInState } from "../recoil/atoms/LogInState";
 import { useState } from "react";
 import { CommentDto } from "../apis/CommentApi";
 import { getComments } from "../apis/CommentApi";
-//import { Link } from "react-router-dom";
 import { validateEmptyInput } from "../pages/utils/loginUtils";
 import { postComment } from "../apis/CommentApi";
 import { useNavigate } from "react-router-dom";
@@ -21,6 +20,20 @@ const StudyComment = ({
 
   const [comment, setComment] = useState("");
 
+  const [isEnterPressed, setIsEnterPressed] = useState(false);
+
+  const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter" && !isEnterPressed) {
+      setIsEnterPressed(true);
+
+      handleCommentButton();
+
+      setTimeout(() => {
+        setIsEnterPressed(false);
+      }, 1000); // enter로 입력시 발생하는 이중 입력 방지
+    }
+  };
+
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
     //console.log(id);
@@ -34,8 +47,6 @@ const StudyComment = ({
       try {
         await postComment(studyGroupId, comment);
         setComment("");
-
-        console.log("댓글이 성공적으로 등록되었습니다.");
         const fetchData = async () => {
           try {
             const newComment = await getComments(studyGroupId);
@@ -46,8 +57,7 @@ const StudyComment = ({
         };
         fetchData();
       } catch (error) {
-        console.log(error);
-        console.log("댓글 등록에 실패했습니다.");
+        console.log("댓글 등록 실패", error);
       }
     }
   };
@@ -58,6 +68,7 @@ const StudyComment = ({
         <input
           value={comment}
           onChange={handleComment}
+          onKeyDown={handleEnter}
           type="text"
           placeholder="댓글을 입력하세요."
           required
