@@ -136,7 +136,7 @@ public class StudygroupService implements StudygroupManager{
 
     @Override
     public Page<Studygroup> getWithPaging(Integer page, Integer size) {
-        return getWithPagingAndOrder(page, size, "기본값");
+        return getWithPagingAndOrder(page, size, "기본값", false);
     }
 
 
