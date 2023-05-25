@@ -11,7 +11,6 @@ const ProfileImg = ({ profileImage }: Props) => {
   const [imageUrl, setImageUrl] = useState<string>(profileImage || "");
   const [isEditing, setIsEditing] = useState<boolean>(false);
 
-
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file: File | undefined = e.target.files?.[0];
     if (file) {
@@ -85,9 +84,11 @@ const ProfileImgSection = styled.div`
   border: 2px solid #ccc;
   margin-bottom: 10px;
   position: relative;
+  cursor: pointer;
 
   &:hover {
     background-color: #ccc;
+    border: 2px solid #3383fa;
 
     &::after {
       content: "프로필 수정";
@@ -99,7 +100,7 @@ const ProfileImgSection = styled.div`
       color: #fff;
       padding: 8px 16px;
       border-radius: 4px;
-      font-size: 14px;
+      font-size: 13px;
     }
   }
 
@@ -107,6 +108,7 @@ const ProfileImgSection = styled.div`
     width: 100%;
     height: 100%;
     object-fit: cover;
+    cursor: pointer;
   }
 `;
 

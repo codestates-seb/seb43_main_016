@@ -10,13 +10,15 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import { useNavigate } from "react-router-dom";
 import CheckPasswordModal from "../components/modal/CheckPasswordModal";
+import tokenRequestApi from "../apis/TokenRequestApi";
+import { removeTokens } from "./utils/Auth";
 
 const ProfileInfo = () => {
-  const isLoggedIn = useRecoilValue(LogInState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoResponseDto | null>(
     null
@@ -92,12 +94,18 @@ const ProfileInfo = () => {
   // TODO DELETE 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에서 DELETE하는 코드
   const handleDeleteClick = async () => {
     try {
-      const confirmed = window.confirm("정말로 회원탈퇴하시겠습니까?");
+      const confirmed = window.confirm(
+        `정말로 회원탈퇴하시겠습니까?
+        
+(소셜 로그인 회원의 경우, 탈퇴 후 재로그인시 자동으로 계정이 복구됩니다.)`
+      );
       if (confirmed) {
+        navigate("/");
         await deleteMember();
         alert("회원탈퇴가 완료되었습니다.");
-        localStorage.clear();
-        navigate("/");
+        tokenRequestApi.setAccessToken(null);
+        removeTokens();
+        setIsLoggedIn(false);
       } else {
         alert("회원탈퇴가 취소되었습니다.");
       }
@@ -112,7 +120,11 @@ const ProfileInfo = () => {
           <ProfileImg profileImage={memberInfo?.profileImage} />
         </ProfileImage>
         <ProfileBaseInfo>
-          <ProfileInput disabled value={memberInfo?.nickName} />
+          <ProfileInput
+            className="nickname-input"
+            disabled
+            value={memberInfo?.nickName}
+          />
           <ProfileInput disabled value={memberInfo?.email} />
           <ProfileInput disabled value={memberInfo?.roles} />
           <EditButton onClick={handleEditClick}>Edit</EditButton>
@@ -121,21 +133,21 @@ const ProfileInfo = () => {
       <IntroduceAndDesired>
         {!isIntroduceEdit ? (
           <>
-            <p>자기소개</p>
+            <h4>자기소개</h4>
             <IntroduceAndDesiredInput value={memberInfo?.aboutMe} disabled />
-            <p>함께하고 싶은 동료</p>
+            <h4>함께하고 싶은 동료</h4>
             <IntroduceAndDesiredInput value={memberInfo?.withMe} disabled />
           </>
         ) : (
           <>
-            <p>자기소개</p>
+            <h4>자기소개</h4>
             <IntroduceAndDesiredInput
               type="text"
               name="aboutMe"
               placeholder={memberInfo?.aboutMe}
               onChange={handleIntroduceChange}
             />
-            <p>함께하고 싶은 동료</p>
+            <h4>함께하고 싶은 동료</h4>
             <IntroduceAndDesiredInput
               type="text"
               name="withMe"
@@ -189,13 +201,25 @@ const ProfileImage = styled.div`
 const ProfileInput = styled.input`
   margin-bottom: 10px;
   padding: 8px;
-  width: 100%;
+  width: 90%;
+  height: 36px;
 `;
 
 const ProfileBaseInfo = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
   width: 100%;
+
+  .nickname-input {
+    border: solid 0px #ccc;
+    background-color: transparent;
+    color: #2759a2;
+    font-size: 24px;
+    font-weight: 700;
+    padding: 0 0 15px;
+  }
 `;
 
 const IntroduceAndDesired = styled.div`
@@ -204,6 +228,13 @@ const IntroduceAndDesired = styled.div`
   align-items: flex-start;
   margin-top: 20px;
   width: 100%;
+
+  h4 {
+    color: #2759a2;
+    font-size: 21px;
+    font-weight: 700;
+    margin: 12px 0;
+  }
 `;
 
 const IntroduceAndDesiredInput = styled.input`
@@ -220,6 +251,8 @@ const ButtonWrapper = styled.div`
 `;
 
 const EditButton = styled.button`
+  width: 100px;
+  height: 40px;
   margin-bottom: 10px;
   padding: 8px 16px;
   background-color: #4d74b1;

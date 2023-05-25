@@ -56,7 +56,7 @@ const StudyList = () => {
                   key={item?.id}
                   onClick={() => navigate(`/studycontent/${item?.id}`)}
                 >
-                  <StudyListImage ></StudyListImage>
+                  <StudyListImage></StudyListImage>
                   <div>
                     <div className="studylist-title">
                       <h3>{item?.title}</h3>
@@ -183,6 +183,7 @@ const StudyBox = styled.div`
     width: 260px;
     padding-top: 10px;
     display: flex;
+    flex-flow: row wrap;
     justify-content: flex-end;
     align-items: center;
   }
@@ -193,7 +194,7 @@ const StudyBox = styled.div`
     border-radius: 4px;
     background-color: #e1ecf4;
     padding: 4.8px 6px;
-    margin-left: 7px;
+    margin: 0 7px 4px 0;
     cursor: pointer;
   }
 `;

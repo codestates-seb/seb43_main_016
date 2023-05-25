@@ -89,6 +89,7 @@ const StudyUpdate = () => {
     setSelectedPeriodEnd(endDateValue);
     setStudyPeriodEnd(formattedPeriodEnd);
     return formattedPeriodEnd
+
   };
 
   const handleStudyTimeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,6 +100,7 @@ const StudyUpdate = () => {
     setSelectedTimeStart(startTimeValue);
     setStudyTimeStart(formattedTimeStart);
     return formattedTimeStart
+
   };
 
   const handleStudyTimeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,11 +128,11 @@ const StudyUpdate = () => {
   const handlePostButton = async () => {
     const StudyPostDto: StudyGroupUpdateDto = {
       studyName,
-      studyPeriodStart,
-      studyPeriodEnd,
+      studyPeriodStart: studyPeriodStart,
+      studyPeriodEnd: studyPeriodEnd,
       daysOfWeek: checked,
-      studyTimeStart,
-      studyTimeEnd,
+      studyTimeStart: studyTimeStart,
+      studyTimeEnd: studyTimeEnd,
       memberCountMin,
       memberCountMax,
       platform,
