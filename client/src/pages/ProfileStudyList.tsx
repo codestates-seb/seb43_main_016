@@ -45,7 +45,9 @@ const ProfileStudyList = () => {
         <Title>
           <h3>{title}</h3>
         </Title>
-        <Tag>{tagValues.join(", ")}</Tag>
+        <Tag>
+          <div>{tagValues.join(", ")}</div>
+        </Tag>
       </CardProfileStudyListContainer>
     );
   };
