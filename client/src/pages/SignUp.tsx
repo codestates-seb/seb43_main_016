@@ -6,12 +6,14 @@ import logo from "../assets/edusync-logo.png";
 import GoogleButton from "../components/social-login-button/GoogleButton";
 import KakaoButton from "../components/social-login-button/KakaoButton";
 import NaverButton from "../components/social-login-button/NaverButton";
+import MemberRestoreModal from "../components/modal/MemberRestoreModal";
 import { validateEmptyInput } from "./utils/loginUtils";
 
 const SignUp = () => {
   const [nickName, setNickName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [memberRestoreModalOpen, setMemberRestoreModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -48,13 +50,14 @@ const SignUp = () => {
         .then(() => navigate("/login"))
         .catch((error) => {
           if (error.response.data.message === "이메일이 이미 존재") {
-            console.log(error.response.data.message);
             alert("이미 가입된 이메일 입니다.");
           }
-          console.log(error.response.data.message);
+          if (error.response.data.message === "닉네임이 이미 존재") {
+            alert("사용할 수 없는 닉네임입니다.");
+          }
 
           if (error.response.data.message === "탈퇴한 회원입니다.") {
-            alert("탈퇴 처리된 회원입니다.");
+            setMemberRestoreModalOpen(true);
           }
         })
         .finally(() => {});
@@ -103,6 +106,11 @@ const SignUp = () => {
           </button>
         </ButtonDiv>
       </SignUpDiv>
+      <MemberRestoreModal
+        isOpen={memberRestoreModalOpen}
+        closeModal={() => setMemberRestoreModalOpen(false)}
+        email={email}
+      />
       <LoginLink to="/login">로그인하러 가기</LoginLink>
       <SocialLoginDiv>
         <GoogleButton />

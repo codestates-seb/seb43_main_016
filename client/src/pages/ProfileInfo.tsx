@@ -92,7 +92,11 @@ const ProfileInfo = () => {
   // TODO DELETE 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에서 DELETE하는 코드
   const handleDeleteClick = async () => {
     try {
-      const confirmed = window.confirm("정말로 회원탈퇴하시겠습니까?");
+      const confirmed = window.confirm(
+        `정말로 회원탈퇴하시겠습니까?
+        
+(소셜 로그인 회원의 경우, 탈퇴 후 재로그인시 자동으로 계정이 복구됩니다.)`
+      );
       if (confirmed) {
         await deleteMember();
         alert("회원탈퇴가 완료되었습니다.");
