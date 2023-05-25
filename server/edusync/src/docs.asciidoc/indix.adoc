@@ -1,4 +1,4 @@
-= 스택오버플로우 애플리케이션
+= EduSync 애플리케이션
 :sectnums:
 :toc: left
 :toclevels: 4
