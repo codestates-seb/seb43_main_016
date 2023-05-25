@@ -51,8 +51,6 @@ const StudyInfoEditModal = ({
   const { id } = useParams();
   const parsedId = Number(id);
 
-  console.log(modalState);
-
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     let updatedDaysOfWeek = [...modalState.daysOfWeek];
@@ -67,6 +65,10 @@ const StudyInfoEditModal = ({
       ...prevState,
       daysOfWeek: updatedDaysOfWeek,
     }));
+  };
+
+  const removeHTMLTags = (str: string) => {
+    return str.replace(/<[^>]*>?/gm, "");
   };
 
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -94,6 +96,7 @@ const StudyInfoEditModal = ({
   const handleAfterClose = () => {
     location.reload();
   };
+
 
   return (
     <>
@@ -222,7 +225,7 @@ const StudyInfoEditModal = ({
           <UserInfoEditInput
             name="introduction"
             type="text"
-            value={modalState.introduction}
+            value={removeHTMLTags(modalState.introduction)}
             onChange={handleInputChange}
           />
           <ModalButton type="button" onClick={handleSaveClick}>
