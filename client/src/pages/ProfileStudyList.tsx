@@ -44,7 +44,6 @@ const ProfileStudyList = () => {
       <CardWrapper onClick={handleClick}>
         <Title>{title}</Title>
         <Tag>{tagValues.join(", ")}</Tag>
-        <Image>{/* 이미지 표시 로직 추가 */}</Image>
       </CardWrapper>
     );
   };
@@ -82,5 +81,4 @@ const Wrapper = styled.div`
 `;
 const CardWrapper = styled.div``;
 const Title = styled.div``;
-const Image = styled.div``;
 const Tag = styled.div``;
