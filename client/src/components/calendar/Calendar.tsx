@@ -1,22 +1,23 @@
 import FullCalendar from "@fullcalendar/react";
 import timeGridPlugin from "@fullcalendar/timegrid";
+import interactionPlugin from "@fullcalendar/interaction";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { generateStudyEvents, Event } from "../../apis/CalendarApi";
-import ViewCalendarEvent from "../modal/ViewCalendarEvent";
+import AddEventModal from "../modal/AddEvent";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
 
 const Calendar = () => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null);
   const isLoggedIn = useRecoilValue(LogInState);
-  const naviate = useNavigate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (!isLoggedIn) {
-      naviate("/");
+      navigate("/");
       alert("로그인이 필요합니다");
     } else {
       const fetchEvents = async () => {
@@ -31,35 +32,34 @@ const Calendar = () => {
     }
   }, []);
 
-  const handleEventClick = (info: { event: any }) => {
+  const handleDateClick = (info: { dateStr: string }) => {
     setIsModalOpen(true);
-    setSelectedEvent(info.event);
+    setSelectedDate(info.dateStr);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedEvent(null);
+    setSelectedDate(null);
   };
 
   return (
     <>
       <FullCalendar
-        plugins={[timeGridPlugin]}
+        plugins={[timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
         allDaySlot={false}
         weekends={true}
         events={events}
-        eventClick={handleEventClick}
-        slotMinTime={"09:00"} // 시작 시간을 09:00으로 설정
-        slotMaxTime={"33:00"} // 종료 시간을 24:00으로 설정
-        slotEventOverlap={true} // 이벤트가 겹치지 않도록 설정
+        dateClick={handleDateClick}
+        slotMinTime={"09:00"}
+        slotMaxTime={"33:00"}
+        slotEventOverlap={true}
         height={"100%"}
       />
-      {selectedEvent && (
-        <ViewCalendarEvent
+      {selectedDate && (
+        <AddEventModal
           isOpen={isModalOpen}
           closeModal={closeModal}
-          id={Number(selectedEvent.id)}
         />
       )}
     </>

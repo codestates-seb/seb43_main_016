@@ -120,8 +120,6 @@ export async function updateStudyGroupInfo(
     studyTimeEnd: `${data.studyPeriodEnd}T${data.studyTimeEnd}:00`,
   };
 
-  console.log(formattedData);
-
   const response = await tokenRequestApi.patch(
     `/studygroup/${id}`,
     formattedData
