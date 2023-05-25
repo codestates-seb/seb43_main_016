@@ -58,9 +58,6 @@ const GNB = () => {
             <Link to="/calendar">
               <span>나의 캘린더</span>
             </Link>
-            <Link to="/profile">
-              <span>나의 프로필</span>
-            </Link>
           </GNBMenuBlock>
           <User
             profileImage={profileImage}
