@@ -236,15 +236,17 @@ const StudyContentTitle = styled.div`
 `;
 
 const StudyContentEdit = styled.div`
-  width: 70px;
+  width: 100px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 
-  div {
+  button {
+    width: 50px;
     font-size: 0.875rem;
     color: #858da8;
     cursor: pointer;
+    padding: 0;
   }
 `;
 
