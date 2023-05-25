@@ -127,6 +127,42 @@ export async function updateStudyGroupInfo(
   console.log("성공적으로 스터디 정보를 업데이트 했습니다", response.data);
 }
 
+// ====================== 스터디 그룹 수정 (PATCH) ===========================
+// TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
+export interface StudyGroupUpdateDto {
+  id?: number;
+  studyName: string;
+  studyPeriodStart: string;
+  studyPeriodEnd: string;
+  daysOfWeek: string[];
+  studyTimeStart: string;
+  studyTimeEnd: string;
+  memberCountMin: number;
+  memberCountMax: number;
+  platform: string;
+  introduction: string;
+  tags: StudyTags;
+}
+
+export async function updateStudyGroupContentsInfo(
+  data: StudyGroupUpdateDto,
+  isLoggedIn: boolean,
+  id: number
+) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
+
+  // studyPeriodStart 및 studyPeriodEnd 값을 ISO 8601 형식으로 변환
+  const formattedData = {
+    ...data,
+  };
+
+  const response = await tokenRequestApi.patch(
+    `/studygroup/${id}`,
+    formattedData
+  );
+  console.log("성공적으로 스터디 정보를 업데이트 했습니다", response.data);
+}
+
 // ====================== 스터디 그룹 삭제 (DELETE) ===========================
 // TODO : StudyGroup의 정보를 삭제하는 코드
 export async function deleteStudyGroupInfo(id: number, isLoggedIn: boolean) {
