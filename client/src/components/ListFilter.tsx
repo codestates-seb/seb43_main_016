@@ -46,7 +46,7 @@ const ListFilter = () => {
       >
         <option value="기본값">기본값</option>
         <option value="수정순">업데이트순</option>
-        <option value="카테고리순">카테고리순</option>
+        <option value="카테고리순">카테고리</option>
         <option value="모집순">모집중/완료</option>
       </select>
       {renderFilterOptions()}

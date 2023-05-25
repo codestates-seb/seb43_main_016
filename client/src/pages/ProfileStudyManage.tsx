@@ -8,6 +8,7 @@ import {
 } from "../apis/StudyGroupApi";
 import styled from "styled-components";
 import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
+import StudyListTag from "../components/StudyListTag";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
@@ -78,6 +79,7 @@ const ProfileStudyManage = () => {
         return;
       }
     });
+    if (!window.confirm("스터디원 모집을 완료하시겠습니까?")) return;
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
     location.reload();
   };
@@ -95,13 +97,19 @@ const ProfileStudyManage = () => {
       </ManageTitle>
       <ManageInfo>
         {" "}
-        <ManageSpan>모집 상태</ManageSpan>
+        <ManageSpan>인원 모집</ManageSpan>
         {!isRecruiting ? (
-          <button type="button" onClick={handleRecuitCloseClick}>
-            모집 중
+          <button
+            type="button"
+            className="recruit-close-button"
+            onClick={handleRecuitCloseClick}
+          >
+            완료하기
           </button>
         ) : (
-          <div>모집 완료</div>
+          <div>
+            <strong>모집 완료</strong>
+          </div>
         )}
       </ManageInfo>
 
@@ -120,18 +128,15 @@ const ProfileStudyManage = () => {
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>태그</ManageSpan>
-        {studyInfo?.tags && (
-          <>
-            {Object.entries(studyInfo.tags).map(([category, tags]) => (
-              <div key={category}>
-                {category}:
-                {tags.map((tag) => (
-                  <span key={tag}>{tag}</span>
-                ))}
-              </div>
-            ))}
-          </>
-        )}
+        <ManageTag>
+          {studyInfo?.tags && (
+            <>
+              {Object.entries(studyInfo.tags).map(([_category, tags]) => (
+                <StudyListTag item={tags} />
+              ))}
+            </>
+          )}
+        </ManageTag>
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>일정</ManageSpan> 매주 {studyInfo?.daysOfWeek}{" "}
@@ -210,6 +215,21 @@ const ManageInfo = styled.div`
   justify-content: flex-start;
   align-items: center;
 
+  .recruit-close-button {
+    width: 100px;
+    height: 30px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #47c4c9;
+
+    &:hover {
+      opacity: 85%;
+    }
+    &:active {
+      opacity: 100%;
+    }
+  }
+
   div {
     text-align: left;
     font-size: 16px;
@@ -225,6 +245,25 @@ const ManageSpan = styled.span`
   font-weight: 700;
   color: #2759a2;
   margin-right: 20px;
+`;
+
+const ManageTag = styled.div`
+  width: 240px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+
+  div {
+    height: 24px;
+    color: #39739d;
+    font-size: 0.8125rem;
+    border-radius: 4px;
+    background-color: #e1ecf4;
+    padding: 4.8px 6px;
+    margin: 0 7px 4px 0;
+    cursor: pointer;
+  }
 `;
 
 const ManageIntro = styled.p`
