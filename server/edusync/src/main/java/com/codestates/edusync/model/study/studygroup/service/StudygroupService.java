@@ -118,26 +118,25 @@ public class StudygroupService implements StudygroupManager{
         return findStudygroup;
     }
 
-    public Page<Studygroup> getWithPagingAndOrder(Integer page, Integer size, String order) {
-        Sort sort = getSortByOrder(order);
+    public Page<Studygroup> getWithPagingAndOrder(Integer page, Integer size, String order, Boolean isAscending) {
+        Sort sort = getSortByOrder(order, isAscending);
 
         return studygroupRepository.findAll(PageRequest.of(page, size, sort));
     }
 
-    private static Sort getSortByOrder(String order) {
+    private static Sort getSortByOrder(String order, Boolean isAscending) {
         StudygroupGetOrder orderEnum = StudygroupGetOrder.valueOfOrder(order);
         String convertedVariable = orderEnum.getVariable();
 
+        // 오름차순과 내림차순 구분
         Sort sort = Sort.by(convertedVariable);
-        if( orderEnum.getMethod().equals("descending") ) {
-            sort.descending();
-        }
-        return sort;
+        if( isAscending )   return sort;
+        else                return sort.descending();
     }
 
     @Override
     public Page<Studygroup> getWithPaging(Integer page, Integer size) {
-        return getWithPagingAndOrder(page, size, "id");
+        return getWithPagingAndOrder(page, size, "기본값");
     }
 
 
