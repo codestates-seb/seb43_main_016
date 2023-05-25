@@ -9,7 +9,7 @@ import TagInput from "../components/TagInput";
 import {
   StudyGroupUpdateDto,
   getStudyGroupInfo,
-  updateStudyGroupInfo,
+  updateStudyGroupContentsInfo,
 } from "../apis/StudyGroupApi";
 /*try {
     } catch (error) {
@@ -88,6 +88,8 @@ const StudyUpdate = () => {
     const formattedPeriodEnd = `${endDateValue}T${timeValue}:00`;
     setSelectedPeriodEnd(endDateValue);
     setStudyPeriodEnd(formattedPeriodEnd);
+    return formattedPeriodEnd
+
   };
 
   const handleStudyTimeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -97,6 +99,8 @@ const StudyUpdate = () => {
     const formattedTimeStart = `${dateValue}T${startTimeValue}:00`;
     setSelectedTimeStart(startTimeValue);
     setStudyTimeStart(formattedTimeStart);
+    return formattedTimeStart
+
   };
 
   const handleStudyTimeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,6 +110,7 @@ const StudyUpdate = () => {
     const formattedTimeEnd = `${dateValue}T${endTimeValue}:00`;
     setSelectedTimeEnd(endTimeValue);
     setStudyTimeEnd(formattedTimeEnd);
+    return formattedTimeEnd
   };
 
   const handleMemberCountMin = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -163,7 +168,7 @@ const StudyUpdate = () => {
     }
 
     try {
-      const res = await updateStudyGroupInfo(
+      const res = await updateStudyGroupContentsInfo(
         StudyPostDto,
         isLoggedIn,
         studyGroupId
