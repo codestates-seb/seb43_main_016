@@ -9,6 +9,7 @@ import "./App.css";
 import StudyList from "./pages/StudyList";
 import StudyContent from "./pages/StudyContent";
 import GNB from "./components/gnb/GNB";
+import Footer from "./components/Footer";
 import ProfileCalendar from "./pages/ProfileCalendar";
 import Redirect from "./pages/Redirect";
 import useRefreshToken from "./hooks/useRefreshToken";
@@ -63,6 +64,7 @@ function AppContent() {
             <Route path={`/studycontent/:id/edit`} element={<StudyUpdate />} />
             <Route />
           </Routes>
+          <Footer />
         </>
       )}
     </>
