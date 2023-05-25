@@ -45,7 +45,9 @@ const ProfileStudyList = () => {
         <Title>
           <h3>{title}</h3>
         </Title>
-        <Tag>{tagValues.join(", ")}</Tag>
+        <Tag>
+          <div>{tagValues.join(", ")}</div>
+        </Tag>
       </CardProfileStudyListContainer>
     );
   };
@@ -85,7 +87,8 @@ export default ProfileStudyList;
 const MyStudyListContainer = styled.div`
   width: 960px;
   height: 100%;
-  padding: 80px 0 100px;
+  margin-top: 100px;
+  padding: 40px 0 200px;
   background-color: #fff;
   border-radius: 4px;
   display: flex;
@@ -103,7 +106,8 @@ const StudyCardContainer = styled.div`
 `;
 
 const ListTitle = styled.h2`
-  width: 700px;
+  width: 900px;
+  padding-left: 20px;
   margin: 24px 0 20px;
   font-size: 20px;
   font-weight: 700;

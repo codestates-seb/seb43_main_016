@@ -52,7 +52,7 @@ const WaitingList = () => {
 
   return (
     <WaitingListWrapper>
-      <WaitingListTitle>스터디 가입 신청</WaitingListTitle>
+      <WaitingListTitle>대기중인 가입 신청</WaitingListTitle>
       <ItemList>
         {waitingList.map((study) => (
           <WaitingStudyGroupItem
@@ -68,10 +68,12 @@ const WaitingList = () => {
 
 export default WaitingList;
 
-const WaitingListWrapper = styled.div``;
+const WaitingListWrapper = styled.div`
+  padding-left: 20px;
+`;
 
 const WaitingListTitle = styled.h2`
-  width: 700px;
+  width: 900px;
   margin: 24px 0 20px;
   font-size: 20px;
   font-weight: 700;
@@ -80,7 +82,7 @@ const WaitingListTitle = styled.h2`
 `;
 
 const ItemList = styled.div`
-  width: 700px;
+  width: 900px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -91,7 +93,7 @@ const ItemWrapper = styled.div`
   width: 700px;
   height: 60px;
   background-color: #fff;
-  border: 1px solid #ccc;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
   border-radius: 4px;
   padding: 20px 30px;
   margin-bottom: 10px;

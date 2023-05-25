@@ -46,14 +46,14 @@ const StudyList = () => {
         <StudyListTop>
           <div>
             <h2>여러분의 스터디를 만들어보세요!</h2>
-            <div>
-              <ListFilter />
-            </div>
           </div>
           <Link to="/studypost">
             <StudyPostButton>스터디 모집!</StudyPostButton>
           </Link>
         </StudyListTop>
+        <ListFilterWrapper>
+          <ListFilter />
+        </ListFilterWrapper>
         <StudyListMain>
           {!fetching && (
             <StudyBoxContainer>
@@ -84,7 +84,6 @@ const StudyList = () => {
 const StudyListContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e9e9e9;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -119,6 +118,14 @@ const StudyListTop = styled.div`
     font-weight: 700;
     margin-left: 10px;
   }
+`;
+
+const ListFilterWrapper = styled.div`
+  width: 900px;
+  margin-bottom: 30px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
 `;
 
 const StudyPostButton = styled.button`

@@ -88,8 +88,7 @@ const StudyUpdate = () => {
     const formattedPeriodEnd = `${endDateValue}T${timeValue}:00`;
     setSelectedPeriodEnd(endDateValue);
     setStudyPeriodEnd(formattedPeriodEnd);
-    return formattedPeriodEnd
-
+    return formattedPeriodEnd;
   };
 
   const handleStudyTimeStart = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -99,8 +98,7 @@ const StudyUpdate = () => {
     const formattedTimeStart = `${dateValue}T${startTimeValue}:00`;
     setSelectedTimeStart(startTimeValue);
     setStudyTimeStart(formattedTimeStart);
-    return formattedTimeStart
-
+    return formattedTimeStart;
   };
 
   const handleStudyTimeEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -110,7 +108,7 @@ const StudyUpdate = () => {
     const formattedTimeEnd = `${dateValue}T${endTimeValue}:00`;
     setSelectedTimeEnd(endTimeValue);
     setStudyTimeEnd(formattedTimeEnd);
-    return formattedTimeEnd
+    return formattedTimeEnd;
   };
 
   const handleMemberCountMin = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -303,7 +301,6 @@ const StudyUpdate = () => {
 const StudyPostContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e9e9e9;
   display: flex;
   justify-content: center;
   align-items: center;

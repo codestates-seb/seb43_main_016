@@ -159,14 +159,8 @@ const StudyContent = () => {
                 <StudyContentTag>
                   {content?.tags && (
                     <>
-                      {Object.entries(content.tags).map(([category, tags]) => (
-                        <div key={category}>
-                          {category}:
-                          {tags.map((tag) => (
-                            <span key={tag}>{tag}</span>
-                          ))}
-                        </div>
-
+                      {Object.entries(content.tags).map(([_category, tags]) => (
+                        <StudyListTag item={tags} />
                       ))}
                     </>
                   )}
@@ -197,7 +191,6 @@ const StudyContent = () => {
 const StudyContentContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e9e9e9;
   display: flex;
   justify-content: center;
   align-items: center;

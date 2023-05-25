@@ -8,6 +8,7 @@ import {
 } from "../apis/StudyGroupApi";
 import styled from "styled-components";
 import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
+import StudyListTag from "../components/StudyListTag";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
@@ -78,6 +79,7 @@ const ProfileStudyManage = () => {
         return;
       }
     });
+    if (!window.confirm("스터디원 모집을 완료하시겠습니까?")) return;
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
     location.reload();
   };
@@ -95,21 +97,28 @@ const ProfileStudyManage = () => {
       </ManageTitle>
       <ManageInfo>
         {" "}
-        <ManageSpan>모집 상태</ManageSpan>
+        <ManageSpan>인원 모집</ManageSpan>
         {!isRecruiting ? (
-          <button type="button" onClick={handleRecuitCloseClick}>
-            모집 중
+          <button
+            type="button"
+            className="recruit-close-button"
+            onClick={handleRecuitCloseClick}
+          >
+            완료하기
           </button>
         ) : (
-          <div>모집 완료</div>
+          <div>
+            <strong>모집 완료</strong>
+          </div>
         )}
       </ManageInfo>
 
       <ManageInfo>
-        <ManageSpan>현재 인원</ManageSpan> {studyInfo?.memberCountCurrent}
+        <ManageSpan>스터디장</ManageSpan>{" "}
+        <strong>{studyInfo?.leaderNickName}</strong>
       </ManageInfo>
       <ManageInfo>
-        <ManageSpan>스터디장</ManageSpan> {studyInfo?.leaderNickName}
+        <ManageSpan>현재 인원</ManageSpan> {studyInfo?.memberCountCurrent}
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>플랫폼</ManageSpan> {studyInfo?.platform}
@@ -120,18 +129,15 @@ const ProfileStudyManage = () => {
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>태그</ManageSpan>
-        {studyInfo?.tags && (
-          <>
-            {Object.entries(studyInfo.tags).map(([category, tags]) => (
-              <div key={category}>
-                {category}:
-                {tags.map((tag) => (
-                  <span key={tag}>{tag}</span>
-                ))}
-              </div>
-            ))}
-          </>
-        )}
+        <ManageTag>
+          {studyInfo?.tags && (
+            <>
+              {Object.entries(studyInfo.tags).map(([_category, tags]) => (
+                <StudyListTag item={tags} />
+              ))}
+            </>
+          )}
+        </ManageTag>
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>일정</ManageSpan> 매주 {studyInfo?.daysOfWeek}{" "}
@@ -177,7 +183,8 @@ export default ProfileStudyManage;
 const StoryManageContainer = styled.div`
   width: 960px;
   height: 100%;
-  padding: 80px 0 100px;
+  margin-top: 100px;
+  padding: 40px 0 200px;
   background-color: #fff;
   border-radius: 4px;
   display: flex;
@@ -187,7 +194,7 @@ const StoryManageContainer = styled.div`
 `;
 
 const ManageTitle = styled.div`
-  width: 800px;
+  width: 850px;
   margin: 0 0 30px 50px;
   display: flex;
   justify-content: flex-start;
@@ -203,11 +210,30 @@ const ManageTitle = styled.div`
 `;
 
 const ManageInfo = styled.div`
-  width: 800px;
+  width: 850px;
   margin: 0 0 20px 50px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
+
+  strong {
+    color: #1f1f1f;
+  }
+
+  .recruit-close-button {
+    width: 100px;
+    height: 30px;
+    font-size: 14px;
+    color: #ffffff;
+    background-color: #47c4c9;
+
+    &:hover {
+      opacity: 85%;
+    }
+    &:active {
+      opacity: 100%;
+    }
+  }
 
   div {
     text-align: left;
@@ -224,6 +250,25 @@ const ManageSpan = styled.span`
   font-weight: 700;
   color: #2759a2;
   margin-right: 20px;
+`;
+
+const ManageTag = styled.div`
+  width: 240px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  align-items: center;
+
+  div {
+    height: 22px;
+    color: #39739d;
+    font-size: 13px;
+    border-radius: 4px;
+    background-color: #e1ecf4;
+    padding: 4.8px 6px;
+    margin: 0 4px 4px 0;
+    cursor: pointer;
+  }
 `;
 
 const ManageIntro = styled.p`
