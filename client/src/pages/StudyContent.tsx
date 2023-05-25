@@ -57,8 +57,13 @@ const StudyContent = () => {
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
         console.log(content);
       } catch (error) {
-        console.log(error);
-        throw new Error("스터디 내용 로딩에 실패했습니다.");
+        if (!isLoggedIn) navigate("/login");
+        else {
+          alert("잘못된 접근입니다");
+          navigate("/studylist");
+
+          throw new Error("스터디 내용 로딩에 실패했습니다.");
+        }
       }
     };
     fetchData();
@@ -78,12 +83,7 @@ const StudyContent = () => {
   };
 
   const handleEditButton = async () => {
-    try {
-    } catch (error) {
-      alert("스터디 수정이 실패했습니다!");
-      // 당신의 스터디가 아닙니다?
-      console.error("Error during POST request:", error);
-    }
+    navigate(`/studycontent/${id}/edit`);
   };
 
   const handleJoinButton = async () => {
@@ -106,80 +106,85 @@ const StudyContent = () => {
   }, [comments]);
 
   return (
-    <StudyContentContainer>
-      <StudyContentBody>
-        {!fetching && (
-          <div key={content?.id}>
-            <StudyContentTop>
-              {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
-              <StudyContentTitle>
-                <h2>{content?.studyName}</h2>
-                <StudyContentEdit>
-                  <button type="button" onClick={handleEditButton}>
-                    수정
-                  </button>
-                  <button type="button" onClick={handleDeleteButton}>
-                    삭제
-                  </button>
-                </StudyContentEdit>
-              </StudyContentTitle>
-            </StudyContentTop>
-            <StudyContentMain>
-              <StudyContentInfo>
-                <div>날짜</div>
-                <span>{`${content?.studyPeriodStart} ~ ${content?.studyPeriodEnd}`}</span>
-              </StudyContentInfo>
-              <StudyContentInfo>
-                <div>요일, 시간</div>
-                <span>{`${content?.daysOfWeek} ${content?.studyTimeStart} ~ ${content?.studyTimeEnd}`}</span>
-              </StudyContentInfo>
-              <StudyContentInfo>
-                <div>인원</div>
-                <span>{`${content?.memberCountMin} ~ ${content?.memberCountMax}`}</span>
-              </StudyContentInfo>
-              <StudyContentInfo>
-                <div>플랫폼</div>
-                <span>{content?.platform}</span>
-              </StudyContentInfo>
-              <StudyContentText
-                dangerouslySetInnerHTML={markUp(convertIntroduction)}
-              ></StudyContentText>
-              <StudyContentProfileWrapper>
-                <StudyContentProfile>
-                  <div className="profile-name">{`${content?.leaderNickName}`}</div>
-                  <div>일반회원</div>
-                </StudyContentProfile>
-              </StudyContentProfileWrapper>
-              <StudyContentTag>
-                {content?.tags && (
-                  <>
-                    {Object.entries(content.tags).map(([category, tags]) => (
-                      <div key={category}>
-                        {category}:
-                        {tags.map((tag) => (
-                          <span key={tag}>{tag}</span>
-                        ))}
-                      </div>
-                    ))}
-                  </>
-                )}
-              </StudyContentTag>
-              <StudyJoinButtonWrapper>
-                <StudyJoinButton type="button" onClick={handleJoinButton}>
-                  스터디 신청!
-                </StudyJoinButton>
-              </StudyJoinButtonWrapper>
-            </StudyContentMain>
-            <StudyComment studyGroupId={Number(id)} setComments={setComments} />
-            <StudyCommentList
-              studyGroupId={Number(id)}
-              comments={comments}
-              setComments={setComments}
-            />
-          </div>
-        )}
-      </StudyContentBody>
-    </StudyContentContainer>
+    <>
+      <StudyContentContainer>
+        <StudyContentBody>
+          {!fetching && (
+            <div key={content?.id}>
+              <StudyContentTop>
+                {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
+                <StudyContentTitle>
+                  <h2>{content?.studyName}</h2>
+                  <StudyContentEdit>
+                    <button type="button" onClick={handleEditButton}>
+                      수정
+                    </button>
+                    <button type="button" onClick={handleDeleteButton}>
+                      삭제
+                    </button>
+                  </StudyContentEdit>
+                </StudyContentTitle>
+              </StudyContentTop>
+              <StudyContentMain>
+                <StudyContentInfo>
+                  <div>날짜</div>
+                  <span>{`${content?.studyPeriodStart} ~ ${content?.studyPeriodEnd}`}</span>
+                </StudyContentInfo>
+                <StudyContentInfo>
+                  <div>요일, 시간</div>
+                  <span>{`${content?.daysOfWeek} ${content?.studyTimeStart} ~ ${content?.studyTimeEnd}`}</span>
+                </StudyContentInfo>
+                <StudyContentInfo>
+                  <div>인원</div>
+                  <span>{`${content?.memberCountMin} ~ ${content?.memberCountMax}`}</span>
+                </StudyContentInfo>
+                <StudyContentInfo>
+                  <div>플랫폼</div>
+                  <span>{content?.platform}</span>
+                </StudyContentInfo>
+                <StudyContentText
+                  dangerouslySetInnerHTML={markUp(convertIntroduction)}
+                ></StudyContentText>
+                <StudyContentProfileWrapper>
+                  <StudyContentProfile>
+                    <div className="profile-name">{`${content?.leaderNickName}`}</div>
+                    <div>일반회원</div>
+                  </StudyContentProfile>
+                </StudyContentProfileWrapper>
+                <StudyContentTag>
+                  {content?.tags && (
+                    <>
+                      {Object.entries(content.tags).map(([category, tags]) => (
+                        <div key={category}>
+                          {category}:
+                          {tags.map((tag) => (
+                            <span key={tag}>{tag}</span>
+                          ))}
+                        </div>
+                      ))}
+                    </>
+                  )}
+                </StudyContentTag>
+                <StudyJoinButtonWrapper>
+                  <StudyJoinButton type="button" onClick={handleJoinButton}>
+                    스터디 신청!
+                  </StudyJoinButton>
+                </StudyJoinButtonWrapper>
+              </StudyContentMain>
+              <StudyComment
+                studyGroupId={Number(id)}
+                setComments={setComments}
+              />
+              <StudyCommentList
+                studyGroupId={Number(id)}
+                comments={comments}
+                setComments={setComments}
+              />
+            </div>
+          )}
+        </StudyContentBody>
+      </StudyContentContainer>
+    </>
   );
 };
 

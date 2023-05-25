@@ -91,9 +91,18 @@ const StudyInfoEditModal = ({
     closeModal();
   };
 
+  const handleAfterClose = () => {
+    location.reload();
+  };
+
   return (
     <>
-      <Modal isOpen={isOpen} onRequestClose={closeModal} style={customStyles}>
+      <Modal
+        isOpen={isOpen}
+        onRequestClose={closeModal}
+        style={customStyles}
+        onAfterClose={handleAfterClose}
+      >
         <form>
           <ModalExplain>스터디명</ModalExplain>
           <UserInfoEditInput

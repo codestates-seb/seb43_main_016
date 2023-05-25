@@ -30,11 +30,14 @@ export interface WaitingStudyGroupListDto {
   beStudys: WaitingStudyGroupItemDto[];
 }
 
-export const getWaitingStudyGroupList = async (): Promise<WaitingStudyGroupListDto> => {
-  const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(`/studygroup/myList?approved=false`);
-  const data = response.data;
-  return data;
-};
+export const getWaitingStudyGroupList =
+  async (): Promise<WaitingStudyGroupListDto> => {
+    const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(
+      `/studygroup/myList?approved=false`
+    );
+    const data = response.data;
+    return data;
+  };
 
 // ====================== 스터디원 가입 신청 철회 ===========================
 // TODO : StudyGroup의 가입 신청을 철회하는 코드
@@ -87,7 +90,7 @@ export async function getStudyGroupInfo(id: number, isLoggedIn: boolean) {
 // ====================== 스터디 그룹 수정 (PATCH) ===========================
 // TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
 export interface StudyGroupUpdateDto {
-  id: number;
+  id?: number;
   studyName: string;
   studyPeriodStart: string;
   studyPeriodEnd: string;
@@ -209,7 +212,7 @@ export async function forceExitStudyGroup(
     `/studygroup/${id}/kick`,
     config
   );
-  return response
+  return response;
 }
 
 // TODO : StudyGroup에서 특정 회원에게 스터디장의 권한을 위임하는 코드
@@ -276,12 +279,12 @@ interface StudyGroupRecruitmentStatusUpdateDto {
 
 export async function changeStudyGroupRecruitmentStatus(
   id: number,
-  isLoggedIn: boolean,
+  isLoggedIn: boolean
 ) {
   if (!isLoggedIn) throw new Error("Access token is not defined.");
 
   const config = {
-    status : false,
+    status: false,
   };
 
   const response = await tokenRequestApi.patch(

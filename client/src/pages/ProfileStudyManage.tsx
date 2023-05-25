@@ -23,6 +23,8 @@ const ProfileStudyManage = () => {
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = studyInfo?.isRecruited;
+
+  if (!isLoggedIn) navigate("/");
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
     if (!isLoggedIn) {
@@ -53,6 +55,7 @@ const ProfileStudyManage = () => {
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
     await deleteStudyGroupInfo(parsedId, isLoggedIn);
+    navigate("/profile/manage-group");
   };
 
   // TODO : 스터디에서 탈퇴하는 코드
@@ -76,6 +79,7 @@ const ProfileStudyManage = () => {
       }
     });
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
+    location.reload();
   };
 
   // TODO : HTML 태그로 이뤄진 문자열을 일반 문자열로 변경하는 함수

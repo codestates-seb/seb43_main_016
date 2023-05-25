@@ -64,25 +64,25 @@ const ProfileInfo = () => {
   const handleIntroduceEditClick = () => {
     setIsIntroduceEdit(true);
   };
-
-  // TODO input 창의 유저의 자기소개 및 원하는 동료상을 수정할 수 있도록 상태를 변경하는 코드
   const handleIntroduceChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { value } = e.target;
-    setIntroduceInfo({
-      aboutMe: value,
-      withMe: value,
-    });
+    const { name, value } = e.target;
+    setIntroduceInfo((prevIntroduceInfo) => ({
+      ...prevIntroduceInfo,
+      [name]: value,
+    }));
+    console.log(introduceInfo)
   };
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
   const handleSaveClick = async () => {
     try {
       const memberDetailDto: MemberDetailDto = {
-        aboutMe: introduceInfo?.aboutMe || "",
-        withMe: introduceInfo?.withMe || "",
+        aboutMe: introduceInfo?.aboutMe,
+        withMe: introduceInfo?.withMe,
       };
       await updateMemberDetail(memberDetailDto);
       setIsIntroduceEdit(false);
+      location.reload();
     } catch (error) {
       console.error(error);
       setIsIntroduceEdit(false);
@@ -131,12 +131,14 @@ const ProfileInfo = () => {
             <p>자기소개</p>
             <IntroduceAndDesiredInput
               type="text"
+              name="aboutMe"
               placeholder={memberInfo?.aboutMe}
               onChange={handleIntroduceChange}
             />
             <p>함께하고 싶은 동료</p>
             <IntroduceAndDesiredInput
               type="text"
+              name="withMe"
               placeholder={memberInfo?.withMe}
               onChange={handleIntroduceChange}
             />
@@ -155,11 +157,6 @@ const ProfileInfo = () => {
         isOpen={isModalOpen}
         closeModal={() => setIsModalOpen(false)}
         userNickname={memberInfo?.nickName}
-      />
-      <CheckPasswordModal
-        isOpen={passowrdCheckModalOpen}
-        closeModal={() => setPasswordCheckModalOpen(false)}
-        setIsModalOpen={setIsModalOpen}
       />
       <CheckPasswordModal
         isOpen={passowrdCheckModalOpen}

@@ -14,7 +14,7 @@ import Redirect from "./pages/Redirect";
 import useRefreshToken from "./hooks/useRefreshToken";
 import Modal from "react-modal";
 import Home from "./pages/Home";
-import HTestPage from "./pages/HTestPage";
+import StudyUpdate from "./pages/StudyUpdate";
 
 // import { worker } from "./mocks/browser";
 // // 개발 모드로 실행되었을 때, mocking 라이브러리가 실행되도록 명시하는 코드
@@ -60,7 +60,7 @@ function AppContent() {
             <Route path={`/studycontent/:id`} element={<StudyContent />} />
             <Route path="/studypost" element={<StudyPost />} />
             <Route path="/calendar" element={<ProfileCalendar />} />
-            <Route path="/haeun" element={<HTestPage />} />
+            <Route path={`/studycontent/:id/edit`} element={<StudyUpdate />} />
             <Route />
           </Routes>
         </>
