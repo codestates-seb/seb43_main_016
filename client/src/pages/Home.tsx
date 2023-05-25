@@ -131,12 +131,12 @@ const TitleButton = styled.div`
     color: #fff;
     font-size: 20px;
     font-weight: 700;
-    animation: fadein 5s;
+    animation: fadein 2.4s;
   }
   > button:hover {
     color: #0093e9;
     background-color: #fff;
-    transition: all ease-in 0.3s;
+    transition: all ease-in 0.5s;
   }
 `;
 
