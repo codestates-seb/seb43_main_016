@@ -40,6 +40,7 @@ public enum ExceptionCode {
     /**
      * 스케쥴 관련 에러 코드
      */
+    TIME_SCHEDULE_NOT_NULL_ALLOWED(400, "스터디 시간은 null 이어서는 안됩니다!"),
     TIME_SCHEDULE_NOT_ALLOWED(403, "해당 일정은 스터디에 종속되어있습니다. 스터디 일정은 개인이 수정할 수 없습니다!"),
     TIME_SCHEDULE_NOT_FOUND(404, "일정이 존재하지 않습니다."),
     TIME_SCHEDULE_NOT_MATCHED_WITH_MEMBER(409, "해당 일정은 본인이 생성한 것이 아닙니다. 본인이 생성한 일정만 관리할 수 있습니다!"),
