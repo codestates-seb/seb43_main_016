@@ -4,6 +4,7 @@ import { useMutation } from "@tanstack/react-query";
 import { useNavigate, Link } from "react-router-dom";
 import logo from "../assets/edusync-logo.png";
 import tokenRequestApi from "../apis/TokenRequestApi";
+import { AxiosResponse, AxiosError } from "axios";
 import { validateEmptyInput } from "./utils/loginUtils";
 import { useSetRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
@@ -11,10 +12,12 @@ import { setRefreshToken } from "./utils/Auth";
 import GoogleButton from "../components/social-login-button/GoogleButton";
 import KakaoButton from "../components/social-login-button/KakaoButton";
 import NaverButton from "../components/social-login-button/NaverButton";
+import MemberRestoreModal from "../components/modal/MemberRestoreModal";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [memberRestoreModalOpen, setMemberRestoreModalOpen] = useState(false);
   const setIsLoggedIn = useSetRecoilState(LogInState);
 
   const navigate = useNavigate();
@@ -27,7 +30,7 @@ const Login = () => {
     setPassword(e.target.value);
   };
 
-  const loginMutation = useMutation(
+  const loginMutation = useMutation<AxiosResponse, AxiosError>(
     () =>
       tokenRequestApi.post("/members/login", {
         email,
@@ -43,8 +46,11 @@ const Login = () => {
         navigate("/");
       },
       onError: (error) => {
-        console.error(error);
-        alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!!");
+        if (error.message === "Request failed with status code 403") {
+          setMemberRestoreModalOpen(true);
+        } else {
+          alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!!");
+        }
       },
     }
   );
@@ -94,6 +100,11 @@ const Login = () => {
           <button onClick={handleLoginButton}>Log In</button>
         </ButtonDiv>
       </LoginDiv>
+      <MemberRestoreModal
+        isOpen={memberRestoreModalOpen}
+        closeModal={() => setMemberRestoreModalOpen(false)}
+        email={email}
+      />
       <SignUpLink to="/signup">회원가입하러 가기</SignUpLink>
       <SocialLoginDiv>
         <GoogleButton />

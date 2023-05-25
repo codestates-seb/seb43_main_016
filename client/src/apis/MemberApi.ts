@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios";
 import tokenRequestApi from "./TokenRequestApi";
 // * recoil에서 전역 LogInState를 가져와서 isLogin 변수에 할당
 // =============== 유저정보 요청(GET) ===============
@@ -18,19 +19,11 @@ export interface MemberInfoResponseDto {
 export const getMemberInfo = async (isLoggedIn: boolean) => {
   // * 로그인 상태가 아닌 경우 에러 발생
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
-
-  try {
-    // tokenRequestApi를 사용하여 /members 엔드포인트로 GET 요청 전송
-    const response = await tokenRequestApi.get<MemberInfoResponseDto>(
-      "/members"
-    );
-    // 응답 데이터 추출
-    const data = response.data;
-    return data; // 데이터 반환
-  } catch (error) {
-    console.error("유저 정보를 불러오는데 실패했습니다.", error);
-    throw new Error("유저 정보를 불러오는데 실패했습니다."); // 실패 시 에러 발생
-  }
+  // tokenRequestApi를 사용하여 /members 엔드포인트로 GET 요청 전송
+  const response = await tokenRequestApi.get<MemberInfoResponseDto>("/members");
+  // 응답 데이터 추출
+  const data = response.data;
+  return data; // 데이터 반환
 };
 
 // =============== 유저 기본정보 업데이트(PATCH) ===============
@@ -48,15 +41,10 @@ export const updateMember = async (
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
   // 입력 데이터가 없을 경우 에러 발생
   if (!data) throw new Error("입력값을 확인해주세요.");
-  try {
-    // tokenRequestApi를 사용하여 /members 엔드포인트로 PATCH 요청 전송
-    console.log("전송되는 데이터:", data);
-    await tokenRequestApi.patch("/members", {data
-    : data});
-  } catch (error) {
-    console.error("유저정보를 업데이트 하는데 실패했습니다.", error);
-    throw new Error("유저정보를 업데이트 하는데 실패했습니다."); // 실패 시 에러 발생
-  }
+
+  // tokenRequestApi를 사용하여 /members 엔드포인트로 PATCH 요청 전송
+  console.log("전송되는 데이터:", data);
+  await tokenRequestApi.patch("/members", data);
 };
 
 // =============== 유저 프로필 사진 업데이트(PATCH) ===============
@@ -67,12 +55,7 @@ export interface MemberProfileUpdateImageDto {
 export const updateMemberProfileImage = async (
   data: MemberProfileUpdateImageDto
 ) => {
-  try {
-    await tokenRequestApi.patch("/members/profile-image", data);
-  } catch (error) {
-    console.error("프로필 사진을 업로드하는데 실패했습니다.", error);
-    throw new Error("프로필 사진을 업로드하는데 실패했습니다.");
-  }
+  await tokenRequestApi.patch("/members/profile-image", data);
 };
 
 // =============== 유저 자기소개 / 선호하는 사람 업데이트(PATCH) ===============
@@ -82,22 +65,13 @@ export interface MemberDetailDto {
 }
 // TODO : Member의 자기소개, 선호하는 사람 수정 요청을 보내는 코드
 export const updateMemberDetail = async (memberDetailDto: MemberDetailDto) => {
-  try {
-    await tokenRequestApi.patch("/members/detail", memberDetailDto);
-  } catch (error) {
-    console.error("상세정보를 업데이트하는데 실패했습니다.", error);
-    throw new Error("상세정보를 업데이트하는데 실패했습니다.");
-  }
+  await tokenRequestApi.patch("/members/detail", memberDetailDto);
 };
 
 // =============== 유저 탈퇴(DELETE) ===============
 // TODO : Member의 회원 탈퇴 요청을 보내는 코드
 export const deleteMember = async () => {
-  try {
-    await tokenRequestApi.delete("/members");
-  } catch (error) {
-    throw new Error("회원탈퇴에 실패했습니다.");
-  }
+  await tokenRequestApi.delete("/members");
 };
 
 // =============== 유저 비밀번호 체크 ===============
@@ -109,12 +83,29 @@ export const checkMemberPassword = async (
   memberPasswordCheckDto: MemberPasswordCheckDto
 ) => {
   try {
-    await tokenRequestApi.post("/members/password", memberPasswordCheckDto);
+    const response: AxiosResponse = await tokenRequestApi.post(
+      "/members/password",
+      memberPasswordCheckDto
+    );
+    if (response.status <= 299) return true;
+    else return false;
   } catch (error) {
-    throw new Error("비밀번호가 일치하지 않습니다.");
+    console.log(error);
   }
 };
 
-// TODO : (Advance) Member의 수정된 사진을 S3에 업로드하는 코드
+// TODO : Oauth2.0 로그인 이용자 검증
+export interface Oauth2MemberCheckDto {
+  provider: string;
+}
+
+export const checkOauth2Member = async (isLoggedIn: boolean) => {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요.");
+  const response = await tokenRequestApi.get<Oauth2MemberCheckDto>(
+    "/members/provider"
+  );
+  const data = response.data;
+  return data;
+};
 
 // TODO : (Advance) S3에 업로드된 사진의 URL을 받아오는 코드

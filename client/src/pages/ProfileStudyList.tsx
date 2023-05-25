@@ -1,89 +1,177 @@
 import { useEffect, useState } from "react";
-// import styled from "styled-components";
 import WaitingList from "../components/WaitingList";
-import { getStudyGroupList, StudyGroupListDto } from "../apis/StudyGroupApi";
+import {
+  getStudyGroupList,
+  StudyGroup,
+  StudyGroupListDto,
+} from "../apis/StudyGroupApi";
+import styled from "styled-components";
+import { useNavigate } from "react-router-dom";
+import { useRecoilValue } from "recoil";
+import { LogInState } from "../recoil/atoms/LogInState";
+import studyImage from "../assets/studyImage.webp";
 
 const ProfileStudyList = () => {
-  const [studyList, setStudyList] = useState<StudyGroupListDto[]>(
-    [] as StudyGroupListDto[]
-  );
+  const isLoggedIn = useRecoilValue(LogInState);
+  const [studyList, setStudyList] = useState<StudyGroupListDto>({
+    leaders: [],
+    members: [],
+  });
+  const navigate = useNavigate();
+
 
   useEffect(() => {
+    if (!isLoggedIn) {
+      alert("로그인이 필요합니다");
+      navigate("/login");
+    }
     const fetchStudyList = async () => {
-      try {
-        const data = await getStudyGroupList();
-        if (data === undefined) {
-          return <>텅..</>;
-        }
+      const { data, status } = await getStudyGroupList();
+      if (status < 299) {
         setStudyList(data);
-        console.log(studyList)
-      } catch (error) {
-        console.error("스터디 그룹 리스트를 불러오는데 실패했습니다.", error);
       }
     };
+    // response.data도 항상 있음.
     fetchStudyList();
   }, []);
 
+  const StudyCard = ({ id, title, tagValues }: StudyGroup) => {
+    const handleClick = () => {
+      navigate(`/profile/${id}`);
+    };
+
+    return (
+      <CardProfileStudyListContainer onClick={handleClick}>
+        <Image>{/* 이미지 표시 로직 추가 */}</Image>
+        <Title>
+          <h3>{title}</h3>
+        </Title>
+        <Tag>
+          <div>{tagValues.join(", ")}</div>
+        </Tag>
+      </CardProfileStudyListContainer>
+    );
+  };
+
+
   return (
-    <>
+    <MyStudyListContainer>
       <WaitingList />
-    </>
+      <ListTitle>운영중인 스터디</ListTitle>
+      <StudyCardContainer>
+        {studyList.leaders.map((leader) => (
+          <StudyCard
+            key={leader.id}
+            id={leader.id}
+            title={leader.title}
+            tagValues={leader.tagValues}
+          />
+        ))}
+      </StudyCardContainer>
+
+      <ListTitle>가입된 스터디</ListTitle>
+      <StudyCardContainer>
+        {studyList.members.map((member) => (
+          <StudyCard
+            key={member.id}
+            id={member.id}
+            title={member.title}
+            tagValues={member.tagValues}
+          />
+        ))}
+      </StudyCardContainer>
+    </MyStudyListContainer>
+
   );
 };
 
 export default ProfileStudyList;
 
-// const Box = styled.div`
-//   box-sizing: border-box;
-//   position: relative;
-//   width: 340px;
-//   height: 340px;
-//   margin: 0 16px 16px 0;
-//   padding: 16px;
-//   background: #ffffff;
-//   border: 1px solid #285aa3;
-//   border-radius: 5px;
-// `;
+const MyStudyListContainer = styled.div`
+  width: 960px;
+  height: 100%;
+  margin-top: 100px;
+  padding: 40px 0 200px;
+  background-color: #fff;
+  border-radius: 4px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+`;
 
-// const Title = styled.h3`
-//   position: absolute;
-//   left: 24px;
-//   top: 28px;
-//   width: 78px;
-//   height: 22px;
-//   font-family: Inter;
-//   font-style: bold;
-//   font-size: 18px;
-//   line-height: 22px;
-//   text-align: center;
-//   color: #000000;
-// `;
+const StudyCardContainer = styled.div`
+  width: 900px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: center;
+`;
 
-// const Tags = styled.p`
-//   position: absolute;
-//   right: 24px;
-//   top: 28px;
-//   width: 77px;
-//   height: 19px;
-//   font-family: Inter;
-//   font-style: regular;
-//   font-size: 16px;
-//   line-height: 19px;
-//   text-align: center;
-//   color: #1f1f1f;
-// `;
+const ListTitle = styled.h2`
+  width: 900px;
+  padding-left: 20px;
+  margin: 24px 0 20px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: left;
+  color: #2759a2;
+`;
 
-// const ImageWrapper = styled.div`
-//   position: absolute;
-//   top: 97px;
-//   left: 0;
-//   width: 100%;
-//   height: 71.3%; // height 값을 조정하여 이미지가 넘치지 않도록 만듦
-//   border-radius: 5px;
-//   overflow: hidden;
+const CardProfileStudyListContainer = styled.div`
+  flex-basis: 260px;
+  height: 320px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  margin: 10px 20px;
+  padding: 5px;
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+`;
 
-//   img {
-//     width: 100%;
-//     height: 100%;
-//     object-fit: cover;
-//   }
+const Title = styled.div`
+  width: 240px;
+  padding: 10px 0;
+  color: #1f1f1f;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  h3 {
+    font-size: 16px;
+    height: 32px;
+    text-align: left;
+    font-weight: 700;
+  }
+`;
+const Image = styled.div`
+  width: 240px;
+  height: 180px;
+  background-image: url(${studyImage});
+  background-size: cover;
+  background-color: aliceblue;
+`;
+const Tag = styled.div`
+  width: 240px;
+  padding-top: 10px;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-end;
+  align-items: center;
+
+  div {
+    height: 24px;
+    color: #39739d;
+    font-size: 0.8125rem;
+    border-radius: 4px;
+    background-color: #e1ecf4;
+    padding: 4.8px 6px;
+    margin: 0 7px 4px 0;
+    cursor: pointer;
+  }
+`;
+

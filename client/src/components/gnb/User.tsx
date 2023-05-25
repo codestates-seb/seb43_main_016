@@ -61,9 +61,11 @@ const User = ({ profileImage, isLoggedIn, setIsLoggedIn }: GNB) => {
 const UserDiv = styled.div`
   display: flex;
   justify-content: flex-end;
-  width: 150px;
+  width: 200px;
   button {
     margin-left: 7px;
+    font-size: 15px;
+    font-weight: 500;
     color: #2759a2;
   }
 `;

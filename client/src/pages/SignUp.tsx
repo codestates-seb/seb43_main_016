@@ -1,17 +1,19 @@
 import styled from "styled-components";
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import axios from "axios";
+import { eduApi } from "../apis/EduApi";
 import logo from "../assets/edusync-logo.png";
 import GoogleButton from "../components/social-login-button/GoogleButton";
 import KakaoButton from "../components/social-login-button/KakaoButton";
 import NaverButton from "../components/social-login-button/NaverButton";
+import MemberRestoreModal from "../components/modal/MemberRestoreModal";
 import { validateEmptyInput } from "./utils/loginUtils";
 
 const SignUp = () => {
   const [nickName, setNickName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [memberRestoreModalOpen, setMemberRestoreModalOpen] = useState(false);
   const navigate = useNavigate();
 
   const handleNickName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,20 +41,24 @@ const SignUp = () => {
       alert("닉네임과 이메일, 패스워드를 모두 입력해주세요!");
     else if (emailTest(email) === false) alert("이메일 형식이 잘못되었습니다.");
     else {
-      axios
-        .post(`${import.meta.env.VITE_APP_API_URL}/members`, {
+      eduApi
+        .post(`/members`, {
           email,
           password,
           nickName,
         })
         .then(() => navigate("/login"))
         .catch((error) => {
-          //if (error?.response?.error === "Internal Server Error") {
-          //  console.log(error.response.data.message);
-          //  alert("이미 가입된 이메일 입니다.");
-          //} else {
-          console.log(error);
-          // }
+          if (error.response.data.message === "이메일이 이미 존재") {
+            alert("이미 가입된 이메일 입니다.");
+          }
+          if (error.response.data.message === "닉네임이 이미 존재") {
+            alert("사용할 수 없는 닉네임입니다.");
+          }
+
+          if (error.response.data.message === "탈퇴한 회원입니다.") {
+            setMemberRestoreModalOpen(true);
+          }
         })
         .finally(() => {});
     }
@@ -100,6 +106,11 @@ const SignUp = () => {
           </button>
         </ButtonDiv>
       </SignUpDiv>
+      <MemberRestoreModal
+        isOpen={memberRestoreModalOpen}
+        closeModal={() => setMemberRestoreModalOpen(false)}
+        email={email}
+      />
       <LoginLink to="/login">로그인하러 가기</LoginLink>
       <SocialLoginDiv>
         <GoogleButton />

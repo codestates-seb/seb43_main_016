@@ -47,16 +47,19 @@ const GNB = () => {
           </GNBBlock>
           <GNBMenuBlock>
             <Link to="/studylist">
-              <span>스터디리스트</span>
-            </Link>
-            <Link to="/studycontent">
-              <span>스터디컨텐츠</span>
+              <span>스터디 목록</span>
             </Link>
             <Link to="/studypost">
-              <span>포스트</span>
+              <span>스터디 등록</span>
+            </Link>
+            <Link to="/profile/manage-group">
+              <span>스터디 관리</span>
             </Link>
             <Link to="/calendar">
-              <span>캘린더</span>
+              <span>나의 캘린더</span>
+            </Link>
+            <Link to="/profile">
+              <span>나의 프로필</span>
             </Link>
           </GNBMenuBlock>
           <User
@@ -69,6 +72,7 @@ const GNB = () => {
     </>
   );
 };
+
 const GNBDiv = styled.div`
   background-color: #ffffff;
   font-size: 13px;
@@ -78,20 +82,32 @@ const GNBDiv = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
+  top: 0%;
+  left: 0%;
+  position: fixed;
+  z-index: 10000;
 `;
 
 const GNBBlock = styled.div`
-  width: 150px;
+  width: 200px;
   display: flex;
 `;
 const GNBMenuBlock = styled(GNBBlock)`
-  width: 370px;
+  width: 500px;
   justify-content: space-between;
+
+  span {
+    font-size: 15px;
+    font-weight: 500;
+  }
   span:hover {
     opacity: 80%;
   }
   span:active {
     opacity: 100%;
+  }
+  a {
+    color: #2759a2;
   }
 `;
 

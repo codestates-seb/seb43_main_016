@@ -2,8 +2,8 @@ import { ChangeEvent, useState } from "react";
 import Modal from "react-modal";
 import styled from "styled-components";
 import { updateMember, MemberUpdateDto } from "../../apis/MemberApi";
-import { useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
+import { useRecoilValue } from "recoil";
 
 const customStyles = {
   content: {
@@ -19,46 +19,55 @@ const customStyles = {
 interface UserInfoEditModalProps {
   isOpen: boolean;
   closeModal: () => void;
+  userNickname: string | undefined;
 }
 
-const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
+const UserInfoEditModal = ({ isOpen, closeModal, userNickname }: UserInfoEditModalProps) => {
   const isLoggedIn = useRecoilValue(LogInState);
+  if (!isLoggedIn) {
+    alert("로그인이 필요합니다.");
+    closeModal();
+  }
   const [modalState, setModalState] = useState({
     nickname: "",
     password: "",
     passwordCheck: "",
   });
 
-  // TODO : form에 입력된 유저의 닉네임, 비밀번호를 상태에 저장하는 코드s
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setModalState((prevState: any) => ({
+    setModalState((prevState) => ({
       ...prevState,
       [name]: value,
     }));
   };
 
-  // TODO : Save 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 서버에 PATCH하는 코드
-  const handleSaveClick = () => {
-    // TODO : 새로운 비밀번호와 비밀번호 확인이 일치하는지 확인하는 코드, 일치하지 않으면 에러메시지를 띄워주는 코드
-    if (modalState.password !== modalState.passwordCheck) {
-      alert("새로운 비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.");
-      return;
-    }
-    try {
-      const updateDto: MemberUpdateDto = {
-        nickName: modalState.nickname,
-        password: modalState.password,
-      };
-      console.log(updateDto)
-      updateMember(isLoggedIn, updateDto);
-      closeModal();
-    } catch (error) {
-      alert("로그인이 필요합니다.");
+  const handleSaveClick = async () => {
+    if (
+      modalState.nickname === "" ||
+      modalState.password === "" ||
+      modalState.passwordCheck === ""
+    ) {
+      alert("입력되지 않은 정보가 있습니다.");
+    } else {
+      if (modalState.password !== modalState.passwordCheck) {
+        alert("새로운 비밀번호와 비밀번호 확인이 서로 일치하지 않습니다.");
+        return;
+      }
+
+      try {
+        const updateDto: MemberUpdateDto = {
+          nickName: modalState.nickname,
+          password: modalState.password,
+        };
+        await updateMember(isLoggedIn, updateDto); // Await the updateMember function call
+        closeModal();
+      } catch (error) {
+        alert("로그인이 필요합니다.");
+      }
     }
   };
 
-  // TODO : Cancel 버튼을 클릭 시, 모달을 닫는 코드
   const handleCancelClick = () => {
     closeModal();
   };
@@ -69,7 +78,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
         isOpen={isOpen}
         onRequestClose={closeModal}
         style={customStyles}
-        contentLabel="Example Modal"
+        contentLabel="UserInfoEditModal"
       >
         <form>
           <ModalExplain>변경할 Nickname</ModalExplain>
@@ -77,6 +86,8 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
             name="nickname"
             value={modalState.nickname}
             onChange={handleInputChange}
+            placeholder={userNickname}
+            required
           />
           <ModalExplain>변경할 비밀번호</ModalExplain>
           <UserInfoEditInput
@@ -84,6 +95,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
             type="password"
             value={modalState.password}
             onChange={handleInputChange}
+            required
           />
           <ModalExplain>변경할 비밀번호 확인</ModalExplain>
           <UserInfoEditInput
@@ -91,6 +103,7 @@ const UserInfoEditModal = ({ isOpen, closeModal }: UserInfoEditModalProps) => {
             type="password"
             value={modalState.passwordCheck}
             onChange={handleInputChange}
+            required
           />
           <ModalButton type="button" onClick={handleSaveClick}>
             저장
