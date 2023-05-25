@@ -10,6 +10,8 @@ import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
+import com.codestates.edusync.model.study.studygroup.utils.ScheduleConverter;
+import com.codestates.edusync.model.study.studygroup.utils.StudygroupGetOrder;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
@@ -17,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +39,16 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public Studygroup create(Studygroup studygroup, String email) {
         studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
-        return studygroupRepository.save(studygroup);
+
+        studygroup.setTimeSchedules(
+                ScheduleConverter.repeatedScheduleToScheduleListConverter(studygroup)
+        );
+
+        Studygroup createdStudygroup = studygroupRepository.save(studygroup);
+
+        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
+
+        return createdStudygroup;
     }
 
     @Override
@@ -72,9 +82,13 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getIntroduction()).ifPresent(findStudygroup::setIntroduction);
         Optional.ofNullable(studygroup.getMemberCountMin()).ifPresent(findStudygroup::setMemberCountMin);
         Optional.ofNullable(studygroup.getMemberCountMax()).ifPresent(findStudygroup::setMemberCountMax);
-        Optional.ofNullable(studygroup.getMemberCountCurrent()).ifPresent(findStudygroup::setMemberCountCurrent);
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
+
+        calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
+        findStudygroup.setTimeSchedules(
+                ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
+        );
 
         return studygroupRepository.save(findStudygroup);
     }
@@ -83,32 +97,48 @@ public class StudygroupService implements StudygroupManager{
     public boolean updateStatus(String email, Long studygroupId) {
         studygroupUtils.studygroupLeaderCheck(email, studygroupId);
         Studygroup findStudygroup = get(studygroupId);
-        if (findStudygroup.getIsRecruited()) {
-            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
-        }
-        findStudygroup.setIsRecruited(true);
+
+        // 모집 완료가 되었더라도 다시 모집할 수 있도록 바꿀 수 있게 함
+//        if (findStudygroup.getIsRecruited()) {
+//            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_RECRUITED_NOT_MODIFIED);
+//        }
+
+        findStudygroup.setIsRecruited(!findStudygroup.getIsRecruited());
         studygroupRepository.save(findStudygroup);
         return findStudygroup.getIsRecruited();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Studygroup get(Long studygroupId) {
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
-        // todo : searchTag null 값으로 수동 셋, 확인 필요
-        findStudygroup.setSearchTags(searchTagService.getList(studygroupId));
-
-        // todo : 스터디 멤버 카운트 확인 필요
-        //findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
-        findStudygroup.setMemberCountCurrent(studygroupJoinService.getAllMemberList(studygroupId).size()+1);
+        findStudygroup.setMemberCountCurrent(studygroupJoinService.getStudygroupMemberCount(studygroupId));
 
         return findStudygroup;
     }
 
+    public Page<Studygroup> getWithPagingAndOrder(Integer page, Integer size, String order, Boolean isAscending) {
+        Sort sort = getSortByOrder(order, isAscending);
+
+        return studygroupRepository.findAll(PageRequest.of(page, size, sort));
+    }
+
+    private static Sort getSortByOrder(String order, Boolean isAscending) {
+        StudygroupGetOrder orderEnum = StudygroupGetOrder.valueOfOrder(order);
+        String convertedVariable = orderEnum.getVariable();
+
+        // 오름차순과 내림차순 구분
+        Sort sort = Sort.by(convertedVariable);
+        if( isAscending )   return sort;
+        else                return sort.descending();
+    }
+
     @Override
     public Page<Studygroup> getWithPaging(Integer page, Integer size) {
-        return studygroupRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+        return getWithPagingAndOrder(page, size, "기본값", false);
     }
+
 
     @Override
     public List<Studygroup> getLeaderStudygroupList(String email) {
@@ -138,12 +168,8 @@ public class StudygroupService implements StudygroupManager{
             }
         }
 
-        if (member == null) throw new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        if (member == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_PRIVILEGES_MEMBER_NOT_FOUND);
         findStudygroup.setLeaderMember(member);
         studygroupRepository.save(findStudygroup);
-
-        Member oldLeader = memberUtils.get(email);
-        Member newLeader = member;
-        studygroupJoinService.leaderChanged(newLeader, oldLeader);
     }
 }

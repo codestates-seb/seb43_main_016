@@ -64,17 +64,20 @@ public class Studygroup extends Auditable {
     @Column(name = "is_recruited")
     private Boolean isRecruited;
 
+    @Column(name = "color")
+    private String color;
+
     @ManyToOne(cascade = {PERSIST, MERGE}, fetch = EAGER)
     @JoinColumn(name = "leader_member_id")
     private Member leaderMember;
 
-    @OneToMany(mappedBy = "studygroup", fetch = LAZY)
+    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
     private List<StudygroupJoin> studygroupJoins = new ArrayList<>();
 
     @OneToMany(mappedBy = "studygroup", cascade = {REMOVE}, fetch = LAZY)
     private List<StudygroupPostComment> studygroupPostComments = new ArrayList<>();
 
-    @OneToMany(mappedBy = "studygroup", cascade = {PERSIST, MERGE, REMOVE}, fetch = LAZY)
+    @OneToMany(mappedBy = "studygroup", cascade = ALL, fetch = LAZY)
     private List<SearchTag> searchTags = new ArrayList<>();
 
 

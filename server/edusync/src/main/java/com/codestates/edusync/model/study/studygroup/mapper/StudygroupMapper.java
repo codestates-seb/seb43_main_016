@@ -1,19 +1,16 @@
 package com.codestates.edusync.model.study.studygroup.mapper;
 
-import com.codestates.edusync.exception.BusinessLogicException;
-import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
-import com.codestates.edusync.model.member.entity.Member;
+import com.codestates.edusync.model.common.utils.TagFormatConverter;
+import com.codestates.edusync.model.study.studygroup.dto.CommonStudygroupDto;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.studyaddons.searchtag.entity.SearchTag;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupDto;
 import com.codestates.edusync.model.study.studygroup.dto.StudygroupResponseDto;
 import org.mapstruct.Mapper;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Mapper(componentModel = "spring")
@@ -26,6 +23,13 @@ public interface StudygroupMapper {
      */
     default Studygroup StudygroupDtoPostToStudygroup(StudygroupDto.Post studygroupDto) {
         Studygroup studygroup = new Studygroup();
+        commonStudygroupDtoToEntitySetter(studygroupDto, studygroup);
+        studygroup.setIsRecruited(false);
+        return studygroup;
+    }
+
+    private static <T extends CommonStudygroupDto>
+    void commonStudygroupDtoToEntitySetter(T studygroupDto, Studygroup studygroup) {
         studygroup.setStudyName(studygroupDto.getStudyName());
         studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
         studygroup.setDate(
@@ -44,20 +48,14 @@ public interface StudygroupMapper {
         studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
         studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
         studygroup.setPlatform(studygroupDto.getPlatform());
-        studygroup.setIsRecruited(false);
+        studygroup.setColor(studygroupDto.getColor());
 
-        List<SearchTag> resultTags = new ArrayList<>();
-        studygroupDto.getTags()
-                .forEach((key, value) -> {
-                        SearchTag st = new SearchTag();
-                        st.setTagKey(key);
-                        st.setTagValue(value);
-                        st.setStudygroup(studygroup);
-
-                        resultTags.add(st);
-                });
-        studygroup.setSearchTags(resultTags);
-        return studygroup;
+        studygroup.setSearchTags(
+                TagFormatConverter.mapToList(
+                        studygroupDto.getTags(),
+                        studygroup
+                )
+        );
     }
 
     /**
@@ -94,7 +92,10 @@ public interface StudygroupMapper {
         responseDto.setPlatform(studygroup.getPlatform());
         responseDto.setIntroduction(studygroup.getIntroduction());
         responseDto.setIsRecruited((studygroup.getIsRecruited()));
-        responseDto.setTags(tags);
+
+        responseDto.setTags(
+                TagFormatConverter.listToMap(studygroup.getSearchTags())
+        );
         responseDto.setLeaderNickName(studygroup.getLeaderMember().getNickName());
         responseDto.setLeader(studygroup.getLeaderMember().getNickName().equals(nickName));
         return responseDto;
@@ -109,36 +110,8 @@ public interface StudygroupMapper {
     default Studygroup StudygroupDtoPatchToStudygroup(Long studyGroupId, StudygroupDto.Patch studygroupDto){
         Studygroup studygroup = new Studygroup();
         studygroup.setId(studyGroupId);
-        studygroup.setStudyName(studygroupDto.getStudyName());
-        studygroup.setDaysOfWeek(studygroupDto.getDaysOfWeek().toString());
-        studygroup.setDate(
-                new DateRange(
-                        studygroupDto.getStudyPeriodStart(),
-                        studygroupDto.getStudyPeriodEnd()
-                )
-        );
-        studygroup.setTime(
-                new TimeRange(
-                        studygroupDto.getStudyTimeStart(),
-                        studygroupDto.getStudyTimeEnd()
-                )
-        );
-        studygroup.setIntroduction(studygroupDto.getIntroduction());
-        studygroup.setMemberCountMin(studygroupDto.getMemberCountMin());
-        studygroup.setMemberCountMax(studygroupDto.getMemberCountMax());
-        studygroup.setPlatform(studygroupDto.getPlatform());
+        commonStudygroupDtoToEntitySetter(studygroupDto, studygroup);
 
-        List<SearchTag> resultTags = new ArrayList<>();
-        studygroupDto.getTags()
-                .forEach((key, value) -> {
-                    SearchTag st = new SearchTag();
-                    st.setTagKey(key);
-                    st.setTagValue(value);
-                    st.setStudygroup(studygroup);
-
-                    resultTags.add(st);
-                });
-        studygroup.setSearchTags(resultTags);
         return studygroup;
     }
 
@@ -162,7 +135,12 @@ public interface StudygroupMapper {
         StudygroupResponseDto.DtoList dtoList = new StudygroupResponseDto.DtoList();
         dtoList.setId(studygroup.getId());
         dtoList.setTitle(studygroup.getStudyName());
-        dtoList.setTagValues(studygroup.getSearchTags().stream().map(SearchTag::getTagValue).collect(Collectors.toList()));
+        dtoList.setTagValues(
+                studygroup.getSearchTags()
+                        .stream()
+                        .map(SearchTag::getTagValue)
+                        .collect(Collectors.toList())
+        );
         return dtoList;
     }
 
@@ -172,6 +150,9 @@ public interface StudygroupMapper {
      * @return
      */
     default List<StudygroupResponseDto.DtoList> StudygroupListToStudygroupResponseDtoList(List<Studygroup> studygroups){
-        return studygroups.stream().map(this::StudygroupsToStudygroupResponseDtoList).collect(Collectors.toList());
+        return studygroups.stream()
+                    .map(this::StudygroupsToStudygroupResponseDtoList)
+                    .collect(Collectors.toList()
+                );
     }
 }

@@ -13,4 +13,6 @@ public interface CalendarRepository extends JpaRepository<TimeSchedule, Long> {
     List<TimeSchedule> findAllByStudygroupIdAndMemberIsNull(Long studygroupId);
 
     List<TimeSchedule> findAllByTimeStudyTimeStart(LocalDateTime studyTimeStart);
+
+    void deleteAllByStudygroupIdAndMemberNickName(Long studygroupId, String nickName);
 }

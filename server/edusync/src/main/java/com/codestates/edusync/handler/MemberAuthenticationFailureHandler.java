@@ -16,9 +16,13 @@ public class MemberAuthenticationFailureHandler implements AuthenticationFailure
     public void onAuthenticationFailure(HttpServletRequest request,
                                         HttpServletResponse response,
                                         AuthenticationException exception) throws IOException {
-        // 인증 실패 시, 에러 로그를 기록하거나 error response를 전송할 수 있다.
         log.error("# Authentication failed: {}", exception.getMessage());
 
-        ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "Please check your email and password again.");
+        if(exception.getMessage().equals("탈퇴한 회원입니다.")){
+            ErrorResponder.sendErrorResponse(response, HttpStatus.FORBIDDEN, "Member is not active");
+        }else {
+            log.error("# Authentication failed: Please check your email and password again.");
+            ErrorResponder.sendErrorResponse(response, HttpStatus.UNAUTHORIZED, "Please check your email and password again.");
+        }
     }
 }
