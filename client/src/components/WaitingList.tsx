@@ -10,7 +10,9 @@ import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 
 const WaitingList = () => {
-  const [waitingList, setWaitingList] = useState<WaitingStudyGroupItemDto[]>([]);
+  const [waitingList, setWaitingList] = useState<WaitingStudyGroupItemDto[]>(
+    []
+  );
   const isLoggedIn = useRecoilValue(LogInState);
 
   useEffect(() => {
@@ -66,8 +68,7 @@ const WaitingList = () => {
 
 export default WaitingList;
 
-const WaitingListWrapper = styled.div`
-`;
+const WaitingListWrapper = styled.div``;
 
 const WaitingListTitle = styled.div`
   margin-bottom: 10px;
@@ -76,14 +77,23 @@ const WaitingListTitle = styled.div`
 `;
 
 const ItemList = styled.div`
+  width: 600px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ItemWrapper = styled.div`
-  border: 1px solid #416bac;
+  width: 600px;
+  background-color: #fff;
+  border: 1px solid #ccc;
   border-radius: 4px;
   padding: 10px;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ItemTitle = styled.div`

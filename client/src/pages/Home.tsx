@@ -151,7 +151,7 @@ const IntroPage = styled.div`
   h2 {
     font-size: 40px;
     color: #fff;
-    margin-bottom: 24px;
+    margin-bottom: 30px;
   }
 `;
 
