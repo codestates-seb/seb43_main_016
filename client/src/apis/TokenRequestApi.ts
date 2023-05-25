@@ -8,9 +8,9 @@ let tokenRequestApi = axios.create({
   headers: {
     "Content-Type": "application/json", // 요청 헤더(content type) 설정
   },
-}) as AxiosInstance & { setAccessToken: (token: string) => void };
+}) as AxiosInstance & { setAccessToken: (token: string | null) => void };
 
-tokenRequestApi.setAccessToken = (token: string): void => {
+tokenRequestApi.setAccessToken = (token: string | null): void => {
   if (token) {
     accessToken = token;
     extendAccessToken();
@@ -29,7 +29,6 @@ tokenRequestApi.interceptors.request.use(
     return Promise.reject(error);
   }
 );
-
 
 const extendAccessToken = async () => {
   const expirationTime = 4 * 60 * 1000;
@@ -50,7 +49,6 @@ const extendAccessToken = async () => {
       const { authorization: newAccessToken } = response.headers;
       tokenRequestApi.setAccessToken(newAccessToken);
       console.log("accessToken 갱신됨");
-
     } catch (error) {
       console.error("accessToken 갱신 실패:", error);
     }

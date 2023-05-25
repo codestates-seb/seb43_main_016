@@ -12,6 +12,7 @@ import { CommentDto } from "../apis/CommentApi";
 import StudyComment from "../components/StudyComment";
 import tokenRequestApi from "../apis/TokenRequestApi";
 import StudyCommentList from "../components/StudyCommentList";
+import StudyListTag from "../components/StudyListTag";
 
 const StudyContent = () => {
   const initialTag = { [""]: [""] };
@@ -154,6 +155,7 @@ const StudyContent = () => {
                 <StudyContentTag>
                   {content?.tags && (
                     <>
+<<<<<<< HEAD
                       {Object.entries(content.tags).map(([category, tags]) => (
                         <div key={category}>
                           {category}:
@@ -161,6 +163,10 @@ const StudyContent = () => {
                             <span key={tag}>{tag}</span>
                           ))}
                         </div>
+=======
+                      {Object.entries(content.tags).map(([_category, tags]) => (
+                        <StudyListTag item={tags} />
+>>>>>>> 3b3eab1df8503c4690eded767b5dcb93fcb87bc1
                       ))}
                     </>
                   )}

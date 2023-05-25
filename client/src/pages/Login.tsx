@@ -12,10 +12,12 @@ import { setRefreshToken } from "./utils/Auth";
 import GoogleButton from "../components/social-login-button/GoogleButton";
 import KakaoButton from "../components/social-login-button/KakaoButton";
 import NaverButton from "../components/social-login-button/NaverButton";
+import MemberRestoreModal from "../components/modal/MemberRestoreModal";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [memberRestoreModalOpen, setMemberRestoreModalOpen] = useState(false);
   const setIsLoggedIn = useSetRecoilState(LogInState);
 
   const navigate = useNavigate();
@@ -45,7 +47,7 @@ const Login = () => {
       },
       onError: (error) => {
         if (error.message === "Request failed with status code 403") {
-          alert("탈퇴 처리된 회원입니다.");
+          setMemberRestoreModalOpen(true);
         } else {
           alert("이메일과 패스워드를 올바르게 입력했는지 확인해주세요!!");
         }
@@ -98,6 +100,11 @@ const Login = () => {
           <button onClick={handleLoginButton}>Log In</button>
         </ButtonDiv>
       </LoginDiv>
+      <MemberRestoreModal
+        isOpen={memberRestoreModalOpen}
+        closeModal={() => setMemberRestoreModalOpen(false)}
+        email={email}
+      />
       <SignUpLink to="/signup">회원가입하러 가기</SignUpLink>
       <SocialLoginDiv>
         <GoogleButton />
