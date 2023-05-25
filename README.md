@@ -55,19 +55,20 @@
 </div>
 
 ✨프론트엔드 기술 스택✨
+
 <div align="center">
 <a href="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=black">
 <img src="https://img.shields.io/badge/React-61DAFB?style=flat&logo=React&logoColor=black"/>
 </a>
-<a href="https://img.shields.io/badge/CreateReactApp-09D3AC?style=flat&logo=CreateReactApp&logoColor=white">
-<img src="https://img.shields.io/badge/CreateReactApp-09D3AC?style=flat&logo=CreateReactApp&logoColor=white"/>
+<a href="https://img.shields.io/badge/vite-646cff?style=flat&logo=vite&logoColor=white">
+<img src="https://img.shields.io/badge/vite-646cff?style=flat&logo=vite&logoColor=white"/>
 <a href="https://img.shields.io/badge/ReactRouter-CA4245?style=flat&logo=ReactRouter&logoColor=white">
 </a>
 <a href="https://img.shields.io/badge/ReactRouter-CA4245?style=flat&logo=ReactRouter&logoColor=white">
 <img src="https://img.shields.io/badge/ReactRouter-CA4245?style=flat&logo=ReactRouter&logoColor=white"/>
 </a>
-<a href="https://img.shields.io/badge/Zustand-764ABC?style=flat&logo=Zustand&logoColor=white">
-<img src="https://img.shields.io/badge/Zustand-764ABC?style=flat&logo=Zustand&logoColor=white"/>
+<a href="https://img.shields.io/badge/Recoil-3578e5?style=flat&logo=Recoil&logoColor=white">
+<img src="https://img.shields.io/badge/Recoil-3578e5?style=flat&logo=Recoil&logoColor=white"/>
 </a>
 <a href="https://img.shields.io/badge/axios-5A29E4?style=flat&logo=axios&logoColor=white">
 <img src="https://img.shields.io/badge/axios-5A29E4?style=flat&logo=axios&logoColor=white"/>
@@ -79,6 +80,11 @@
 </a>
 <a href="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=black">
 <img src="https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=JavaScript&logoColor=black"/>
+</a>
+<a href="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white">
+</a>
+<a href="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white">
+<img src="https://img.shields.io/badge/TypeScript-3178C6?style=flat&logo=TypeScript&logoColor=white"/>
 </a>
 <a href="https://img.shields.io/badge/CssModules-1572B6?style=flat&logo=css3&logoColor=white">
 <img src="https://img.shields.io/badge/CssModules-1572B6?style=flat&logo=css3&logoColor=white"/>
@@ -93,26 +99,25 @@
 <img src="https://img.shields.io/badge/ESLint-4B32C3?style=flat&logo=ESLint&logoColor=white"/>
 </a>
 
-
 </div>
 
 ## Git
 
 ### Commit Message
 
-|Message|설명|
-|:---:|:---|
-|[feat]|새로운 기능을 추가할 경우|
-|[fix]|버그를 고친 경우|
-|[design]|CSS 등 사용자 UI 디자인 변경|
-|[style]|코드 포맷변경, 세미콜론 누락, 코드수정이 없는 경우.|
-|[refactor] |프로덕션 코드 리펙토링할 경우|
-|[comment]|필요한 주석 추가 및 변경|
-|[docs]|문서를 수정한 경우|
-|[test]|테스트 코드 작업을할 경우|
-|[chore]|빌드 테스트 업데이트, 패키지 매니저를 설정하는 경우|
-|[rename]|파일 혹은 폴더명을 수정하거나 옮기는 작업만 하는 경우|
-|[remove]|삭제하는 작업만 수행한 경우|
-|[init]|브랜치 초기화 및 초기셋팅 관련된 설정일 경우|
+|  Message   | 설명                                                  |
+| :--------: | :---------------------------------------------------- |
+|   [feat]   | 새로운 기능을 추가할 경우                             |
+|   [fix]    | 버그를 고친 경우                                      |
+|  [design]  | CSS 등 사용자 UI 디자인 변경                          |
+|  [style]   | 코드 포맷변경, 세미콜론 누락, 코드수정이 없는 경우.   |
+| [refactor] | 프로덕션 코드 리펙토링할 경우                         |
+| [comment]  | 필요한 주석 추가 및 변경                              |
+|   [docs]   | 문서를 수정한 경우                                    |
+|   [test]   | 테스트 코드 작업을할 경우                             |
+|  [chore]   | 빌드 테스트 업데이트, 패키지 매니저를 설정하는 경우   |
+|  [rename]  | 파일 혹은 폴더명을 수정하거나 옮기는 작업만 하는 경우 |
+|  [remove]  | 삭제하는 작업만 수행한 경우                           |
+|   [init]   | 브랜치 초기화 및 초기셋팅 관련된 설정일 경우          |
 
 <br/>
