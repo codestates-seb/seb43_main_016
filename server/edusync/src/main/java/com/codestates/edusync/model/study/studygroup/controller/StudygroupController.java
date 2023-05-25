@@ -123,6 +123,20 @@ public class StudygroupController {
         return ResponseEntity.ok(new MultiResponseDto<>(responseDtoList,studygroupPage));
     }
 
+    @GetMapping(STUDYGROUP_DEFAULT_URI + "s/order")
+    public ResponseEntity getStudygroupPage(@RequestParam("page") @Positive Integer page,
+                                            @RequestParam("size") @Positive Integer size,
+                                            @RequestParam("order") String order,
+                                            @RequestParam("isAscending") Boolean isAscending){
+
+        Page<Studygroup> studygroupPage = studygroupService.getWithPagingAndOrder(page-1, size, order, isAscending);
+
+        List<StudygroupResponseDto.DtoList> responseDtoList =
+                studygroupMapper.StudygroupListToStudygroupResponseDtoList(studygroupPage.getContent());
+
+        return ResponseEntity.ok(new MultiResponseDto<>(responseDtoList,studygroupPage));
+    }
+
     /**
      * 스터디 삭제
      * @param studygroupId
