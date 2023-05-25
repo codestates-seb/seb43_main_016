@@ -182,13 +182,13 @@ const ProfileInfo = () => {
 export default ProfileInfo;
 
 const ProfileInfoContainer = styled.div`
-  width: 100%;
+  width: 900px;
   height: 100%;
-  padding-top: 100px;
+  padding: 100px 0 0 50px;
 `;
 
 const ProfileBaseWrapper = styled.div`
-  width: 900px;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -226,11 +226,14 @@ const ProfileBaseInfo = styled.div`
 const IntroduceAndDesired = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
-  width: 100%;
+  width: 900px;
 
   h4 {
+    width: 90%;
+    text-align: left;
     color: #2759a2;
     font-size: 21px;
     font-weight: 700;
@@ -241,14 +244,14 @@ const IntroduceAndDesired = styled.div`
 const IntroduceAndDesiredInput = styled.input`
   margin-bottom: 10px;
   padding: 8px;
-  width: 100%;
+  width: 90%;
   height: 200px;
 `;
 
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
 `;
 
 const EditButton = styled.button`
