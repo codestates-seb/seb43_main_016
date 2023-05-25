@@ -34,6 +34,7 @@ export const getWaitingStudyGroupList =
   async (): Promise<WaitingStudyGroupListDto> => {
     const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(
       `/studygroup/myList?approved=false`
+
     );
     const data = response.data;
     return data;
@@ -326,4 +327,5 @@ export async function changeStudyGroupRecruitmentStatus(
     config
   );
   console.log("스터디 모집 상태를 변경했습니다", response);
+
 }

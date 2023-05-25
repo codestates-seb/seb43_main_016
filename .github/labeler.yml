@@ -1,0 +1,12 @@
+audit: audit/**/*
+auth: auth/**/*
+config: config/**/*
+exception: exception/**/*
+member: member/**/*
+plancalendar: plancalendar/**/*
+postcomment: postcomment/**/*
+studygroup: studygroup/**/*
+studygroupjoin: studygroupjoin
+flyway: /**/*.sql
+yml: /**/*.yml
+gradle: /**/*.gradle
