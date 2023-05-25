@@ -10,13 +10,15 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-import { useRecoilValue } from "recoil";
+import { useRecoilState } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import { useNavigate } from "react-router-dom";
 import CheckPasswordModal from "../components/modal/CheckPasswordModal";
+import tokenRequestApi from "../apis/TokenRequestApi";
+import { removeTokens } from "./utils/Auth";
 
 const ProfileInfo = () => {
-  const isLoggedIn = useRecoilValue(LogInState);
+  const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoResponseDto | null>(
     null
@@ -70,7 +72,7 @@ const ProfileInfo = () => {
       ...prevIntroduceInfo,
       [name]: value,
     }));
-    console.log(introduceInfo)
+    console.log(introduceInfo);
   };
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
@@ -98,10 +100,12 @@ const ProfileInfo = () => {
 (소셜 로그인 회원의 경우, 탈퇴 후 재로그인시 자동으로 계정이 복구됩니다.)`
       );
       if (confirmed) {
+        navigate("/");
         await deleteMember();
         alert("회원탈퇴가 완료되었습니다.");
-        localStorage.clear();
-        navigate("/");
+        tokenRequestApi.setAccessToken(null);
+        removeTokens();
+        setIsLoggedIn(false);
       } else {
         alert("회원탈퇴가 취소되었습니다.");
       }
