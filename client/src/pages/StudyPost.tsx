@@ -27,8 +27,8 @@ const StudyPost = () => {
     useState<string>("프론트엔드");
   const [selectedPeriodStart, setSelectedPeriodStart] = useState<string>("");
   const [selectedPeriodEnd, setSelectedPeriodEnd] = useState<string>("");
-  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("00:00");
-  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("00:00");
+  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("12:00");
+  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("12:00");
   const isLoggedIn = useRecoilValue(LogInState);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
