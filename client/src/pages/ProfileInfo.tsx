@@ -44,7 +44,6 @@ const ProfileInfo = () => {
         setMemberInfo(info);
       } catch (error) {
         alert("로그인이 필요합니다.");
-        console.error(error);
       }
     };
     fetchMemberInfo();
@@ -66,13 +65,12 @@ const ProfileInfo = () => {
   const handleIntroduceEditClick = () => {
     setIsIntroduceEdit(true);
   };
-  const handleIntroduceChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleIntroduceChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setIntroduceInfo((prevIntroduceInfo) => ({
       ...prevIntroduceInfo,
       [name]: value,
     }));
-    console.log(introduceInfo);
   };
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
@@ -86,7 +84,6 @@ const ProfileInfo = () => {
       setIsIntroduceEdit(false);
       location.reload();
     } catch (error) {
-      console.error(error);
       setIsIntroduceEdit(false);
     }
   };
@@ -96,7 +93,7 @@ const ProfileInfo = () => {
     try {
       const confirmed = window.confirm(
         `정말로 회원탈퇴하시겠습니까?
-        
+
 (소셜 로그인 회원의 경우, 탈퇴 후 재로그인시 자동으로 계정이 복구됩니다.)`
       );
       if (confirmed) {
@@ -109,9 +106,7 @@ const ProfileInfo = () => {
       } else {
         alert("회원탈퇴가 취소되었습니다.");
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
   return (
     <Wrapper>
@@ -134,22 +129,20 @@ const ProfileInfo = () => {
         {!isIntroduceEdit ? (
           <>
             <h4>자기소개</h4>
-            <IntroduceAndDesiredInput value={memberInfo?.aboutMe} disabled />
+            <IntroduceAndDesiredTextarea value={memberInfo?.aboutMe} disabled />
             <h4>함께하고 싶은 동료</h4>
-            <IntroduceAndDesiredInput value={memberInfo?.withMe} disabled />
+            <IntroduceAndDesiredTextarea value={memberInfo?.withMe} disabled />
           </>
         ) : (
           <>
             <h4>자기소개</h4>
-            <IntroduceAndDesiredInput
-              type="text"
+            <IntroduceAndDesiredTextarea
               name="aboutMe"
               placeholder={memberInfo?.aboutMe}
               onChange={handleIntroduceChange}
             />
             <h4>함께하고 싶은 동료</h4>
-            <IntroduceAndDesiredInput
-              type="text"
+            <IntroduceAndDesiredTextarea
               name="withMe"
               placeholder={memberInfo?.withMe}
               onChange={handleIntroduceChange}
@@ -159,9 +152,16 @@ const ProfileInfo = () => {
         <ButtonWrapper>
           <ExitEditButton onClick={handleDeleteClick}>회원탈퇴</ExitEditButton>
           {!isIntroduceEdit ? (
-            <EditButton onClick={handleIntroduceEditClick}>Edit</EditButton>
+            <EditButton
+              id="introduceEditButton"
+              onClick={handleIntroduceEditClick}
+            >
+              Edit
+            </EditButton>
           ) : (
-            <EditButton onClick={handleSaveClick}>Save</EditButton>
+            <EditButton id="introduceEditButton" onClick={handleSaveClick}>
+              Save
+            </EditButton>
           )}
         </ButtonWrapper>
       </IntroduceAndDesired>
@@ -237,11 +237,24 @@ const IntroduceAndDesired = styled.div`
   }
 `;
 
-const IntroduceAndDesiredInput = styled.input`
+const IntroduceAndDesiredTextarea = styled.textarea`
   margin-bottom: 10px;
   padding: 8px;
   width: 100%;
   height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  transition: all 0.3s;
+
+  &:disabled {
+    background-color: #fff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #4d74b1;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -255,13 +268,19 @@ const EditButton = styled.button`
   height: 40px;
   margin-bottom: 10px;
   padding: 8px 16px;
-  background-color: #4d74b1;
+  background-color: ${props =>
+    props.id === "introduceEditButton" ? "#2b8a3e" : "#4d74b1"};
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-`;
+  transition: background-color 0.3s ease-in-out;
 
+  &:hover {
+    background-color: ${props =>
+      props.id === "introduceEditButton" ? "#1d6530" : "#375f8d"};
+  }
+`;
 const ExitEditButton = styled.button`
   margin-bottom: 10px;
   padding: 8px 16px;
@@ -270,6 +289,7 @@ const ExitEditButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 
   &:hover {
     background-color: #5a0202;
