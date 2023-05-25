@@ -7,33 +7,23 @@ import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
-import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
 import com.codestates.edusync.model.study.studygroup.utils.ScheduleConverter;
+import com.codestates.edusync.model.study.studygroup.utils.StudygroupGetOrder;
 import com.codestates.edusync.model.study.studygroupjoin.entity.StudygroupJoin;
 import com.codestates.edusync.model.study.studygroupjoin.service.StudygroupJoinService;
 import com.codestates.edusync.model.studyaddons.searchtag.service.SearchTagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
-import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import java.time.Duration;
-import java.time.LocalDateTime;
-import java.time.Period;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @RequiredArgsConstructor
 @Transactional
@@ -95,7 +85,6 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
-        // FIXME: 2023-05-22 프론트로부터 스케쥴 변경 내용이 없을 때, status 하나 받아서 아래 로직을 처리하지 않도록 변경 해야함
         calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
         findStudygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
@@ -129,10 +118,28 @@ public class StudygroupService implements StudygroupManager{
         return findStudygroup;
     }
 
+    public Page<Studygroup> getWithPagingAndOrder(Integer page, Integer size, String order) {
+        Sort sort = getSortByOrder(order);
+
+        return studygroupRepository.findAll(PageRequest.of(page, size, sort));
+    }
+
+    private static Sort getSortByOrder(String order) {
+        StudygroupGetOrder orderEnum = StudygroupGetOrder.valueOfOrder(order);
+        String convertedVariable = orderEnum.getVariable();
+
+        Sort sort = Sort.by(convertedVariable);
+        if( orderEnum.getMethod().equals("descending") ) {
+            sort.descending();
+        }
+        return sort;
+    }
+
     @Override
     public Page<Studygroup> getWithPaging(Integer page, Integer size) {
-        return studygroupRepository.findAll(PageRequest.of(page, size, Sort.by("id").descending()));
+        return getWithPagingAndOrder(page, size, "id");
     }
+
 
     @Override
     public List<Studygroup> getLeaderStudygroupList(String email) {
