@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import StudyListTag from "../components/StudyListTag";
 import studyImage from "../assets/studyImage.webp";
+import ListFilter from "../components/ListFilter";
 
 const StudyList = () => {
   interface StudyListDto {
@@ -43,7 +44,12 @@ const StudyList = () => {
     <StudyListContainer>
       <StudyListBody>
         <StudyListTop>
-          <h2>여러분의 스터디를 만들어보세요!</h2>
+          <div>
+            <h2>여러분의 스터디를 만들어보세요!</h2>
+            <div>
+              <ListFilter />
+            </div>
+          </div>
           <Link to="/studypost">
             <StudyPostButton>스터디 모집!</StudyPostButton>
           </Link>
@@ -78,7 +84,7 @@ const StudyList = () => {
 const StudyListContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e0e0e0;
+  background-color: #e9e9e9;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -88,7 +94,7 @@ const StudyListContainer = styled.div`
 const StudyListBody = styled.div`
   width: 960px;
   height: 100%;
-  padding-top: 90px;
+  padding: 100px 0;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -102,13 +108,16 @@ const StudyListTop = styled.div`
   margin-bottom: 30px;
   justify-content: space-between;
   align-items: center;
-
+  div {
+    text-align: start;
+    margin-left: 10px;
+  }
   h2 {
     text-align: left;
     font-size: 2rem;
     color: #1f1f1f;
     font-weight: 700;
-    margin-left: 20px;
+    margin-left: 10px;
   }
 `;
 

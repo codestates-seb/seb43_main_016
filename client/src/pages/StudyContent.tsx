@@ -113,7 +113,11 @@ const StudyContent = () => {
           {!fetching && (
             <div key={content?.id}>
               <StudyContentTop>
-                {!isRecruiting ? <span>모집중</span> : <span>모집 완료</span>}
+                {!isRecruiting ? (
+                  <span>모집중</span>
+                ) : (
+                  <span className="recruited">모집 완료</span>
+                )}
                 <StudyContentTitle>
                   <h2>{content?.studyName}</h2>
                   <StudyContentEdit>
@@ -155,7 +159,6 @@ const StudyContent = () => {
                 <StudyContentTag>
                   {content?.tags && (
                     <>
-<<<<<<< HEAD
                       {Object.entries(content.tags).map(([category, tags]) => (
                         <div key={category}>
                           {category}:
@@ -163,10 +166,6 @@ const StudyContent = () => {
                             <span key={tag}>{tag}</span>
                           ))}
                         </div>
-=======
-                      {Object.entries(content.tags).map(([_category, tags]) => (
-                        <StudyListTag item={tags} />
->>>>>>> 3b3eab1df8503c4690eded767b5dcb93fcb87bc1
                       ))}
                     </>
                   )}
@@ -197,7 +196,7 @@ const StudyContent = () => {
 const StudyContentContainer = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #e0e0e0;
+  background-color: #e9e9e9;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -205,7 +204,7 @@ const StudyContentContainer = styled.div`
 
 const StudyContentBody = styled.div`
   width: 960px;
-  padding-top: 120px;
+  padding: 120px 0 100px;
   background-color: #fff;
   display: flex;
   flex-direction: column;
@@ -222,9 +221,14 @@ const StudyContentTop = styled.div`
   align-items: flex-start;
 
   span {
-    font-size: 1.5rem;
+    font-size: 20px;
     font-weight: 700;
     color: #2759a2;
+  }
+  .recruited {
+    font-size: 20px;
+    font-weight: 700;
+    color: #666;
   }
 `;
 
@@ -238,19 +242,22 @@ const StudyContentTitle = styled.div`
     font-size: 2rem;
     font-weight: 700;
     color: #1f1f1f;
+    text-align: left;
   }
 `;
 
 const StudyContentEdit = styled.div`
-  width: 70px;
+  width: 100px;
   display: flex;
   justify-content: space-between;
   align-items: flex-end;
 
-  div {
+  button {
+    width: 50px;
     font-size: 0.875rem;
     color: #858da8;
     cursor: pointer;
+    padding: 0;
   }
 `;
 

@@ -9,6 +9,7 @@ import {
 } from "../../apis/StudyGroupApi";
 import { useParams } from "react-router-dom";
 import { BsCheckCircle, BsFillXCircleFill } from "react-icons/bs";
+import { MemberManageContainer, MemberManageTitle } from "./MemberManage";
 
 interface CandidateManageProps {
   studyLeader: string | undefined;
@@ -47,8 +48,10 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
   };
 
   return (
-    <div>
-      <div>회원의 가입 대기 리스트</div>
+    <MemberManageContainer>
+      <MemberManageTitle>
+        <h3>가입 신청 대기 리스트</h3>
+      </MemberManageTitle>
       <>
         {waitingList &&
           waitingList.nickName.map((nickname, index) => (
@@ -63,7 +66,7 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
             </div>
           ))}
       </>
-    </div>
+    </MemberManageContainer>
   );
 };
 

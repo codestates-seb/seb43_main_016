@@ -52,8 +52,14 @@ const GNB = () => {
             <Link to="/studypost">
               <span>스터디 등록</span>
             </Link>
+            <Link to="/profile/manage-group">
+              <span>스터디 관리</span>
+            </Link>
             <Link to="/calendar">
               <span>나의 캘린더</span>
+            </Link>
+            <Link to="/profile">
+              <span>나의 프로필</span>
             </Link>
           </GNBMenuBlock>
           <User
@@ -85,6 +91,10 @@ const GNBMenuBlock = styled(GNBBlock)`
   width: 370px;
   justify-content: space-between;
 
+  span {
+    font-size: 15px;
+    font-weight: 500;
+  }
   span:hover {
     opacity: 80%;
   }

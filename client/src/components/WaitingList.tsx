@@ -5,12 +5,14 @@ import {
   getWaitingStudyGroupList,
   cancelStudyGroupApplication,
 } from "../apis/StudyGroupApi";
-import { GiCancel } from "react-icons/gi";
+import { FiDelete } from "react-icons/fi";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 
 const WaitingList = () => {
-  const [waitingList, setWaitingList] = useState<WaitingStudyGroupItemDto[]>([]);
+  const [waitingList, setWaitingList] = useState<WaitingStudyGroupItemDto[]>(
+    []
+  );
   const isLoggedIn = useRecoilValue(LogInState);
 
   useEffect(() => {
@@ -42,7 +44,7 @@ const WaitingList = () => {
       <ItemWrapper key={id}>
         <ItemTitle>{title}</ItemTitle>
         <CancelButton onClick={() => handleCancelButton(id)}>
-          <GiCancel />
+          <FiDelete size="21" />
         </CancelButton>
       </ItemWrapper>
     );
@@ -50,7 +52,7 @@ const WaitingList = () => {
 
   return (
     <WaitingListWrapper>
-      <WaitingListTitle>신청중인 스터디</WaitingListTitle>
+      <WaitingListTitle>스터디 가입 신청</WaitingListTitle>
       <ItemList>
         {waitingList.map((study) => (
           <WaitingStudyGroupItem
@@ -66,36 +68,56 @@ const WaitingList = () => {
 
 export default WaitingList;
 
-const WaitingListWrapper = styled.div`
-`;
+const WaitingListWrapper = styled.div``;
 
-const WaitingListTitle = styled.div`
-  margin-bottom: 10px;
-  font-weight: bold;
-  color: #416bac;
+const WaitingListTitle = styled.h2`
+  width: 700px;
+  margin: 24px 0 20px;
+  font-size: 20px;
+  font-weight: 700;
+  text-align: left;
+  color: #2759a2;
 `;
 
 const ItemList = styled.div`
+  width: 700px;
   display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ItemWrapper = styled.div`
-  border: 1px solid #416bac;
+  width: 700px;
+  height: 60px;
+  background-color: #fff;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  padding: 10px;
+  padding: 20px 30px;
   margin-bottom: 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const ItemTitle = styled.div`
   margin-bottom: 5px;
-  color: #416bac;
+  color: #1f1f1f;
+  font-size: 18px;
+  font-weight: 700;
+  text-align: left;
 `;
 
 const CancelButton = styled.button`
-  background-color: #416bac;
+  width: 27px;
+  height: 27px;
+  background-color: #999;
   color: #ffffff;
   border: none;
   border-radius: 4px;
   padding: 5px;
   cursor: pointer;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
