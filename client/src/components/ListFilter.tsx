@@ -38,24 +38,39 @@ const ListFilter = () => {
   };
 
   return (
-    <>
+    <ListFilterContainer>
       <select
         name="listFilter"
         value={selectedOption}
         onChange={handleOptionChange}
       >
         <option value="기본값">기본값</option>
-        <option value="수정순">수정순</option>
+        <option value="수정순">업데이트순</option>
         <option value="카테고리순">카테고리순</option>
-        <option value="모집순">모집순</option>
+        <option value="모집순">모집중/완료</option>
       </select>
       {renderFilterOptions()}
-    </>
+    </ListFilterContainer>
   );
 };
+
+const ListFilterContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  select {
+    width: 100px;
+    height: 30px;
+    padding: 2px 3px;
+    border: none;
+    border-radius: 3px;
+  }
+`;
+
 const CategoryOptions = styled.div`
   display: flex;
-  align-items: baseline;
+  align-items: center;
 `;
 
 const CategoryLabel = styled.label`
