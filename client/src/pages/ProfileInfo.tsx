@@ -67,13 +67,12 @@ const ProfileInfo = () => {
   const handleIntroduceEditClick = () => {
     setIsIntroduceEdit(true);
   };
-  const handleIntroduceChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleIntroduceChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setIntroduceInfo((prevIntroduceInfo) => ({
       ...prevIntroduceInfo,
       [name]: value,
     }));
-    console.log("?", introduceInfo);
   };
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
@@ -143,16 +142,14 @@ const ProfileInfo = () => {
           <>
             <h4>자기소개</h4>
             <IntroduceAndDesiredInput
-              type="text"
               name="aboutMe"
-              placeholder={memberInfo?.aboutMe}
+              placeholder="자기소개를 입력해주세요."
               onChange={handleIntroduceChange}
             />
             <h4>함께하고 싶은 동료</h4>
             <IntroduceAndDesiredInput
-              type="text"
               name="withMe"
-              placeholder={memberInfo?.withMe}
+              placeholder="함께 하고 싶은 동료상을 입력해주세요."
               onChange={handleIntroduceChange}
             />
           </>
@@ -242,9 +239,12 @@ const IntroduceAndDesired = styled.div`
   }
 `;
 
-const IntroduceAndDesiredInput = styled.input`
+const IntroduceAndDesiredInput = styled.textarea`
+  background-color: #ffffff;
+  border: #ffffff;
+  vertical-align: top;
   margin-bottom: 10px;
-  padding: 8px;
+  padding: 30px;
   width: 90%;
   height: 200px;
 `;
