@@ -60,7 +60,7 @@ public class MemberService {
         member.setWithMe("");
 
         if (member.getProfileImage() == null || member.getProfileImage().isEmpty()) {
-            member.setProfileImage("https://avatars.githubusercontent.com/u/120456261?v=4");
+            member.setProfileImage("https://www.gravatar.com/avatar/HASH");
         }
 
         Member savedMember = memberRepository.save(member);
