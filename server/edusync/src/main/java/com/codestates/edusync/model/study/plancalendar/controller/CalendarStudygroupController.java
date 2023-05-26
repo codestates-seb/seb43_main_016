@@ -1,9 +1,9 @@
 package com.codestates.edusync.model.study.plancalendar.controller;
 
-import com.codestates.edusync.model.common.dto.TimeRangeDto;
+import com.codestates.edusync.model.common.utils.MemberUtils;
+import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupDto;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarStudygroupResponseDto;
-import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleSingleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.mapper.CalendarMapper;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+@Transactional
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/calendars")
@@ -26,6 +28,7 @@ import java.util.List;
 public class CalendarStudygroupController {
     private final CalendarStudygroupService calendarStudygroupService;
     private final CalendarMapper mapper;
+    private final MemberUtils memberUtils;
 
     private static final String DEFAULT_STUDYGROUP_URL = "/studygroups";
 
@@ -33,10 +36,12 @@ public class CalendarStudygroupController {
     public ResponseEntity postCalendarStudygroup(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                                  @Valid @RequestBody CalendarStudygroupDto.Post postDto,
                                                  Authentication authentication) {
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
+
         calendarStudygroupService.createTimeSchedules(
                 studygroupId,
                 mapper.timeSchedulePostDtoListToTimeScheduleList(postDto.getTimeSchedules()),
-                authentication.getPrincipal().toString()
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -47,10 +52,12 @@ public class CalendarStudygroupController {
                                                   @PathVariable("studygroup-id") @Positive Long studygroupId,
                                                   @Valid @RequestBody CalendarStudygroupDto.Patch patchDto,
                                                   Authentication authentication) {
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
+
         calendarStudygroupService.updateTimeSchedule(
                 studygroupId, timeScheduleId,
                 mapper.timeSchedulePatchDtoToTimeSchedule(patchDto.getTimeSchedule()),
-                authentication.getPrincipal().toString()
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -86,9 +93,11 @@ public class CalendarStudygroupController {
     public ResponseEntity deleteCalendarStudygroup(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                    @PathVariable("studygroup-id") @Positive Long studygroupId,
                                                    Authentication authentication) {
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
+
         calendarStudygroupService.deleteTimeScheduleByTimeScheduleId(
                 studygroupId, timeScheduleId,
-                authentication.getPrincipal().toString()
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

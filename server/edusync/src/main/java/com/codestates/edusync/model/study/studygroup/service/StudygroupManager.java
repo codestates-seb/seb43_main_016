@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.studygroup.service;
 
+import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import org.springframework.data.domain.Page;
 
@@ -10,13 +11,14 @@ public interface StudygroupManager {
     /**
      * 스터디 등록
      * @param studygroup
-     * @param email
+     * @param loginMember
      * @return
      */
-    Studygroup create(Studygroup studygroup, String email);
+    Studygroup create(Studygroup studygroup, Member loginMember);
 
     /**
      * 스터디 정보 수정
+     * @param email
      * @param studygroup
      * @return
      */
@@ -24,6 +26,7 @@ public interface StudygroupManager {
 
     /**
      * 스터디 모집 상태 수정
+     * @param email
      * @param studygroupId
      */
     boolean updateStatus(String email, Long studygroupId);
@@ -48,10 +51,11 @@ public interface StudygroupManager {
      * @param email
      * @return
      */
-    List<Studygroup> getLeaderStudygroupList(String email);
+    List<Studygroup> getLeaderStudygroupList(Member loginMember);
 
     /**
      * 스터디 삭제
+     * @param email
      * @param studygroupId
      */
     void delete(String email, Long studygroupId);
@@ -60,6 +64,7 @@ public interface StudygroupManager {
      * 스터디 리더 권한 이전
      * @param email
      * @param studygroupId
+     * @param newLeader
      */
     void patchLeader(String email, Long studygroupId, String newLeader);
 }
