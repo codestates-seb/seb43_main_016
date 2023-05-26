@@ -200,7 +200,7 @@ const StudyBox = styled.div`
     width: 260px;
     height: 30px;
     padding-top: 10px;
-    margin-bottom: 15px;
+    margin-bottom: 10px;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;

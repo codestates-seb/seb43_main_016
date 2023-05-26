@@ -15,7 +15,11 @@ const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
     } else {
       updatedList.splice(checked.indexOf(e.target.value), 1);
     }
-    setChecked(updatedList);
+    setChecked(
+      updatedList.sort(
+        (a, b) => daysOfWeekList.indexOf(a) - daysOfWeekList.indexOf(b)
+      )
+    );
   };
 
   return (
