@@ -49,13 +49,17 @@ public class StudygroupJoinController {
     public ResponseEntity getStudygroupJoins(@PathVariable("studygroup-id") @Positive Long studygroupId,
                                              @RequestParam("join") Boolean join,
                                              Authentication authentication) {
-        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
-
         List<StudygroupJoin> studygroupJoinList;
 
-        if (join) studygroupJoinList = studygroupJoinService.getAllMemberList(studygroupId); // 멤버 리스트
-        else      studygroupJoinList = studygroupJoinService.getAllCandidateList
-                (studygroupId, loginMember.getEmail(), true); // 대기 리스트
+        if (join) {
+            studygroupJoinList = studygroupJoinService.getAllMemberList(studygroupId); // 멤버 리스트
+        }
+        else {
+            Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
+
+            studygroupJoinList = studygroupJoinService.getAllCandidateList
+                    (studygroupId, loginMember.getEmail(), true); // 대기 리스트
+        }
 
         StudygroupJoinDto.Response studygroupJoinDtos =
                 studygroupJoinmapper.studygroupJoinToStudygroupJoinDtos(studygroupJoinList);
