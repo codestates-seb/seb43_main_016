@@ -119,10 +119,10 @@ const ProfileInfo = () => {
           <ProfileInput
             className="nickname-input"
             disabled
-            value={memberInfo?.nickName}
+            value={memberInfo?.nickName || ""}
           />
-          <ProfileInput disabled value={memberInfo?.email} />
-          <ProfileInput disabled value={memberInfo?.roles} />
+          <ProfileInput disabled value={memberInfo?.email || ""} />
+          <ProfileInput disabled value={memberInfo?.roles || ""} />
           <EditButton onClick={handleEditClick}>Edit</EditButton>
         </ProfileBaseInfo>
       </ProfileBaseWrapper>
