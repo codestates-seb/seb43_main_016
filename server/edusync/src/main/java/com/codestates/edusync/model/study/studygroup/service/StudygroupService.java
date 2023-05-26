@@ -85,7 +85,7 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
-        calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
+        calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), findStudygroup.getLeaderMember());
         findStudygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
         );

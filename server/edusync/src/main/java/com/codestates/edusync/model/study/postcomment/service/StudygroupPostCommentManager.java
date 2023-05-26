@@ -14,7 +14,7 @@ public interface StudygroupPostCommentManager {
      * @param comment      댓글
      * @param loginMember  로그인 중인 맴버
      */
-    StudygroupPostComment create(Long studygroupId, StudygroupPostComment comment, String email);
+    StudygroupPostComment create(Long studygroupId, StudygroupPostComment comment, Member loginMember);
 
     /**
      * <h2>댓글을 수정한다</h2>
@@ -24,7 +24,7 @@ public interface StudygroupPostCommentManager {
      * @param comment      댓글
      * @param loginMember  로그인 중인 맴버
      */
-    StudygroupPostComment update(Long studygroupId, Long commentId, StudygroupPostComment comment, String email);
+    StudygroupPostComment update(Long studygroupId, Long commentId, StudygroupPostComment comment, Member loginMember);
 
     /**
      * <h2>댓글들을 전부 조회한다</h2>
@@ -41,7 +41,7 @@ public interface StudygroupPostCommentManager {
      * @param studygroupPostCommentId
      * @param loginMember             로그인 중인 맴버
      */
-    void delete(Long studygroupId, Long studygroupPostCommentId, String email);
+    void delete(Long studygroupId, Long studygroupPostCommentId, Member loginMember);
 
     /**
      * <h2>스터디 모집글의 댓글을 전부 삭제한다</h2>
@@ -49,5 +49,5 @@ public interface StudygroupPostCommentManager {
      * @param studygroupId
      * @param loginMember  로그인 중인 맴버
      */
-    void deleteAllByStudygroupId(Long studygroupId, String email);
+    void deleteAllByStudygroupId(Long studygroupId, Member loginMember);
 }

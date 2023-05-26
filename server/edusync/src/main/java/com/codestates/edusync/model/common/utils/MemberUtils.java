@@ -83,4 +83,12 @@ public class MemberUtils implements MemberVerificationManager {
     public Member getLoggedIn(String email) {
         return get(email);
     }
+
+    public Member getLoggedInWithAuthenticationCheck(Authentication authentication) {
+        if( authentication == null ) {
+            throw new BusinessLogicException(ExceptionCode.AUTHENTICATION_NOT_NULL_ALLOWED);
+        }
+
+        return getLoggedIn(authentication.getPrincipal().toString());
+    }
 }

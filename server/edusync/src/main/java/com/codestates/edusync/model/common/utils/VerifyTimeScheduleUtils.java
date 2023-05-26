@@ -23,8 +23,7 @@ public class VerifyTimeScheduleUtils {
                 .orElseThrow(() -> new BusinessLogicException(ExceptionCode.TIME_SCHEDULE_NOT_FOUND));
     }
 
-    public TimeSchedule findVerifyTimeScheduleWithMember(Long timeScheduleId, String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+    public TimeSchedule findVerifyTimeScheduleWithMember(Long timeScheduleId, Member loginMember) {
         TimeSchedule findTimeSchedule = verifyCalendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         if( findTimeSchedule.getMember() == null ) {
