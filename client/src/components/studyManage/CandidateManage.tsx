@@ -21,13 +21,8 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
     useState<StudyGroupMemberWaitingListDto | null>(null);
   const { id } = useParams<{ id: string }>();
   const isLoggedIn = useRecoilValue(LogInState);
-  console.log(studyLeader);
 
   useEffect(() => {
-    if (!isLoggedIn) {
-      throw new Error("로그인 상태를 확인해주세요");
-    }
-
     const fetchWaitingList = async () => {
       const data = await getStudyGroupMemberWaitingList(Number(id), isLoggedIn);
       setWaitingList(data);
@@ -36,14 +31,22 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
     if (id) {
       fetchWaitingList();
     }
-  }, [id, isLoggedIn]);
+  }, [id]);
 
   const handleApproveCandidate = async (nickname: string) => {
+    // 스터디 원에게는 아예 대기리스트가 보이지 않기 때문에 예외처리 불필요
+    if (nickname === studyLeader) {
+      alert("스터디원은 새로운 스터디원의 허가여부를 결정할 수 없습니다");
+    }
     await approveStudyGroupApplication(Number(id), nickname, isLoggedIn);
     location.reload();
   };
 
   const handleDenyCandidate = async (nickname: string) => {
+    if (nickname === studyLeader) {
+      alert("스터디원은 새로운 스터디원의 허가여부를 결정할 수 없습니다");
+    }
+    // 스터디 원에게는 아예 대기리스트가 보이지 않기 때문에 예외처리 불필요
     await rejectStudyGroupApplication(Number(id), nickname);
     location.reload();
   };

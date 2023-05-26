@@ -125,7 +125,7 @@ export async function updateStudyGroupInfo(
     `/studygroup/${id}`,
     formattedData
   );
-  console.log("성공적으로 스터디 정보를 업데이트 했습니다", response.data);
+  return response;
 }
 
 // ====================== 스터디 그룹 수정 (PATCH) ===========================
@@ -278,8 +278,6 @@ export async function getStudyGroupMemberWaitingList(
   const response = await tokenRequestApi.get<StudyGroupMemberWaitingListDto>(
     `/studygroup/${id}/member?join=false`
   );
-  console.log("성공적으로 대기 리스트를 호출했습니다", response);
-  console.log(response.data);
   return response.data;
 }
 // ====================== 회원 리스트 ===========================
@@ -303,7 +301,7 @@ export async function getStudyGroupMemberList(id: number, isLoggedIn: boolean) {
 export async function exitStudyGroup(id: number, isLoggedIn: boolean) {
   if (!isLoggedIn) throw new Error("Access token is not defined.");
   const response = await tokenRequestApi.delete(`/studygroup/${id}/member`);
-  console.log("스터디에서 탈퇴했습니다", response);
+  return response.data;
 }
 
 // ====================== 스터디 그룹 모집상태 변경 ===========================

@@ -16,7 +16,8 @@ import { useNavigate } from "react-router-dom";
 import CheckPasswordModal from "../components/modal/CheckPasswordModal";
 import tokenRequestApi from "../apis/TokenRequestApi";
 import { removeTokens } from "./utils/Auth";
-import { RenderingState } from "../recoil/atoms/renderingState";
+import { RenderingState } from "../recoil/atoms/RenderingState";
+
 
 const ProfileInfo = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
@@ -88,7 +89,6 @@ const ProfileInfo = () => {
       setIsIntroduceEdit(false);
       location.reload();
     } catch (error) {
-      console.error(error);
       setIsIntroduceEdit(false);
     }
   };
@@ -98,7 +98,7 @@ const ProfileInfo = () => {
     try {
       const confirmed = window.confirm(
         `정말로 회원탈퇴하시겠습니까?
-        
+
 (소셜 로그인 회원의 경우, 탈퇴 후 재로그인시 자동으로 계정이 복구됩니다.)`
       );
       if (confirmed) {
@@ -111,9 +111,7 @@ const ProfileInfo = () => {
       } else {
         alert("회원탈퇴가 취소되었습니다.");
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
   return (
     <ProfileInfoContainer>
@@ -125,10 +123,10 @@ const ProfileInfo = () => {
           <ProfileInput
             className="nickname-input"
             disabled
-            value={memberInfo?.nickName || ""}
+            value={memberInfo?.nickName}
           />
-          <ProfileInput disabled value={memberInfo?.email || ""} />
-          <ProfileInput disabled value={memberInfo?.roles || ""} />
+          <ProfileInput disabled value={memberInfo?.email} />
+          <ProfileInput disabled value={memberInfo?.roles} />
           <EditButton onClick={handleEditClick}>Edit</EditButton>
         </ProfileBaseInfo>
       </ProfileBaseWrapper>
@@ -136,22 +134,22 @@ const ProfileInfo = () => {
         {!isIntroduceEdit ? (
           <>
             <h4>자기소개</h4>
-            <IntroduceAndDesiredInput value={memberInfo?.aboutMe} disabled />
+            <IntroduceAndDesiredTextarea value={memberInfo?.aboutMe} disabled />
             <h4>함께하고 싶은 동료</h4>
-            <IntroduceAndDesiredInput value={memberInfo?.withMe} disabled />
+            <IntroduceAndDesiredTextarea value={memberInfo?.withMe} disabled />
           </>
         ) : (
           <>
             <h4>자기소개</h4>
-            <IntroduceAndDesiredInput
+            <IntroduceAndDesiredTextarea
               name="aboutMe"
-              placeholder="자기소개를 입력해주세요."
+              placeholder="자기소개를 입력해주세요"
               onChange={handleIntroduceChange}
             />
             <h4>함께하고 싶은 동료</h4>
-            <IntroduceAndDesiredInput
+            <IntroduceAndDesiredTextarea
               name="withMe"
-              placeholder="함께 하고 싶은 동료상을 입력해주세요."
+              placeholder="함께하고 싶은 동료상을 입력해주세요"
               onChange={handleIntroduceChange}
             />
           </>
@@ -159,9 +157,16 @@ const ProfileInfo = () => {
         <ButtonWrapper>
           <ExitEditButton onClick={handleDeleteClick}>회원탈퇴</ExitEditButton>
           {!isIntroduceEdit ? (
-            <EditButton onClick={handleIntroduceEditClick}>Edit</EditButton>
+            <EditButton
+              id="introduceEditButton"
+              onClick={handleIntroduceEditClick}
+            >
+              Edit
+            </EditButton>
           ) : (
-            <EditButton onClick={handleSaveClick}>Save</EditButton>
+            <EditButton id="introduceSaveButton" onClick={handleSaveClick}>
+              Save
+            </EditButton>
           )}
         </ButtonWrapper>
       </IntroduceAndDesired>
@@ -241,14 +246,24 @@ const IntroduceAndDesired = styled.div`
   }
 `;
 
-const IntroduceAndDesiredInput = styled.textarea`
-  background-color: #ffffff;
-  border: #ffffff;
-  vertical-align: top;
+const IntroduceAndDesiredTextarea = styled.textarea`
   margin-bottom: 10px;
-  padding: 30px;
+  padding: 8px;
   width: 90%;
   height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  transition: all 0.3s;
+
+  &:disabled {
+    background-color: #fff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #4d74b1;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -262,12 +277,18 @@ const EditButton = styled.button`
   height: 40px;
   margin-bottom: 10px;
   padding: 8px 16px;
-  background-color: #4d74b1;
+  background-color: ${props =>
+    props.id === "introduceEditButton" ? "#4d74b1" : props.id === "introduceSaveButton" ? "#868DAA" : "#4d74b1"};
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
-`;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: ${props =>
+      props.id === "introduceEditButton" ? "#4d74b1" : props.id === "introduceSaveButton" ? "#868DAA" : "#4d74b1"};
+  }`
 
 const ExitEditButton = styled.button`
   margin-bottom: 10px;

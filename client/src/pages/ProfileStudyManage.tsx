@@ -8,7 +8,6 @@ import {
 } from "../apis/StudyGroupApi";
 import styled from "styled-components";
 import StudyInfoEditModal from "../components/modal/StudyInfoEditModal";
-import StudyListTag from "../components/StudyListTag";
 import { useParams, useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
@@ -19,13 +18,20 @@ import { getMemberInfo } from "../apis/MemberApi";
 const ProfileStudyManage = () => {
   const [studyInfo, setStudyInfo] = useState<StudyInfoDto | null>(null);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [LoggedInUser, setLoggedInUser] = useState<string | null>(null);
   const { id } = useParams();
   const parsedId = Number(id);
   const navigate = useNavigate();
   const isLoggedIn = useRecoilValue(LogInState);
   const isRecruiting = studyInfo?.isRecruited;
 
-  if (!isLoggedIn) navigate("/");
+  // TODO : 로그인 상태가 변경되면, 홈 화면으로 이동하는 코드
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/");
+    }
+  }, [isLoggedIn]);
+
   // TODO : 최초 페이지 진입 시 스터디 정보를 조회하는 코드
   useEffect(() => {
     if (!isLoggedIn) {
@@ -44,31 +50,46 @@ const ProfileStudyManage = () => {
         console.log(error);
       }
     };
-
+    getMemberInfo(isLoggedIn).then((data) => {
+      if (data) {
+        setLoggedInUser(data.nickName);
+      } else {
+        setLoggedInUser(null);
+      }
+    });
     fetchStudyGroupInfo();
   }, [parsedId]);
 
   // TODO : 스터디 정보를 수정하는 코드
   const handleEditClick = () => {
+    if (LoggedInUser !== studyInfo?.leaderNickName) {
+      alert("스터디장만 스터디를 수정할 수 있습니다");
+      return;
+    }
     setModalOpen(true);
   };
 
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
+    if (LoggedInUser !== studyInfo?.leaderNickName) {
+      alert("선넘네...?");
+      return;
+    }
+    if (!window.confirm("정말로 스터디를 삭제하시겠습니까?")) return;
     await deleteStudyGroupInfo(parsedId, isLoggedIn);
     navigate("/profile/manage-group");
   };
 
   // TODO : 스터디에서 탈퇴하는 코드
   const handleExitClick = async () => {
-    getMemberInfo(isLoggedIn).then((data) => {
-      if (data.nickName === studyInfo?.leaderNickName) {
-        alert("스터디장은 권한을 멤버에게 위임한 뒤에 탈퇴할 수 있습니다");
-      } else {
-        if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
-        exitStudyGroup(parsedId, isLoggedIn);
-      }
-    });
+    if (LoggedInUser === studyInfo?.leaderNickName) {
+      alert("스터디장은 스터디에서 탈퇴할 수 없습니다");
+      return;
+    }
+    if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
+    exitStudyGroup(parsedId, isLoggedIn);
+    navigate("/profile/manage-group")
+    window.location.reload(); // 페이지를 새로고침
   };
 
   // TODO : 스터디 모집 상태를 수정하는 코드
@@ -79,7 +100,6 @@ const ProfileStudyManage = () => {
         return;
       }
     });
-    if (!window.confirm("스터디원 모집을 완료하시겠습니까?")) return;
     await changeStudyGroupRecruitmentStatus(parsedId, isLoggedIn);
     location.reload();
   };
@@ -97,28 +117,21 @@ const ProfileStudyManage = () => {
       </ManageTitle>
       <ManageInfo>
         {" "}
-        <ManageSpan>인원 모집</ManageSpan>
+        <ManageSpan>모집 상태</ManageSpan>
         {!isRecruiting ? (
-          <button
-            type="button"
-            className="recruit-close-button"
-            onClick={handleRecuitCloseClick}
-          >
-            완료하기
+          <button type="button" onClick={handleRecuitCloseClick}>
+            모집 중
           </button>
         ) : (
-          <div>
-            <strong>모집 완료</strong>
-          </div>
+          <div>모집 완료</div>
         )}
       </ManageInfo>
 
       <ManageInfo>
-        <ManageSpan>스터디장</ManageSpan>{" "}
-        <strong>{studyInfo?.leaderNickName}</strong>
+        <ManageSpan>현재 인원</ManageSpan> {studyInfo?.memberCountCurrent}
       </ManageInfo>
       <ManageInfo>
-        <ManageSpan>현재 인원</ManageSpan> {studyInfo?.memberCountCurrent}
+        <ManageSpan>스터디장</ManageSpan> {studyInfo?.leaderNickName}
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>플랫폼</ManageSpan> {studyInfo?.platform}
@@ -129,15 +142,18 @@ const ProfileStudyManage = () => {
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>태그</ManageSpan>
-        <ManageTag>
-          {studyInfo?.tags && (
-            <>
-              {Object.entries(studyInfo.tags).map(([_category, tags]) => (
-                <StudyListTag item={tags} />
-              ))}
-            </>
-          )}
-        </ManageTag>
+        {studyInfo?.tags && (
+          <>
+            {Object.entries(studyInfo.tags).map(([category, tags]) => (
+              <div key={category}>
+                {category}:
+                {tags.map((tag) => (
+                  <span key={tag}>{tag}</span>
+                ))}
+              </div>
+            ))}
+          </>
+        )}
       </ManageInfo>
       <ManageInfo>
         <ManageSpan>일정</ManageSpan> 매주 {studyInfo?.daysOfWeek}{" "}
@@ -183,8 +199,7 @@ export default ProfileStudyManage;
 const StoryManageContainer = styled.div`
   width: 960px;
   height: 100%;
-  margin-top: 100px;
-  padding: 40px 0 200px;
+  padding: 80px 0 100px;
   background-color: #fff;
   border-radius: 4px;
   display: flex;
@@ -194,7 +209,7 @@ const StoryManageContainer = styled.div`
 `;
 
 const ManageTitle = styled.div`
-  width: 850px;
+  width: 800px;
   margin: 0 0 30px 50px;
   display: flex;
   justify-content: flex-start;
@@ -210,30 +225,11 @@ const ManageTitle = styled.div`
 `;
 
 const ManageInfo = styled.div`
-  width: 850px;
+  width: 800px;
   margin: 0 0 20px 50px;
   display: flex;
   justify-content: flex-start;
   align-items: center;
-
-  strong {
-    color: #1f1f1f;
-  }
-
-  .recruit-close-button {
-    width: 100px;
-    height: 30px;
-    font-size: 14px;
-    color: #ffffff;
-    background-color: #47c4c9;
-
-    &:hover {
-      opacity: 85%;
-    }
-    &:active {
-      opacity: 100%;
-    }
-  }
 
   div {
     text-align: left;
@@ -250,25 +246,6 @@ const ManageSpan = styled.span`
   font-weight: 700;
   color: #2759a2;
   margin-right: 20px;
-`;
-
-const ManageTag = styled.div`
-  width: 240px;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  align-items: center;
-
-  div {
-    height: 22px;
-    color: #39739d;
-    font-size: 13px;
-    border-radius: 4px;
-    background-color: #e1ecf4;
-    padding: 4.8px 6px;
-    margin: 0 4px 4px 0;
-    cursor: pointer;
-  }
 `;
 
 const ManageIntro = styled.p`

@@ -6,7 +6,7 @@ import User from "./User";
 import tokenRequestApi from "../../apis/TokenRequestApi";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
-import { RenderingState } from "../../recoil/atoms/renderingState";
+import { RenderingState } from "../../recoil/atoms/RenderingState";
 
 const GNB = () => {
   const [profileImage, setProfileImage] = useState("");

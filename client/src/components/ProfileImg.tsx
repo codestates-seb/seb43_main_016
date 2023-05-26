@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import { updateMemberProfileImage } from "../apis/MemberApi";
-import { RenderingState } from "../recoil/atoms/renderingState";
+import { RenderingState } from "../recoil/atoms/RenderingState";
 import { useRecoilState } from "recoil";
 
 interface Props {
@@ -90,29 +90,36 @@ const ProfileImgSection = styled.div`
   position: relative;
   cursor: pointer;
 
-  &:hover {
-    background-color: #ccc;
-    border: 2px solid #3383fa;
-
-    &::after {
-      content: "프로필 수정";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-  }
-
-  img {
+  label {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    cursor: pointer;
+    position: relative;
+
+    &:hover {
+      background-color: #ccc;
+      border: 2px solid #3383fa;
+
+      &::after {
+        content: "프로필 수정";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -121,20 +128,6 @@ const ButtonGroup = styled.div`
   justify-content: center;
   margin-top: 10px;
 `;
-
-// const UploadButton = styled.button`
-//   background-color: #337ab7;
-//   color: #fff;
-//   padding: 8px 16px;
-//   border: none;
-//   border-radius: 4px;
-//   font-size: 14px;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: #23527c;
-//   }
-// `;
 
 const CancelButton = styled.button`
   background-color: #ccc;

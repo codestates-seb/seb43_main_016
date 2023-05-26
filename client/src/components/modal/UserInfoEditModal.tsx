@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { updateMember, MemberUpdateDto } from "../../apis/MemberApi";
 import { LogInState } from "../../recoil/atoms/LogInState";
 import { useRecoilValue } from "recoil";
-import { AxiosError } from "axios";
 
 const customStyles = {
   content: {
