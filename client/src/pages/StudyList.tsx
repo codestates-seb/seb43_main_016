@@ -22,6 +22,7 @@ const StudyList = () => {
 
   const [fetching, setFetching] = useState(true);
   const [list, setList] = useState<StudyListDto[]>(initialState);
+  //const [filterData, setFilterData] = useState<StudyListDto[]>(initialState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -52,7 +53,7 @@ const StudyList = () => {
           </Link>
         </StudyListTop>
         <ListFilterWrapper>
-          <ListFilter />
+          <ListFilter setFilterData={setList} />
         </ListFilterWrapper>
         <StudyListMain>
           {!fetching && (

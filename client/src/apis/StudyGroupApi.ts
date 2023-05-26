@@ -1,5 +1,6 @@
 import axios from "axios";
 import tokenRequestApi from "./TokenRequestApi";
+import { eduApi } from "./EduApi";
 
 // ====================== 마이 스터디 리스트 조회 (GET) ===========================
 export interface StudyGroup {
@@ -34,7 +35,6 @@ export const getWaitingStudyGroupList =
   async (): Promise<WaitingStudyGroupListDto> => {
     const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(
       `/studygroup/myList?approved=false`
-
     );
     const data = response.data;
     return data;
@@ -327,5 +327,14 @@ export async function changeStudyGroupRecruitmentStatus(
     config
   );
   console.log("스터디 모집 상태를 변경했습니다", response);
+}
+export interface StudyListOrderDto {
+  data: StudyGroup[];
+}
 
+export async function getStudyListOrder(order: string, isAscending: boolean) {
+  const response = await eduApi.get<StudyListOrderDto>(
+    `/studygroups/order?page=1&size=1000&order=${order}&isAscending=${isAscending}`
+  );
+  return response.data.data;
 }

@@ -19,10 +19,8 @@ const ProfileStudyList = () => {
   });
   const navigate = useNavigate();
 
-
   useEffect(() => {
     if (!isLoggedIn) {
-      alert("로그인이 필요합니다");
       navigate("/login");
     }
     const fetchStudyList = async () => {
@@ -53,7 +51,6 @@ const ProfileStudyList = () => {
     );
   };
 
-
   return (
     <MyStudyListContainer>
       <WaitingList />
@@ -81,7 +78,6 @@ const ProfileStudyList = () => {
         ))}
       </StudyCardContainer>
     </MyStudyListContainer>
-
   );
 };
 
@@ -174,4 +170,3 @@ const Tag = styled.div`
     cursor: pointer;
   }
 `;
-
