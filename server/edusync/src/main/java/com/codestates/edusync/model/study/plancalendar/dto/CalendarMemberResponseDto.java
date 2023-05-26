@@ -1,13 +1,9 @@
 package com.codestates.edusync.model.study.plancalendar.dto;
 
-import com.codestates.edusync.model.common.dto.DateRangeDto;
 import com.codestates.edusync.model.common.dto.TimeRangeDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @NoArgsConstructor
 @Getter

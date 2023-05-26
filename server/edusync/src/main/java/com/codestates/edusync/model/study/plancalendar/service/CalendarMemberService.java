@@ -1,5 +1,7 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
+import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyCalendarUtils;
@@ -11,7 +13,9 @@ import com.codestates.edusync.model.study.plancalendar.repository.CalendarReposi
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import javax.validation.ValidationException;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +30,11 @@ public class CalendarMemberService {
 
     public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
                                                     String email) {
+        if( timeSchedule.getTime().getStudyTimeStart() == null ||
+            timeSchedule.getTime().getStudyTimeEnd() == null ) {
+            throw new BusinessLogicException(ExceptionCode.TIME_SCHEDULE_NOT_NULL_ALLOWED);
+        }
+
         Member loginMember = memberUtils.getLoggedIn(email);
         timeSchedule.setMember(loginMember);
 

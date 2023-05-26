@@ -25,9 +25,11 @@ public class TimeRangeDto {
     @NoArgsConstructor
     @Getter
     public static class Patch {
+        @NotNull
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime studyTimeStart;
 
+        @NotNull
         @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
         private LocalDateTime studyTimeEnd;
     }
