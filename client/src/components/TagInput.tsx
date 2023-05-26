@@ -65,56 +65,92 @@ const TagInput = ({
   }, [selectedCategory]);
 
   return (
-    <>
-      <ul
-        onClick={() => {
-          setViewTag(!viewTag);
-        }}
-      >
-        {selectedCategory} {viewTag ? "⌃" : "⌄"}
-        {viewTag && defaultTag && (
-          <TagDropdown
-            defaultTags={defaultTag[selectedCategory]}
-            setTags={setTags}
-            tags={tags}
-            setIsInput={setIsInput}
+    <TagInputContainer>
+      <TagInputBox>
+        <ul
+          onClick={() => {
+            setViewTag(!viewTag);
+          }}
+        >
+          {selectedCategory} {viewTag ? "⌃" : "⌄"}
+          {viewTag && defaultTag && (
+            <TagDropdown
+              defaultTags={defaultTag[selectedCategory]}
+              setTags={setTags}
+              tags={tags}
+              setIsInput={setIsInput}
+            />
+          )}
+        </ul>
+        {isInput && (
+          <input
+            className="tag-write-input"
+            type="text"
+            value={createdTag}
+            onChange={handleTag}
+            onKeyDown={handleTagPost}
           />
         )}
-      </ul>
-      {isInput && (
-        <TagWriteInput
-          type="text"
-          value={createdTag}
-          onChange={handleTag}
-          onKeyDown={handleTagPost}
-        />
-      )}
-      <div>
-        {tags &&
-          tags.map((tag) => {
-            if (tag === "") return [];
-            return (
-              <StudyTag onClick={() => handleDelete(tag)} key={tag}>
-                {tag} x
-              </StudyTag>
-            );
-          })}
-      </div>
-    </>
+      </TagInputBox>
+      <SelectedTagWrapper>
+        <div className="selected-tag">
+          {tags &&
+            tags.map((tag) => {
+              if (tag === "") return [];
+              return (
+                <StudyTag onClick={() => handleDelete(tag)} key={tag}>
+                  {tag} x
+                </StudyTag>
+              );
+            })}
+        </div>
+      </SelectedTagWrapper>
+    </TagInputContainer>
   );
 };
 const StudyTag = styled.div`
   height: 24px;
   color: #39739d;
-  font-size: 0.8125rem;
+  font-size: 13px;
   border-radius: 4px;
   background-color: #e1ecf4;
   padding: 2px 6px 5px 6px;
-  margin-right: 7px;
+  margin: 0 3px 3px;
   cursor: pointer;
 `;
-const TagWriteInput = styled.input`
-  width: 150px;
+const TagInputContainer = styled.div`
+  width: 800px;
+  display: flex;
+  flex-flow: row wrap;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+`;
+
+const TagInputBox = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .tag-write-input {
+    width: 120px;
+    display: flex;
+  }
+`;
+
+const SelectedTagWrapper = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  .selected-tag {
+    width: 500px;
+    margin-top: 12px;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: flex-start;
+    align-items: center;
+  }
 `;
 
 export default TagInput;
