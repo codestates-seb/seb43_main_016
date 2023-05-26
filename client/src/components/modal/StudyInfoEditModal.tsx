@@ -85,7 +85,6 @@ const StudyInfoEditModal = ({
       closeModal();
     } catch (error) {
       alert("스터디 그룹 정보를 업데이트하는 중에 오류가 발생했습니다.");
-      console.error("Error updating study group information:", error);
     }
   };
 
@@ -96,7 +95,6 @@ const StudyInfoEditModal = ({
   const handleAfterClose = () => {
     location.reload();
   };
-
 
   return (
     <>

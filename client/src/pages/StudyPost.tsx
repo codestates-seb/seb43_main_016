@@ -129,13 +129,11 @@ const StudyPost = () => {
     }
 
     try {
-      const res = await tokenRequestApi.post("/studygroup", StudyPostDto);
-      console.log(res.data);
+      await tokenRequestApi.post("/studygroup", StudyPostDto);
       alert("스터디 등록이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
       alert("스터디 등록이 실패했습니다!");
-      console.error("Error during POST request:", error);
     }
   };
 

@@ -32,7 +32,6 @@ const StudyCommentList = ({
 
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
-    //console.log(id);
   };
 
   const handleEnter = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -68,7 +67,7 @@ const StudyCommentList = ({
           setComment("");
         }
       } catch (error) {
-        console.log("댓글 등록 실패", error);
+        alert("댓글 등록 실패했습니다.");
       }
     }
   };
@@ -79,7 +78,7 @@ const StudyCommentList = ({
       await deleteComment(studyGroupId, patchId);
       fetchCommentsData();
     } catch (error) {
-      console.log("댓글 삭제 실패", error);
+      alert("댓글 삭제 실패했습니다.");
     }
   };
 
@@ -87,9 +86,7 @@ const StudyCommentList = ({
     try {
       const newComment = await getComments(studyGroupId);
       setComments(newComment);
-    } catch (error) {
-      console.log(error);
-    }
+    } catch (error) {}
   };
   useEffect(() => {
     fetchCommentsData();

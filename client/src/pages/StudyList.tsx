@@ -22,7 +22,7 @@ const StudyList = () => {
 
   const [fetching, setFetching] = useState(true);
   const [list, setList] = useState<StudyListDto[]>(initialState);
-  //const [filterData, setFilterData] = useState<StudyListDto[]>(initialState);
+  const [filterData, setFilterData] = useState<StudyListDto[]>(initialState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,12 +34,17 @@ const StudyList = () => {
         setList(response.data?.data);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
       } catch (error) {
-        console.log(error);
         throw new Error("스터디 리스트 로딩에 실패했습니다.");
       }
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setFetching(true);
+    setList(filterData);
+    setFetching(false);
+  }, ["", filterData]);
 
   return (
     <StudyListContainer>
@@ -53,7 +58,7 @@ const StudyList = () => {
           </Link>
         </StudyListTop>
         <ListFilterWrapper>
-          <ListFilter setFilterData={setList} />
+          <ListFilter setFilterData={setFilterData} />
         </ListFilterWrapper>
         <StudyListMain>
           {!fetching && (
