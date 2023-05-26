@@ -4,7 +4,6 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
-import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
@@ -34,11 +33,10 @@ public class StudygroupService implements StudygroupManager{
     private final SearchTagService searchTagService;
     private final CalendarStudygroupService calendarStudygroupService;
     private final VerifyStudygroupUtils studygroupUtils;
-    private final MemberUtils memberUtils;
 
     @Override
-    public Studygroup create(Studygroup studygroup, String email) {
-        studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
+    public Studygroup create(Studygroup studygroup, Member loginMember) {
+        studygroup.setLeaderMember(loginMember);
 
         studygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(studygroup)
@@ -46,7 +44,7 @@ public class StudygroupService implements StudygroupManager{
 
         Studygroup createdStudygroup = studygroupRepository.save(studygroup);
 
-        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
+        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), loginMember);
 
         return createdStudygroup;
     }
@@ -141,9 +139,8 @@ public class StudygroupService implements StudygroupManager{
 
 
     @Override
-    public List<Studygroup> getLeaderStudygroupList(String email) {
-        Member member = memberUtils.get(email);
-        return studygroupRepository.findAllByLeaderMemberId(member.getId());
+    public List<Studygroup> getLeaderStudygroupList(Member loginMember) {
+        return studygroupRepository.findAllByLeaderMemberId(loginMember.getId());
     }
 
     @Override
