@@ -19,6 +19,7 @@ const ProfileStudyList = () => {
   });
   const navigate = useNavigate();
 
+
   useEffect(() => {
     if (!isLoggedIn) {
       alert("로그인이 필요합니다");
@@ -45,10 +46,34 @@ const ProfileStudyList = () => {
         <Title>
           <h3>{title}</h3>
         </Title>
+<<<<<<< HEAD
         <Tag>{tagValues.join(", ")}</Tag>
+=======
+        <Tag>
+          <div>{tagValues.join(", ")}</div>
+        </Tag>
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
       </CardProfileStudyListContainer>
     );
   };
+
+<<<<<<< HEAD
+  return (
+    <MyStudyListContainer>
+      <WaitingList />
+      <ListTitle>운영중인 스터디</ListTitle>
+      <StudyCardContainer>
+        {studyList.leaders.map((leader) => (
+          <StudyCard
+            key={leader.id}
+            id={leader.id}
+            title={leader.title}
+            tagValues={leader.tagValues}
+          />
+        ))}
+      </StudyCardContainer>
+
+=======
 
   return (
     <MyStudyListContainer>
@@ -65,6 +90,7 @@ const ProfileStudyList = () => {
         ))}
       </StudyCardContainer>
 
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
       <ListTitle>가입된 스터디</ListTitle>
       <StudyCardContainer>
         {studyList.members.map((member) => (
@@ -77,6 +103,10 @@ const ProfileStudyList = () => {
         ))}
       </StudyCardContainer>
     </MyStudyListContainer>
+<<<<<<< HEAD
+=======
+
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   );
 };
 
@@ -85,7 +115,12 @@ export default ProfileStudyList;
 const MyStudyListContainer = styled.div`
   width: 960px;
   height: 100%;
+<<<<<<< HEAD
   padding: 80px 0 100px;
+=======
+  margin-top: 100px;
+  padding: 40px 0 200px;
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   background-color: #fff;
   border-radius: 4px;
   display: flex;
@@ -103,7 +138,12 @@ const StudyCardContainer = styled.div`
 `;
 
 const ListTitle = styled.h2`
+<<<<<<< HEAD
   width: 700px;
+=======
+  width: 900px;
+  padding-left: 20px;
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   margin: 24px 0 20px;
   font-size: 20px;
   font-weight: 700;
@@ -167,3 +207,7 @@ const Tag = styled.div`
     cursor: pointer;
   }
 `;
+<<<<<<< HEAD
+=======
+
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3

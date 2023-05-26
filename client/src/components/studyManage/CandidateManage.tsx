@@ -1,3 +1,4 @@
+import styled from "styled-components";
 import { useEffect, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
@@ -58,15 +59,17 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
       <>
         {waitingList &&
           waitingList.nickName.map((nickname, index) => (
-            <div key={index}>
+            <WaitingList key={index}>
               {nickname}
-              <button onClick={() => handleApproveCandidate(nickname)}>
-                <BsCheckCircle />
-              </button>
-              <button onClick={() => handleDenyCandidate(nickname)}>
-                <BsFillXCircleFill />
-              </button>
-            </div>
+              <WaitingButton>
+                <button onClick={() => handleApproveCandidate(nickname)}>
+                  <BsCheckCircle size="18" color="#0e9220" />
+                </button>
+                <button onClick={() => handleDenyCandidate(nickname)}>
+                  <BsFillXCircleFill size="18" color="#bb2727" />
+                </button>
+              </WaitingButton>
+            </WaitingList>
           ))}
       </>
     </MemberManageContainer>
@@ -74,3 +77,25 @@ const CandidateManage = ({ studyLeader }: CandidateManageProps) => {
 };
 
 export default CandidateManage;
+
+const WaitingList = styled.div`
+  width: 360px;
+  height: 36px;
+  background-color: #fff;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 4px;
+  padding: 20px 30px;
+  margin-bottom: 10px;
+  color: #1f1f1f;
+  font-size: 14px;
+  font-weight: 300;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const WaitingButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;

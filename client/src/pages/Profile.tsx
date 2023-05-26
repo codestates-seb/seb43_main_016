@@ -54,7 +54,7 @@ const LnbWrapper = styled.div`
   width: 160px;
   height: 270px;
   border-radius: 4px;
-  margin-right: 20px;
+  margin: 100px 20px 0 0;
   padding: 30px 10px;
   display: flex;
   flex-direction: column;

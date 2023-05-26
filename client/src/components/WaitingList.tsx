@@ -52,7 +52,11 @@ const WaitingList = () => {
 
   return (
     <WaitingListWrapper>
+<<<<<<< HEAD
       <WaitingListTitle>스터디 가입 신청</WaitingListTitle>
+=======
+      <WaitingListTitle>대기중인 가입 신청</WaitingListTitle>
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
       <ItemList>
         {waitingList.map((study) => (
           <WaitingStudyGroupItem
@@ -68,10 +72,19 @@ const WaitingList = () => {
 
 export default WaitingList;
 
+<<<<<<< HEAD
 const WaitingListWrapper = styled.div``;
 
 const WaitingListTitle = styled.h2`
   width: 700px;
+=======
+const WaitingListWrapper = styled.div`
+  padding-left: 20px;
+`;
+
+const WaitingListTitle = styled.h2`
+  width: 900px;
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   margin: 24px 0 20px;
   font-size: 20px;
   font-weight: 700;
@@ -80,7 +93,11 @@ const WaitingListTitle = styled.h2`
 `;
 
 const ItemList = styled.div`
+<<<<<<< HEAD
   width: 700px;
+=======
+  width: 900px;
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -91,7 +108,11 @@ const ItemWrapper = styled.div`
   width: 700px;
   height: 60px;
   background-color: #fff;
+<<<<<<< HEAD
   border: 1px solid #ccc;
+=======
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   border-radius: 4px;
   padding: 20px 30px;
   margin-bottom: 10px;

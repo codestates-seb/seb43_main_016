@@ -196,7 +196,10 @@ const StudyContent = () => {
 const StudyContentContainer = styled.div`
   width: 100%;
   height: 100%;
+<<<<<<< HEAD
   background-color: #e9e9e9;
+=======
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   display: flex;
   justify-content: center;
   align-items: center;

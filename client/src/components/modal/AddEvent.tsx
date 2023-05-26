@@ -16,10 +16,16 @@ interface EventInfo {
 interface AddEventProps {
   isOpen: boolean;
   closeModal: () => void;
+<<<<<<< HEAD
   onNewEvent?: () => void;
 }
 
 const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
+=======
+}
+
+const AddEvent = ({ isOpen, closeModal }: AddEventProps) => {
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   const isLoggedIn = useRecoilValue(LogInState);
   const [eventInfo, setEventInfo] = useState<EventInfo>({
     title: "",
@@ -50,9 +56,18 @@ const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+<<<<<<< HEAD
     await generateCustomEvents(isLoggedIn, eventInfo);
     closeModal();
     onNewEvent && onNewEvent();
+=======
+    // eventInfo 상태 업데이트 후에 generateCustomEvents 호출
+    await setEventInfo((prevState) => ({
+      ...prevState,
+    }));
+    await generateCustomEvents(isLoggedIn, eventInfo);
+    closeModal();
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   };
 
   const customModalStyles = {
@@ -68,10 +83,15 @@ const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
       borderRadius: "8px",
       maxWidth: "400px",
       padding: "24px",
+<<<<<<< HEAD
       display: "flex",
       flexDirection: undefined,
       alignItems: "center",
       justifyContent: "space-between",
+=======
+      // display: "flex", // remove this
+      // flexDirection: "column", // remove this
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
     },
     overlay: {
       zIndex: 9999,
@@ -98,8 +118,12 @@ const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
                 name="title"
                 value={eventInfo.title}
                 onChange={handleInputChangeText}
+<<<<<<< HEAD
                 placeholder="일정명"
                 required
+=======
+                placeholder="스터디 이름"
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
               />
             </label>
           </div>
@@ -110,7 +134,10 @@ const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
                 name="studyTimeStart"
                 value={eventInfo.studyTimeStart}
                 onChange={handleInputChangeText}
+<<<<<<< HEAD
                 required
+=======
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
               />
             </label>
           </div>
@@ -121,7 +148,10 @@ const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
                 name="studyTimeEnd"
                 value={eventInfo.studyTimeEnd}
                 onChange={handleInputChangeText}
+<<<<<<< HEAD
                 required
+=======
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
               />
             </label>
           </div>
@@ -145,7 +175,10 @@ const AddEvent = ({ isOpen, closeModal, onNewEvent }: AddEventProps) => {
                 value={eventInfo.color}
                 onChange={handleInputChangeText}
                 style={{ marginTop: "8px" }}
+<<<<<<< HEAD
                 required
+=======
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
               />
             </label>
           </div>

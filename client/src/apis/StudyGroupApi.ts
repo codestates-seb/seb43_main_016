@@ -34,6 +34,7 @@ export const getWaitingStudyGroupList =
   async (): Promise<WaitingStudyGroupListDto> => {
     const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(
       `/studygroup/myList?approved=false`
+
     );
     const data = response.data;
     return data;
@@ -324,4 +325,5 @@ export async function changeStudyGroupRecruitmentStatus(
     config
   );
   return response.data;
+
 }

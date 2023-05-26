@@ -1,0 +1,97 @@
+logging:
+  level:
+    org:
+      springframework:
+        web: debug
+#        security: debug
+    org.springframework.web.servlet: debug
+    org.hibernate.type.descriptor.sql.BasicBinder: trace
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/edusync?serverTimezone=Asia/Seoul
+    username: root
+    password: ${localDBPassword}
+  redis:
+    host: localhost
+    port: 6379
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+    log-request-details: true
+  flyway:
+    #location: classpath:db/migration 스키마 defaults 경로
+    enabled: true # flyway 활성화, default로 true 이지만 명시적으로 작성
+    baseline-on-migrate: true # flyway 변경 이력 테이블 생성 여부
+#  sql:
+#    init:
+#      mode: always
+  jpa:
+    defer-datasource-initialization: false
+    open-in-view: false
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+        default_batch_fetch_size: 100
+        highlight_sql: true
+        color-codes: true
+        type:
+          descriptor:
+            sql: trace
+  security:
+    oauth2:
+      client:
+        registration:
+          google:
+            client-id: 90423476142-0p4j9mmj540elt7qgg5udb7hsiog7hi2.apps.googleusercontent.com
+            clientSecret: ${GOOGLE_CLIENT_SECRET}
+            scope:
+              - email
+              - profile
+          kakao:
+            client-id: ${KAKAO_CLIENT_ID}
+            client-secret: ${KAKAO_CLIENT_SECRET}
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            client-name: Kakao
+            provider: kakao
+            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
+            scope:
+              - profile_nickname
+              - profile_image
+              - account_email
+          naver:
+            client-id: ${NAVER_CLIENT_ID}
+            client-secret: ${NAVER_CLIENT_SECRET}
+            client-authentication-method: POST
+            authorization-grant-type: authorization_code
+            redirect-uri: "http://localhost:8080/login/oauth2/code/naver"
+            client-name: Naver
+            provider: naver
+            scope:
+              - nickname
+              - email
+              - profile_image
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize
+            token-uri: https://kauth.kakao.com/oauth/token
+            user-info-uri: https://kapi.kakao.com/v2/user/me
+            user-name-attribute: id
+          naver:
+            authorization_uri: https://nid.naver.com/oauth2.0/authorize
+            token_uri: https://nid.naver.com/oauth2.0/token
+            user-info-uri: https://openapi.naver.com/v1/nid/me
+            user_name_attribute: response
+mail:
+  address:
+    admin: admin@gmail.com
+jwt:
+  key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 5
+  refresh-token-expiration-minutes: 420
+
+server:
+  port: 8080

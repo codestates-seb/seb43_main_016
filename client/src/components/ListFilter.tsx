@@ -38,13 +38,18 @@ const ListFilter = () => {
   };
 
   return (
+<<<<<<< HEAD
     <>
+=======
+    <ListFilterContainer>
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
       <select
         name="listFilter"
         value={selectedOption}
         onChange={handleOptionChange}
       >
         <option value="기본값">기본값</option>
+<<<<<<< HEAD
         <option value="수정순">수정순</option>
         <option value="카테고리순">카테고리순</option>
         <option value="모집순">모집순</option>
@@ -56,6 +61,34 @@ const ListFilter = () => {
 const CategoryOptions = styled.div`
   display: flex;
   align-items: baseline;
+=======
+        <option value="수정순">업데이트순</option>
+        <option value="카테고리순">카테고리</option>
+        <option value="모집순">모집중/완료</option>
+      </select>
+      {renderFilterOptions()}
+    </ListFilterContainer>
+  );
+};
+
+const ListFilterContainer = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+
+  select {
+    width: 100px;
+    height: 30px;
+    padding: 2px 3px;
+    border: none;
+    border-radius: 3px;
+  }
+`;
+
+const CategoryOptions = styled.div`
+  display: flex;
+  align-items: center;
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
 `;
 
 const CategoryLabel = styled.label`

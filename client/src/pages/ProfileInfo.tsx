@@ -109,7 +109,7 @@ const ProfileInfo = () => {
     } catch (error) {}
   };
   return (
-    <Wrapper>
+    <ProfileInfoContainer>
       <ProfileBaseWrapper>
         <ProfileImage>
           <ProfileImg profileImage={memberInfo?.profileImage} />
@@ -175,19 +175,20 @@ const ProfileInfo = () => {
         closeModal={() => setPasswordCheckModalOpen(false)}
         setIsModalOpen={setIsModalOpen}
       />
-    </Wrapper>
+    </ProfileInfoContainer>
   );
 };
 
 export default ProfileInfo;
 
-const Wrapper = styled.div`
-  width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
+const ProfileInfoContainer = styled.div`
+  width: 900px;
+  height: 100%;
+  padding: 100px 0 0 50px;
 `;
 
 const ProfileBaseWrapper = styled.div`
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -225,11 +226,14 @@ const ProfileBaseInfo = styled.div`
 const IntroduceAndDesired = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  justify-content: center;
+  align-items: center;
   margin-top: 20px;
-  width: 100%;
+  width: 900px;
 
   h4 {
+    width: 90%;
+    text-align: left;
     color: #2759a2;
     font-size: 21px;
     font-weight: 700;
@@ -240,7 +244,7 @@ const IntroduceAndDesired = styled.div`
 const IntroduceAndDesiredTextarea = styled.textarea`
   margin-bottom: 10px;
   padding: 8px;
-  width: 100%;
+  width: 90%;
   height: 200px;
   border: 1px solid #ccc;
   border-radius: 4px;
@@ -260,7 +264,7 @@ const IntroduceAndDesiredTextarea = styled.textarea`
 const ButtonWrapper = styled.div`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 90%;
 `;
 
 const EditButton = styled.button`
@@ -289,7 +293,10 @@ const ExitEditButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
+<<<<<<< HEAD
   transition: background-color 0.2s ease-in-out;
+=======
+>>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
 
   &:hover {
     background-color: #5a0202;
