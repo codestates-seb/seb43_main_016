@@ -18,21 +18,20 @@ const StudyUpdate = () => {
   useEffect(() => {
     getStudyGroupInfo(studyGroupId, isLoggedIn).then((data) => {
       const key = Object.keys(data.tags)[0];
-      setStudyName(data.studyName);
-      setStudyPeriodStart(data.studyPeriodStart);
-      setStudyPeriodEnd(data.studyPeriodEnd);
-      setChecked(data.daysOfWeek);
-      setStudyTimeStart(data.studyTimeStart);
-      setStudyTimeEnd(data.studyTimeEnd);
-      setMemberCountMin(data.memberCountMin);
-      setMemberCountMax(data.memberCountMax);
-      setPlatform(data.platform);
-      setIntroduction(data.introduction);
+      setStudyName(data?.studyName);
+      setStudyPeriodStart(data?.studyPeriodStart);
+      setStudyPeriodEnd(data?.studyPeriodEnd);
+      setChecked(data?.daysOfWeek);
+      setStudyTimeStart(data?.studyTimeStart);
+      setStudyTimeEnd(data?.studyTimeEnd);
+      setMemberCountMin(data?.memberCountMin);
+      setMemberCountMax(data?.memberCountMax);
+      setPlatform(data?.platform);
+      setIntroduction(data?.introduction);
       setSelectedCategory(key);
-      setTags(data.tags[key]);
+      setTags(data?.tags[key]);
     });
   }, []);
-
   const [studyName, setStudyName] = useState<string>("");
   const [studyPeriodStart, setStudyPeriodStart] = useState<string>("");
   const [studyPeriodEnd, setStudyPeriodEnd] = useState<string>("");
