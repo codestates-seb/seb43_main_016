@@ -42,7 +42,6 @@ export const updateMember = async (
   if (!data) throw new Error("입력값을 확인해주세요.");
 
   // tokenRequestApi를 사용하여 /members 엔드포인트로 PATCH 요청 전송
-  console.log("전송되는 데이터:", data);
   await tokenRequestApi.patch("/members", data);
 };
 
@@ -88,9 +87,7 @@ export const checkMemberPassword = async (
     );
     if (response.status <= 299) return true;
     else return false;
-  } catch (error) {
-    console.log(error);
-  }
+  } catch (error) {}
 };
 
 // TODO : Oauth2.0 로그인 이용자 검증

@@ -35,7 +35,6 @@ const TagInput = ({
         alert("이미 존재하는 태그입니다.");
       } else if (createdTag) {
         setTags([...tags, createdTag]);
-        console.log([...tags, createdTag]);
       }
       setCreatedTag("");
     }
@@ -56,9 +55,7 @@ const TagInput = ({
         );
         const result = response.data.tags;
         setDefaultTag(result);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
 
     fetchData();

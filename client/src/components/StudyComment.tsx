@@ -36,7 +36,6 @@ const StudyComment = ({
 
   const handleComment = (e: React.ChangeEvent<HTMLInputElement>) => {
     setComment(e.target.value);
-    //console.log(id);
   };
 
   const handleCommentButton = async () => {
@@ -51,13 +50,11 @@ const StudyComment = ({
           try {
             const newComment = await getComments(studyGroupId);
             setComments(newComment);
-          } catch (error) {
-            console.log(error);
-          }
+          } catch (error) {}
         };
         fetchData();
       } catch (error) {
-        console.log("댓글 등록 실패", error);
+        alert("댓글 등록 실패했습니다.");
       }
     }
   };

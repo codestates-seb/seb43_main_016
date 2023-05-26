@@ -35,12 +35,9 @@ const Calendar = () => {
   const isLoggedIn = useRecoilValue(LogInState);
   const navigate = useNavigate();
 
-  console.log(customEvents[0]);
-
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
-      alert("로그인이 필요합니다");
     } else {
       const fetchEvents = async () => {
         try {
@@ -57,7 +54,6 @@ const Calendar = () => {
   useEffect(() => {
     if (!isLoggedIn) {
       navigate("/");
-      alert("로그인이 필요합니다");
     } else {
       const fetchCustomEvents = async () => {
         try {
@@ -65,7 +61,6 @@ const Calendar = () => {
           setCustomEvents(generatedCustomEvents);
         } catch (error) {
           alert("커스텀 이벤트를 불러오는 데 실패했습니다");
-          console.log(error);
         }
       };
       fetchCustomEvents();
@@ -78,7 +73,6 @@ const Calendar = () => {
       setCustomEvents(generatedCustomEvents);
     } catch (error) {
       alert("커스텀 이벤트를 불러오는 데 실패했습니다");
-      console.log(error);
     }
   };
 

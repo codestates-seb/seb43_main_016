@@ -46,9 +46,7 @@ const ProfileStudyManage = () => {
       try {
         const studyInfo = await getStudyGroupInfo(parsedId, isLoggedIn);
         setStudyInfo(studyInfo);
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) {}
     };
     getMemberInfo(isLoggedIn).then((data) => {
       if (data) {
@@ -88,7 +86,7 @@ const ProfileStudyManage = () => {
     }
     if (!window.confirm("정말로 스터디를 탈퇴하시겠습니까?")) return;
     exitStudyGroup(parsedId, isLoggedIn);
-    navigate("/profile/manage-group")
+    navigate("/profile/manage-group");
     window.location.reload(); // 페이지를 새로고침
   };
 

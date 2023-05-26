@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { StudyGroup, getStudyListOrder } from "../apis/StudyGroupApi";
 const ListFilter = ({
@@ -11,10 +11,13 @@ const ListFilter = ({
 
   const handleOptionChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedOption(e.target.value);
+  };
+
+  useEffect(() => {
     getStudyListOrder(selectedOption, isAscending).then((data) => {
       setFilterData(data);
     });
-  };
+  }, ["", selectedOption]);
 
   return (
     <ListFilterContainer>

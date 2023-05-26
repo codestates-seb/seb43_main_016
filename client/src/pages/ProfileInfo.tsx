@@ -18,7 +18,6 @@ import tokenRequestApi from "../apis/TokenRequestApi";
 import { removeTokens } from "./utils/Auth";
 import { RenderingState } from "../recoil/atoms/RenderingState";
 
-
 const ProfileInfo = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
   const isRendering = useRecoilValue(RenderingState);
@@ -46,10 +45,7 @@ const ProfileInfo = () => {
         const info = await getMemberInfo(isLoggedIn);
         setMemberInfo(info);
         setIntroduceInfo({ aboutMe: info.aboutMe, withMe: info.withMe });
-      } catch (error) {
-        //alert("로그인이 필요합니다.");
-        console.error(error);
-      }
+      } catch (error) {}
     };
     fetchMemberInfo();
   }, [isModalOpen, isRendering]);
@@ -277,8 +273,12 @@ const EditButton = styled.button`
   height: 40px;
   margin-bottom: 10px;
   padding: 8px 16px;
-  background-color: ${props =>
-    props.id === "introduceEditButton" ? "#4d74b1" : props.id === "introduceSaveButton" ? "#868DAA" : "#4d74b1"};
+  background-color: ${(props) =>
+    props.id === "introduceEditButton"
+      ? "#4d74b1"
+      : props.id === "introduceSaveButton"
+      ? "#868DAA"
+      : "#4d74b1"};
   color: white;
   border: none;
   border-radius: 4px;
@@ -286,9 +286,14 @@ const EditButton = styled.button`
   transition: background-color 0.3s ease-in-out;
 
   &:hover {
-    background-color: ${props =>
-      props.id === "introduceEditButton" ? "#4d74b1" : props.id === "introduceSaveButton" ? "#868DAA" : "#4d74b1"};
-  }`
+    background-color: ${(props) =>
+      props.id === "introduceEditButton"
+        ? "#4d74b1"
+        : props.id === "introduceSaveButton"
+        ? "#868DAA"
+        : "#4d74b1"};
+  }
+`;
 
 const ExitEditButton = styled.button`
   margin-bottom: 10px;

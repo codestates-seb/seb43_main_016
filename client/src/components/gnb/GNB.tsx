@@ -17,15 +17,10 @@ const GNB = () => {
   useEffect(() => {
     setIsLoading(true);
     if (isLoggedIn) {
-      tokenRequestApi
-        .get("/members")
-        .then((res) => {
-          setProfileImage(res.data.profileImage);
-          setIsLoading(false);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      tokenRequestApi.get("/members").then((res) => {
+        setProfileImage(res.data.profileImage);
+        setIsLoading(false);
+      });
     }
     setIsLoading(false);
   }, [isLoggedIn, isRendering]);

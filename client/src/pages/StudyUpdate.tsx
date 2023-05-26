@@ -11,13 +11,6 @@ import {
   getStudyGroupInfo,
   updateStudyGroupContentsInfo,
 } from "../apis/StudyGroupApi";
-/*try {
-    } catch (error) {
-      alert("스터디 수정이 실패했습니다!");
-      // 당신의 스터디가 아닙니다?
-      console.error("Error during POST request:", error);
-    }
-*/
 
 const StudyUpdate = () => {
   const { id } = useParams();
@@ -82,7 +75,6 @@ const StudyUpdate = () => {
 
   const handleStudyPeriodEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const endDateValue = e.target.value;
-    console.log(endDateValue);
     const timeValue = "00:00";
 
     const formattedPeriodEnd = `${endDateValue}T${timeValue}:00`;
@@ -140,8 +132,6 @@ const StudyUpdate = () => {
       },
     };
 
-    console.log(StudyPostDto);
-
     if (studyName === "") {
       alert("제목을 입력해주세요!");
       return;
@@ -166,17 +156,15 @@ const StudyUpdate = () => {
     }
 
     try {
-      const res = await updateStudyGroupContentsInfo(
+      await updateStudyGroupContentsInfo(
         StudyPostDto,
         isLoggedIn,
         studyGroupId
       );
-      console.log(res);
       alert("스터디 수정이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
       alert("스터디 수정이 실패했습니다!");
-      console.error("Error during POST request:", error);
     }
   };
 
