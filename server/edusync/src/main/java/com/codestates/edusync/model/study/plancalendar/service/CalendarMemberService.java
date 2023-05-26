@@ -46,16 +46,19 @@ public class CalendarMemberService {
         calendarRepository.save(findTimeSchedule);
     }
 
+    @Transactional(readOnly = true)
     public List<TimeSchedule> getTimeSchedules(String email) {
 
         return calendarRepository.findAllByMemberEmail(email);
     }
 
+    @Transactional(readOnly = true)
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long timeScheduleId) {
 
         return calendarUtils.findVerifyTimeSchedule(timeScheduleId);
     }
 
+    @Transactional(readOnly = true)
     public void deleteTimeScheduleByTimeScheduleId(Long timeScheduleId,
                                                    Member loginMember) {
         TimeSchedule findTimeSchedule =

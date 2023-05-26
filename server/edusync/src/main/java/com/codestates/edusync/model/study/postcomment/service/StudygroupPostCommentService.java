@@ -47,6 +47,7 @@ public class StudygroupPostCommentService implements StudygroupPostCommentManage
         return studygroupPostCommentRepository.save(findComment);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StudygroupPostComment> getAll(Long studygroupId) {
         return studygroupPostCommentRepository.findAllByStudygroupId(studygroupId);

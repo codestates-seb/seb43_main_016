@@ -7,10 +7,12 @@ import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
 import com.codestates.edusync.model.study.plancalendar.repository.CalendarRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_LINKED_WITH_MEMBER;
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_MATCHED_WITH_MEMBER;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Component
 public class VerifyTimeScheduleUtils {

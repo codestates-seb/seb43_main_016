@@ -116,13 +116,15 @@ public class StudygroupService implements StudygroupManager{
         return findStudygroup;
     }
 
+    @Transactional(readOnly = true)
     public Page<Studygroup> getWithPagingAndOrder(Integer page, Integer size, String order, Boolean isAscending) {
         Sort sort = getSortByOrder(order, isAscending);
 
         return studygroupRepository.findAll(PageRequest.of(page, size, sort));
     }
 
-    private static Sort getSortByOrder(String order, Boolean isAscending) {
+    @Transactional(readOnly = true)
+    public Sort getSortByOrder(String order, Boolean isAscending) {
         StudygroupGetOrder orderEnum = StudygroupGetOrder.valueOfOrder(order);
         String convertedVariable = orderEnum.getVariable();
 
@@ -132,12 +134,14 @@ public class StudygroupService implements StudygroupManager{
         else                return sort.descending();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Studygroup> getWithPaging(Integer page, Integer size) {
         return getWithPagingAndOrder(page, size, "기본값", false);
     }
 
 
+    @Transactional(readOnly = true)
     @Override
     public List<Studygroup> getLeaderStudygroupList(Member loginMember) {
         return studygroupRepository.findAllByLeaderMemberId(loginMember.getId());

@@ -23,6 +23,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     private final VerifyStudygroupUtils verifyStudygroupUtils;
     private final CalendarStudygroupService calendarStudygroupService;
 
+    @Transactional(readOnly = true)
     @Override
     public StudygroupJoin getCandidateByNickName(Long studygroupId, String nickName) {
         List<StudygroupJoin> sjs =
@@ -34,6 +35,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public StudygroupJoin getMemberByNickName(Long studygroupId, String nickName) {
         List<StudygroupJoin> sjs =
@@ -45,12 +47,14 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email, boolean isLeader) {
         if (isLeader) verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
         return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StudygroupJoin> getAllMemberList(Long studygroupId) {
         return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsTrue(studygroupId);
@@ -144,6 +148,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return studygroupJoin;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<Studygroup> getMyStudygroupList(Member loginMember, boolean isApproved) {
         List<StudygroupJoin> studygroupJoinList;
@@ -155,6 +160,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return studygroupJoinList.stream().map(StudygroupJoin::getStudygroup).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public int getStudygroupMemberCount(Long studygroupId) {
         return studygroupJoinRepository.countByStudygroupIdAndIsApprovedIsTrue(studygroupId);

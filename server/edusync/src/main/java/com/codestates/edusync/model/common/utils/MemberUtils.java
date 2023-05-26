@@ -45,7 +45,6 @@ public class MemberUtils implements MemberVerificationManager {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Member> getList(List<String> uuids) {
         return memberRepository.findByUuidIn(uuids);
     }

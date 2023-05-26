@@ -171,11 +171,13 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         calendarRepository.saveAll(findTimeSchedules);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<TimeSchedule> getTimeSchedules(Long studygroupId) {
         return calendarRepository.findAllByStudygroupIdAndMemberIsNull(studygroupId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
