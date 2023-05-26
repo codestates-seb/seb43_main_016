@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import { updateMemberProfileImage } from "../apis/MemberApi";
+import { RenderingState } from "../recoil/atoms/RenderingState";
+import { useRecoilState } from "recoil";
 
 interface Props {
   profileImage: string | undefined;
@@ -10,6 +12,7 @@ const ProfileImg = ({ profileImage }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState<string>(profileImage || "");
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isRendering, setIsRendering] = useRecoilState(RenderingState);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file: File | undefined = e.target.files?.[0];
@@ -32,7 +35,8 @@ const ProfileImg = ({ profileImage }: Props) => {
   const updateImg = async (): Promise<void> => {
     try {
       await updateMemberProfileImage({ profileImage: imageUrl });
-      alert("프로필 이미지가 변경되었습니다.");
+      setIsEditing(false);
+      setIsRendering(!isRendering);
     } catch (error) {
       alert("프로필 이미지 변경에 실패하였습니다.");
     }
@@ -41,13 +45,13 @@ const ProfileImg = ({ profileImage }: Props) => {
   return (
     <ProfileImgWrapper>
       <ProfileImgSection>
-        <label htmlFor="profile-image">
-          {!isEditing ? (
+        {!isEditing ? (
+          <label htmlFor="profile-image">
             <img src={profileImage} alt="Profile image" />
-          ) : (
-            <img src={imageUrl} alt="Profile image" />
-          )}
-        </label>
+          </label>
+        ) : (
+          <img src={imageUrl} alt="Profile image" />
+        )}
         <input
           ref={fileInputRef}
           id="profile-image"

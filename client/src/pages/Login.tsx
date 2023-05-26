@@ -93,6 +93,7 @@ const Login = () => {
             onChange={handlePassword}
             type="password"
             placeholder="Password"
+            autoComplete="new-password"
             required
           />
         </LoginForm>

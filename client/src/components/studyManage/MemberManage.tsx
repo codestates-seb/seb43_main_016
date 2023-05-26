@@ -78,10 +78,13 @@ const MemberManage = ({ studyLeader }: MemberManageProps) => {
 
   // TODO : 스터디 그룹에서 강제로 퇴출하는 함수
   const handleForcedKicked = async (nickname: string) => {
-    if (nickname === studyLeader) {
+    if (nickname === studyLeader && loggedInUser === studyLeader) {
       alert("스터디장은 스터디 그룹에서 강제로 퇴출할 수 없습니다");
     }
-    if (loggedInUser !== studyLeader) {
+    if (nickname === studyLeader && loggedInUser !== studyLeader) {
+      alert("스터디원 따위가 감히?!");
+    }
+    if (loggedInUser === studyLeader && loggedInUser !== nickname) {
       alert("스터디 그룹장만 그룹원을 강제로 퇴출할 수 있습니다");
     }
     const data: StudyGroupMemberApprovalDto = {

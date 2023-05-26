@@ -10,15 +10,18 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import { useNavigate } from "react-router-dom";
 import CheckPasswordModal from "../components/modal/CheckPasswordModal";
 import tokenRequestApi from "../apis/TokenRequestApi";
 import { removeTokens } from "./utils/Auth";
+import { RenderingState } from "../recoil/atoms/RenderingState";
+
 
 const ProfileInfo = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
+  const isRendering = useRecoilValue(RenderingState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoResponseDto | null>(
     null
@@ -42,12 +45,14 @@ const ProfileInfo = () => {
       try {
         const info = await getMemberInfo(isLoggedIn);
         setMemberInfo(info);
+        setIntroduceInfo({ aboutMe: info.aboutMe, withMe: info.withMe });
       } catch (error) {
-        alert("로그인이 필요합니다.");
+        //alert("로그인이 필요합니다.");
+        console.error(error);
       }
     };
     fetchMemberInfo();
-  }, [isModalOpen, isLoggedIn]);
+  }, [isModalOpen, isRendering]);
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
   // 현재 Modal 구현은 완료했으나 비동기 처리로 인해 계속된 오류 발생. 추가적인 최적화 작업 요함
@@ -138,13 +143,13 @@ const ProfileInfo = () => {
             <h4>자기소개</h4>
             <IntroduceAndDesiredTextarea
               name="aboutMe"
-              placeholder={memberInfo?.aboutMe}
+              placeholder="자기소개를 입력해주세요"
               onChange={handleIntroduceChange}
             />
             <h4>함께하고 싶은 동료</h4>
             <IntroduceAndDesiredTextarea
               name="withMe"
-              placeholder={memberInfo?.withMe}
+              placeholder="함께하고 싶은 동료상을 입력해주세요"
               onChange={handleIntroduceChange}
             />
           </>
@@ -159,7 +164,7 @@ const ProfileInfo = () => {
               Edit
             </EditButton>
           ) : (
-            <EditButton id="introduceEditButton" onClick={handleSaveClick}>
+            <EditButton id="introduceSaveButton" onClick={handleSaveClick}>
               Save
             </EditButton>
           )}
@@ -273,7 +278,7 @@ const EditButton = styled.button`
   margin-bottom: 10px;
   padding: 8px 16px;
   background-color: ${props =>
-    props.id === "introduceEditButton" ? "#2b8a3e" : "#4d74b1"};
+    props.id === "introduceEditButton" ? "#4d74b1" : props.id === "introduceSaveButton" ? "#868DAA" : "#4d74b1"};
   color: white;
   border: none;
   border-radius: 4px;
@@ -282,9 +287,9 @@ const EditButton = styled.button`
 
   &:hover {
     background-color: ${props =>
-      props.id === "introduceEditButton" ? "#1d6530" : "#375f8d"};
-  }
-`;
+      props.id === "introduceEditButton" ? "#4d74b1" : props.id === "introduceSaveButton" ? "#868DAA" : "#4d74b1"};
+  }`
+
 const ExitEditButton = styled.button`
   margin-bottom: 10px;
   padding: 8px 16px;
@@ -293,10 +298,6 @@ const ExitEditButton = styled.button`
   border: none;
   border-radius: 4px;
   cursor: pointer;
-<<<<<<< HEAD
-  transition: background-color 0.2s ease-in-out;
-=======
->>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
 
   &:hover {
     background-color: #5a0202;

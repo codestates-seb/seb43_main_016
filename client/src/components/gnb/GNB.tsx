@@ -4,24 +4,31 @@ import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
 import tokenRequestApi from "../../apis/TokenRequestApi";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
+import { RenderingState } from "../../recoil/atoms/RenderingState";
 
 const GNB = () => {
   const [profileImage, setProfileImage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
+  const isRendering = useRecoilValue(RenderingState);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     if (isLoggedIn) {
-      tokenRequestApi.get("/members").then((res) => {
-        setProfileImage(res.data.profileImage);
-        setIsLoading(false);
-      });
+      tokenRequestApi
+        .get("/members")
+        .then((res) => {
+          setProfileImage(res.data.profileImage);
+          setIsLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
     setIsLoading(false);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isRendering]);
   return (
     <>
       {isLoading ? (

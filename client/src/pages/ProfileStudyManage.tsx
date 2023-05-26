@@ -72,7 +72,7 @@ const ProfileStudyManage = () => {
   // TODO : 스터디 정보를 삭제하는 코드
   const handleDeleteClick = async () => {
     if (LoggedInUser !== studyInfo?.leaderNickName) {
-      alert("스터디장만 스터디를 삭제할 수 있습니다");
+      alert("선넘네...?");
       return;
     }
     if (!window.confirm("정말로 스터디를 삭제하시겠습니까?")) return;

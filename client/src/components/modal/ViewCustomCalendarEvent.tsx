@@ -20,9 +20,9 @@ const customStyles = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    maxWidth: "400px",
+    maxWidth: "300px",
     width: "90%",
-    maxHeight: "350px",
+    maxHeight: "200px",
     backgroundColor: "white",
     borderRadius: "10px",
     border: "none",
@@ -31,7 +31,6 @@ const customStyles = {
     outline: "none",
   },
 };
-
 interface ViewEventDetailModalProps {
   isOpen: boolean;
   closeModal: () => void;

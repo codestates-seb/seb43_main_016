@@ -1,8 +1,5 @@
 import tokenRequestApi from "./TokenRequestApi";
-<<<<<<< HEAD
-=======
 
->>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
 import {
   StudyInfoDto,
   getStudyGroupInfo,
@@ -120,7 +117,6 @@ export const generateCustomEvents = async (
   const response = await tokenRequestApi.post("/calendars/members", {
     timeSchedule,
   });
-<<<<<<< HEAD
   return response;
 };
 
@@ -151,25 +147,6 @@ export const getCustomEvent = async (isLoggedIn: boolean) => {
     return customEvent;
   });
   return customEventData;
-=======
-  console.log(timeSchedule);
-  return response;
-};
-
-// TODO : 개인 커스텀 일정을 수정
-export const updateCustomEvents = async (
-  isLoggedIn: boolean,
-  data: CustomEventDto,
-  id: number
-) => {
-  if (!isLoggedIn) throw new Error("로그인이 필요합니다.");
-
-  const response = await tokenRequestApi.patch(
-    `/calendars/${id}/members`,
-    data
-  );
-  return response;
->>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
 };
 
 // TODO : 개인 커스텀 일정 삭제
@@ -181,7 +158,6 @@ export const deleteCustomEvents = async (isLoggedIn: boolean, id: number) => {
 };
 
 // TODO : 개인 커스텀 일정 상세 조회
-<<<<<<< HEAD
 export interface Schedule {
   studyTimeStart: string;
   studyTimeEnd: string;
@@ -201,11 +177,4 @@ export const getCustomEvents = async (isLoggedIn: boolean, id: number): Promise<
 
   const response: AxiosResponse<EventData> = await tokenRequestApi.get(`/calendars/${id}/members`);
   return response.data;
-=======
-export const getCustomEvents = async (isLoggedIn: boolean, id: number) => {
-  if (!isLoggedIn) throw new Error("로그인이 필요합니다.");
-
-  const response = await tokenRequestApi.get(`/calendars/${id}/members`);
-  return response;
->>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
 };

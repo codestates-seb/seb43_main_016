@@ -56,11 +56,10 @@ const StudyContent = () => {
         const content = await getStudyGroupInfo(parsedId, isLoggedIn);
         setContent(content);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
-        console.log(content);
       } catch (error) {
         if (!isLoggedIn) navigate("/login");
         else {
-          alert("잘못된 접근입니다");
+          alert("로그인이 필요합니다");
           navigate("/studylist");
 
           throw new Error("스터디 내용 로딩에 실패했습니다.");
@@ -89,8 +88,7 @@ const StudyContent = () => {
 
   const handleJoinButton = async () => {
     try {
-      const res = await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
-      console.log(res);
+      await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
       alert("스터디 신청이 완료되었습니다!");
     } catch (error) {
       alert("스터디 신청이 실패했습니다!");
@@ -159,13 +157,8 @@ const StudyContent = () => {
                 <StudyContentTag>
                   {content?.tags && (
                     <>
-                      {Object.entries(content.tags).map(([category, tags]) => (
-                        <div key={category}>
-                          {category}:
-                          {tags.map((tag) => (
-                            <span key={tag}>{tag}</span>
-                          ))}
-                        </div>
+                      {Object.entries(content.tags).map(([_category, tags]) => (
+                        <StudyListTag item={tags} />
                       ))}
                     </>
                   )}
@@ -180,11 +173,14 @@ const StudyContent = () => {
                 studyGroupId={Number(id)}
                 setComments={setComments}
               />
-              <StudyCommentList
-                studyGroupId={Number(id)}
-                comments={comments}
-                setComments={setComments}
-              />
+              {content && (
+                <StudyCommentList
+                  isLeader={content.leader}
+                  studyGroupId={Number(id)}
+                  comments={comments}
+                  setComments={setComments}
+                />
+              )}
             </div>
           )}
         </StudyContentBody>
@@ -196,10 +192,6 @@ const StudyContent = () => {
 const StudyContentContainer = styled.div`
   width: 100%;
   height: 100%;
-<<<<<<< HEAD
-  background-color: #e9e9e9;
-=======
->>>>>>> d6e29db2b9e5868d24be2a5b05aef6ebc6fb46a3
   display: flex;
   justify-content: center;
   align-items: center;

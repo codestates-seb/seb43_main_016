@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
@@ -105,8 +105,6 @@ const StudyPost = () => {
       },
     };
 
-    console.log(StudyPostDto);
-
     if (studyName === "") {
       alert("제목을 입력해주세요!");
       return;
@@ -142,6 +140,12 @@ const StudyPost = () => {
   };
 
   const navigate = useNavigate();
+
+  useEffect(() => {
+    if (!isLoggedIn) {
+      navigate("/login");
+    }
+  }, []);
 
   return (
     <StudyPostContainer>
