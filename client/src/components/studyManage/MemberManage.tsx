@@ -10,7 +10,7 @@ import {
   forceExitStudyGroup,
   getStudyGroupMemberList,
 } from "../../apis/StudyGroupApi";
-import { GiBootKick, GiLaurelCrown } from "react-icons/gi";
+import { AiOutlineCrown, AiOutlineUserDelete } from "react-icons/ai";
 import { getMemberInfo } from "../../apis/MemberApi";
 
 // TODO: 스터디 그룹에 가입된 회원 리스트 타입
@@ -102,15 +102,25 @@ const MemberManage = ({ studyLeader }: MemberManageProps) => {
       <>
         {memberList &&
           memberList.nickName.map((nickname, index) => (
-            <div key={index}>
+            <MemberList key={index}>
               {nickname}
-              <button onClick={() => handlePrivileges(nickname)}>
-                <GiLaurelCrown />
-              </button>
-              <button onClick={() => handleForcedKicked(nickname)}>
-                <GiBootKick />
-              </button>
-            </div>
+              <MemberButton>
+                <button onClick={() => handlePrivileges(nickname)}>
+                  <AiOutlineCrown
+                    size="24"
+                    color="#89920f"
+                    title="스터디장 위임"
+                  />
+                </button>
+                <button onClick={() => handleForcedKicked(nickname)}>
+                  <AiOutlineUserDelete
+                    size="24"
+                    color="#bb2727"
+                    title="회원 강제퇴장"
+                  />
+                </button>
+              </MemberButton>
+            </MemberList>
           ))}
       </>
     </MemberManageContainer>
@@ -135,10 +145,33 @@ export const MemberManageTitle = styled.div`
   align-items: center;
 
   h3 {
-    width: 700px;
+    width: 650px;
     text-align: left;
     font-size: 18px;
     font-weight: 700;
     color: #2759a2;
+    margin-bottom: 20px;
   }
+`;
+
+const MemberList = styled.div`
+  width: 700px;
+  height: 60px;
+  background-color: #fff;
+  box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
+  border-radius: 4px;
+  padding: 20px 30px;
+  margin-bottom: 10px;
+  color: #2759a2;
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+const MemberButton = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
