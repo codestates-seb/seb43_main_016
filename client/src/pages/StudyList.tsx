@@ -170,7 +170,7 @@ const StudyListImage = styled.div`
 
 const StudyBox = styled.div`
   flex-basis: 280px;
-  height: 320px;
+  height: 350px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -184,7 +184,7 @@ const StudyBox = styled.div`
 
   .studylist-title {
     width: 260px;
-    padding: 10px 0;
+    padding: 20px 0 12px;
     color: #1f1f1f;
     display: flex;
     justify-content: flex-start;
@@ -198,7 +198,9 @@ const StudyBox = styled.div`
   }
   .studylist-tag {
     width: 260px;
+    height: 30px;
     padding-top: 10px;
+    margin-bottom: 15px;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;
