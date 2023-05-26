@@ -33,6 +33,12 @@ const TagDropdown = ({
   );
 };
 const TagLiDiv = styled.div`
+  width: 300px;
+  display: flex;
+  flex-flow: row wrap;
+  gap: 3px;
+  justify-content: center;
+  align-items: center;
   list-style-type: none;
   background-color: white;
   border-radius: 5px;
@@ -47,4 +53,5 @@ const TagLiDiv = styled.div`
     font-size: 10px;
   }
 `;
+
 export default TagDropdown;
