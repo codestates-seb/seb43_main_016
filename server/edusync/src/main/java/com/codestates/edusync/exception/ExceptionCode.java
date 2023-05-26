@@ -7,6 +7,7 @@ public enum ExceptionCode {
      * Member 관련 에러 코드
      */
     YOU_ARE_NOT_STUDYGROUP_LEADER(403, "스터디 리더만 가능합니다."),
+    MEMBER_NICKNAME_NOT_ALLOWED(403, "해당 닉네임은 금지되어있습니다!!"),
     MEMBER_NOT_FOUND(404, "멤버를 찾을수 없습니다."),
     DUPLICATED_EMAIL(409, "이메일을 찾을수 없습니다."),
     MEMBER_EXISTS_EMAIL(409, "이메일이 이미 존재"),

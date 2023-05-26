@@ -7,7 +7,7 @@ import lombok.Setter;
 import org.springframework.lang.Nullable;
 
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Null;
+import java.util.List;
 
 public class CalendarStudygroupDto {
 
@@ -15,7 +15,7 @@ public class CalendarStudygroupDto {
     @Getter
     public static class Post {
         @NotNull
-        private java.util.List<TimeScheduleDto.Post> timeSchedules;
+        private List<TimeScheduleDto.Post> timeSchedules;
     }
 
     @NoArgsConstructor
