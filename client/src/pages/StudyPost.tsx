@@ -16,8 +16,8 @@ const StudyPost = () => {
   const [checked, setChecked] = useState<string[]>([]);
   const [studyTimeStart, setStudyTimeStart] = useState<string>("00:00");
   const [studyTimeEnd, setStudyTimeEnd] = useState<string>("00:00");
-  const [memberCountMin, setMemberCountMin] = useState<number>(1);
-  const [memberCountMax, setMemberCountMax] = useState<number>(1);
+  const [memberCountMin, setMemberCountMin] = useState<number>(2);
+  const [memberCountMax, setMemberCountMax] = useState<number>(2);
   const [platform, setPlatform] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [viewTag, setViewTag] = useState(false);
@@ -27,8 +27,8 @@ const StudyPost = () => {
     useState<string>("프론트엔드");
   const [selectedPeriodStart, setSelectedPeriodStart] = useState<string>("");
   const [selectedPeriodEnd, setSelectedPeriodEnd] = useState<string>("");
-  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("00:00");
-  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("00:00");
+  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("12:00");
+  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("12:00");
   const isLoggedIn = useRecoilValue(LogInState);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -219,7 +219,7 @@ const StudyPost = () => {
             <span>인원</span>
             <input
               type="number"
-              min="1"
+              min="2"
               value={memberCountMin}
               onChange={handleMemberCountMin}
               required

@@ -13,6 +13,7 @@ import StudyComment from "../components/StudyComment";
 import tokenRequestApi from "../apis/TokenRequestApi";
 import StudyCommentList from "../components/StudyCommentList";
 import StudyListTag from "../components/StudyListTag";
+import LoginAlertModal from "../components/modal/LoginAlertModal";
 
 const StudyContent = () => {
   const initialTag = { [""]: [""] };
@@ -38,6 +39,7 @@ const StudyContent = () => {
   const [fetching, setFetching] = useState(true);
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [content, setContent] = useState<StudyInfoDto | null>(initialState);
+  const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
   const { id } = useParams(); // App.tsx의 Route url에 :id로 명시하면 그걸 가져옴
   const parsedId = Number(id);
   const navigate = useNavigate();
@@ -57,7 +59,7 @@ const StudyContent = () => {
         setContent(content);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
       } catch (error) {
-        if (!isLoggedIn) navigate("/login");
+        if (!isLoggedIn) setLoginAlertModalOpen(true);
         else {
           alert("로그인이 필요합니다");
           navigate("/studylist");
@@ -184,6 +186,10 @@ const StudyContent = () => {
             </div>
           )}
         </StudyContentBody>
+        <LoginAlertModal
+          isOpen={loginAlertModalOpen}
+          closeModal={() => setLoginAlertModalOpen(false)}
+        />
       </StudyContentContainer>
     </>
   );
