@@ -1,9 +1,5 @@
 import tokenRequestApi from "./TokenRequestApi";
-
-import {
-  StudyInfoDto,
-  getStudyGroupList,
-} from "./StudyGroupApi";
+import { getStudyGroupList } from "./StudyGroupApi";
 import axios, { AxiosResponse } from "axios";
 
 // ====================== 개인이 속한 스터디의 스케줄을 가져오는 로직  ===========================
@@ -16,78 +12,69 @@ export interface StudyEvent {
   id: string;
   title: string;
   daysOfWeek?: string[];
-  startTime: string;
-  endTime: string;
-  startRecur: string;
-  endRecur: string;
-  description: string;
+  start: string;
+  end: string;
   overlap: boolean;
+  color: string;
   divide: string;
 }
 
-export const generateStudyEvents = async (
-): Promise<StudyEvent[]> => {
-  // 1. 개인이 속한 스터디 조회
+export interface StudyEventDto {
+  studyTimeStart: string;
+  studyTimeEnd: string;
+  id: number;
+  title: string;
+  color: string;
+}
+
+// TODO : 개인이 속한 스터디 리스트의 일정 전체 조회
+export const getStudyGroupEvents = async (id: number) => {
+  try {
+    const response = await axios.get(
+      `${import.meta.env.VITE_APP_API_URL}/calendars/studygroups/${id}`
+    );
+    const fetchedEvents = response.data;
+    return fetchedEvents;
+  } catch (error) {
+    console.error("에러가 발생했습니다:", error);
+    throw error;
+  }
+};
+
+// TODO : getStudyGroupEvents을 활용해서, 개인이 속한 스터디의 스케줄을 가져오는 로직
+export const generateStudyEvents = async (): Promise<StudyEvent[]> => {
   const myStudyGroups = await getStudyGroupList();
-  // 2. 조회 데이터의 id 추출
   const studyGroupIds: number[] = [];
 
   for (const member of myStudyGroups.data.members) {
     studyGroupIds.push(member.id);
   }
 
-  // 3. id를 인자로 전달하여 각 스터디의 상세정보를 추출하고, 변수에 담기
-  const studyGroupInfos: StudyInfoDto[] = [];
-  for (const id of studyGroupIds) {
-    const studyGroupInfo = await getStudyGroupEvents(id);
-    studyGroupInfos.push(studyGroupInfo);
-    console.log(studyGroupInfo);
+  const studyGroupInfo: StudyEventDto[] = [];
+
+  try {
+    for (const id of studyGroupIds) {
+      const response = await getStudyGroupEvents(id);
+      studyGroupInfo.push(...response);
+    }
+  } catch (error) {
+    alert("스터디 정보를 불러오는데 실패했습니다");
   }
 
-  // 4. 변수에 담은 스터디 정보를 fullCalendar 라이브러리에 맞게 맵핑
-  const events: StudyEvent[] = studyGroupInfos.map(
-    (studyGroupInfo: StudyInfoDto) => {
-      const mappedDaysOfWeek: string[] = studyGroupInfo.daysOfWeek.map(
-        (day: string) => {
-          switch (day) {
-            case "월":
-              return "1"; // "월" -> 1
-            case "화":
-              return "2"; // "화" -> 2
-            case "수":
-              return "3"; // "수" -> 3
-            case "목":
-              return "4"; // "목" -> 4
-            case "금":
-              return "5"; // "금" -> 5
-            case "토":
-              return "6"; // "토" -> 6
-            case "일":
-              return "0"; // "일" -> 0
-            default:
-              return "";
-          }
-        }
-      );
-
+  const events: StudyEvent[] = studyGroupInfo.map(
+    (studyGroup: StudyEventDto) => {
       const event: StudyEvent = {
-        id: studyGroupInfo.id.toString(),
-        title: studyGroupInfo.studyName,
-        daysOfWeek: mappedDaysOfWeek,
-        startTime: `${studyGroupInfo.studyTimeStart}:00`,
-        endTime: `${studyGroupInfo.studyTimeEnd}:00`,
-        startRecur: studyGroupInfo.studyPeriodStart,
-        endRecur: studyGroupInfo.studyPeriodEnd,
-        description: studyGroupInfo.introduction,
+        id: studyGroup.id.toString(),
+        title: studyGroup.title,
+        start: studyGroup.studyTimeStart,
+        end: studyGroup.studyTimeEnd,
+        color: studyGroup.color,
         overlap: true,
-        divide: "studyGroup"
+        divide: "studyGroup",
       };
       return event;
     }
   );
-
-  // 5. fullCalendar 이벤트 배열 반환
-  console.log(events);
   return events;
 };
 
@@ -135,17 +122,19 @@ export const getCustomEvent = async (isLoggedIn: boolean) => {
 
   const response = await tokenRequestApi.get("/calendars/members");
 
-  const customEventData : FullCalendarEvent[] = response.data.map((data : any) => {
-    const customEvent : FullCalendarEvent = {
-      id : data.id.toString(),
-      title : data.title,
-      start : data.studyTimeStart,
-      end : data.studyTimeEnd,
-      color : data.color,
-      divide: "customEvent"
+  const customEventData: FullCalendarEvent[] = response.data.map(
+    (data: any) => {
+      const customEvent: FullCalendarEvent = {
+        id: data.id.toString(),
+        title: data.title,
+        start: data.studyTimeStart,
+        end: data.studyTimeEnd,
+        color: data.color,
+        divide: "customEvent",
+      };
+      return customEvent;
     }
-    return customEvent;
-  });
+  );
   return customEventData;
 };
 
@@ -172,16 +161,14 @@ export interface EventData {
   color: string;
 }
 
-export const getCustomEvents = async (isLoggedIn: boolean, id: number): Promise<EventData> => {
+export const getCustomEvents = async (
+  isLoggedIn: boolean,
+  id: number
+): Promise<EventData> => {
   if (!isLoggedIn) throw new Error("로그인이 필요합니다.");
 
-  const response: AxiosResponse<EventData> = await tokenRequestApi.get(`/calendars/${id}/members`);
+  const response: AxiosResponse<EventData> = await tokenRequestApi.get(
+    `/calendars/${id}/members`
+  );
   return response.data;
 };
-
-// TODO : 일정 리스트 조회
-const getStudyGroupEvents = async(id: number) => {
-  const response = await axios.get(`/calendars/studygroups/${id}`);
-  const events = response.data;
-  return events;
-}
