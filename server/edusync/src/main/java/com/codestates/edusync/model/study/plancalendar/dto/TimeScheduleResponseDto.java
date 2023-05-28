@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Setter
 public class TimeScheduleResponseDto {
     private Long id;
+    private Long groupId;
 
     private String studyName;
     private String platform;

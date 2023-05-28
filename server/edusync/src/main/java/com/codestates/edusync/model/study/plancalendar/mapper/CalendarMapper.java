@@ -31,6 +31,7 @@ public interface CalendarMapper {
     @Named("EntityToResponse")
     @Mapping(source = "time.studyTimeStart", target = "studyTimeStart")
     @Mapping(source = "time.studyTimeEnd", target = "studyTimeEnd")
+    @Mapping(source = "studygroup.id", target = "groupId")
     TimeScheduleSingleResponseDto timeScheduleListToTimeScheduleResponseDto(TimeSchedule timeSchedules);
 
     @IterableMapping(qualifiedByName = "EntityToResponse")
@@ -39,6 +40,7 @@ public interface CalendarMapper {
     default TimeScheduleResponseDto timeScheduleToTimeScheduleResponseDto(TimeSchedule ts) {
         TimeScheduleResponseDto result = new TimeScheduleResponseDto();
         result.setId(ts.getId());
+        result.setGroupId((ts.getStudygroup().getId()));
         result.setStudyName(ts.getStudygroup().getStudyName());
         result.setPlatform(ts.getStudygroup().getPlatform());
 
