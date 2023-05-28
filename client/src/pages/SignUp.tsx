@@ -97,6 +97,7 @@ const SignUp = () => {
             onChange={handlePassword}
             type="password"
             placeholder="Password"
+            autoComplete="new-password"
             required
           />
         </SignUpForm>

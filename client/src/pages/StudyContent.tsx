@@ -13,6 +13,7 @@ import StudyComment from "../components/StudyComment";
 import tokenRequestApi from "../apis/TokenRequestApi";
 import StudyCommentList from "../components/StudyCommentList";
 import StudyListTag from "../components/StudyListTag";
+import LoginAlertModal from "../components/modal/LoginAlertModal";
 
 const StudyContent = () => {
   const initialTag = { [""]: [""] };
@@ -38,6 +39,7 @@ const StudyContent = () => {
   const [fetching, setFetching] = useState(true);
   const [comments, setComments] = useState<CommentDto[]>([]);
   const [content, setContent] = useState<StudyInfoDto | null>(initialState);
+  const [loginAlertModalOpen, setLoginAlertModalOpen] = useState(false);
   const { id } = useParams(); // App.tsx의 Route url에 :id로 명시하면 그걸 가져옴
   const parsedId = Number(id);
   const navigate = useNavigate();
@@ -56,9 +58,8 @@ const StudyContent = () => {
         const content = await getStudyGroupInfo(parsedId, isLoggedIn);
         setContent(content);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
-        console.log(content);
       } catch (error) {
-        if (!isLoggedIn) navigate("/login");
+        if (!isLoggedIn) setLoginAlertModalOpen(true);
         else {
           alert("잘못된 접근입니다");
           navigate("/studylist");
@@ -79,7 +80,6 @@ const StudyContent = () => {
     } catch (error) {
       alert("스터디 삭제가 실패했습니다!");
       // 당신의 스터디가 아닙니다?
-      console.error("Error during POST request:", error);
     }
   };
 
@@ -89,12 +89,10 @@ const StudyContent = () => {
 
   const handleJoinButton = async () => {
     try {
-      const res = await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
-      console.log(res);
+      await tokenRequestApi.post(`/studygroup/${parsedId}/join`);
       alert("스터디 신청이 완료되었습니다!");
     } catch (error) {
       alert("스터디 신청이 실패했습니다!");
-      console.error("Error during POST request:", error);
     }
     // 이미 등록한 스터디입니다 어떻게?
   };
@@ -159,8 +157,8 @@ const StudyContent = () => {
                 <StudyContentTag>
                   {content?.tags && (
                     <>
-                      {Object.entries(content.tags).map(([_category, tags]) => (
-                        <StudyListTag item={tags} />
+                      {Object.entries(content.tags).map(([category, tags]) => (
+                        <StudyListTag key={category} item={tags} />
                       ))}
                     </>
                   )}
@@ -175,14 +173,21 @@ const StudyContent = () => {
                 studyGroupId={Number(id)}
                 setComments={setComments}
               />
-              <StudyCommentList
-                studyGroupId={Number(id)}
-                comments={comments}
-                setComments={setComments}
-              />
+              {content && (
+                <StudyCommentList
+                  isLeader={content.leader}
+                  studyGroupId={Number(id)}
+                  comments={comments}
+                  setComments={setComments}
+                />
+              )}
             </div>
           )}
         </StudyContentBody>
+        <LoginAlertModal
+          isOpen={loginAlertModalOpen}
+          closeModal={() => setLoginAlertModalOpen(false)}
+        />
       </StudyContentContainer>
     </>
   );

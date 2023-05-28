@@ -11,13 +11,6 @@ import {
   getStudyGroupInfo,
   updateStudyGroupContentsInfo,
 } from "../apis/StudyGroupApi";
-/*try {
-    } catch (error) {
-      alert("스터디 수정이 실패했습니다!");
-      // 당신의 스터디가 아닙니다?
-      console.error("Error during POST request:", error);
-    }
-*/
 
 const StudyUpdate = () => {
   const { id } = useParams();
@@ -25,29 +18,28 @@ const StudyUpdate = () => {
   useEffect(() => {
     getStudyGroupInfo(studyGroupId, isLoggedIn).then((data) => {
       const key = Object.keys(data.tags)[0];
-      setStudyName(data.studyName);
-      setStudyPeriodStart(data.studyPeriodStart);
-      setStudyPeriodEnd(data.studyPeriodEnd);
-      setChecked(data.daysOfWeek);
-      setStudyTimeStart(data.studyTimeStart);
-      setStudyTimeEnd(data.studyTimeEnd);
-      setMemberCountMin(data.memberCountMin);
-      setMemberCountMax(data.memberCountMax);
-      setPlatform(data.platform);
-      setIntroduction(data.introduction);
+      setStudyName(data?.studyName);
+      setStudyPeriodStart(data?.studyPeriodStart);
+      setStudyPeriodEnd(data?.studyPeriodEnd);
+      setChecked(data?.daysOfWeek);
+      setStudyTimeStart(data?.studyTimeStart);
+      setStudyTimeEnd(data?.studyTimeEnd);
+      setMemberCountMin(data?.memberCountMin);
+      setMemberCountMax(data?.memberCountMax);
+      setPlatform(data?.platform);
+      setIntroduction(data?.introduction);
       setSelectedCategory(key);
-      setTags(data.tags[key]);
+      setTags(data?.tags[key]);
     });
   }, []);
-
   const [studyName, setStudyName] = useState<string>("");
   const [studyPeriodStart, setStudyPeriodStart] = useState<string>("");
   const [studyPeriodEnd, setStudyPeriodEnd] = useState<string>("");
   const [checked, setChecked] = useState<string[]>([]);
   const [studyTimeStart, setStudyTimeStart] = useState<string>("00:00");
   const [studyTimeEnd, setStudyTimeEnd] = useState<string>("00:00");
-  const [memberCountMin, setMemberCountMin] = useState<number>(1);
-  const [memberCountMax, setMemberCountMax] = useState<number>(1);
+  const [memberCountMin, setMemberCountMin] = useState<number>(2);
+  const [memberCountMax, setMemberCountMax] = useState<number>(2);
   const [platform, setPlatform] = useState<string>("");
   const [tags, setTags] = useState<string[]>([]);
   const [viewTag, setViewTag] = useState(false);
@@ -57,8 +49,8 @@ const StudyUpdate = () => {
     useState<string>("프론트엔드");
   const [selectedPeriodStart, setSelectedPeriodStart] = useState<string>("");
   const [selectedPeriodEnd, setSelectedPeriodEnd] = useState<string>("");
-  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("00:00");
-  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("00:00");
+  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("12:00");
+  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("12:00");
   const isLoggedIn = useRecoilValue(LogInState);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -82,7 +74,6 @@ const StudyUpdate = () => {
 
   const handleStudyPeriodEnd = (e: React.ChangeEvent<HTMLInputElement>) => {
     const endDateValue = e.target.value;
-    console.log(endDateValue);
     const timeValue = "00:00";
 
     const formattedPeriodEnd = `${endDateValue}T${timeValue}:00`;
@@ -140,8 +131,6 @@ const StudyUpdate = () => {
       },
     };
 
-    console.log(StudyPostDto);
-
     if (studyName === "") {
       alert("제목을 입력해주세요!");
       return;
@@ -166,17 +155,15 @@ const StudyUpdate = () => {
     }
 
     try {
-      const res = await updateStudyGroupContentsInfo(
+      await updateStudyGroupContentsInfo(
         StudyPostDto,
         isLoggedIn,
         studyGroupId
       );
-      console.log(res);
       alert("스터디 수정이 완료되었습니다!");
       navigate("/studylist");
     } catch (error) {
       alert("스터디 수정이 실패했습니다!");
-      console.error("Error during POST request:", error);
     }
   };
 
@@ -254,7 +241,7 @@ const StudyUpdate = () => {
             <span>인원</span>
             <input
               type="number"
-              min="1"
+              min="2"
               value={memberCountMin}
               onChange={handleMemberCountMin}
               required
@@ -301,6 +288,7 @@ const StudyUpdate = () => {
 const StudyPostContainer = styled.div`
   width: 100%;
   height: 100%;
+  background-color: #e9e9e9;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -11,6 +11,7 @@ import {
   getStudyGroupMemberList,
 } from "../../apis/StudyGroupApi";
 import { AiOutlineCrown, AiOutlineUserDelete } from "react-icons/ai";
+import { getMemberInfo } from "../../apis/MemberApi";
 
 // TODO: 스터디 그룹에 가입된 회원 리스트 타입
 export interface StudyGroupMemberListDto {
@@ -18,6 +19,7 @@ export interface StudyGroupMemberListDto {
 }
 
 interface MemberManageProps {
+  // 스터디 리더 === studyInfo에서 받아온 코드
   studyLeader: string | undefined;
 }
 
@@ -28,7 +30,19 @@ const MemberManage = ({ studyLeader }: MemberManageProps) => {
   const [memberList, setMemberList] = useState<StudyGroupMemberListDto | null>(
     null
   );
-  console.log(studyLeader);
+  const [loggedInUser, setLoggedInUser] = useState<string | null>(null);
+
+  // TODO : 페이지 진입 시 유저 목록 및 사용중인 유저의 닉네임을 불러오는 함수
+  useEffect(() => {
+    fetchMemberList();
+    getMemberInfo(isLoggedIn).then((response) => {
+      if (response) {
+        setLoggedInUser(response.nickName);
+      } else {
+        setLoggedInUser(null);
+      }
+    });
+  }, []);
 
   // 스터디 그룹 멤버 리스트를 불러오는 함수
   const fetchMemberList = async () => {
@@ -45,30 +59,34 @@ const MemberManage = ({ studyLeader }: MemberManageProps) => {
     }
   };
 
-  useEffect(() => {
-    if (!isLoggedIn) {
-      navigate("/login");
-    }
-    fetchMemberList();
-  }, []);
-
   // TODO : 스터디 그룹장의 권한을 위임하는 함수
   const handlePrivileges = async (nickname: string) => {
+    if (loggedInUser === nickname) {
+      alert("스터디장은 스스로 스터디 그룹장의 권한을 위임할 수 없습니다");
+    }
+    if (loggedInUser !== studyLeader) {
+      alert("스터디 그룹장만 권한을 위임할 수 있습니다");
+    }
     const data: StudyGroupMemberApprovalDto = {
       nickName: nickname,
     };
-    try {
-      await delegateStudyGroupLeader(Number(id), data);
-      alert("권한 위임에 성공했습니다");
-      location.reload();
-    } catch (error) {
-      alert("스터디장만이 권한을 위임할 수 있습니다");
-    }
+    await delegateStudyGroupLeader(Number(id), data);
+    alert("권한 위임에 성공했습니다");
+    navigate("/profile/manage-group");
     fetchMemberList();
   };
 
   // TODO : 스터디 그룹에서 강제로 퇴출하는 함수
   const handleForcedKicked = async (nickname: string) => {
+    if (nickname === studyLeader && loggedInUser === studyLeader) {
+      alert("스터디장은 스터디 그룹에서 강제로 퇴출할 수 없습니다");
+    }
+    if (nickname === studyLeader && loggedInUser !== studyLeader) {
+      alert("스터디원 따위가 감히?!");
+    }
+    if (loggedInUser === studyLeader && loggedInUser !== nickname) {
+      alert("스터디 그룹장만 그룹원을 강제로 퇴출할 수 있습니다");
+    }
     const data: StudyGroupMemberApprovalDto = {
       nickName: nickname,
     };

@@ -1,6 +1,8 @@
 import { useState, useRef } from "react";
 import styled from "styled-components";
 import { updateMemberProfileImage } from "../apis/MemberApi";
+import { RenderingState } from "../recoil/atoms/RenderingState";
+import { useRecoilState } from "recoil";
 
 interface Props {
   profileImage: string | undefined;
@@ -10,6 +12,7 @@ const ProfileImg = ({ profileImage }: Props) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [imageUrl, setImageUrl] = useState<string>(profileImage || "");
   const [isEditing, setIsEditing] = useState<boolean>(false);
+  const [isRendering, setIsRendering] = useRecoilState(RenderingState);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const file: File | undefined = e.target.files?.[0];
@@ -32,7 +35,8 @@ const ProfileImg = ({ profileImage }: Props) => {
   const updateImg = async (): Promise<void> => {
     try {
       await updateMemberProfileImage({ profileImage: imageUrl });
-      alert("프로필 이미지가 변경되었습니다.");
+      setIsEditing(false);
+      setIsRendering(!isRendering);
     } catch (error) {
       alert("프로필 이미지 변경에 실패하였습니다.");
     }
@@ -86,29 +90,36 @@ const ProfileImgSection = styled.div`
   position: relative;
   cursor: pointer;
 
-  &:hover {
-    background-color: #ccc;
-    border: 2px solid #3383fa;
-
-    &::after {
-      content: "프로필 수정";
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background-color: rgba(0, 0, 0, 0.5);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 4px;
-      font-size: 13px;
-    }
-  }
-
-  img {
+  label {
     width: 100%;
     height: 100%;
-    object-fit: cover;
-    cursor: pointer;
+    position: relative;
+
+    &:hover {
+      background-color: #ccc;
+      border: 2px solid #3383fa;
+
+      &::after {
+        content: "프로필 수정";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        font-size: 13px;
+        cursor: pointer;
+      }
+    }
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      cursor: pointer;
+    }
   }
 `;
 
@@ -117,20 +128,6 @@ const ButtonGroup = styled.div`
   justify-content: center;
   margin-top: 10px;
 `;
-
-// const UploadButton = styled.button`
-//   background-color: #337ab7;
-//   color: #fff;
-//   padding: 8px 16px;
-//   border: none;
-//   border-radius: 4px;
-//   font-size: 14px;
-//   cursor: pointer;
-
-//   &:hover {
-//     background-color: #23527c;
-//   }
-// `;
 
 const CancelButton = styled.button`
   background-color: #ccc;

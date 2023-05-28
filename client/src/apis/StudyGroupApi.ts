@@ -1,5 +1,6 @@
 import axios from "axios";
 import tokenRequestApi from "./TokenRequestApi";
+import { eduApi } from "./EduApi";
 
 // ====================== 마이 스터디 리스트 조회 (GET) ===========================
 export interface StudyGroup {
@@ -34,7 +35,6 @@ export const getWaitingStudyGroupList =
   async (): Promise<WaitingStudyGroupListDto> => {
     const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(
       `/studygroup/myList?approved=false`
-
     );
     const data = response.data;
     return data;
@@ -47,8 +47,8 @@ export async function cancelStudyGroupApplication(
   isLoggedIn: boolean
 ) {
   if (!isLoggedIn) throw new Error("로그인 상태를 확인하세요");
-  const response = await tokenRequestApi.delete(`/studygroup/${id}/join`);
-  console.log("해당 그룹에 가입신청을 철회합니다", response);
+  await tokenRequestApi.delete(`/studygroup/${id}/join`);
+  alert("해당 그룹에 가입신청을 철회합니다");
 }
 
 // ====================== 스터디 그룹 정보 조회 (GET) ===========================
@@ -125,7 +125,7 @@ export async function updateStudyGroupInfo(
     `/studygroup/${id}`,
     formattedData
   );
-  console.log("성공적으로 스터디 정보를 업데이트 했습니다", response.data);
+  return response;
 }
 
 // ====================== 스터디 그룹 수정 (PATCH) ===========================
@@ -157,19 +157,16 @@ export async function updateStudyGroupContentsInfo(
     ...data,
   };
 
-  const response = await tokenRequestApi.patch(
-    `/studygroup/${id}`,
-    formattedData
-  );
-  console.log("성공적으로 스터디 정보를 업데이트 했습니다", response.data);
+  await tokenRequestApi.patch(`/studygroup/${id}`, formattedData);
+  alert("성공적으로 스터디 정보를 업데이트 했습니다");
 }
 
 // ====================== 스터디 그룹 삭제 (DELETE) ===========================
 // TODO : StudyGroup의 정보를 삭제하는 코드
 export async function deleteStudyGroupInfo(id: number, isLoggedIn: boolean) {
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
-  const response = await tokenRequestApi.delete(`/studygroup/${id}`);
-  console.log("스터디가 삭제되었습니다.", response);
+  await tokenRequestApi.delete(`/studygroup/${id}`);
+  alert("스터디가 삭제되었습니다.");
 }
 
 // ====================== 스터디 그룹 모집 상태 수정 (UPDATE) ===========================
@@ -185,8 +182,8 @@ export async function updateStudyGroupRecruitmentStatus(
   isLoggedIn: boolean
 ) {
   if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
-  const response = await tokenRequestApi.patch(`/studygroup/${id}`, data);
-  console.log("스터디 모집 상태를 최신화하는데 성공했습니다", response);
+  await tokenRequestApi.patch(`/studygroup/${id}`, data);
+  alert("스터디 모집 상태를 최신화하는데 성공했습니다");
 }
 
 // ====================== 스터디 그룹장의 가입 승인/거절/강제 탈퇴 기능 ===========================
@@ -210,11 +207,8 @@ export async function approveStudyGroupApplication(
   const data: StudyGroupMemberApprovalDto = {
     nickName: nickname,
   };
-  const response = await tokenRequestApi.post(
-    `/studygroup/${id}/candidate`,
-    data
-  );
-  console.log("해당 회원의 가입을 허가합니다", response);
+  await tokenRequestApi.post(`/studygroup/${id}/candidate`, data);
+  alert("해당 회원의 가입을 허가합니다");
 }
 
 // TODO: StudyGroup으로의 가입을 거절하는 코드
@@ -228,11 +222,8 @@ export async function rejectStudyGroupApplication(
   const config = {
     data,
   };
-  const response = await tokenRequestApi.delete(
-    `/studygroup/${id}/candidate`,
-    config
-  );
-  console.log("가입 거절", response);
+  await tokenRequestApi.delete(`/studygroup/${id}/candidate`, config);
+  alert("가입이 거절됐습니다");
 }
 
 // TODO : StudyGroup에서 강제 퇴출시키는 코드
@@ -278,8 +269,6 @@ export async function getStudyGroupMemberWaitingList(
   const response = await tokenRequestApi.get<StudyGroupMemberWaitingListDto>(
     `/studygroup/${id}/member?join=false`
   );
-  console.log("성공적으로 대기 리스트를 호출했습니다", response);
-  console.log(response.data);
   return response.data;
 }
 // ====================== 회원 리스트 ===========================
@@ -303,7 +292,7 @@ export async function getStudyGroupMemberList(id: number, isLoggedIn: boolean) {
 export async function exitStudyGroup(id: number, isLoggedIn: boolean) {
   if (!isLoggedIn) throw new Error("Access token is not defined.");
   const response = await tokenRequestApi.delete(`/studygroup/${id}/member`);
-  console.log("스터디에서 탈퇴했습니다", response);
+  return response.data;
 }
 
 // ====================== 스터디 그룹 모집상태 변경 ===========================
@@ -322,10 +311,16 @@ export async function changeStudyGroupRecruitmentStatus(
     status: false,
   };
 
-  const response = await tokenRequestApi.patch(
-    `/studygroup/${id}/status`,
-    config
-  );
-  console.log("스터디 모집 상태를 변경했습니다", response);
+  await tokenRequestApi.patch(`/studygroup/${id}/status`, config);
+  alert("스터디 모집 상태를 변경했습니다");
+}
+export interface StudyListOrderDto {
+  data: StudyGroup[];
+}
 
+export async function getStudyListOrder(order: string, isAscending: boolean) {
+  const response = await eduApi.get<StudyListOrderDto>(
+    `/studygroups/order?page=1&size=1000&order=${order}&isAscending=${isAscending}`
+  );
+  return response.data.data;
 }

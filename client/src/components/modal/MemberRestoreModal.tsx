@@ -53,9 +53,6 @@ const MemberRestoreModal = ({ isOpen, closeModal, email }: ModalProps) => {
             setIsSuccess(false);
             navigate("/login");
           }, 800);
-        })
-        .catch((err) => {
-          console.log(err);
         });
     }
   };

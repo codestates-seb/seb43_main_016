@@ -51,8 +51,6 @@ const StudyInfoEditModal = ({
   const { id } = useParams();
   const parsedId = Number(id);
 
-  console.log(modalState);
-
   const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { value, checked } = event.target;
     let updatedDaysOfWeek = [...modalState.daysOfWeek];
@@ -69,6 +67,10 @@ const StudyInfoEditModal = ({
     }));
   };
 
+  const removeHTMLTags = (str: string) => {
+    return str.replace(/<[^>]*>?/gm, "");
+  };
+
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setModalState((prevState) => ({
@@ -83,7 +85,6 @@ const StudyInfoEditModal = ({
       closeModal();
     } catch (error) {
       alert("스터디 그룹 정보를 업데이트하는 중에 오류가 발생했습니다.");
-      console.error("Error updating study group information:", error);
     }
   };
 
@@ -222,7 +223,7 @@ const StudyInfoEditModal = ({
           <UserInfoEditInput
             name="introduction"
             type="text"
-            value={modalState.introduction}
+            value={removeHTMLTags(modalState.introduction)}
             onChange={handleInputChange}
           />
           <ModalButton type="button" onClick={handleSaveClick}>

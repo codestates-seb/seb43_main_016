@@ -28,9 +28,6 @@ const User = ({ profileImage, isLoggedIn, setIsLoggedIn }: GNB) => {
         removeTokens();
         setIsLoggedIn(false);
         navigate("/");
-      })
-      .catch((err) => {
-        console.log(err);
       });
   };
 

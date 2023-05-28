@@ -48,10 +48,7 @@ const extendAccessToken = async () => {
       });
       const { authorization: newAccessToken } = response.headers;
       tokenRequestApi.setAccessToken(newAccessToken);
-      console.log("accessToken 갱신됨");
-    } catch (error) {
-      console.error("accessToken 갱신 실패:", error);
-    }
+    } catch (error) {}
   }, timeToExpire);
 };
 

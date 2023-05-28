@@ -4,30 +4,26 @@ import styled from "styled-components";
 import logo from "../../assets/edusync-logo.png";
 import User from "./User";
 import tokenRequestApi from "../../apis/TokenRequestApi";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { LogInState } from "../../recoil/atoms/LogInState";
+import { RenderingState } from "../../recoil/atoms/RenderingState";
 
 const GNB = () => {
   const [profileImage, setProfileImage] = useState("");
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
+  const isRendering = useRecoilValue(RenderingState);
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     setIsLoading(true);
     if (isLoggedIn) {
-      tokenRequestApi
-        .get("/members")
-        .then((res) => {
-          setProfileImage(res.data.profileImage);
-          setIsLoading(false);
-          console.log(res.data);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      tokenRequestApi.get("/members").then((res) => {
+        setProfileImage(res.data.profileImage);
+        setIsLoading(false);
+      });
     }
     setIsLoading(false);
-  }, [isLoggedIn]);
+  }, [isLoggedIn, isRendering]);
   return (
     <>
       {isLoading ? (
@@ -57,9 +53,6 @@ const GNB = () => {
             </Link>
             <Link to="/calendar">
               <span>나의 캘린더</span>
-            </Link>
-            <Link to="/profile">
-              <span>나의 프로필</span>
             </Link>
           </GNBMenuBlock>
           <User

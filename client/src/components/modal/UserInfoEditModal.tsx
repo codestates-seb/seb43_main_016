@@ -22,12 +22,13 @@ interface UserInfoEditModalProps {
   userNickname: string | undefined;
 }
 
-const UserInfoEditModal = ({ isOpen, closeModal, userNickname }: UserInfoEditModalProps) => {
+const UserInfoEditModal = ({
+  isOpen,
+  closeModal,
+  userNickname,
+}: UserInfoEditModalProps) => {
   const isLoggedIn = useRecoilValue(LogInState);
-  if (!isLoggedIn) {
-    alert("로그인이 필요합니다.");
-    closeModal();
-  }
+
   const [modalState, setModalState] = useState({
     nickname: "",
     password: "",
@@ -62,14 +63,19 @@ const UserInfoEditModal = ({ isOpen, closeModal, userNickname }: UserInfoEditMod
         };
         await updateMember(isLoggedIn, updateDto); // Await the updateMember function call
         closeModal();
-      } catch (error) {
-        alert("로그인이 필요합니다.");
+      } catch (error: any) {
+        alert(error.response.data.message);
       }
     }
   };
 
   const handleCancelClick = () => {
     closeModal();
+    setModalState({
+      nickname: "",
+      password: "",
+      passwordCheck: "",
+    });
   };
 
   return (

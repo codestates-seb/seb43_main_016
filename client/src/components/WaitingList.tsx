@@ -24,7 +24,7 @@ const WaitingList = () => {
         }
         setWaitingList(data.beStudys);
       } catch (error) {
-        console.error("스터디 그룹 리스트를 불러오는데 실패했습니다.", error);
+        alert("스터디 그룹 리스트를 불러오는데 실패했습니다.");
       }
     };
     fetchWaitingList();
@@ -35,7 +35,7 @@ const WaitingList = () => {
       await cancelStudyGroupApplication(id, isLoggedIn);
       setWaitingList(waitingList.filter((study) => study.id !== id));
     } catch (error) {
-      console.error("가입 신청 철회에 실패했습니다", error);
+      alert("가입 신청 철회에 실패했습니다");
     }
   };
 

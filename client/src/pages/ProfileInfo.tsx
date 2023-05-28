@@ -10,15 +10,17 @@ import {
 } from "../apis/MemberApi";
 import { useState, useEffect, ChangeEvent } from "react";
 import UserInfoEditModal from "../components/modal/UserInfoEditModal";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { LogInState } from "../recoil/atoms/LogInState";
 import { useNavigate } from "react-router-dom";
 import CheckPasswordModal from "../components/modal/CheckPasswordModal";
 import tokenRequestApi from "../apis/TokenRequestApi";
 import { removeTokens } from "./utils/Auth";
+import { RenderingState } from "../recoil/atoms/RenderingState";
 
 const ProfileInfo = () => {
   const [isLoggedIn, setIsLoggedIn] = useRecoilState(LogInState);
+  const isRendering = useRecoilValue(RenderingState);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [memberInfo, setMemberInfo] = useState<MemberInfoResponseDto | null>(
     null
@@ -42,13 +44,11 @@ const ProfileInfo = () => {
       try {
         const info = await getMemberInfo(isLoggedIn);
         setMemberInfo(info);
-      } catch (error) {
-        alert("로그인이 필요합니다.");
-        console.error(error);
-      }
+        setIntroduceInfo({ aboutMe: info.aboutMe, withMe: info.withMe });
+      } catch (error) {}
     };
     fetchMemberInfo();
-  }, [isModalOpen, isLoggedIn]);
+  }, [isModalOpen, isRendering]);
 
   // TODO Edit 버튼을 클릭 시, 유저의 닉네임, 비밀번호를 수정할 수 있도록 상태를 변경하는 코드
   // 현재 Modal 구현은 완료했으나 비동기 처리로 인해 계속된 오류 발생. 추가적인 최적화 작업 요함
@@ -66,13 +66,12 @@ const ProfileInfo = () => {
   const handleIntroduceEditClick = () => {
     setIsIntroduceEdit(true);
   };
-  const handleIntroduceChange = (e: ChangeEvent<HTMLInputElement>) => {
+  const handleIntroduceChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setIntroduceInfo((prevIntroduceInfo) => ({
       ...prevIntroduceInfo,
       [name]: value,
     }));
-    console.log(introduceInfo);
   };
 
   // TODO Save 버튼을 클릭 시, 유저의 자기소개 및 원하는 동료상을 서버에 PATCH하는 코드
@@ -86,7 +85,6 @@ const ProfileInfo = () => {
       setIsIntroduceEdit(false);
       location.reload();
     } catch (error) {
-      console.error(error);
       setIsIntroduceEdit(false);
     }
   };
@@ -96,7 +94,7 @@ const ProfileInfo = () => {
     try {
       const confirmed = window.confirm(
         `정말로 회원탈퇴하시겠습니까?
-        
+
 (소셜 로그인 회원의 경우, 탈퇴 후 재로그인시 자동으로 계정이 복구됩니다.)`
       );
       if (confirmed) {
@@ -109,9 +107,7 @@ const ProfileInfo = () => {
       } else {
         alert("회원탈퇴가 취소되었습니다.");
       }
-    } catch (error) {
-      console.error(error);
-    }
+    } catch (error) {}
   };
   return (
     <ProfileInfoContainer>
@@ -123,10 +119,10 @@ const ProfileInfo = () => {
           <ProfileInput
             className="nickname-input"
             disabled
-            value={memberInfo?.nickName}
+            value={memberInfo?.nickName || ""}
           />
-          <ProfileInput disabled value={memberInfo?.email} />
-          <ProfileInput disabled value={memberInfo?.roles} />
+          <ProfileInput disabled value={memberInfo?.email || ""} />
+          <ProfileInput disabled value={memberInfo?.roles || ""} />
           <EditButton onClick={handleEditClick}>Edit</EditButton>
         </ProfileBaseInfo>
       </ProfileBaseWrapper>
@@ -134,24 +130,22 @@ const ProfileInfo = () => {
         {!isIntroduceEdit ? (
           <>
             <h4>자기소개</h4>
-            <IntroduceAndDesiredInput value={memberInfo?.aboutMe} disabled />
+            <IntroduceAndDesiredTextarea value={memberInfo?.aboutMe} disabled />
             <h4>함께하고 싶은 동료</h4>
-            <IntroduceAndDesiredInput value={memberInfo?.withMe} disabled />
+            <IntroduceAndDesiredTextarea value={memberInfo?.withMe} disabled />
           </>
         ) : (
           <>
             <h4>자기소개</h4>
-            <IntroduceAndDesiredInput
-              type="text"
+            <IntroduceAndDesiredTextarea
               name="aboutMe"
-              placeholder={memberInfo?.aboutMe}
+              placeholder="자기소개를 입력해주세요"
               onChange={handleIntroduceChange}
             />
             <h4>함께하고 싶은 동료</h4>
-            <IntroduceAndDesiredInput
-              type="text"
+            <IntroduceAndDesiredTextarea
               name="withMe"
-              placeholder={memberInfo?.withMe}
+              placeholder="함께하고 싶은 동료상을 입력해주세요"
               onChange={handleIntroduceChange}
             />
           </>
@@ -159,9 +153,16 @@ const ProfileInfo = () => {
         <ButtonWrapper>
           <ExitEditButton onClick={handleDeleteClick}>회원탈퇴</ExitEditButton>
           {!isIntroduceEdit ? (
-            <EditButton onClick={handleIntroduceEditClick}>Edit</EditButton>
+            <EditButton
+              id="introduceEditButton"
+              onClick={handleIntroduceEditClick}
+            >
+              Edit
+            </EditButton>
           ) : (
-            <EditButton onClick={handleSaveClick}>Save</EditButton>
+            <EditButton id="introduceSaveButton" onClick={handleSaveClick}>
+              Save
+            </EditButton>
           )}
         </ButtonWrapper>
       </IntroduceAndDesired>
@@ -241,11 +242,24 @@ const IntroduceAndDesired = styled.div`
   }
 `;
 
-const IntroduceAndDesiredInput = styled.input`
+const IntroduceAndDesiredTextarea = styled.textarea`
   margin-bottom: 10px;
   padding: 8px;
   width: 90%;
   height: 200px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f5f5f5;
+  transition: all 0.3s;
+
+  &:disabled {
+    background-color: #fff;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: #4d74b1;
+  }
 `;
 
 const ButtonWrapper = styled.div`
@@ -259,11 +273,26 @@ const EditButton = styled.button`
   height: 40px;
   margin-bottom: 10px;
   padding: 8px 16px;
-  background-color: #4d74b1;
+  background-color: ${(props) =>
+    props.id === "introduceEditButton"
+      ? "#4d74b1"
+      : props.id === "introduceSaveButton"
+      ? "#868DAA"
+      : "#4d74b1"};
   color: white;
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
+
+  &:hover {
+    background-color: ${(props) =>
+      props.id === "introduceEditButton"
+        ? "#4d74b1"
+        : props.id === "introduceSaveButton"
+        ? "#868DAA"
+        : "#4d74b1"};
+  }
 `;
 
 const ExitEditButton = styled.button`
