@@ -32,6 +32,7 @@ const StudyUpdate = () => {
       setTags(data?.tags[key]);
     });
   }, []);
+
   const [studyName, setStudyName] = useState<string>("");
   const [studyPeriodStart, setStudyPeriodStart] = useState<string>("");
   const [studyPeriodEnd, setStudyPeriodEnd] = useState<string>("");
@@ -143,12 +144,10 @@ const StudyUpdate = () => {
       alert("최대 인원이 최소 인원보다 적습니다!");
       return;
     }
-
     if (studyPeriodStart > studyPeriodEnd) {
       alert("스터디 시작일이 종료일보다 늦습니다!");
       return;
     }
-
     if (checked.length === 0) {
       alert("요일을 선택해주세요!");
       return;
