@@ -120,6 +120,7 @@ const Calendar = () => {
         slotMaxTime={"33:00"}
         slotEventOverlap={true}
         height={"100%"}
+
       />
       {selectedDate && (
         <AddEventModal
