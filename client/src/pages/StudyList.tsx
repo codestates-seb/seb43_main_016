@@ -22,7 +22,7 @@ const StudyList = () => {
 
   const [fetching, setFetching] = useState(true);
   const [list, setList] = useState<StudyListDto[]>(initialState);
-  //const [filterData, setFilterData] = useState<StudyListDto[]>(initialState);
+  const [filterData, setFilterData] = useState<StudyListDto[]>(initialState);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,12 +34,17 @@ const StudyList = () => {
         setList(response.data?.data);
         setFetching(false); // 데이터를 가져왔다는 걸 표시하는 플래그 함수, 렌더링했으면 undefined가 아니다
       } catch (error) {
-        console.log(error);
         throw new Error("스터디 리스트 로딩에 실패했습니다.");
       }
     };
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setFetching(true);
+    setList(filterData);
+    setFetching(false);
+  }, ["", filterData]);
 
   return (
     <StudyListContainer>
@@ -53,7 +58,7 @@ const StudyList = () => {
           </Link>
         </StudyListTop>
         <ListFilterWrapper>
-          <ListFilter setFilterData={setList} />
+          <ListFilter setFilterData={setFilterData} />
         </ListFilterWrapper>
         <StudyListMain>
           {!fetching && (
@@ -170,7 +175,7 @@ const StudyListImage = styled.div`
 
 const StudyBox = styled.div`
   flex-basis: 280px;
-  height: 320px;
+  height: 350px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
@@ -184,7 +189,7 @@ const StudyBox = styled.div`
 
   .studylist-title {
     width: 260px;
-    padding: 10px 0;
+    padding: 20px 0 12px;
     color: #1f1f1f;
     display: flex;
     justify-content: flex-start;
@@ -198,7 +203,9 @@ const StudyBox = styled.div`
   }
   .studylist-tag {
     width: 260px;
+    height: 30px;
     padding-top: 10px;
+    margin-bottom: 10px;
     display: flex;
     flex-flow: row wrap;
     justify-content: flex-end;

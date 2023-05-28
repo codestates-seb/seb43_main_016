@@ -80,7 +80,6 @@ const StudyContent = () => {
     } catch (error) {
       alert("스터디 삭제가 실패했습니다!");
       // 당신의 스터디가 아닙니다?
-      console.error("Error during POST request:", error);
     }
   };
 
@@ -94,7 +93,6 @@ const StudyContent = () => {
       alert("스터디 신청이 완료되었습니다!");
     } catch (error) {
       alert("스터디 신청이 실패했습니다!");
-      console.error("Error during POST request:", error);
     }
     // 이미 등록한 스터디입니다 어떻게?
   };
@@ -159,8 +157,8 @@ const StudyContent = () => {
                 <StudyContentTag>
                   {content?.tags && (
                     <>
-                      {Object.entries(content.tags).map(([_category, tags]) => (
-                        <StudyListTag item={tags} />
+                      {Object.entries(content.tags).map(([category, tags]) => (
+                        <StudyListTag key={category} item={tags} />
                       ))}
                     </>
                   )}

@@ -16,7 +16,6 @@ export const postComment = async (studyGroupId: number, data: string) => {
       content: data,
     });
   } catch (error) {
-    console.log(error);
     throw new Error("댓글 등록 실패");
   }
 };
@@ -33,7 +32,6 @@ export const patchComment = async (
       { content: data }
     );
   } catch (error) {
-    console.log(error);
     throw new Error("댓글 수정 실패");
   }
 }; //31 -> 변수로 나중에 바꿔야 함
@@ -48,7 +46,6 @@ export const getComments = async (
     ); //31 -> 변수로 나중에 바꿔야 함
     return response.data;
   } catch (error) {
-    console.log(error);
     throw new Error("댓글 전부 조회 실패");
   }
 };
@@ -56,11 +53,10 @@ export const getComments = async (
 // ====================== 댓글 삭제 (DELETE) ===========================
 export const deleteComment = async (studyGroupId: number, patchId: number) => {
   try {
-    const response = await tokenRequestApi.delete(
+    await tokenRequestApi.delete(
       `/studygroup/${studyGroupId}/comment/${patchId}`
     );
-    console.log("댓글이 삭제되었습니다.", response);
   } catch (error) {
-    console.error("댓글을 삭제하는데 실패했습니다. 권한을 확인하세요", error);
+    alert("댓글을 삭제하는데 실패했습니다. 권한을 확인하세요");
   }
 };
