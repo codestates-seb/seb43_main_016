@@ -106,7 +106,9 @@ const ProfileStudyManage = () => {
   // TODO : HTML 태그로 이뤄진 문자열을 일반 문자열로 변경하는 함수
   const removeHtmlTag = (str: string | undefined) => {
     if (str === undefined) return str;
-    return str.replace(/(<([^>]+)>)/gi, "");
+    let processedStr = str.replace(/(<([^>]+)>)/gi, "");
+    processedStr = processedStr.replace(/&nbsp;/g, " ");
+    return processedStr;
   };
 
   return (
