@@ -2,10 +2,9 @@ import tokenRequestApi from "./TokenRequestApi";
 
 import {
   StudyInfoDto,
-  getStudyGroupInfo,
   getStudyGroupList,
 } from "./StudyGroupApi";
-import { AxiosResponse } from "axios";
+import axios, { AxiosResponse } from "axios";
 
 // ====================== 개인이 속한 스터디의 스케줄을 가져오는 로직  ===========================
 // 1. 개인이 속한 스터디 조회
@@ -27,7 +26,6 @@ export interface StudyEvent {
 }
 
 export const generateStudyEvents = async (
-  isLoggedIn: boolean
 ): Promise<StudyEvent[]> => {
   // 1. 개인이 속한 스터디 조회
   const myStudyGroups = await getStudyGroupList();
@@ -41,8 +39,9 @@ export const generateStudyEvents = async (
   // 3. id를 인자로 전달하여 각 스터디의 상세정보를 추출하고, 변수에 담기
   const studyGroupInfos: StudyInfoDto[] = [];
   for (const id of studyGroupIds) {
-    const studyGroupInfo = await getStudyGroupInfo(id, isLoggedIn);
+    const studyGroupInfo = await getStudyGroupEvents(id);
     studyGroupInfos.push(studyGroupInfo);
+    console.log(studyGroupInfo);
   }
 
   // 4. 변수에 담은 스터디 정보를 fullCalendar 라이브러리에 맞게 맵핑
@@ -88,6 +87,7 @@ export const generateStudyEvents = async (
   );
 
   // 5. fullCalendar 이벤트 배열 반환
+  console.log(events);
   return events;
 };
 
@@ -178,3 +178,10 @@ export const getCustomEvents = async (isLoggedIn: boolean, id: number): Promise<
   const response: AxiosResponse<EventData> = await tokenRequestApi.get(`/calendars/${id}/members`);
   return response.data;
 };
+
+// TODO : 일정 리스트 조회
+const getStudyGroupEvents = async(id: number) => {
+  const response = await axios.get(`/calendars/studygroups/${id}`);
+  const events = response.data;
+  return events;
+}

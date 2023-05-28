@@ -51,6 +51,7 @@ const Calendar = () => {
         }
       };
       fetchEvents();
+      console.log(studyEvents);
     }
   }, [isLoggedIn, navigate]);
 
