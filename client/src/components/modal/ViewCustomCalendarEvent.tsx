@@ -20,7 +20,7 @@ const customStyles = {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    maxWidth: "300px",
+    maxWidth: "400px",
     width: "90%",
     maxHeight: "200px",
     backgroundColor: "white",
@@ -30,7 +30,30 @@ const customStyles = {
     padding: "20px",
     outline: "none",
   },
+  title: {
+    marginBottom: "10px",
+    color: "#3688D8",
+    fontSize: "16px",
+  },
+  label: {
+    marginBottom: "2px",
+    fontSize: "12px",
+  },
+  description: {
+    marginBottom: "2px",
+    fontSize: "12px",
+  },
+  deleteButton: {
+    marginTop: "10px",
+    backgroundColor: "#3688D8",
+    color: "white",
+    border: "none",
+    borderRadius: "4px",
+    padding: "8px 16px",
+    cursor: "pointer",
+  },
 };
+
 interface ViewEventDetailModalProps {
   isOpen: boolean;
   closeModal: () => void;
@@ -90,24 +113,23 @@ const ViewCustomCalendarEvent = ({
       >
         {studyInfo ? (
           <>
-            <h2 style={{ marginBottom: "10px", color: "#4D74B1" }}>
-              {" "}
-              제목 : {studyInfo.title}
-            </h2>
-            <p style={{ marginBottom: "2px" }}>
+            <h2 style={customStyles.title}>제목: {studyInfo.title}</h2>
+            <p style={customStyles.label}>
               스터디 기간: {startDate} ~ {endDate}
             </p>
-            <p style={{ marginBottom: "2px" }}>
+            <p style={customStyles.label}>
               스터디 시간: {startTime} ~ {endTime}
             </p>
-            <p style={{ marginBottom: "2px" }}>
+            <p style={customStyles.description}>
               상세내용: {studyInfo.description}
             </p>
           </>
         ) : (
           <p>Loading study group information...</p>
         )}
-        <button onClick={handleDeleteEvent}>삭제</button>
+        <button style={customStyles.deleteButton} onClick={handleDeleteEvent}>
+          삭제
+        </button>
       </Modal>
     </>
   );

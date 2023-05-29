@@ -41,7 +41,7 @@ const Calendar = () => {
     } else {
       const fetchEvents = async () => {
         try {
-          const generatedStudyEvents = await generateStudyEvents(true);
+          const generatedStudyEvents = await generateStudyEvents();
           setStudyEvents(generatedStudyEvents);
         } catch (error) {
           alert("스터디 일정을 불러오는 데 실패했습니다");
@@ -89,7 +89,8 @@ const Calendar = () => {
 
   const handleEventClick = (event: any) => {
     if (event.event._def.extendedProps.divide === "studyGroup") {
-      setSelectedStudyEvent(Number(event.event._def.publicId));
+      setSelectedStudyEvent(Number(event.event._def.groupId));
+      console.log(event);
       setViewCalendarEventModalOpen(true);
     } else if (event.event._def.extendedProps.divide === "customEvent") {
       setSelectedCustomEvent(Number(event.event._def.publicId));
@@ -120,6 +121,7 @@ const Calendar = () => {
         slotMaxTime={"33:00"}
         slotEventOverlap={true}
         height={"100%"}
+
       />
       {selectedDate && (
         <AddEventModal

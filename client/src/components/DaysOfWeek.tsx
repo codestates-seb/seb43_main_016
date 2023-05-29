@@ -6,7 +6,7 @@ interface DaysOfWeekProps {
 }
 
 const DaysOfWeek = ({ checked, setChecked }: DaysOfWeekProps) => {
-  const daysOfWeekList: string[] = ["월", "화", "수", "목", "금", "토", "일"];
+  const daysOfWeekList: string[] = ["일", "월", "화", "수", "목", "금", "토"] ;
 
   const handleCheck = (e: { target: { checked: any; value: string } }) => {
     let updatedList = [...checked];
