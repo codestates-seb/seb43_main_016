@@ -10,6 +10,7 @@ import axios, { AxiosResponse } from "axios";
 // 5. fullCalendar 라이브러리에 전달하여 이벤트 생성
 export interface StudyEvent {
   id: string;
+  groupId:string
   title: string;
   daysOfWeek?: string[];
   start: string;
@@ -23,6 +24,7 @@ export interface StudyEventDto {
   studyTimeStart: string;
   studyTimeEnd: string;
   id: number;
+  groupId: string;
   title: string;
   color: string;
 }
@@ -53,9 +55,10 @@ export const generateStudyEvents = async (): Promise<StudyEvent[]> => {
   const studyGroupInfo: StudyEventDto[] = [];
 
   try {
-    for (const id of studyGroupIds) {
-      const response = await getStudyGroupEvents(id);
+    for (const groupId of studyGroupIds) {
+      const response = await getStudyGroupEvents(groupId);
       studyGroupInfo.push(...response);
+      console.log(studyGroupInfo)
     }
   } catch (error) {
     alert("스터디 정보를 불러오는데 실패했습니다");
@@ -65,6 +68,7 @@ export const generateStudyEvents = async (): Promise<StudyEvent[]> => {
     (studyGroup: StudyEventDto) => {
       const event: StudyEvent = {
         id: studyGroup.id.toString(),
+        groupId : studyGroup.groupId,
         title: studyGroup.title,
         start: studyGroup.studyTimeStart,
         end: studyGroup.studyTimeEnd,
@@ -75,6 +79,7 @@ export const generateStudyEvents = async (): Promise<StudyEvent[]> => {
       return event;
     }
   );
+  console.log(events)
   return events;
 };
 

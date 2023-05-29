@@ -60,28 +60,26 @@ const StudyList = () => {
         <ListFilterWrapper>
           <ListFilter setFilterData={setFilterData} />
         </ListFilterWrapper>
-        <StudyListMain>
-          {!fetching && (
-            <StudyBoxContainer>
-              {list?.map((item: StudyListDto) => (
-                <StudyBox
-                  key={item?.id}
-                  onClick={() => navigate(`/studycontent/${item?.id}`)}
-                >
-                  <StudyListImage></StudyListImage>
-                  <div>
-                    <div className="studylist-title">
-                      <h3>{item?.title}</h3>
-                    </div>
-                    <div className="studylist-tag">
-                      <StudyListTag item={item.tagValues} />
-                    </div>
+        {!fetching && (
+          <StudyBoxContainer>
+            {list?.map((item: StudyListDto) => (
+              <StudyBox
+                key={item?.id}
+                onClick={() => navigate(`/studycontent/${item?.id}`)}
+              >
+                <StudyListImage></StudyListImage>
+                <div>
+                  <div className="studylist-title">
+                    <h3>{item?.title}</h3>
                   </div>
-                </StudyBox>
-              ))}
-            </StudyBoxContainer>
-          )}
-        </StudyListMain>
+                  <div className="studylist-tag">
+                    <StudyListTag item={item.tagValues} />
+                  </div>
+                </div>
+              </StudyBox>
+            ))}
+          </StudyBoxContainer>
+        )}
       </StudyListBody>
     </StudyListContainer>
   );
@@ -150,15 +148,8 @@ const StudyPostButton = styled.button`
   }
 `;
 
-const StudyListMain = styled.div`
-  width: 960px;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: flex-start;
-  align-items: center;
-`;
-
 const StudyBoxContainer = styled.div`
+  width: 960px;
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
@@ -174,12 +165,12 @@ const StudyListImage = styled.div`
 `;
 
 const StudyBox = styled.div`
-  flex-basis: 280px;
+  flex-basis: 270px;
   height: 350px;
   background-color: #fff;
   border-radius: 8px;
   box-shadow: rgba(99, 99, 99, 0.2) 0px 2px 8px 0px;
-  margin: 10px 20px;
+  margin: 10px;
   padding: 5px;
   display: flex;
   flex-flow: column wrap;
