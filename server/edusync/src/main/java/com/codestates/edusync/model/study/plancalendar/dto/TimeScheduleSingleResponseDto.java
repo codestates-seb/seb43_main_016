@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 @Setter
 public class TimeScheduleSingleResponseDto extends TimeRangeDto.Response {
     private Long id;
+    private Long groupId;
     private String title;
     private String color;
 }
