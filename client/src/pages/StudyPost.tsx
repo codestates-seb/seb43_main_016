@@ -14,8 +14,8 @@ const StudyPost = () => {
   const [studyPeriodStart, setStudyPeriodStart] = useState<string>("");
   const [studyPeriodEnd, setStudyPeriodEnd] = useState<string>("");
   const [checked, setChecked] = useState<string[]>([]);
-  const [studyTimeStart, setStudyTimeStart] = useState<string>("00:00");
-  const [studyTimeEnd, setStudyTimeEnd] = useState<string>("00:00");
+  const [studyTimeStart, setStudyTimeStart] = useState<string>("08:00:00");
+  const [studyTimeEnd, setStudyTimeEnd] = useState<string>("07:00:00");
   const [memberCountMin, setMemberCountMin] = useState<number>(2);
   const [memberCountMax, setMemberCountMax] = useState<number>(2);
   const [platform, setPlatform] = useState<string>("");
@@ -27,9 +27,18 @@ const StudyPost = () => {
     useState<string>("프론트엔드");
   const [selectedPeriodStart, setSelectedPeriodStart] = useState<string>("");
   const [selectedPeriodEnd, setSelectedPeriodEnd] = useState<string>("");
-  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("12:00");
-  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("12:00");
+  const [selectedTimeStart, setSelectedTimeStart] = useState<string>("07:00");
+  const [selectedTimeEnd, setSelectedTimeEnd] = useState<string>("08:00");
   const isLoggedIn = useRecoilValue(LogInState);
+
+  useEffect(() => {
+    if (selectedTimeStart === "") {
+      setSelectedTimeStart("08:00"); // 기본값으로 설정
+    }
+    if (selectedTimeEnd === "") {
+      setSelectedTimeEnd("07:00"); // 기본값으로 설정
+    }
+  }, []);
 
   const handleCategory = (e: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(e.target.value);
@@ -89,6 +98,7 @@ const StudyPost = () => {
   };
 
   const handlePostButton = async () => {
+
     const StudyPostDto = {
       studyName,
       studyPeriodStart,

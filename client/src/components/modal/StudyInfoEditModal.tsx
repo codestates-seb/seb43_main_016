@@ -18,9 +18,12 @@ const customStyles = {
     bottom: "auto",
     marginRight: "-50%",
     transform: "translate(-50%, -50%)",
+    width: `90%`,
+    maxWidth: `600px`,
+    maxHeight: `500px`,
+    backgroundColor: "white",
   },
 };
-
 interface UserInfoEditModalProps {
   isOpen: boolean;
   closeModal: () => void;
@@ -67,10 +70,6 @@ const StudyInfoEditModal = ({
     }));
   };
 
-  const removeHTMLTags = (str: string) => {
-    return str.replace(/<[^>]*>?/gm, "");
-  };
-
   const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setModalState((prevState) => ({
@@ -104,7 +103,7 @@ const StudyInfoEditModal = ({
         style={customStyles}
         onAfterClose={handleAfterClose}
       >
-        <form>
+        <Form>
           <ModalExplain>스터디명</ModalExplain>
           <UserInfoEditInput
             name="studyName"
@@ -126,9 +125,9 @@ const StudyInfoEditModal = ({
             onChange={handleInputChange}
           />
           <ModalExplain>스터디 요일 선택</ModalExplain>
-          <div>
-            <label>
-              <input
+          <CheckboxGroup>
+            <CheckboxLabel>
+              <CheckboxInput
                 type="checkbox"
                 name="daysOfWeek"
                 value="일"
@@ -136,9 +135,9 @@ const StudyInfoEditModal = ({
                 onChange={handleCheckboxChange}
               />
               일
-            </label>
-            <label>
-              <input
+            </CheckboxLabel>
+            <CheckboxLabel>
+              <CheckboxInput
                 type="checkbox"
                 name="daysOfWeek"
                 value="월"
@@ -146,9 +145,9 @@ const StudyInfoEditModal = ({
                 onChange={handleCheckboxChange}
               />
               월
-            </label>
-            <label>
-              <input
+            </CheckboxLabel>
+            <CheckboxLabel>
+              <CheckboxInput
                 type="checkbox"
                 name="daysOfWeek"
                 value="화"
@@ -156,9 +155,9 @@ const StudyInfoEditModal = ({
                 onChange={handleCheckboxChange}
               />
               화
-            </label>
-            <label>
-              <input
+            </CheckboxLabel>
+            <CheckboxLabel>
+              <CheckboxInput
                 type="checkbox"
                 name="daysOfWeek"
                 value="수"
@@ -166,9 +165,9 @@ const StudyInfoEditModal = ({
                 onChange={handleCheckboxChange}
               />
               수
-            </label>
-            <label>
-              <input
+            </CheckboxLabel>
+            <CheckboxLabel>
+              <CheckboxInput
                 type="checkbox"
                 name="daysOfWeek"
                 value="목"
@@ -176,9 +175,9 @@ const StudyInfoEditModal = ({
                 onChange={handleCheckboxChange}
               />
               목
-            </label>
-            <label>
-              <input
+            </CheckboxLabel>
+            <CheckboxLabel>
+              <CheckboxInput
                 type="checkbox"
                 name="daysOfWeek"
                 value="금"
@@ -186,9 +185,9 @@ const StudyInfoEditModal = ({
                 onChange={handleCheckboxChange}
               />
               금
-            </label>
-            <label>
-              <input
+            </CheckboxLabel>
+            <CheckboxLabel>
+              <CheckboxInput
                 type="checkbox"
                 name="daysOfWeek"
                 value="토"
@@ -196,8 +195,8 @@ const StudyInfoEditModal = ({
                 onChange={handleCheckboxChange}
               />
               토
-            </label>
-          </div>
+            </CheckboxLabel>
+          </CheckboxGroup>
           <ModalExplain>스터디 시작 시간</ModalExplain>
           <UserInfoEditInput
             name="studyTimeStart"
@@ -219,20 +218,13 @@ const StudyInfoEditModal = ({
             value={modalState.platform}
             onChange={handleInputChange}
           />
-          <ModalExplain>Introduction</ModalExplain>
-          <UserInfoEditInput
-            name="introduction"
-            type="text"
-            value={removeHTMLTags(modalState.introduction)}
-            onChange={handleInputChange}
-          />
           <ModalButton type="button" onClick={handleSaveClick}>
             저장
           </ModalButton>
           <ModalButton type="button" onClick={handleCancelClick}>
             취소
           </ModalButton>
-        </form>
+        </Form>
       </Modal>
     </>
   );
@@ -240,6 +232,60 @@ const StudyInfoEditModal = ({
 
 export default StudyInfoEditModal;
 
-const ModalExplain = styled.div``;
-const UserInfoEditInput = styled.input``;
-const ModalButton = styled.button``;
+const Form = styled.form`
+  padding: 16px;
+`;
+
+const ModalExplain = styled.div`
+  margin-bottom: 8px;
+`;
+
+const UserInfoEditInput = styled.input`
+  margin-bottom: 16px;
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  width: 100%;
+`;
+
+const CheckboxGroup = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: 16px;
+
+  label {
+    display: flex;
+    align-items: center;
+    margin-right: 16px;
+    margin-bottom: 8px;
+    cursor: pointer;
+  }
+`;
+
+const CheckboxInput = styled.input`
+  margin-right: 4px;
+`;
+
+const CheckboxLabel = styled.label`
+  color: #555;
+`;
+
+const ModalButton = styled.button`
+  display: inline-block;
+  margin-right: 8px;
+  padding: 8px 16px;
+  background-color: #1e77d1;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #1c6bb7;
+  }
+
+  &:active {
+    background-color: #195890;
+  }
+`;

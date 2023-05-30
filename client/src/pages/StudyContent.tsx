@@ -61,7 +61,7 @@ const StudyContent = () => {
       } catch (error) {
         if (!isLoggedIn) setLoginAlertModalOpen(true);
         else {
-          alert("잘못된 접근입니다");
+          alert("로그인이 필요합니다");
           navigate("/studylist");
 
           throw new Error("스터디 내용 로딩에 실패했습니다.");
