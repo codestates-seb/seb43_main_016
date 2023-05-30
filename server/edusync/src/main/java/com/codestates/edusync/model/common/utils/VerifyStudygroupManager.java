@@ -31,4 +31,11 @@ public interface VerifyStudygroupManager {
      * @return
      */
     void studygroupLeaderCheck(String email, Long studygroupId);
+
+    /**
+     * 스터디 리더 본인이 본인을 승인, 거절, 강퇴 할 수 없음 체크
+     * @param studygroupId
+     * @param nickName
+     */
+    void studygroupLeaderNickName(Long studygroupId, String nickName);
 }

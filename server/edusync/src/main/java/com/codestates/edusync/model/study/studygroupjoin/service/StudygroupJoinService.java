@@ -2,7 +2,6 @@ package com.codestates.edusync.model.study.studygroupjoin.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
-import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
@@ -23,12 +22,8 @@ public class StudygroupJoinService implements StudygroupJoinManager {
     private final StudygroupJoinRepository studygroupJoinRepository;
     private final VerifyStudygroupUtils verifyStudygroupUtils;
     private final CalendarStudygroupService calendarStudygroupService;
-    private final MemberUtils memberUtils;
 
-    private Member getLoginMember(String email) {
-        return memberUtils.getLoggedIn(email);
-    }
-
+    @Transactional(readOnly = true)
     @Override
     public StudygroupJoin getCandidateByNickName(Long studygroupId, String nickName) {
         List<StudygroupJoin> sjs =
@@ -40,6 +35,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public StudygroupJoin getMemberByNickName(Long studygroupId, String nickName) {
         List<StudygroupJoin> sjs =
@@ -51,20 +47,22 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return null;
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email, boolean isLeader) {
         if (isLeader) verifyStudygroupUtils.studygroupLeaderCheck(email, studygroupId);
         return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsFalse(studygroupId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<StudygroupJoin> getAllMemberList(Long studygroupId) {
         return studygroupJoinRepository.findAllByStudygroupIdAndIsApprovedIsTrue(studygroupId);
     }
 
     @Override
-    public void createCandidate(Long studygroupId, String email) {
-        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, email);
+    public void createCandidate(Long studygroupId, Member loginMember) {
+        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, loginMember);
         studygroupJoinRepository.save(studygroupJoin);
     }
 
@@ -89,7 +87,6 @@ public class StudygroupJoinService implements StudygroupJoinManager {
      * @param isMember
      */
     public void delStudygroupJoin(Long studygroupId, String email, boolean isMember) {
-        Member loginMember = getLoginMember(email);
         StudygroupJoin studygroupJoin = null;
         List<StudygroupJoin> studygroupJoins;
 
@@ -97,7 +94,7 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         else studygroupJoins = getAllCandidateList(studygroupId, email, false);
 
         for (StudygroupJoin sj : studygroupJoins) {
-            if (sj.getMember().getEmail().equals(loginMember.getEmail())) {
+            if (sj.getMember().getEmail().equals(email)) {
                 studygroupJoin = sj;
                 studygroupJoinRepository.delete(sj);
                 break;
@@ -147,12 +144,13 @@ public class StudygroupJoinService implements StudygroupJoinManager {
             studygroupJoin = getCandidateByNickName(studygroupId, nickName);
             if (studygroupJoin == null) throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_NOT_FOUND);
         }
+        verifyStudygroupUtils.studygroupLeaderNickName(studygroupId, nickName);
         return studygroupJoin;
     }
 
+    @Transactional(readOnly = true)
     @Override
-    public List<Studygroup> getMyStudygroupList(String email, boolean isApproved) {
-        Member loginMember = getLoginMember(email);
+    public List<Studygroup> getMyStudygroupList(Member loginMember, boolean isApproved) {
         List<StudygroupJoin> studygroupJoinList;
         if (isApproved)
             studygroupJoinList = studygroupJoinRepository.findAllByMemberIdAndIsApprovedIsTrue(loginMember.getId());
@@ -162,19 +160,19 @@ public class StudygroupJoinService implements StudygroupJoinManager {
         return studygroupJoinList.stream().map(StudygroupJoin::getStudygroup).collect(Collectors.toList());
     }
 
+    @Transactional(readOnly = true)
     @Override
     public int getStudygroupMemberCount(Long studygroupId) {
         return studygroupJoinRepository.countByStudygroupIdAndIsApprovedIsTrue(studygroupId);
     }
 
-    public void createJoinAsLeader(Long studygroupId, String email) {
-        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, email);
+    public void createJoinAsLeader(Long studygroupId, Member loginMember) {
+        StudygroupJoin studygroupJoin = createStudygroupJoinWithVerifyMember(studygroupId, loginMember);
         studygroupJoin.setIsApproved(true);
         studygroupJoinRepository.save(studygroupJoin);
     }
 
-    private StudygroupJoin createStudygroupJoinWithVerifyMember(Long studygroupId, String email) {
-        Member loginMember = getLoginMember(email);
+    private StudygroupJoin createStudygroupJoinWithVerifyMember(Long studygroupId, Member loginMember) {
         if (getCandidateByNickName(studygroupId, loginMember.getNickName()) != null) {
             throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_CANDIDATE_EXISTS);
         }

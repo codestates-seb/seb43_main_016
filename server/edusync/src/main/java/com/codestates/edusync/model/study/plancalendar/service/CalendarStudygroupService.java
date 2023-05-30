@@ -1,7 +1,6 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
-import com.codestates.edusync.model.common.entity.TimeRange;
 import com.codestates.edusync.model.common.utils.*;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
@@ -14,7 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import static com.codestates.edusync.exception.ExceptionCode.*;
 
@@ -26,13 +24,12 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     private final VerifyCalendarUtils calendarUtils;
     private final VerifyStudygroupUtils studygroupUtils;
     private final VerifyTimeScheduleUtils timeScheduleUtils;
-    private final MemberUtils memberUtils;
 
     @Override
     public void createTimeSchedules(Long studygroupId,
                                     List<TimeSchedule> timeSchedules,
-                                    String email) {
-        if( !studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId) ) {
+                                    Member loginMember) {
+        if( !studygroupUtils.isMemberLeaderOfStudygroup(loginMember.getEmail(), studygroupId) ) {
             throw new BusinessLogicException(YOU_ARE_NOT_STUDYGROUP_LEADER);
         }
 
@@ -50,14 +47,13 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         createTimeSchedulesOfAllMember(
                 studygroupId,
                 timeSchedules,
-                email
+                loginMember
         );
     }
 
     public void createTimeSchedulesOfAllMember(Long studygroupId,
                                                List<TimeSchedule> timeSchedules,
-                                               String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+                                               Member loginMember) {
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
         if(!findStudygroup.getLeaderMember().getId().equals(loginMember.getId())) {
@@ -138,8 +134,7 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     @Override
     public void updateTimeSchedule(Long studygroupId, Long timeScheduleId,
                                    TimeSchedule timeSchedule,
-                                   String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+                                   Member loginMember) {
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
 
         CommonCalendarFeature.setTimeScheduleInformation(timeSchedule, findTimeSchedule);
@@ -149,16 +144,16 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
         updateTimeSchedulesOfAllMember(
                 studygroupId, timeScheduleId,
                 timeSchedule,
-                email
+                loginMember
         );
     }
 
     public void updateTimeSchedulesOfAllMember(Long studygroupId, Long timeScheduleId,
                                                TimeSchedule timeSchedule,
-                                               String email) {
+                                               Member loginMember) {
         Studygroup findStudygroup = studygroupUtils.findVerifyStudygroup(studygroupId);
 
-        if( !studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId) ) {
+        if( !studygroupUtils.isMemberLeaderOfStudygroup(loginMember.getEmail(), studygroupId) ) {
             throw new BusinessLogicException(YOU_ARE_NOT_STUDYGROUP_LEADER);
         }
 
@@ -169,18 +164,20 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
                         referenceOfTimeSchedule.getTime().getStudyTimeStart()
                 );
 
-        findTimeSchedules.forEach(ts -> {
-            CommonCalendarFeature.setTimeScheduleInformation(timeSchedule, ts);
-        });
+        findTimeSchedules.forEach(ts ->
+            CommonCalendarFeature.setTimeScheduleInformation(timeSchedule, ts)
+        );
 
         calendarRepository.saveAll(findTimeSchedules);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public List<TimeSchedule> getTimeSchedules(Long studygroupId) {
         return calendarRepository.findAllByStudygroupIdAndMemberIsNull(studygroupId);
     }
 
+    @Transactional(readOnly = true)
     @Override
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long studygroupId, Long timeScheduleId) {
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
@@ -198,21 +195,26 @@ public class CalendarStudygroupService implements CalendarStudygroupManager {
     // 스터디 삭제 시 일정 제거용으로 이걸 호출해야함
     @Override
     public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId,
+                                                     Member loginMember) {
+        deleteAllTimeSchedulesByStudygroupId(studygroupId, loginMember.getEmail());
+    }
+
+    public void deleteAllTimeSchedulesByStudygroupId(Long studygroupId,
                                                      String email) {
         if( !studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId) ) {
             throw new BusinessLogicException(YOU_ARE_NOT_STUDYGROUP_LEADER);
         }
 
         List<TimeSchedule> findTimeSchedules = calendarRepository.findAllByStudygroupId(studygroupId);
-        
+
         calendarRepository.deleteAll(findTimeSchedules);
     }
 
     @Override
     public void deleteTimeScheduleByTimeScheduleId(Long studygroupId,
                                                    Long timeScheduleId,
-                                                   String email) {
-        studygroupUtils.isMemberLeaderOfStudygroup(email, studygroupId);
+                                                   Member loginMember) {
+        studygroupUtils.isMemberLeaderOfStudygroup(loginMember.getEmail(), studygroupId);
         TimeSchedule findTimeSchedule = calendarUtils.findVerifyTimeSchedule(timeScheduleId);
         if( !findTimeSchedule.getStudygroup().getId().equals(studygroupId) ) {
             throw new BusinessLogicException(TIME_SCHEDULE_NOT_MATCHED_WITH_STUDYGROUP);

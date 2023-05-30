@@ -27,6 +27,8 @@ public interface StudygroupJoinManager {
     /**
      * 스터디 가입 대기 리스트 조회
      * @param studygroupId
+     * @param email
+     * @param isLeader
      * @return
      */
     List<StudygroupJoin> getAllCandidateList(Long studygroupId, String email, boolean isLeader);
@@ -41,18 +43,21 @@ public interface StudygroupJoinManager {
     /**
      * 스터디 가입 신청
      * @param studygroupId
+     * @param loginMember
      */
-    void createCandidate(Long studygroupId, String email);
+    void createCandidate(Long studygroupId, Member loginMember);
 
     /**
      * 스터디 가입 신청 철회
      * @param studygroupId
+     * @param email
      */
     void deleteCandidateSelf(Long studygroupId, String email);
 
     /**
      * 스터디 탈퇴
      * @param studygroupId
+     * @param email
      */
     void deleteMemberSelf(Long studygroupId, String email);
 
@@ -60,6 +65,7 @@ public interface StudygroupJoinManager {
      * 스터디 리더가 가입 승인
      * @param studygroupId
      * @param nickName
+     * @param email
      */
     void approveCandidateByNickName(Long studygroupId, String nickName, String email);
 
@@ -67,6 +73,7 @@ public interface StudygroupJoinManager {
      * 스터디 리더가 가입 거절
      * @param studygroupId
      * @param nickName
+     * @param email
      */
     void rejectCandidateByNickName(Long studygroupId, String nickName, String email);
 
@@ -74,16 +81,17 @@ public interface StudygroupJoinManager {
      * 스터디 리더가 멤버 강퇴
      * @param studygroupId
      * @param nickName
+     * @param email
      */
     void kickOutMemberByNickName(Long studygroupId, String nickName, String email);
 
     /**
      * 사용자가 신청한 | 가입된 스터디 리스트 조회
-     * @param email
+     * @param loginMember
      * @param isApproved
      * @return
      */
-    List<Studygroup> getMyStudygroupList(String email, boolean isApproved);
+    List<Studygroup> getMyStudygroupList(Member loginMember, boolean isApproved);
 
     /**
      * 스터디 멤버 수

@@ -6,9 +6,11 @@ import com.codestates.edusync.model.study.postcomment.repository.StudygroupPostC
 import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import static com.codestates.edusync.exception.ExceptionCode.*;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Component
 public class VerifyStudygroupPostCommentUtils {

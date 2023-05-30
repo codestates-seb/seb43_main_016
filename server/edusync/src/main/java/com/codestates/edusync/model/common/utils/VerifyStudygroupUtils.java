@@ -6,7 +6,9 @@ import com.codestates.edusync.model.study.studygroup.entity.Studygroup;
 import com.codestates.edusync.model.study.studygroup.repository.StudygroupRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 @Component
 public class VerifyStudygroupUtils implements VerifyStudygroupManager {
@@ -30,6 +32,14 @@ public class VerifyStudygroupUtils implements VerifyStudygroupManager {
 
         if (!studygroup.getLeaderMember().getEmail().equals(email)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_PERMISSION);
+        }
+    }
+
+    @Override
+    public void studygroupLeaderNickName(Long studygroupId, String nickName) {
+        Studygroup studygroup = findVerifyStudygroup(studygroupId);
+        if (studygroup.getLeaderMember().getNickName().equals(nickName)) {
+            throw new BusinessLogicException(ExceptionCode.STUDYGROUP_JOIN_YOU_ARE_STUDYGROUP_LEADER);
         }
     }
 }

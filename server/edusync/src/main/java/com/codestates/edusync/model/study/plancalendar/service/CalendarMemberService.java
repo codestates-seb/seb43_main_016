@@ -1,9 +1,8 @@
 package com.codestates.edusync.model.study.plancalendar.service;
 
-import com.codestates.edusync.model.common.entity.TimeRange;
-import com.codestates.edusync.model.common.utils.MemberUtils;
+import com.codestates.edusync.exception.BusinessLogicException;
+import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.utils.VerifyCalendarUtils;
-import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.common.utils.VerifyTimeScheduleUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.entity.TimeSchedule;
@@ -13,7 +12,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
@@ -22,11 +20,14 @@ public class CalendarMemberService {
     private final CalendarRepository calendarRepository;
     private final VerifyCalendarUtils calendarUtils;
     private final VerifyTimeScheduleUtils timeScheduleUtils;
-    private final MemberUtils memberUtils;
 
     public void createTimeSchedulesExceptStudygroup(TimeSchedule timeSchedule,
-                                                    String email) {
-        Member loginMember = memberUtils.getLoggedIn(email);
+                                                    Member loginMember) {
+        if( timeSchedule.getTime().getStudyTimeStart() == null ||
+            timeSchedule.getTime().getStudyTimeEnd() == null ) {
+            throw new BusinessLogicException(ExceptionCode.TIME_SCHEDULE_NOT_NULL_ALLOWED);
+        }
+
         timeSchedule.setMember(loginMember);
 
         calendarRepository.save(timeSchedule);
@@ -34,10 +35,10 @@ public class CalendarMemberService {
 
     public void updateTimeSchedule(Long timeScheduleId,
                                    TimeSchedule timeSchedule,
-                                   String email) {
+                                   Member loginMember) {
         TimeSchedule findTimeSchedule =
                 timeScheduleUtils.findVerifyTimeScheduleWithMember(
-                        timeScheduleId, email
+                        timeScheduleId, loginMember
                 );
 
         CommonCalendarFeature.setTimeScheduleInformation(timeSchedule, findTimeSchedule);
@@ -45,21 +46,24 @@ public class CalendarMemberService {
         calendarRepository.save(findTimeSchedule);
     }
 
+    @Transactional(readOnly = true)
     public List<TimeSchedule> getTimeSchedules(String email) {
 
         return calendarRepository.findAllByMemberEmail(email);
     }
 
+    @Transactional(readOnly = true)
     public TimeSchedule getSingleTimeScheduleByTimeScheduleId(Long timeScheduleId) {
 
         return calendarUtils.findVerifyTimeSchedule(timeScheduleId);
     }
 
+    @Transactional(readOnly = true)
     public void deleteTimeScheduleByTimeScheduleId(Long timeScheduleId,
-                                                   String email) {
+                                                   Member loginMember) {
         TimeSchedule findTimeSchedule =
                 timeScheduleUtils.findVerifyTimeScheduleWithMember(
-                        timeScheduleId, email
+                        timeScheduleId, loginMember
                 );
 
         calendarRepository.delete(findTimeSchedule);

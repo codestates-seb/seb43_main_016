@@ -4,7 +4,6 @@ import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
 import com.codestates.edusync.model.common.entity.DateRange;
 import com.codestates.edusync.model.common.entity.TimeRange;
-import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.common.utils.VerifyStudygroupUtils;
 import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarStudygroupService;
@@ -34,11 +33,10 @@ public class StudygroupService implements StudygroupManager{
     private final SearchTagService searchTagService;
     private final CalendarStudygroupService calendarStudygroupService;
     private final VerifyStudygroupUtils studygroupUtils;
-    private final MemberUtils memberUtils;
 
     @Override
-    public Studygroup create(Studygroup studygroup, String email) {
-        studygroup.setLeaderMember(memberUtils.getLoggedIn(email));
+    public Studygroup create(Studygroup studygroup, Member loginMember) {
+        studygroup.setLeaderMember(loginMember);
 
         studygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(studygroup)
@@ -46,7 +44,7 @@ public class StudygroupService implements StudygroupManager{
 
         Studygroup createdStudygroup = studygroupRepository.save(studygroup);
 
-        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), email);
+        studygroupJoinService.createJoinAsLeader(createdStudygroup.getId(), loginMember);
 
         return createdStudygroup;
     }
@@ -85,7 +83,7 @@ public class StudygroupService implements StudygroupManager{
         Optional.ofNullable(studygroup.getPlatform()).ifPresent(findStudygroup::setPlatform);
         Optional.ofNullable(studygroup.getSearchTags()).ifPresent(findStudygroup::setSearchTags);
 
-        calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), email);
+        calendarStudygroupService.deleteAllTimeSchedulesByStudygroupId(findStudygroup.getId(), findStudygroup.getLeaderMember());
         findStudygroup.setTimeSchedules(
                 ScheduleConverter.repeatedScheduleToScheduleListConverter(findStudygroup)
         );
@@ -118,13 +116,15 @@ public class StudygroupService implements StudygroupManager{
         return findStudygroup;
     }
 
+    @Transactional(readOnly = true)
     public Page<Studygroup> getWithPagingAndOrder(Integer page, Integer size, String order, Boolean isAscending) {
         Sort sort = getSortByOrder(order, isAscending);
 
         return studygroupRepository.findAll(PageRequest.of(page, size, sort));
     }
 
-    private static Sort getSortByOrder(String order, Boolean isAscending) {
+    @Transactional(readOnly = true)
+    public Sort getSortByOrder(String order, Boolean isAscending) {
         StudygroupGetOrder orderEnum = StudygroupGetOrder.valueOfOrder(order);
         String convertedVariable = orderEnum.getVariable();
 
@@ -134,16 +134,17 @@ public class StudygroupService implements StudygroupManager{
         else                return sort.descending();
     }
 
+    @Transactional(readOnly = true)
     @Override
     public Page<Studygroup> getWithPaging(Integer page, Integer size) {
         return getWithPagingAndOrder(page, size, "기본값", false);
     }
 
 
+    @Transactional(readOnly = true)
     @Override
-    public List<Studygroup> getLeaderStudygroupList(String email) {
-        Member member = memberUtils.get(email);
-        return studygroupRepository.findAllByLeaderMemberId(member.getId());
+    public List<Studygroup> getLeaderStudygroupList(Member loginMember) {
+        return studygroupRepository.findAllByLeaderMemberId(loginMember.getId());
     }
 
     @Override
@@ -157,6 +158,7 @@ public class StudygroupService implements StudygroupManager{
     @Override
     public void patchLeader(String email, Long studygroupId, String newLeaderNickName) {
         studygroupUtils.studygroupLeaderCheck(email, studygroupId);
+        studygroupUtils.studygroupLeaderNickName(studygroupId, newLeaderNickName);
         Studygroup findStudygroup = get(studygroupId);
         List<StudygroupJoin> studygroupJoins = findStudygroup.getStudygroupJoins();
         Member member = null;

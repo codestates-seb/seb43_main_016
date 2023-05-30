@@ -2,6 +2,7 @@ package com.codestates.edusync.model.member.service;
 
 import com.codestates.edusync.exception.BusinessLogicException;
 import com.codestates.edusync.exception.ExceptionCode;
+import com.codestates.edusync.model.member.utils.NickNameValidationUtility;
 import com.codestates.edusync.security.auth.utils.CustomAuthorityUtils;
 import com.codestates.edusync.model.common.utils.MemberUtils;
 import com.codestates.edusync.model.member.entity.Member;
@@ -31,8 +32,11 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
     private final MemberUtils memberUtils;
+    private final NickNameValidationUtility nickNameValidationUtility;
 
     public Member createMember(Member member) {
+        nickNameValidationUtility.checkValidNickName(member.getNickName());
+
         Optional<Member> optionalMember =
                 memberRepository.findByEmail(member.getEmail());
         if(optionalMember.isPresent()){
@@ -56,7 +60,7 @@ public class MemberService {
         member.setWithMe("");
 
         if (member.getProfileImage() == null || member.getProfileImage().isEmpty()) {
-            member.setProfileImage("https://avatars.githubusercontent.com/u/120456261?v=4");
+            member.setProfileImage("https://www.gravatar.com/avatar/HASH");
         }
 
         Member savedMember = memberRepository.save(member);

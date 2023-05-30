@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @RequiredArgsConstructor
 @Component
 public class MemberUtils implements MemberVerificationManager {
@@ -44,7 +45,6 @@ public class MemberUtils implements MemberVerificationManager {
     }
 
     @Override
-    @Transactional(readOnly = true)
     public List<Member> getList(List<String> uuids) {
         return memberRepository.findByUuidIn(uuids);
     }
@@ -82,5 +82,13 @@ public class MemberUtils implements MemberVerificationManager {
 
     public Member getLoggedIn(String email) {
         return get(email);
+    }
+
+    public Member getLoggedInWithAuthenticationCheck(Authentication authentication) {
+        if( authentication == null ) {
+            throw new BusinessLogicException(ExceptionCode.AUTHENTICATION_NOT_NULL_ALLOWED);
+        }
+
+        return getLoggedIn(authentication.getPrincipal().toString());
     }
 }

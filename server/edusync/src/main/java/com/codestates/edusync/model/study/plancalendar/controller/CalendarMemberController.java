@@ -1,9 +1,9 @@
 package com.codestates.edusync.model.study.plancalendar.controller;
 
-import com.codestates.edusync.model.common.dto.TimeRangeDto;
+import com.codestates.edusync.model.common.utils.MemberUtils;
+import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarMemberDto;
 import com.codestates.edusync.model.study.plancalendar.dto.CalendarMemberResponseDto;
-import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.dto.TimeScheduleSingleResponseDto;
 import com.codestates.edusync.model.study.plancalendar.mapper.CalendarMapper;
 import com.codestates.edusync.model.study.plancalendar.service.CalendarMemberService;
@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 import javax.validation.constraints.Positive;
 import java.util.List;
 
+@Transactional
 @RequiredArgsConstructor
 @Validated
 @RequestMapping("/calendars")
@@ -26,6 +28,7 @@ import java.util.List;
 public class CalendarMemberController {
     private final CalendarMemberService calendarMemberService;
     private final CalendarMapper mapper;
+    private final MemberUtils memberUtils;
 
     private static final String DEFAULT_MEMBER_URL = "/members";
 
@@ -39,9 +42,11 @@ public class CalendarMemberController {
     @PostMapping(DEFAULT_MEMBER_URL)
     public ResponseEntity postCalendarMember(@Valid @RequestBody CalendarMemberDto.Post postDto,
                                              Authentication authentication) {
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
+
         calendarMemberService.createTimeSchedulesExceptStudygroup(
                 mapper.memberTimeSchedulePostDtoToTimeSchedule(postDto.getTimeSchedule()),
-                authentication.getPrincipal().toString()
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.CREATED);
@@ -60,12 +65,12 @@ public class CalendarMemberController {
     public ResponseEntity patchCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                               @Valid @RequestBody CalendarMemberDto.Patch patchDto,
                                               Authentication authentication) {
-
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
 
         calendarMemberService.updateTimeSchedule(
                 timeScheduleId,
                 mapper.memberTimeSchedulePatchDtoToTimeSchedule(patchDto.getTimeSchedule()),
-                authentication.getPrincipal().toString()
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
@@ -79,9 +84,10 @@ public class CalendarMemberController {
      */
     @GetMapping(DEFAULT_MEMBER_URL)
     public ResponseEntity getAllTimeScheduleOfMember(Authentication authentication) {
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
 
         List<TimeSchedule> findTimeSchedules =
-                calendarMemberService.getTimeSchedules(authentication.getPrincipal().toString());
+                calendarMemberService.getTimeSchedules(loginMember.getEmail());
 
         List<TimeScheduleSingleResponseDto> responseDtos =
                 mapper.timeScheduleListToTimeScheduleResponseDto(findTimeSchedules);
@@ -120,9 +126,11 @@ public class CalendarMemberController {
     @DeleteMapping("/{timeschedule-id}" + DEFAULT_MEMBER_URL)
     public ResponseEntity deleteCalendarMember(@PathVariable("timeschedule-id") @Positive Long timeScheduleId,
                                                Authentication authentication) {
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
+
         calendarMemberService.deleteTimeScheduleByTimeScheduleId(
                 timeScheduleId,
-                authentication.getPrincipal().toString()
+                loginMember
         );
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);

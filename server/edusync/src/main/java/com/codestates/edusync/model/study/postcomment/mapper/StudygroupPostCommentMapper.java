@@ -4,10 +4,8 @@ import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.dto.StudygroupPostCommentDto;
 import com.codestates.edusync.model.study.postcomment.dto.StudygroupPostCommentResponseDto;
-import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.mapstruct.Named;
 
 import java.util.ArrayList;
 import java.util.List;
