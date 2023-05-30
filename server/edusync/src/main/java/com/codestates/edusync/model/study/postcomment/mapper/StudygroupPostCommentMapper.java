@@ -1,5 +1,6 @@
 package com.codestates.edusync.model.study.postcomment.mapper;
 
+import com.codestates.edusync.model.member.entity.Member;
 import com.codestates.edusync.model.study.postcomment.entity.StudygroupPostComment;
 import com.codestates.edusync.model.study.postcomment.dto.StudygroupPostCommentDto;
 import com.codestates.edusync.model.study.postcomment.dto.StudygroupPostCommentResponseDto;

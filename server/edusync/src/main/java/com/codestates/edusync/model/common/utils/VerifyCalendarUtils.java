@@ -9,6 +9,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+import java.util.List;
+
 import static com.codestates.edusync.exception.ExceptionCode.TIME_SCHEDULE_NOT_FOUND;
 
 @Transactional(readOnly = true)

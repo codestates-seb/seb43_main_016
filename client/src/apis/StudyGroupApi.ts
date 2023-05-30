@@ -1,0 +1,326 @@
+import axios from "axios";
+import tokenRequestApi from "./TokenRequestApi";
+import { eduApi } from "./EduApi";
+
+// ====================== 마이 스터디 리스트 조회 (GET) ===========================
+export interface StudyGroup {
+  id: number;
+  title: string;
+  tagValues: string[];
+}
+
+export interface StudyGroupListDto {
+  leaders: StudyGroup[];
+  members: StudyGroup[];
+}
+
+export const getStudyGroupList = async () => {
+  const response = await tokenRequestApi.get<StudyGroupListDto>(
+    `/studygroup/myList?approved=true`
+  );
+  return response;
+};
+
+// ====================== 가입 대기중인 스터디 리스트 조회 (GET) ===========================
+export interface WaitingStudyGroupItemDto {
+  id: number;
+  title: string;
+}
+
+export interface WaitingStudyGroupListDto {
+  beStudys: WaitingStudyGroupItemDto[];
+}
+
+export const getWaitingStudyGroupList =
+  async (): Promise<WaitingStudyGroupListDto> => {
+    const response = await tokenRequestApi.get<WaitingStudyGroupListDto>(
+      `/studygroup/myList?approved=false`
+    );
+    const data = response.data;
+    return data;
+  };
+
+// ====================== 스터디원 가입 신청 철회 ===========================
+// TODO : StudyGroup의 가입 신청을 철회하는 코드
+export async function cancelStudyGroupApplication(
+  id: number,
+  isLoggedIn: boolean
+) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인하세요");
+  await tokenRequestApi.delete(`/studygroup/${id}/join`);
+  alert("해당 그룹에 가입신청을 철회합니다");
+}
+
+// ====================== 스터디 그룹 정보 조회 (GET) ===========================
+// TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
+export interface StudyTags {
+  [key: string]: string[];
+}
+
+export interface StudyInfoDto {
+  id: number;
+  studyName: string;
+  studyPeriodStart: string;
+  studyPeriodEnd: string;
+  daysOfWeek: string[];
+  studyTimeStart: string;
+  studyTimeEnd: string;
+  memberCountMin: number;
+  memberCountMax: number;
+  memberCountCurrent: number;
+  platform: string;
+  introduction: string;
+  isRecruited: boolean;
+  tags: StudyTags;
+  leaderNickName: string;
+  leader: boolean;
+}
+
+// TODO : StudyGroup의 정보를 조회하는 코드
+export async function getStudyGroupInfo(id: number, isLoggedIn: boolean) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인하세요");
+  const response = await tokenRequestApi.get<StudyInfoDto>(`/studygroup/${id}`);
+  const studyInfo = response.data;
+  studyInfo.studyTimeStart = studyInfo.studyTimeStart
+    .split("T")[1]
+    .substring(0, 5);
+  studyInfo.studyTimeEnd = studyInfo.studyTimeEnd.split("T")[1].substring(0, 5);
+  return studyInfo;
+}
+
+// ====================== 스터디 그룹 수정 (PATCH) ===========================
+// TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
+export interface StudyGroupUpdateDto {
+  id?: number;
+  studyName: string;
+  studyPeriodStart: string;
+  studyPeriodEnd: string;
+  daysOfWeek: string[];
+  studyTimeStart: string;
+  studyTimeEnd: string;
+  memberCountMin: number;
+  memberCountMax: number;
+  platform: string;
+  introduction: string;
+  tags: StudyTags;
+}
+
+export async function updateStudyGroupInfo(
+  data: StudyGroupUpdateDto,
+  isLoggedIn: boolean,
+  id: number
+) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
+
+  // studyPeriodStart 및 studyPeriodEnd 값을 ISO 8601 형식으로 변환
+  const formattedData = {
+    ...data,
+    studyPeriodStart: `${data.studyPeriodStart}T${data.studyTimeStart}:00`,
+    studyPeriodEnd: `${data.studyPeriodEnd}T${data.studyTimeEnd}:00`,
+    studyTimeStart: `${data.studyPeriodStart}T${data.studyTimeStart}:00`,
+    studyTimeEnd: `${data.studyPeriodEnd}T${data.studyTimeEnd}:00`,
+  };
+
+  const response = await tokenRequestApi.patch(
+    `/studygroup/${id}`,
+    formattedData
+  );
+  return response;
+}
+
+// ====================== 스터디 그룹 수정 (PATCH) ===========================
+// TODO : StudyGroup의 정보를 조회할 때 데이터 타입 정의
+export interface StudyGroupUpdateDto {
+  id?: number;
+  studyName: string;
+  studyPeriodStart: string;
+  studyPeriodEnd: string;
+  daysOfWeek: string[];
+  studyTimeStart: string;
+  studyTimeEnd: string;
+  memberCountMin: number;
+  memberCountMax: number;
+  platform: string;
+  introduction: string;
+  tags: StudyTags;
+}
+
+export async function updateStudyGroupContentsInfo(
+  data: StudyGroupUpdateDto,
+  isLoggedIn: boolean,
+  id: number
+) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
+
+  // studyPeriodStart 및 studyPeriodEnd 값을 ISO 8601 형식으로 변환
+  const formattedData = {
+    ...data,
+  };
+
+  await tokenRequestApi.patch(`/studygroup/${id}`, formattedData);
+  alert("성공적으로 스터디 정보를 업데이트 했습니다");
+}
+
+// ====================== 스터디 그룹 삭제 (DELETE) ===========================
+// TODO : StudyGroup의 정보를 삭제하는 코드
+export async function deleteStudyGroupInfo(id: number, isLoggedIn: boolean) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
+  await tokenRequestApi.delete(`/studygroup/${id}`);
+  alert("스터디가 삭제되었습니다.");
+}
+
+// ====================== 스터디 그룹 모집 상태 수정 (UPDATE) ===========================
+// TODO : StudyGroup의 모집상태를 수정할 때, 서버로 보내는 데이터 양식
+interface StudyGroupRecruitmentStatusUpdateDto {
+  state: boolean;
+}
+
+// TODO : StudyGroup의 모집 상태를 수정
+export async function updateStudyGroupRecruitmentStatus(
+  id: number,
+  data: StudyGroupRecruitmentStatusUpdateDto,
+  isLoggedIn: boolean
+) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
+  await tokenRequestApi.patch(`/studygroup/${id}`, data);
+  alert("스터디 모집 상태를 최신화하는데 성공했습니다");
+}
+
+// ====================== 스터디 그룹장의 가입 승인/거절/강제 탈퇴 기능 ===========================
+// TODO : 스터디 그룹장이 가입을 승인/거절할 때 + 강제 탈퇴 시킬 때, 서버로 보내는 데이터 양식
+export interface StudyGroupMemberApprovalDto {
+  nickName: string;
+}
+
+// TODO: 스터디 그룹장이 가입을 승인/거절할 때 + 강제 탈퇴 시킬 때, 서버로 보내는 데이터 양식
+export interface StudyGroupMemberApprovalDto {
+  nickName: string;
+}
+
+// TODO: StudyGroup으로의 가입을 승인하는 코드
+export async function approveStudyGroupApplication(
+  id: number,
+  nickname: string,
+  isLoggedIn: boolean
+) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
+  const data: StudyGroupMemberApprovalDto = {
+    nickName: nickname,
+  };
+  await tokenRequestApi.post(`/studygroup/${id}/candidate`, data);
+  alert("해당 회원의 가입을 허가합니다");
+}
+
+// TODO: StudyGroup으로의 가입을 거절하는 코드
+export async function rejectStudyGroupApplication(
+  id: number,
+  nickname: string
+) {
+  const data: StudyGroupMemberApprovalDto = {
+    nickName: nickname,
+  };
+  const config = {
+    data,
+  };
+  await tokenRequestApi.delete(`/studygroup/${id}/candidate`, config);
+  alert("가입이 거절됐습니다");
+}
+
+// TODO : StudyGroup에서 강제 퇴출시키는 코드
+export async function forceExitStudyGroup(
+  id: number,
+  data: StudyGroupMemberApprovalDto
+) {
+  const config = {
+    data,
+  };
+  const response = await tokenRequestApi.delete(
+    `/studygroup/${id}/kick`,
+    config
+  );
+  return response;
+}
+
+// TODO : StudyGroup에서 특정 회원에게 스터디장의 권한을 위임하는 코드
+export async function delegateStudyGroupLeader(
+  id: number,
+  data: StudyGroupMemberApprovalDto
+) {
+  const response = await tokenRequestApi.patch(
+    `/studygroup/${id}/privileges`,
+    data
+  );
+  return response;
+}
+
+// ====================== 회원의 가입 대기 리스트 ===========================
+// TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회할 때, 서버에서 받은 양식에 대한 타입 정의
+export interface StudyGroupMemberWaitingListDto {
+  nickName: [string];
+}
+
+// TODO 회원이 스터디에 가입하기 위해 대기하는 리스트를 조회하는 코드
+export async function getStudyGroupMemberWaitingList(
+  id: number,
+  isLoggedIn: boolean
+) {
+  if (!isLoggedIn) throw new Error("로그인 상태를 확인해주세요");
+
+  const response = await tokenRequestApi.get<StudyGroupMemberWaitingListDto>(
+    `/studygroup/${id}/member?join=false`
+  );
+  return response.data;
+}
+// ====================== 회원 리스트 ===========================
+// TODO 스터디 그룹에 가입된 회원 리스트
+export interface StudyGroupMemberListDto {
+  nickName: [string];
+}
+
+// TODO : StudyGroup에 가입된 멤버 리스트
+export async function getStudyGroupMemberList(id: number, isLoggedIn: boolean) {
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
+  const response = await axios.get<StudyGroupMemberListDto>(
+    `${import.meta.env.VITE_APP_API_URL}/studygroup/${id}/member?join=true`
+  );
+  if (response === undefined) return;
+  return response.data as StudyGroupMemberListDto;
+}
+
+// ====================== 스터디에서 탈퇴 ===========================
+// TODO : 스터디에서 탈퇴하는 코드
+export async function exitStudyGroup(id: number, isLoggedIn: boolean) {
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
+  const response = await tokenRequestApi.delete(`/studygroup/${id}/member`);
+  return response.data;
+}
+
+// ====================== 스터디 그룹 모집상태 변경 ===========================
+// TODO : 스터디의 모집 상태를 변경하는 코드
+interface StudyGroupRecruitmentStatusUpdateDto {
+  state: boolean;
+}
+
+export async function changeStudyGroupRecruitmentStatus(
+  id: number,
+  isLoggedIn: boolean
+) {
+  if (!isLoggedIn) throw new Error("Access token is not defined.");
+
+  const config = {
+    status: false,
+  };
+
+  await tokenRequestApi.patch(`/studygroup/${id}/status`, config);
+  alert("스터디 모집 상태를 변경했습니다");
+}
+export interface StudyListOrderDto {
+  data: StudyGroup[];
+}
+
+export async function getStudyListOrder(order: string, isAscending: boolean) {
+  const response = await eduApi.get<StudyListOrderDto>(
+    `/studygroups/order?page=1&size=1000&order=${order}&isAscending=${isAscending}`
+  );
+  return response.data.data;
+}
