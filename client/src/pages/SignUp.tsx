@@ -59,6 +59,9 @@ const SignUp = () => {
           if (error.response.data.message === "탈퇴한 회원입니다.") {
             setMemberRestoreModalOpen(true);
           }
+          if(error.response.data.message  === "해당 닉네임은 금지되어있습니다!!") {
+            alert("사용할 수 없는 닉네임입니다.")
+          }
         })
         .finally(() => {});
     }
