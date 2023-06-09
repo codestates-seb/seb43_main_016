@@ -1,11 +1,9 @@
-<div align="center">
 <h1>EduSync</h1>
 스터디 모집 & 관리 플랫폼
 <br>
 프론트엔드 배포 주소 : https://www.edusync.site/
 <br>
 백엔드 배포 주소 : https://wish17.store/
-</div>
 
 ## 프로젝트 기간 및 소개
 > 프로젝트 기간 : 2023.04.28 ~ 2023.05.25
@@ -109,7 +107,7 @@
 <a href="https://img.shields.io/badge/styledComponents-DB7093?style=flat&logo=styledComponents&logoColor=white">
 <img src="https://img.shields.io/badge/styledComponents-DB7093?style=flat&logo=styledComponents&logoColor=white"/>
 </a>
-<a href="https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=Prettier&logoColor=black">
+<a href="https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=Prettier&logoColor=black"></a>
 <img src="https://img.shields.io/badge/Prettier-F7B93E?style=flat&logo=Prettier&logoColor=black"/>
 </a>
 <a href="https://img.shields.io/badge/ESLint-4B32C3?style=flat&logo=ESLint&logoColor=white">
@@ -139,7 +137,7 @@
 </thead>
 <tbody>
 <tr>
-<td align="center"><img src="https://i.ibb.co/m5MfkYQ/main-pre-3.gif" alt="main-pre-3" border="0"></td>
+<td align="center"><img src="https://i.ibb.co/nbm0HP0/main-pre-6.jpg" alt="main-pre-6" border="0"></td>
 <td align="center"><img src="https://i.ibb.co/xG7WpPW/main-pre-4.gif" alt="main-pre-4" border="0"></td>
 </tr>
 </tbody>
@@ -239,8 +237,8 @@
 
 ## 시작 가이드
 ***required***
-[JDK 11](https://jdk.java.net/11/)
-[Node 6.9.0](https://nodejs.org/en/blog/release/v6.9.0)
+- [JDK 11](https://jdk.java.net/11/)
+- [Node 6.9.0](https://nodejs.org/en/blog/release/v6.9.0)
 
 #### Backend
 ```
