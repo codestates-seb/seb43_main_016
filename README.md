@@ -67,6 +67,7 @@
     <a href="https://velog.io/@wish17?tag=aws"><img src="https://img.shields.io/badge/AWS-232F3E?style=flat&logo=amazonaws&logoColor=white" /></a>
     <a href="https://velog.io/@wish17/%EC%84%9C%EB%B2%84-%EB%B0%B0%ED%8F%ACaws-Session-Manager-%EC%97%B0%EA%B2%B0"><img src="https://img.shields.io/badge/EC2-232F3E?style=flat&logo=amazonaws&logoColor=white" /></a>
     <a href="https://velog.io/@wish17/u1p70k28"><img src="https://img.shields.io/badge/RDS-232F3E?style=flat&logo=amazonaws&logoColor=white" /></a>
+    <a href="https://velog.io/@wish17/JWT-%EB%B3%B4%EC%95%88%EC%97%90-%EA%B4%80%ED%95%9C-%EA%B3%A0%EC%B0%B0"><img src="https://img.shields.io/badge/Redis-D92E20?style=flat&logo=redis&logoColor=white" /></a>
 </div>
 
 ✨Frontend✨
