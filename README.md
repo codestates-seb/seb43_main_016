@@ -51,7 +51,7 @@
 ## Project Diagram & Stack
 
 ✨Project Diagram✨
-<a><img src="https://i.ibb.co/t3dvGX2/diagram.jpg" alt="diagram" border="0"></a>
+<a><img src="https://i.ibb.co/t3dvGX2/diagram.jpg" alt="diagram" border="0" width="130%" width="130%"></a>
 ✨Backend✨
 
 <div align="center">
