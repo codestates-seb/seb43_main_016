@@ -57,6 +57,8 @@ dependencies {
 
 	implementation 'org.jsoup:jsoup:1.14.2'
 
+	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE' // 이미지 처리를 위한 AWS S3
+
 	implementation 'org.flywaydb:flyway-mysql' // flyway mysql 의존성 추가
 	implementation 'org.flywaydb:flyway-core' // flyway 의존성 추가
 }

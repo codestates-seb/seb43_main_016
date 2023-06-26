@@ -18,6 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -26,8 +27,9 @@ import java.util.List;
 
 @Transactional
 @RequiredArgsConstructor
-@Validated
 @RestController
+@RequestMapping("/studygroup")
+@Validated
 public class StudygroupController {
     private static final String STUDYGROUP_DEFAULT_URI = "/studygroup";
     private final StudygroupMapper studygroupMapper;
@@ -40,7 +42,7 @@ public class StudygroupController {
      * @param postDto
      * @return
      */
-    @PostMapping(STUDYGROUP_DEFAULT_URI)
+    @PostMapping
     public ResponseEntity postStudygroup(Authentication authentication,
                                          @Valid @RequestBody StudygroupDto.Post postDto) {
         Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
@@ -59,7 +61,7 @@ public class StudygroupController {
      * @return
      * @throws Exception
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
+    @PatchMapping("/{studygroup-id}")
     public ResponseEntity patchStudygroup(Authentication authentication,
                                           @Positive @PathVariable("studygroup-id") Long studygroupId,
                                           @Valid @RequestBody StudygroupDto.Patch patchDto) {
@@ -76,12 +78,31 @@ public class StudygroupController {
     }
 
     /**
+     * 스터디 그룹 이미지 수정
+     * @param authentication
+     * @param studygroupId
+     * @param file
+     * @return
+     */
+    @PatchMapping("/{studygroup-id}/image")
+    public ResponseEntity patchStudygroupImage(Authentication authentication,
+                                               @Positive @PathVariable("studygroup-id") Long studygroupId,
+                                               @RequestPart(value="image") MultipartFile file) {
+        Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
+        Studygroup studygroup = studygroupService.imageSave(loginMember.getEmail(), studygroupId, file);
+
+        URI location = UriCreator.createUri(STUDYGROUP_DEFAULT_URI, studygroup.getId());
+
+        return ResponseEntity.created(location).build();
+    }
+
+    /**
      * 스터디 모집 상태 수정(모집중 - 모집완료)
      * @param authentication
      * @param studygroupId
      * @return
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/status")
+    @PatchMapping("/{studygroup-id}/status")
     public ResponseEntity patchStudygroupStatus(Authentication authentication,
                                                 @PathVariable("studygroup-id") @Positive Long studygroupId) {
         Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
@@ -102,7 +123,7 @@ public class StudygroupController {
      * @param studygroupId
      * @return
      */
-    @GetMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
+    @GetMapping("/{studygroup-id}")
     public ResponseEntity getStudygroupDetail(Authentication authentication,
                                               @PathVariable("studygroup-id") @Positive Long studygroupId) {
         Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
@@ -155,7 +176,7 @@ public class StudygroupController {
      * @param studygroupId
      * @return
      */
-    @DeleteMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}")
+    @DeleteMapping("/{studygroup-id}")
     public ResponseEntity deleteStudygroup(Authentication authentication,
                                            @PathVariable("studygroup-id") @Positive Long studygroupId) {
         Member loginMember = memberUtils.getLoggedInWithAuthenticationCheck(authentication);
@@ -171,7 +192,7 @@ public class StudygroupController {
      * @param patchLeader
      * @return
      */
-    @PatchMapping(STUDYGROUP_DEFAULT_URI + "/{studygroup-id}/privileges")
+    @PatchMapping("/{studygroup-id}/privileges")
     public ResponseEntity patchStudygroupLeader(Authentication authentication,
                                                 @PathVariable("studygroup-id") @Positive Long studygroupId,
                                                 @RequestBody StudygroupDto.PatchLeader patchLeader) {

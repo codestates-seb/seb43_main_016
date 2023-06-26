@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import javax.validation.constraints.Positive;
@@ -88,12 +89,22 @@ public class MemberController {
     }
 
     @PatchMapping("/profile-image")
-    public ResponseEntity updateProfileImage(
-            @RequestBody MemberDto.ProfileImage requestBody,
-            Authentication authentication) {
+    public ResponseEntity updateProfileImage(@RequestBody MemberDto.ProfileImage requestBody,
+                                             Authentication authentication) {
         Member updatedMember = memberService.updateMember(memberMapper.memberProfileImageToMember(requestBody), authentication.getName());
         MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(updatedMember);
         return new ResponseEntity(responseDto, HttpStatus.OK);
+    }
+
+    @PatchMapping("/image")
+    public ResponseEntity patchMemberImage(@RequestPart(value="image") MultipartFile image,
+                                           Authentication authentication) {
+        Member member = memberUtils.get(authentication.getName());
+        member = memberService.imageSave(member.getId(), image);
+
+        MemberJoinResponseDto responseDto = memberMapper.memberToMemberResponse(member);
+
+        return new ResponseEntity(responseDto, HttpStatus.CREATED);
     }
 
     @PatchMapping("/detail")
